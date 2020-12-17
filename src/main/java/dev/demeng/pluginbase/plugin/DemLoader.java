@@ -1,6 +1,4 @@
-package dev.demeng.pluginbase;
-
-import dev.demeng.pluginbase.plugin.DemPlugin;
+package dev.demeng.pluginbase.plugin;
 
 /** Simple class containg a method to get the {@link DemPlugin} the library is working with. */
 public final class DemLoader {
