@@ -47,7 +47,7 @@ public abstract class DemPlugin extends JavaPlugin {
     return libraryManager;
   }
 
-  protected abstract BaseSettings getBaseSettings();
+  public abstract BaseSettings getBaseSettings();
 
   /** Code to perform at early plugin startup. */
   protected void load() {}
