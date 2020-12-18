@@ -1,14 +1,32 @@
 package dev.demeng.pluginbase.chat;
 
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.plugin.DemLoader;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /** Message-related utilities, including console and chat messages. */
 public class ChatUtils {
+
+  /** Pattern to amtch our HEX color format for MC 1.16+. */
+  public static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
+
+  /** Separation line for players (in-game chat). */
+  public static final String CHAT_LINE = "&m-----------------------------------------------------";
+
+  /** Separation line for console. */
+  public static final String CONSOLE_LINE =
+      "*-----------------------------------------------------*";
+
+  // -----------------------------------------------------------------------------------------------------
+  // FORMATTING
+  // -----------------------------------------------------------------------------------------------------
 
   /**
    * Convenience method to get the current prefix of the plugin.
@@ -20,18 +38,38 @@ public class ChatUtils {
   }
 
   /**
-   * Convert plain string(s) with color codes into a colorized message.
+   * Convert plain string(s) with color codes into a colorized message. Supports HEX colors in the
+   * format of {@code <#HEX>}. 1.16+ HEX support requires the server software to be Spigot, or a
+   * fork of Spigot.
    *
-   * @param str The plain string(s)
+   * @param strings The plain string(s)
    * @return The colorized string(s), separated by a new line
    */
-  public static String colorize(String... str) {
+  public static String colorize(String... strings) {
 
-    if (str == null || str.length < 1) {
+    if (strings == null || strings.length < 1) {
       throw new IllegalArgumentException("No strings to colorize");
     }
 
-    return ChatColor.translateAlternateColorCodes('&', String.join("\n", str));
+    String message = String.join("\n", strings);
+
+    if (Common.SPIGOT && Common.isServerVersionAtLeast(16)) {
+
+      Matcher matcher = HEX_PATTERN.matcher(message);
+
+      while (matcher.find()) {
+        final net.md_5.bungee.api.ChatColor hexColor =
+            net.md_5.bungee.api.ChatColor.of(
+                matcher.group().substring(1, matcher.group().length() - 1));
+        final String before = message.substring(0, matcher.start());
+        final String after = message.substring(matcher.end());
+
+        message = before + hexColor + after;
+        matcher = HEX_PATTERN.matcher(message);
+      }
+    }
+
+    return ChatColor.translateAlternateColorCodes('&', message);
   }
 
   /**
@@ -49,24 +87,24 @@ public class ChatUtils {
   /**
    * Appends the prefix, and then colorizes.
    *
-   * @param str The plain, non-prefixed string(s)
+   * @param strings The plain, non-prefixed string(s)
    * @return The colorized string(s), separated by a new line
    */
-  public static String format(String... str) {
+  public static String format(String... strings) {
 
-    if (str == null || str.length < 1) {
+    if (strings == null || strings.length < 1) {
       throw new IllegalArgumentException("No strings to format");
     }
 
-    if (str.length == 1) {
-      return colorize(getPrefix() + str[0]);
+    if (strings.length == 1) {
+      return colorize(getPrefix() + strings[0]);
     }
 
     final StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < str.length; i++) {
-      builder.append(getPrefix()).append(str[i]);
+    for (int i = 0; i < strings.length; i++) {
+      builder.append(getPrefix()).append(strings[i]);
 
-      if (i != str.length - 1) {
+      if (i != strings.length - 1) {
         builder.append("\n");
       }
     }
@@ -121,8 +159,59 @@ public class ChatUtils {
     return ChatColor.stripColor(colorize(str));
   }
 
+  /**
+   * Fully strip all color from strings.
+   *
+   * @see #strip(String)
+   */
   public static List<String> strip(List<String> strList) {
     Objects.requireNonNull(strList, "No strings to strip");
     return strList.stream().map(ChatUtils::strip).collect(Collectors.toList());
   }
+
+  // -----------------------------------------------------------------------------------------------------
+  // CONSOLE MESSAGES
+  // -----------------------------------------------------------------------------------------------------
+
+  /**
+   * Send formatted console messages. Any message equaling "none" will be ignored.
+   *
+   * @param strings The messages to send
+   */
+  public static void console(String... strings) {
+
+    if (strings == null || strings.length < 1) {
+      throw new IllegalArgumentException("No messages to send to console");
+    }
+
+    for (String s : strings) {
+      if (!s.equalsIgnoreCase("none")) {
+        Bukkit.getConsoleSender().sendMessage(format(s));
+      }
+    }
+  }
+
+  /**
+   * Send colored console messages. Any message equaling "none" will be ignored.
+   *
+   * @param strings The messages to send
+   */
+  public static void coloredConsole(String... strings) {
+
+    if (strings == null || strings.length < 1) {
+      throw new IllegalArgumentException("No messages to send to console");
+    }
+
+    for (String s : strings) {
+      if (!s.equalsIgnoreCase("none")) {
+        Bukkit.getConsoleSender().sendMessage(colorize(s));
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------------------------------------------
+  // PLAYER MESSAGES
+  // -----------------------------------------------------------------------------------------------------
+
+  // TODO Send a JSON message supporting color codes, bossbars, and a bunch of other cool stuff.
 }

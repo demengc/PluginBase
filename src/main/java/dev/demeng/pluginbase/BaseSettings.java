@@ -12,6 +12,6 @@ public interface BaseSettings {
    * @return The prefix
    */
   default String prefix() {
-    return "&8[&bMyPlugin&8] ";
+    return "&8[&b" + Common.getName() + "&8] &r";
   }
 }

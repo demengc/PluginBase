@@ -1,13 +1,19 @@
 package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
+import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
-/**
- * Commonly used methods and utilities.
- */
+/** Commonly used methods and utilities. */
 public class Common {
+
+  /**
+   * If the server software the plugin is running on is Spigot or a fork of Spigot. Used internally
+   * for some Spigot-only features or optimizations.
+   */
+  public static final boolean SPIGOT = Validate.checkClass("net.md_5.bungee.api.ChatColor");
 
   // -----------------------------------------------------------------------------------------------------
   // PLUGIN INFORMATION
@@ -32,7 +38,7 @@ public class Common {
   }
 
   // -----------------------------------------------------------------------------------------------------
-  // MINECRAFT VERSION
+  // SERVER INFORMATION
   // -----------------------------------------------------------------------------------------------------
 
   /**
@@ -59,13 +65,30 @@ public class Common {
   // -----------------------------------------------------------------------------------------------------
   // MISC
   // -----------------------------------------------------------------------------------------------------
-  public static void error(Throwable error, String description, boolean disable) {
+
+  /**
+   * Reports an error in the plugin.
+   *
+   * @param error The exception
+   * @param description A brief description of the error
+   * @param disable If the plugin should be disabled
+   * @param players Any players associated with this error, a message will be sent to them
+   */
+  public static void error(
+      Throwable error, String description, boolean disable, Player... players) {
 
     if (error != null) {
       error.printStackTrace();
     }
 
-    // TODO Print console messages.
+    ChatUtils.coloredConsole(
+        "&4" + ChatUtils.CONSOLE_LINE,
+        "&cAn internal error has occured in " + Common.getName() + "!",
+        "&cContact the plugin author if you cannot fix this error.",
+        "&cDescription: &6" + description,
+        "&4" + ChatUtils.CONSOLE_LINE);
+
+    // TODO Broadcast message to players.
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(DemLoader.getPlugin())) {
       Bukkit.getPluginManager().disablePlugin(DemLoader.getPlugin());
