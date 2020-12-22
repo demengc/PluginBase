@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -208,6 +209,40 @@ public class ChatUtils {
       }
     }
   }
+
+  /**
+   * Log plain messages into the console.
+   *
+   * @param strings The messages to send
+   */
+  public static void log(String... strings) {
+
+    if (strings == null || strings.length < 1) {
+      throw new IllegalArgumentException("No messages to log to console");
+    }
+
+    for (String s : strings) {
+      DemLoader.getPlugin().getLogger().info(s);
+    }
+  }
+
+  /**
+   * Log plain messages into the console.
+   *
+   * @param strings The messages to send
+   * @param level The logging level
+   */
+  public static void log(Level level, String... strings) {
+
+    if (strings == null || strings.length < 1) {
+      throw new IllegalArgumentException("No messages to log to console");
+    }
+
+    for (String s : strings) {
+      DemLoader.getPlugin().getLogger().log(level, s);
+    }
+  }
+
 
   // -----------------------------------------------------------------------------------------------------
   // PLAYER MESSAGES
