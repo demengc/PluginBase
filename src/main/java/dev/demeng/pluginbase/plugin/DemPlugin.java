@@ -29,7 +29,7 @@ public abstract class DemPlugin extends JavaPlugin {
     disable();
   }
 
-  public void quickLoadLibrary(
+  public void loadLib(
       String groupId, String artifactId, String version, String pattern, String shadedPattern) {
 
     final Library.Builder builder = Library.builder();
