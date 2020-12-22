@@ -32,6 +32,10 @@ public abstract class DemPlugin extends JavaPlugin {
   public void loadLib(
       String groupId, String artifactId, String version, String pattern, String shadedPattern) {
 
+    if (groupId == null || artifactId == null || version == null) {
+      throw new NullPointerException("Library group ID, artifact ID, or version is null");
+    }
+
     final Library.Builder builder = Library.builder();
 
     builder.groupId(groupId).artifactId(artifactId).version(version);
