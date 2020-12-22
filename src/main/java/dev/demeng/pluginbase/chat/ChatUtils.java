@@ -4,6 +4,7 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,7 @@ public class ChatUtils {
    *
    * @return The prefix
    */
+  @NotNull
   public static String getPrefix() {
     return DemLoader.getPlugin().getBaseSettings().prefix();
   }
@@ -46,6 +48,7 @@ public class ChatUtils {
    * @param strings The plain string(s)
    * @return The colorized string(s), separated by a new line
    */
+  @NotNull
   public static String colorize(String... strings) {
 
     if (strings == null || strings.length < 1) {
@@ -78,6 +81,7 @@ public class ChatUtils {
    *
    * @see #colorize(String...)
    */
+  @NotNull
   public static List<String> colorize(List<String> strList) {
 
     Objects.requireNonNull(strList, "No strings to colorize");
@@ -91,6 +95,7 @@ public class ChatUtils {
    * @param strings The plain, non-prefixed string(s)
    * @return The colorized string(s), separated by a new line
    */
+  @NotNull
   public static String format(String... strings) {
 
     if (strings == null || strings.length < 1) {
@@ -120,6 +125,7 @@ public class ChatUtils {
    * @param placeholders The placeholders
    * @return The replaced string
    */
+  @NotNull
   public static String replace(String str, Placeholder... placeholders) {
 
     if (str == null || placeholders == null || placeholders.length < 1) {
@@ -140,6 +146,7 @@ public class ChatUtils {
    *
    * @see #replace(String, Placeholder...)
    */
+  @NotNull
   public static List<String> replace(List<String> strList, Placeholder... placeholders) {
 
     if (strList == null || placeholders == null || placeholders.length < 1) {
@@ -155,6 +162,7 @@ public class ChatUtils {
    * @param str The string to strip
    * @return The stripped string
    */
+  @NotNull
   public static String strip(String str) {
     Objects.requireNonNull(str, "No string to strip");
     return ChatColor.stripColor(colorize(str));
@@ -165,6 +173,7 @@ public class ChatUtils {
    *
    * @see #strip(String)
    */
+  @NotNull
   public static List<String> strip(List<String> strList) {
     Objects.requireNonNull(strList, "No strings to strip");
     return strList.stream().map(ChatUtils::strip).collect(Collectors.toList());

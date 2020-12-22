@@ -1,5 +1,9 @@
 package dev.demeng.pluginbase.chat;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
 /** Represents a message placeholder. */
 public class Placeholder {
 
@@ -13,6 +17,10 @@ public class Placeholder {
    * @param replaced The string that matches will be replaced with
    */
   public Placeholder(String toReplace, String replaced) {
+
+    Objects.requireNonNull(toReplace, "String to replace is null");
+    Objects.requireNonNull(replaced, "Replaced string is null");
+
     this.toReplace = toReplace;
     this.replaced = replaced;
   }
@@ -22,6 +30,7 @@ public class Placeholder {
    *
    * @return The string that will be replaced
    */
+  @NotNull
   public String getToReplace() {
     return toReplace;
   }
@@ -31,6 +40,7 @@ public class Placeholder {
    *
    * @return The string that matches will be replaced with
    */
+  @NotNull
   public String getReplaced() {
     return replaced;
   }
@@ -41,6 +51,7 @@ public class Placeholder {
    * @param original The string tht placeholders will be applied to
    * @return The replaced string
    */
+  @NotNull
   public String apply(String original) {
     return original.replace(toReplace, replaced);
   }

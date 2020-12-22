@@ -1,5 +1,7 @@
 package dev.demeng.pluginbase.plugin;
 
+import org.jetbrains.annotations.NotNull;
+
 /** Simple class containg a method to get the {@link DemPlugin} the library is working with. */
 public final class DemLoader {
 
@@ -12,6 +14,7 @@ public final class DemLoader {
    * @throws RuntimeException If the plugin is not set (main class does not extend {@link
    *     DemPlugin})
    */
+  @NotNull
   public static DemPlugin getPlugin() {
 
     if (plugin == null) {

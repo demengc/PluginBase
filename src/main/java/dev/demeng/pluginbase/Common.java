@@ -5,6 +5,7 @@ import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /** Commonly used methods and utilities. */
 public class Common {
@@ -24,6 +25,7 @@ public class Common {
    *
    * @return The name of the plugin
    */
+  @NotNull
   public static String getName() {
     return DemLoader.getPlugin().getDescription().getName();
   }
@@ -33,6 +35,7 @@ public class Common {
    *
    * @return The version of the plugin
    */
+  @NotNull
   public static String getVersion() {
     return DemLoader.getPlugin().getDescription().getVersion();
   }
