@@ -4,6 +4,8 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class ChatUtils {
   public static String colorize(String... strings) {
 
     if (strings == null || strings.length < 1) {
-      throw new IllegalArgumentException("No strings to colorize");
+      throw new NullPointerException("No strings to colorize");
     }
 
     String message = String.join("\n", strings);
@@ -99,7 +101,7 @@ public class ChatUtils {
   public static String format(String... strings) {
 
     if (strings == null || strings.length < 1) {
-      throw new IllegalArgumentException("No strings to format");
+      throw new NullPointerException("No strings to format");
     }
 
     if (strings.length == 1) {
@@ -129,7 +131,7 @@ public class ChatUtils {
   public static String replace(String str, Placeholder... placeholders) {
 
     if (str == null || placeholders == null || placeholders.length < 1) {
-      throw new IllegalArgumentException("No string to replace or no placeholders to apply");
+      throw new NullPointerException("No string to replace or no placeholders to apply");
     }
 
     String replaced = str;
@@ -150,7 +152,7 @@ public class ChatUtils {
   public static List<String> replace(List<String> strList, Placeholder... placeholders) {
 
     if (strList == null || placeholders == null || placeholders.length < 1) {
-      throw new IllegalArgumentException("No strings to replace or no placeholders to apply");
+      throw new NullPointerException("No strings to replace or no placeholders to apply");
     }
 
     return strList.stream().map(str -> replace(str, placeholders)).collect(Collectors.toList());
@@ -191,7 +193,7 @@ public class ChatUtils {
   public static void console(String... strings) {
 
     if (strings == null || strings.length < 1) {
-      throw new IllegalArgumentException("No messages to send to console");
+      throw new NullPointerException("No messages to send to console");
     }
 
     for (String s : strings) {
@@ -209,7 +211,7 @@ public class ChatUtils {
   public static void coloredConsole(String... strings) {
 
     if (strings == null || strings.length < 1) {
-      throw new IllegalArgumentException("No messages to send to console");
+      throw new NullPointerException("No messages to send to console");
     }
 
     for (String s : strings) {
@@ -227,7 +229,7 @@ public class ChatUtils {
   public static void log(String... strings) {
 
     if (strings == null || strings.length < 1) {
-      throw new IllegalArgumentException("No messages to log to console");
+      throw new NullPointerException("No messages to log to console");
     }
 
     for (String s : strings) {
@@ -244,7 +246,7 @@ public class ChatUtils {
   public static void log(Level level, String... strings) {
 
     if (strings == null || strings.length < 1) {
-      throw new IllegalArgumentException("No messages to log to console");
+      throw new NullPointerException("No messages to log to console");
     }
 
     for (String s : strings) {
@@ -252,10 +254,10 @@ public class ChatUtils {
     }
   }
 
-
   // -----------------------------------------------------------------------------------------------------
   // PLAYER MESSAGES
   // -----------------------------------------------------------------------------------------------------
 
+  public static void tellJson(CommandSender sender, @Language("json") String json) {}
   // TODO Send a JSON message supporting color codes, bossbars, and a bunch of other cool stuff.
 }

@@ -155,18 +155,23 @@ public abstract class LibraryManager {
         logger.info("Downloaded library " + connection.getURL());
         return out.toByteArray();
       }
-    } catch (MalformedURLException e) {
-      throw new IllegalArgumentException(e);
-    } catch (IOException e) {
-      if (e instanceof FileNotFoundException) {
+
+    } catch (MalformedURLException ex) {
+      throw new IllegalArgumentException(ex);
+
+    } catch (IOException ex) {
+      if (ex instanceof FileNotFoundException) {
         logger.warning("File not found: " + url);
-      } else if (e instanceof SocketTimeoutException) {
+
+      } else if (ex instanceof SocketTimeoutException) {
         logger.warning("Connect timed out: " + url);
-      } else if (e instanceof UnknownHostException) {
+
+      } else if (ex instanceof UnknownHostException) {
         logger.warning("Unknown host: " + url);
+
       } else {
-        logger.warning("Unexpected IOException");
-        e.printStackTrace();
+        logger.warning("Unexpected IOException.");
+        ex.printStackTrace();
       }
 
       return null;
