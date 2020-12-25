@@ -1,9 +1,14 @@
 package dev.demeng.pluginbase.chat;
 
-import org.bukkit.boss.BossBar;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -13,27 +18,39 @@ import java.util.Objects;
 public class TellContents {
 
   private final String message;
-  private final Title title;
-  private final BossBar bossBar;
-  private final ActionBar actionBar;
-  private final Sound sound;
+  private final TellContents.Title title;
+  private final TellContents.ActionBar actionBar;
+  private final TellContents.Sound sound;
 
   /**
    * New tell contents. Any parameter may be null if you wish to not use the feature.
    *
    * @param message The chat message to send
    * @param title The title to send
-   * @param bossBar The boss bar to send
    * @param actionBar The action bar to send
    * @param sound The sound to play
    */
   public TellContents(
-      String message, Title title, BossBar bossBar, ActionBar actionBar, Sound sound) {
+      String message,
+      TellContents.Title title,
+      TellContents.ActionBar actionBar,
+      TellContents.Sound sound) {
     this.message = message;
     this.title = title;
-    this.bossBar = bossBar;
     this.actionBar = actionBar;
     this.sound = sound;
+  }
+
+  /**
+   * New tell contents containing only a message.
+   *
+   * @param message The chat message to send
+   */
+  public TellContents(String message) {
+    this.message = message;
+    this.title = null;
+    this.actionBar = null;
+    this.sound = null;
   }
 
   /**
@@ -57,22 +74,12 @@ public class TellContents {
   }
 
   /**
-   * Gets the boss bar to send.
-   *
-   * @return The boss bar to send
-   */
-  @Nullable
-  public BossBar getBossBar() {
-    return bossBar;
-  }
-
-  /**
    * Gets the action bar to send.
    *
    * @return The action bar to send
    */
   @Nullable
-  public ActionBar getActionBar() {
+  public TellContents.ActionBar getActionBar() {
     return actionBar;
   }
 
@@ -82,8 +89,123 @@ public class TellContents {
    * @return The sound to play
    */
   @Nullable
-  public Sound getSound() {
+  public TellContents.Sound getSound() {
     return sound;
+  }
+
+  public String getJson() {
+
+    if (title == null && actionBar == null && sound == null) {
+
+      if (message == null) {
+        return "none";
+      }
+
+      return message;
+    }
+
+    final Map<String, String> map = new LinkedHashMap<>();
+
+    if (message != null) {
+      map.put("message", message);
+    }
+
+    if (title != null) {
+      final Map<String, Object> titleMap = new LinkedHashMap<>();
+      titleMap.put("title", title.getTitle());
+
+      if (title.getSubtitle() != null) {
+        titleMap.put("subtitle", title.getSubtitle());
+      }
+
+      titleMap.put("fadeIn", title.getFadeIn());
+      titleMap.put("stay", title.getStay());
+      titleMap.put("fadeOut", title.getFadeOut());
+
+      map.put("title", new JSONObject(titleMap).toJSONString());
+    }
+
+    if (actionBar != null) {
+      final Map<String, Object> actionBarMap = new LinkedHashMap<>();
+      actionBarMap.put("text", actionBar.getText());
+      actionBarMap.put("duration", actionBar.getDuration());
+
+      map.put("actionBar", new JSONObject(actionBarMap).toJSONString());
+    }
+
+    if (sound != null) {
+      final Map<String, Object> soundMap = new LinkedHashMap<>();
+      soundMap.put("sound", sound.getSound());
+      soundMap.put("volume", sound.getVolume());
+      soundMap.put("pitch", sound.getPitch());
+
+      map.put("sound", new JSONObject(soundMap).toJSONString());
+    }
+
+    return new JSONObject(map).toJSONString();
+  }
+
+  public static TellContents fromJson(@Language("JSON") String strJson) {
+
+    if (strJson.equalsIgnoreCase("none")) {
+      return new TellContents(null);
+    }
+
+    final JSONObject json;
+
+    try {
+      json = (JSONObject) new JSONParser().parse(strJson);
+    } catch (ParseException ex) {
+      return new TellContents(strJson);
+    }
+
+    TellContents.Title title = null;
+    TellContents.ActionBar actionBar = null;
+    TellContents.Sound sound = null;
+
+    try {
+
+      if (json.containsKey("title")) {
+        title = titleFromJson((String) json.get("title"));
+      }
+
+      if (json.containsKey("actionBar")) {
+        actionBar = actionBarFromJson((String) json.get("actionBar"));
+      }
+
+      if (json.containsKey("sound")) {
+        sound = soundFromJson((String) json.get("sound"));
+      }
+
+    } catch (ParseException ex) {
+      return new TellContents(strJson);
+    }
+
+    return new TellContents((String) json.get("message"), title, actionBar, sound);
+  }
+
+  private static TellContents.Title titleFromJson(@Language("JSON") String strJson)
+      throws ParseException {
+    final JSONObject json = (JSONObject) new JSONParser().parse(strJson);
+    return new TellContents.Title(
+        (String) json.get("title"),
+        (String) json.get("subtitle"),
+        (int) json.get("fadeIn"),
+        (int) json.get("stay"),
+        (int) json.get("fadeOut"));
+  }
+
+  private static TellContents.ActionBar actionBarFromJson(@Language("JSON") String strJson)
+      throws ParseException {
+    final JSONObject json = (JSONObject) new JSONParser().parse(strJson);
+    return new TellContents.ActionBar((String) json.get("text"), (int) json.get("duration"));
+  }
+
+  private static TellContents.Sound soundFromJson(@Language("JSON") String strJson)
+      throws ParseException {
+    final JSONObject json = (JSONObject) new JSONParser().parse(strJson);
+    return new TellContents.Sound(
+        (String) json.get("sound"), (float) json.get("volume"), (float) json.get("pitch"));
   }
 
   /** A title and/or subtitle complete with fade in time, stay time, and fade out time. */
