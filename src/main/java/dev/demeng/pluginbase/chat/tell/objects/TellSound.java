@@ -1,13 +1,16 @@
 package dev.demeng.pluginbase.chat.tell.objects;
 
-import dev.demeng.pluginbase.JsonSerializable;
+import dev.demeng.pluginbase.SoundUtils;
+import dev.demeng.pluginbase.chat.tell.TellObject;
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** A sound to play for the individual player. * */
-public class TellSound implements JsonSerializable<TellSound> {
+public class TellSound implements TellObject<TellSound> {
 
   private final String sound;
   private final float volume;
@@ -30,6 +33,16 @@ public class TellSound implements JsonSerializable<TellSound> {
     this.sound = sound;
     this.volume = volume;
     this.pitch = pitch;
+  }
+
+  @Override
+  public void tell(CommandSender sender) {
+
+    if (!(sender instanceof Player)) {
+      return;
+    }
+
+    SoundUtils.playToPlayer((Player) sender, sound, volume, pitch);
   }
 
   /**

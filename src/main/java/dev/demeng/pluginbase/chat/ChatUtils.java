@@ -5,6 +5,7 @@ import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -258,10 +259,93 @@ public class ChatUtils {
   // PLAYER MESSAGES
   // -----------------------------------------------------------------------------------------------------
 
-  public static void tell()
-  {
+  /**
+   * Sends a colored and prefixed message to the command sender.
+   *
+   * @param sender The command sender that will receive the message
+   * @param lines The lines to send
+   */
+  public static void tell(CommandSender sender, String... lines) {
 
+    if (lines == null) {
+      throw new NullPointerException("No lines to send");
+    }
+
+    sender.sendMessage(format(lines));
   }
+
+  /**
+   * Does the same thing as {@link #tell(CommandSender, String...)}, but without the prefix.
+   *
+   * @param sender The command sender that will receive the message
+   * @param lines The lines to send
+   */
+  public static void tellColored(CommandSender sender, String... lines) {
+    if (lines == null) {
+      throw new NullPointerException("No lines to send");
+    }
+
+    sender.sendMessage(colorize(lines));
+  }
+
+  /**
+   * Sends a colored and centered message. May not work if the player has changed their chat size,
+   * used a custom font (resource pack), or if the message contains HEX colors.
+   *
+   * @param player The player that will receive the message
+   * @param lines The lines to send
+   */
+  public static void tellCentered(Player player, String... lines) {
+
+    if (lines == null) {
+      throw new NullPointerException("No lines to send");
+    }
+
+    for (String line : lines) {
+
+      if (line == null || line.equals("")) {
+        player.sendMessage("");
+        continue;
+      }
+
+      line = ChatColor.translateAlternateColorCodes('&', line);
+
+      int messagePxSize = 0;
+      boolean previousCode = false;
+      boolean isBold = false;
+
+      for (char c : line.toCharArray()) {
+
+        if (c == ChatColor.COLOR_CHAR) {
+          previousCode = true;
+
+        } else if (previousCode) {
+          previousCode = false;
+          isBold = c == 'l' || c == 'L';
+
+        } else {
+          DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
+          messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
+          messagePxSize++;
+        }
+      }
+
+      int halvedMessageSize = messagePxSize / 2;
+      int toCompensate = 154 - halvedMessageSize;
+      int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+      int compensated = 0;
+
+      StringBuilder sb = new StringBuilder();
+
+      while (compensated < toCompensate) {
+        sb.append(" ");
+        compensated += spaceLength;
+      }
+
+      player.sendMessage(sb.toString() + line);
+    }
+  }
+
   public static void tellJson(CommandSender sender, @Language("json") String json) {}
   // TODO Send a JSON message supporting color codes, bossbars, and a bunch of other cool stuff.
 }

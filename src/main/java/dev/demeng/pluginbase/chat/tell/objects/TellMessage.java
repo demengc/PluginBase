@@ -1,6 +1,12 @@
 package dev.demeng.pluginbase.chat.tell.objects;
 
-import dev.demeng.pluginbase.JsonSerializable;
+import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.tell.TellObject;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -9,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** A chat message. Prefix is not added and the message is not colored. */
-public class TellMessage implements JsonSerializable<TellMessage> {
+public class TellMessage implements TellObject<TellMessage> {
 
   private final boolean json;
   private final String[] lines;
@@ -45,6 +51,43 @@ public class TellMessage implements JsonSerializable<TellMessage> {
     this.lines = Objects.requireNonNull(lines, "Lines cannot be null");
     this.addPrefix = true;
     this.center = false;
+  }
+
+  @Override
+  public void tell(CommandSender sender) {
+
+    if (json) {
+
+      if (!Common.SPIGOT) {
+        return;
+      }
+
+      for (String line : lines) {
+        final BaseComponent[] components = ComponentSerializer.parse(line);
+        sender.spigot().sendMessage(components);
+      }
+
+      return;
+    }
+
+    if (center) {
+
+      if (!(sender instanceof Player)) {
+        for (String line : lines) {
+          sender.sendMessage(ChatUtils.colorize(line));
+        }
+        return;
+      }
+
+      ChatUtils.tellCentered((Player) sender, lines);
+      return;
+    }
+
+    if (!addPrefix) {
+      ChatUtils.tellColored(sender, lines);
+    }
+
+    ChatUtils.tell(sender, lines);
   }
 
   /**

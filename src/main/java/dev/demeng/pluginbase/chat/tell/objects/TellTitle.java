@@ -1,11 +1,14 @@
 package dev.demeng.pluginbase.chat.tell.objects;
 
-import dev.demeng.pluginbase.JsonSerializable;
+import com.cryptomorin.xseries.messages.Titles;
+import dev.demeng.pluginbase.chat.tell.TellObject;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** A title and/or subtitle complete with fade in time, stay time, and fade out time. */
-public class TellTitle implements JsonSerializable<TellTitle> {
+public class TellTitle implements TellObject<TellTitle> {
 
   private final String title;
   private final String subtitle;
@@ -40,6 +43,14 @@ public class TellTitle implements JsonSerializable<TellTitle> {
     this.fadeIn = fadeIn;
     this.stay = stay;
     this.fadeOut = fadeOut;
+  }
+
+  @Override
+  public void tell(CommandSender sender) {
+
+    if(sender instanceof Player) {
+      Titles.sendTitle((Player) sender, fadeIn, stay, fadeOut, title, subtitle);
+    }
   }
 
   /**

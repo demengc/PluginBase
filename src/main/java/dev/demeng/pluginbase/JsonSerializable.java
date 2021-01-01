@@ -5,6 +5,11 @@ import org.intellij.lang.annotations.Language;
 
 import java.lang.reflect.Type;
 
+/**
+ * Adds basic JSON serialization and deserialization methods to the class.
+ *
+ * @param <T>
+ */
 public interface JsonSerializable<T> {
 
   /**
@@ -15,7 +20,6 @@ public interface JsonSerializable<T> {
   default String toJson() {
     return new Gson().toJson(this);
   }
-
 
   /**
    * Converts JSON into an object.

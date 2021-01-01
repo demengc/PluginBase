@@ -6,6 +6,7 @@ import dev.demeng.pluginbase.JsonSerializable;
 import dev.demeng.pluginbase.chat.tell.objects.TellMessage;
 import dev.demeng.pluginbase.chat.tell.objects.TellSound;
 import dev.demeng.pluginbase.chat.tell.objects.TellTitle;
+import org.bukkit.command.CommandSender;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents a "tell" object- stuff to send to a player, typically to notify them of a result of a
  * command or event.
  */
-public class TellContents implements JsonSerializable<TellContents> {
+public class TellContents implements TellObject<TellContents> {
 
   private final TellMessage message;
   private final TellTitle title;
@@ -42,6 +43,22 @@ public class TellContents implements JsonSerializable<TellContents> {
     this.message = new TellMessage(lines);
     this.title = null;
     this.sound = null;
+  }
+
+  @Override
+  public void tell(CommandSender sender) {
+
+    if (message != null) {
+      message.tell(sender);
+    }
+
+    if (title != null) {
+      title.tell(sender);
+    }
+
+    if (sound != null) {
+      sound.tell(sender);
+    }
   }
 
   /**
