@@ -10,8 +10,7 @@ import java.util.Objects;
  * jar for the purpose of preventing namespace conflicts with other plugins that bundle their own
  * version of the same library.
  *
- * <p>Use the "#" or "{}" character(s) to prevent the string literal from being relocated on
- * compile.
+ * <p>Use the "{}" character to prevent the string literal from being relocated on compile.
  */
 public class Relocation {
 
@@ -35,7 +34,7 @@ public class Relocation {
       Collection<String> excludes) {
     this.pattern = Objects.requireNonNull(pattern, "pattern").replace("{}", ".");
     this.relocatedPattern =
-        Objects.requireNonNull(relocatedPattern, "relocatedPattern").replace("#", ".").replace("{}", ".");
+        Objects.requireNonNull(relocatedPattern, "relocatedPattern").replace("{}", ".");
     this.includes =
         includes != null
             ? Collections.unmodifiableList(new LinkedList<>(includes))

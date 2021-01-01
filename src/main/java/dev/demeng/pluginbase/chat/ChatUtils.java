@@ -258,6 +258,10 @@ public class ChatUtils {
   // PLAYER MESSAGES
   // -----------------------------------------------------------------------------------------------------
 
+  public static void tell()
+  {
+
+  }
   public static void tellJson(CommandSender sender, @Language("json") String json) {}
   // TODO Send a JSON message supporting color codes, bossbars, and a bunch of other cool stuff.
 }

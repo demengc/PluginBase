@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.demeng</groupId>
-    <artifactId>PluginBase</artifactId>
+    <artifactId>pluginbase</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
@@ -45,6 +45,10 @@
                                 <relocation>
                                     <pattern>com.cryptomorin.xseries</pattern>
                                     <shadedPattern>dev.demeng.pluginbase.lib.xseries</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.google.gson</pattern>
+                                    <shadedPattern>dev.demeng.pluginbase.lib.gson</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -102,9 +106,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
