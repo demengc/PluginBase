@@ -364,9 +364,9 @@ public class ChatUtils {
         }
       }
 
-      int halvedMessageSize = messagePxSize / 2;
-      int toCompensate = 154 - halvedMessageSize;
-      int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+      final int halvedMessageSize = messagePxSize / 2;
+      final int toCompensate = 154 - halvedMessageSize;
+      final int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
       int compensated = 0;
 
       StringBuilder sb = new StringBuilder();
