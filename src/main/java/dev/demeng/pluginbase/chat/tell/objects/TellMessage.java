@@ -1,5 +1,6 @@
 package dev.demeng.pluginbase.chat.tell.objects;
 
+import com.google.gson.Gson;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.chat.tell.TellObject;
@@ -7,6 +8,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 /** A chat message. Prefix is not added and the message is not colored. */
-public class TellMessage implements TellObject<TellMessage> {
+public class TellMessage implements TellObject {
 
   private final boolean json;
   private final String[] lines;
@@ -84,10 +86,31 @@ public class TellMessage implements TellObject<TellMessage> {
     }
 
     if (!addPrefix) {
-      ChatUtils.tellColored(sender, lines);
+      ChatUtils.tellMessageColored(sender, lines);
     }
 
-    ChatUtils.tell(sender, lines);
+    ChatUtils.tellMessage(sender, lines);
+  }
+
+  /**
+   * Converts the message into JSON, for storage.
+   *
+   * @return The equivalent JSON message
+   */
+  @NotNull
+  public String toJson() {
+    return new Gson().toJson(this);
+  }
+
+  /**
+   * Converts the JSON into a TellMessage object.
+   *
+   * @param json The JSON to convert
+   * @return The equivalent TellMessage object
+   */
+  @NotNull
+  public static TellMessage fromJson(@Language("JSON") String json) {
+    return new Gson().fromJson(json, TellMessage.class);
   }
 
   /**

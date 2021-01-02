@@ -1,15 +1,9 @@
 package dev.demeng.pluginbase.chat.tell;
 
-import dev.demeng.pluginbase.JsonSerializable;
 import org.bukkit.command.CommandSender;
 
-/**
- * Represents a tell object, which can be sent to a CommandSender and serialized/deserialized with
- * GSON.
- *
- * @param <T>
- */
-public interface TellObject<T> extends JsonSerializable<T> {
+/** Represents a tell object, which can be sent to a CommandSender. */
+public interface TellObject {
 
   /**
    * Sends the object to a command sender.

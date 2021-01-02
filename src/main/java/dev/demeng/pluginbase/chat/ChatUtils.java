@@ -1,6 +1,7 @@
 package dev.demeng.pluginbase.chat;
 
 import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.chat.tell.TellContents;
 import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -54,8 +56,8 @@ public class ChatUtils {
   @NotNull
   public static String colorize(String... strings) {
 
-    if (strings == null || strings.length < 1) {
-      throw new NullPointerException("No strings to colorize");
+    if (strings == null) {
+      return "";
     }
 
     String message = String.join("\n", strings);
@@ -87,7 +89,9 @@ public class ChatUtils {
   @NotNull
   public static List<String> colorize(List<String> strList) {
 
-    Objects.requireNonNull(strList, "No strings to colorize");
+    if (strList == null) {
+      return Collections.emptyList();
+    }
 
     return strList.stream().map(ChatUtils::colorize).collect(Collectors.toList());
   }
@@ -101,8 +105,8 @@ public class ChatUtils {
   @NotNull
   public static String format(String... strings) {
 
-    if (strings == null || strings.length < 1) {
-      throw new NullPointerException("No strings to format");
+    if (strings == null) {
+      return "";
     }
 
     if (strings.length == 1) {
@@ -131,8 +135,12 @@ public class ChatUtils {
   @NotNull
   public static String replace(String str, Placeholder... placeholders) {
 
-    if (str == null || placeholders == null || placeholders.length < 1) {
-      throw new NullPointerException("No string to replace or no placeholders to apply");
+    if (str == null) {
+      return "";
+    }
+
+    if (placeholders == null || placeholders.length < 1) {
+      return str;
     }
 
     String replaced = str;
@@ -152,8 +160,12 @@ public class ChatUtils {
   @NotNull
   public static List<String> replace(List<String> strList, Placeholder... placeholders) {
 
-    if (strList == null || placeholders == null || placeholders.length < 1) {
-      throw new NullPointerException("No strings to replace or no placeholders to apply");
+    if (strList == null) {
+      return Collections.emptyList();
+    }
+
+    if (placeholders == null || placeholders.length < 1) {
+      return strList;
     }
 
     return strList.stream().map(str -> replace(str, placeholders)).collect(Collectors.toList());
@@ -167,7 +179,11 @@ public class ChatUtils {
    */
   @NotNull
   public static String strip(String str) {
-    Objects.requireNonNull(str, "No string to strip");
+
+    if (str == null) {
+      return "";
+    }
+
     return ChatColor.stripColor(colorize(str));
   }
 
@@ -178,7 +194,11 @@ public class ChatUtils {
    */
   @NotNull
   public static List<String> strip(List<String> strList) {
-    Objects.requireNonNull(strList, "No strings to strip");
+
+    if (strList == null) {
+      return Collections.emptyList();
+    }
+
     return strList.stream().map(ChatUtils::strip).collect(Collectors.toList());
   }
 
@@ -193,8 +213,8 @@ public class ChatUtils {
    */
   public static void console(String... strings) {
 
-    if (strings == null || strings.length < 1) {
-      throw new NullPointerException("No messages to send to console");
+    if (strings == null) {
+      return;
     }
 
     for (String s : strings) {
@@ -211,8 +231,8 @@ public class ChatUtils {
    */
   public static void coloredConsole(String... strings) {
 
-    if (strings == null || strings.length < 1) {
-      throw new NullPointerException("No messages to send to console");
+    if (strings == null) {
+      return;
     }
 
     for (String s : strings) {
@@ -229,8 +249,8 @@ public class ChatUtils {
    */
   public static void log(String... strings) {
 
-    if (strings == null || strings.length < 1) {
-      throw new NullPointerException("No messages to log to console");
+    if (strings == null) {
+      return;
     }
 
     for (String s : strings) {
@@ -246,8 +266,8 @@ public class ChatUtils {
    */
   public static void log(Level level, String... strings) {
 
-    if (strings == null || strings.length < 1) {
-      throw new NullPointerException("No messages to log to console");
+    if (strings == null) {
+      return;
     }
 
     for (String s : strings) {
@@ -265,27 +285,40 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines The lines to send
    */
-  public static void tell(CommandSender sender, String... lines) {
+  public static void tellMessage(CommandSender sender, String... lines) {
+    Objects.requireNonNull(sender, "Sender is null");
 
     if (lines == null) {
-      throw new NullPointerException("No lines to send");
+      return;
     }
 
     sender.sendMessage(format(lines));
   }
 
   /**
-   * Does the same thing as {@link #tell(CommandSender, String...)}, but without the prefix.
+   * Does the same thing as {@link #tellMessage(CommandSender, String...)}, but without the prefix.
    *
    * @param sender The command sender that will receive the message
    * @param lines The lines to send
    */
-  public static void tellColored(CommandSender sender, String... lines) {
+  public static void tellMessageColored(CommandSender sender, String... lines) {
+    Objects.requireNonNull(sender, "Sender is null");
+
     if (lines == null) {
-      throw new NullPointerException("No lines to send");
+      return;
     }
 
     sender.sendMessage(colorize(lines));
+  }
+
+  public static void tell(CommandSender sender, @Language("JSON") String json) {
+    Objects.requireNonNull(sender, "Sender is null");
+
+    if (json == null) {
+      return;
+    }
+
+    TellContents.fromJson(json).tell(sender);
   }
 
   /**
@@ -296,9 +329,10 @@ public class ChatUtils {
    * @param lines The lines to send
    */
   public static void tellCentered(Player player, String... lines) {
+    Objects.requireNonNull(player, "Player is null");
 
     if (lines == null) {
-      throw new NullPointerException("No lines to send");
+      return;
     }
 
     for (String line : lines) {
@@ -345,7 +379,4 @@ public class ChatUtils {
       player.sendMessage(sb.toString() + line);
     }
   }
-
-  public static void tellJson(CommandSender sender, @Language("json") String json) {}
-  // TODO Send a JSON message supporting color codes, bossbars, and a bunch of other cool stuff.
 }

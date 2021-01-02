@@ -1,16 +1,18 @@
 package dev.demeng.pluginbase.chat.tell.objects;
 
+import com.google.gson.Gson;
 import dev.demeng.pluginbase.SoundUtils;
 import dev.demeng.pluginbase.chat.tell.TellObject;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 /** A sound to play for the individual player. * */
-public class TellSound implements TellObject<TellSound> {
+public class TellSound implements TellObject {
 
   private final String sound;
   private final float volume;
@@ -43,6 +45,27 @@ public class TellSound implements TellObject<TellSound> {
     }
 
     SoundUtils.playToPlayer((Player) sender, sound, volume, pitch);
+  }
+
+  /**
+   * Converts the sound into JSON, for storage.
+   *
+   * @return The equivalent JSON sound
+   */
+  @NotNull
+  public String toJson() {
+    return new Gson().toJson(this);
+  }
+
+  /**
+   * Converts the JSON into a TellSound object.
+   *
+   * @param json The JSON to convert
+   * @return The equivalent TellSound object
+   */
+  @NotNull
+  public static TellSound fromJson(@Language("JSON") String json) {
+    return new Gson().fromJson(json, TellSound.class);
   }
 
   /**

@@ -2,7 +2,6 @@ package dev.demeng.pluginbase.chat.tell;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import dev.demeng.pluginbase.JsonSerializable;
 import dev.demeng.pluginbase.chat.tell.objects.TellMessage;
 import dev.demeng.pluginbase.chat.tell.objects.TellSound;
 import dev.demeng.pluginbase.chat.tell.objects.TellTitle;
@@ -15,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents a "tell" object- stuff to send to a player, typically to notify them of a result of a
  * command or event.
  */
-public class TellContents implements TellObject<TellContents> {
+public class TellContents implements TellObject {
 
   private final TellMessage message;
   private final TellTitle title;
@@ -96,11 +95,9 @@ public class TellContents implements TellObject<TellContents> {
    * with default message settings, this method returns just that 1 line of message for more
    * user-friendly editing.
    *
-   * @see JsonSerializable#toJson()
    * @return The serialized JSON
    */
   @NotNull
-  @Override
   public String toJson() {
 
     if (title == null && sound == null) {
@@ -118,14 +115,12 @@ public class TellContents implements TellObject<TellContents> {
   /**
    * Converts JSON back to a TellContents object. Supports the "none" value.
    *
-   * @see JsonSerializable#fromJson(String)
    * @param json The JSON to deserialize
    * @return The equivalent TellContents object, or a new TellContents object with its message as
    *     the JSON parameter if the provided JSON is invalid
    */
   @NotNull
-  @Override
-  public TellContents fromJson(@Language("JSON") String json) {
+  public static TellContents fromJson(@Language("JSON") String json) {
 
     if (json.equalsIgnoreCase("none")) {
       return new TellContents(null, null, null);
@@ -134,7 +129,7 @@ public class TellContents implements TellObject<TellContents> {
     final TellContents obj;
 
     try {
-      obj = new Gson().fromJson(json, this.getClass());
+      obj = new Gson().fromJson(json, TellContents.class);
     } catch (JsonSyntaxException ex) {
       return new TellContents(json);
     }

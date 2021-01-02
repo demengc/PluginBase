@@ -1,8 +1,8 @@
 package dev.demeng.pluginbase.libby.relocation;
 
 import dev.demeng.pluginbase.libby.Library;
-import dev.demeng.pluginbase.libby.managers.LibraryManager;
 import dev.demeng.pluginbase.libby.classloader.IsolatedClassLoader;
+import dev.demeng.pluginbase.libby.managers.LibraryManager;
 
 import java.io.File;
 import java.lang.reflect.Constructor;

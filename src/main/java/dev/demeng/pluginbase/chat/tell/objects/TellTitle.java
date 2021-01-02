@@ -1,14 +1,16 @@
 package dev.demeng.pluginbase.chat.tell.objects;
 
 import com.cryptomorin.xseries.messages.Titles;
+import com.google.gson.Gson;
 import dev.demeng.pluginbase.chat.tell.TellObject;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** A title and/or subtitle complete with fade in time, stay time, and fade out time. */
-public class TellTitle implements TellObject<TellTitle> {
+public class TellTitle implements TellObject {
 
   private final String title;
   private final String subtitle;
@@ -48,9 +50,30 @@ public class TellTitle implements TellObject<TellTitle> {
   @Override
   public void tell(CommandSender sender) {
 
-    if(sender instanceof Player) {
+    if (sender instanceof Player) {
       Titles.sendTitle((Player) sender, fadeIn, stay, fadeOut, title, subtitle);
     }
+  }
+
+  /**
+   * Converts the title into JSON, for storage.
+   *
+   * @return The equivalent JSON title
+   */
+  @NotNull
+  public String toJson() {
+    return new Gson().toJson(this);
+  }
+
+  /**
+   * Converts the JSON into a TellTitle object.
+   *
+   * @param json The JSON to convert
+   * @return The equivalent TellTitle object
+   */
+  @NotNull
+  public static TellTitle fromJson(@Language("JSON") String json) {
+    return new Gson().fromJson(json, TellTitle.class);
   }
 
   /**
