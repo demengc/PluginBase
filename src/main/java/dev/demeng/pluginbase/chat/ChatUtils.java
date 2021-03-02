@@ -1,22 +1,22 @@
 package dev.demeng.pluginbase.chat;
 
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.chat.tell.TellContents;
 import dev.demeng.pluginbase.plugin.DemLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /** Message-related utilities, including console and chat messages. */
 public class ChatUtils {
@@ -51,7 +51,8 @@ public class ChatUtils {
    * fork of Spigot.
    *
    * @param strings The plain string(s)
-   * @return The colorized string(s), separated by a new line
+   * @return The colorized string(s), separated by a new line, or an empty string if the provided
+   *     string(s) is/are null
    */
   @NotNull
   public static String colorize(String... strings) {
@@ -100,7 +101,8 @@ public class ChatUtils {
    * Appends the prefix, and then colorizes.
    *
    * @param strings The plain, non-prefixed string(s)
-   * @return The colorized string(s), separated by a new line
+   * @return The colorized string(s), separated by a new line, or an empty string if the provided
+   *     string(s) is/are null
    */
   @NotNull
   public static String format(String... strings) {
@@ -126,56 +128,62 @@ public class ChatUtils {
   }
 
   /**
-   * Applies placeholders to the specified string.
+   * Applies the specified placeholder to the entire list of strings.
    *
-   * @param str The string placeholders will be applied to
-   * @param placeholders The placeholders
-   * @return The replaced string
+   * @param strList The list that will have its strings replaced
+   * @param toReplace The string to replace
+   * @param replaceWith The string that matches will be replaced with
+   * @return The replaced list, or an empty list if the provided one is null
    */
   @NotNull
-  public static String replace(String str, Placeholder... placeholders) {
-
-    if (str == null) {
-      return "";
-    }
-
-    if (placeholders == null || placeholders.length < 1) {
-      return str;
-    }
-
-    String replaced = str;
-
-    for (Placeholder placeholder : placeholders) {
-      replaced = placeholder.apply(replaced);
-    }
-
-    return replaced;
-  }
-
-  /**
-   * Applies placeholders to a list of strings.
-   *
-   * @see #replace(String, Placeholder...)
-   */
-  @NotNull
-  public static List<String> replace(List<String> strList, Placeholder... placeholders) {
+  public static List<String> replace(List<String> strList, String toReplace, String replaceWith) {
 
     if (strList == null) {
       return Collections.emptyList();
     }
 
-    if (placeholders == null || placeholders.length < 1) {
+    if (toReplace == null || replaceWith == null) {
       return strList;
     }
 
-    return strList.stream().map(str -> replace(str, placeholders)).collect(Collectors.toList());
+    return strList.stream()
+        .map(str -> str.replace(toReplace, replaceWith))
+        .collect(Collectors.toList());
+  }
+
+  /**
+   * Applies the map of placeholders to the entire list of strings.
+   *
+   * @param strList The list that will have its strings replaced
+   * @param placeholders The map of placeholders, with the string to replace as the key and the
+   *     string matches will be replaced with as the value
+   * @return The replaced list, or an empty list if the provided one is null
+   */
+  @NotNull
+  public static List<String> replace(List<String> strList, Map<String, String> placeholders) {
+
+    if (strList == null) {
+      return Collections.emptyList();
+    }
+
+    if (placeholders == null || placeholders.isEmpty()) {
+      return strList;
+    }
+
+    Stream<String> stream = strList.stream();
+
+    for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+      stream = stream.map(str -> str.replace(entry.getKey(), entry.getValue()));
+    }
+
+    return stream.collect(Collectors.toList());
   }
 
   /**
    * Fully strip all color from the string.
    *
    * @param str The string to strip
-   * @return The stripped string
+   * @return The stripped string, or an empty string if the provided one is null
    */
   @NotNull
   public static String strip(String str) {
@@ -191,6 +199,7 @@ public class ChatUtils {
    * Fully strip all color from strings.
    *
    * @see #strip(String)
+   * @return The stripped string list, or an empty list if the provided one is null
    */
   @NotNull
   public static List<String> strip(List<String> strList) {
@@ -309,16 +318,6 @@ public class ChatUtils {
     }
 
     sender.sendMessage(colorize(lines));
-  }
-
-  public static void tell(CommandSender sender, @Language("JSON") String json) {
-    Objects.requireNonNull(sender, "Sender is null");
-
-    if (json == null) {
-      return;
-    }
-
-    TellContents.fromJson(json).tell(sender);
   }
 
   /**
