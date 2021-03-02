@@ -14,7 +14,7 @@ public class Common {
    * If the server software the plugin is running on is Spigot or a fork of Spigot. Used internally
    * for some Spigot-only features or optimizations.
    */
-  public static final boolean SPIGOT = Validate.checkClass("net.md_5.bungee.api.ChatColor");
+  public static final boolean SPIGOT = Validate.checkClass("net.md_5.bungee.api.ChatColor") != null;
 
   // -----------------------------------------------------------------------------------------------------
   // PLUGIN INFORMATION
@@ -91,7 +91,13 @@ public class Common {
         "&cDescription: &6" + description,
         "&4" + ChatUtils.CONSOLE_LINE);
 
-    // TODO Broadcast message to players.
+    for (Player p : players) {
+      ChatUtils.tellMessage(
+          p,
+          "&6An internal error has occurred in "
+              + Common.getName()
+              + ". Further details have been printed in console.");
+    }
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(DemLoader.getPlugin())) {
       Bukkit.getPluginManager().disablePlugin(DemLoader.getPlugin());
