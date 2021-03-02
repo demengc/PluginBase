@@ -378,4 +378,44 @@ public class ChatUtils {
       player.sendMessage(sb.toString() + line);
     }
   }
+
+  /**
+   * Broadcasts the message after coloring and formating them.
+   *
+   * @param permission The permission players must have in order to see this broadcast, or null if
+   *     the broadcast should be seen by everyone
+   * @param lines The lines to send
+   */
+  public static void broadcast(String permission, String... lines) {
+
+    if (lines == null) {
+      return;
+    }
+
+    if (permission == null) {
+      Bukkit.broadcastMessage(format(lines));
+      return;
+    }
+
+    Bukkit.broadcast(format(lines), permission);
+  }
+
+  /**
+   * Same thing as {@link #broadcast(String, String...)}, but without the prefix.
+   *
+   * @see #broadcast(String, String...)
+   */
+  public static void broadcastColored(String permission, String... lines) {
+
+    if (lines == null) {
+      return;
+    }
+
+    if (permission == null) {
+      Bukkit.broadcastMessage(colorize(lines));
+      return;
+    }
+
+    Bukkit.broadcast(colorize(lines), permission);
+  }
 }
