@@ -13,17 +13,16 @@ public class Validate {
    * Simple method to check if a class exists.
    *
    * @param className The class's package and name (Example: dev.demeng.pluginbase.Validate)
-   * @return True if the class exists, false otherwise
+   * @return The actul class if the class exists, null otherwise
    */
-  public static boolean checkClass(String className) {
+  public static Class<?> checkClass(String className) {
+    Objects.requireNonNull(className, "Class name to check is null");
 
     try {
-      Class.forName(className);
+      return Class.forName(className);
     } catch (ClassNotFoundException ex) {
-      return false;
+      return null;
     }
-
-    return true;
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -34,53 +33,47 @@ public class Validate {
    * Checks if the provided string is an integer.
    *
    * @param str The string to check
-   * @return True if the value is an integer, false otherwise
+   * @return The actual integer if the string is an integer, null otherwise
    */
-  public static boolean checkInt(String str) {
+  public static Integer checkInt(String str) {
     Objects.requireNonNull(str, "String to check is null");
 
     try {
-      Integer.parseInt(str);
+      return Integer.parseInt(str);
     } catch (NumberFormatException ex) {
-      return false;
+      return null;
     }
-
-    return true;
   }
 
   /**
    * Checks if the provided string is a long.
    *
    * @param str The string to check
-   * @return True if the value is a long, false otherwise
+   * @return The actual long if the string is an long, null otherwise
    */
-  public static boolean checkLong(String str) {
+  public static Long checkLong(String str) {
     Objects.requireNonNull(str, "String to check is null");
 
     try {
-      Long.parseLong(str);
+      return Long.parseLong(str);
     } catch (NumberFormatException ex) {
-      return false;
+      return null;
     }
-
-    return true;
   }
 
   /**
    * Checks if the provided string is a double.
    *
    * @param str The string to check
-   * @return True if the value is a double, false otherwise
+   * @return The actual double if the string is an double, null otherwise
    */
-  public static boolean checkDouble(String str) {
+  public static Double checkDouble(String str) {
     Objects.requireNonNull(str, "String to check is null");
 
     try {
-      Double.parseDouble(str);
+      return Double.parseDouble(str);
     } catch (NumberFormatException ex) {
-      return false;
+      return null;
     }
-
-    return true;
   }
 }
