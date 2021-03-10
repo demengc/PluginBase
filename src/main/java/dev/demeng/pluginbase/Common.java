@@ -76,6 +76,7 @@ public class Common {
    * @param def The default value
    * @return The nullable if not null, default otherwise
    */
+  @NotNull
   public static <T> T getOrDefault(T nullable, T def) {
     return nullable != null ? nullable : def;
   }
