@@ -2,6 +2,7 @@ package dev.demeng.pluginbase;
 
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -14,6 +15,7 @@ public class TaskUtils {
    * @param task The task to run
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable runSync(Consumer<BukkitRunnable> task) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTask(BaseLoader.getPlugin());
@@ -26,6 +28,7 @@ public class TaskUtils {
    * @param task The task to run
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable runAsync(Consumer<BukkitRunnable> task) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskAsynchronously(BaseLoader.getPlugin());
@@ -39,6 +42,7 @@ public class TaskUtils {
    * @param delay The number of ticks to delay
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable delay(Consumer<BukkitRunnable> task, long delay) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskLater(BaseLoader.getPlugin(), delay);
@@ -52,6 +56,7 @@ public class TaskUtils {
    * @param delay The number of ticks to delay
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable delayAsync(Consumer<BukkitRunnable> task, long delay) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskLaterAsynchronously(BaseLoader.getPlugin(), delay);
@@ -66,6 +71,7 @@ public class TaskUtils {
    * @param repeatDelay The number of ticks between eech run
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable repeat(
       Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay) {
     final BukkitRunnable runnable = createSimpleTask(task);
@@ -81,6 +87,7 @@ public class TaskUtils {
    * @param repeatDelay The number of ticks between eech run
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable repeatAsync(
       Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay) {
     final BukkitRunnable runnable = createSimpleTask(task);
@@ -98,6 +105,7 @@ public class TaskUtils {
    * @param limit The maximum number of times the task will be repeated
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable repeat(
       Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay, int limit) {
 
@@ -131,6 +139,7 @@ public class TaskUtils {
    * @param limit The maximum number of times the task will be repeated
    * @return The BukkitRunnable that was initialized for this task
    */
+  @NotNull
   public static BukkitRunnable repeatAsync(
       Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay, int limit) {
 
