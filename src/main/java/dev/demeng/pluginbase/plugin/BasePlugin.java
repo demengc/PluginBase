@@ -8,13 +8,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * An extended version of JavaPlugin. Main class must extend this class in order to use PluginBase.
  */
-public abstract class DemPlugin extends JavaPlugin {
+public abstract class BasePlugin extends JavaPlugin {
 
   private BukkitLibraryManager libraryManager;
 
   @Override
   public final void onLoad() {
-    DemLoader.setPlugin(this);
+    BaseLoader.setPlugin(this);
     libraryManager = new BukkitLibraryManager();
     load();
   }

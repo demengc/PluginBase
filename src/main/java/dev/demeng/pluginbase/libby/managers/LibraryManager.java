@@ -3,7 +3,7 @@ package dev.demeng.pluginbase.libby.managers;
 import dev.demeng.pluginbase.libby.Library;
 import dev.demeng.pluginbase.libby.relocation.Relocation;
 import dev.demeng.pluginbase.libby.relocation.RelocationHelper;
-import dev.demeng.pluginbase.plugin.DemLoader;
+import dev.demeng.pluginbase.plugin.BaseLoader;
 
 import java.io.*;
 import java.net.*;
@@ -128,7 +128,7 @@ public abstract class LibraryManager {
    */
   private byte[] downloadLibrary(String url) {
 
-    final Logger logger = DemLoader.getPlugin().getLogger();
+    final Logger logger = BaseLoader.getPlugin().getLogger();
 
     try {
       final URLConnection connection = new URL(Objects.requireNonNull(url, "url")).openConnection();
@@ -200,7 +200,7 @@ public abstract class LibraryManager {
    */
   public Path downloadLibrary(Library library) {
 
-    final Logger logger = DemLoader.getPlugin().getLogger();
+    final Logger logger = BaseLoader.getPlugin().getLogger();
 
     Path file = saveDirectory.resolve(Objects.requireNonNull(library, "library").getPath());
     if (Files.exists(file)) {
@@ -297,7 +297,7 @@ public abstract class LibraryManager {
       relocator.relocate(in, tmpOut, relocations);
       Files.move(tmpOut, file);
 
-      DemLoader.getPlugin()
+      BaseLoader.getPlugin()
           .getLogger()
           .info("Relocations applied to " + saveDirectory.getParent().relativize(in));
 

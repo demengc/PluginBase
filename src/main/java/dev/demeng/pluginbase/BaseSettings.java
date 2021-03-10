@@ -1,8 +1,10 @@
 package dev.demeng.pluginbase;
 
+import dev.demeng.pluginbase.plugin.BasePlugin;
+
 /**
  * Settings for the plugin base. Most of these methods should be overriden to suite your needs.
- * Apply the settings using {@link dev.demeng.pluginbase.plugin.DemPlugin}'s #setBaseSettings().
+ * Apply the settings using {@link BasePlugin}'s #setBaseSettings().
  */
 public interface BaseSettings {
 

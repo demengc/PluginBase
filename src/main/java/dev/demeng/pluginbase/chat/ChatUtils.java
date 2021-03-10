@@ -1,7 +1,7 @@
 package dev.demeng.pluginbase.chat;
 
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.plugin.DemLoader;
+import dev.demeng.pluginbase.plugin.BaseLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -42,7 +42,7 @@ public class ChatUtils {
    */
   @NotNull
   public static String getPrefix() {
-    return DemLoader.getPlugin().getBaseSettings().prefix();
+    return BaseLoader.getPlugin().getBaseSettings().prefix();
   }
 
   /**
@@ -263,7 +263,7 @@ public class ChatUtils {
     }
 
     for (String s : strings) {
-      DemLoader.getPlugin().getLogger().info(s);
+      BaseLoader.getPlugin().getLogger().info(s);
     }
   }
 
@@ -280,7 +280,7 @@ public class ChatUtils {
     }
 
     for (String s : strings) {
-      DemLoader.getPlugin().getLogger().log(level, s);
+      BaseLoader.getPlugin().getLogger().log(level, s);
     }
   }
 

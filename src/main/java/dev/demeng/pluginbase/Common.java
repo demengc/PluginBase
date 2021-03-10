@@ -2,7 +2,7 @@ package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
-import dev.demeng.pluginbase.plugin.DemLoader;
+import dev.demeng.pluginbase.plugin.BaseLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ public class Common {
    */
   @NotNull
   public static String getName() {
-    return DemLoader.getPlugin().getDescription().getName();
+    return BaseLoader.getPlugin().getDescription().getName();
   }
 
   /**
@@ -37,7 +37,7 @@ public class Common {
    */
   @NotNull
   public static String getVersion() {
-    return DemLoader.getPlugin().getDescription().getVersion();
+    return BaseLoader.getPlugin().getDescription().getVersion();
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -99,8 +99,8 @@ public class Common {
               + ". Further details have been printed in console.");
     }
 
-    if (disable && Bukkit.getPluginManager().isPluginEnabled(DemLoader.getPlugin())) {
-      Bukkit.getPluginManager().disablePlugin(DemLoader.getPlugin());
+    if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseLoader.getPlugin())) {
+      Bukkit.getPluginManager().disablePlugin(BaseLoader.getPlugin());
     }
   }
 }
