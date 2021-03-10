@@ -70,6 +70,17 @@ public class Common {
   // -----------------------------------------------------------------------------------------------------
 
   /**
+   * Returns the nullable value if not null, or the default value if it is null.
+   *
+   * @param nullable The nullable value
+   * @param def The default value
+   * @return The nullable if not null, default otherwise
+   */
+  public static <T> T getOrDefault(T nullable, T def) {
+    return nullable != null ? nullable : def;
+  }
+
+  /**
    * Reports an error in the plugin.
    *
    * @param error The exception
