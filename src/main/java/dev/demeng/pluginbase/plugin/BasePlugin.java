@@ -3,6 +3,7 @@ package dev.demeng.pluginbase.plugin;
 import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.libby.Library;
 import dev.demeng.pluginbase.libby.managers.BukkitLibraryManager;
+import dev.demeng.pluginbase.command.CommandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -10,12 +11,16 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public abstract class BasePlugin extends JavaPlugin {
 
+  // TODO Add more JavaDoc comments.
+
   private BukkitLibraryManager libraryManager;
+  private CommandManager commandManager;
 
   @Override
   public final void onLoad() {
     BaseLoader.setPlugin(this);
     libraryManager = new BukkitLibraryManager();
+    commandManager = new CommandManager();
     load();
   }
 
@@ -27,6 +32,7 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onDisable() {
     disable();
+    commandManager.unregisterAll();
   }
 
   public void loadLib(
@@ -49,6 +55,15 @@ public abstract class BasePlugin extends JavaPlugin {
 
   public BukkitLibraryManager getLibraryManager() {
     return libraryManager;
+  }
+
+  /**
+   * The command manager for the plugin.
+   *
+   * @return The command manager
+   */
+  public CommandManager getCommandManager() {
+    return commandManager;
   }
 
   public abstract BaseSettings getBaseSettings();

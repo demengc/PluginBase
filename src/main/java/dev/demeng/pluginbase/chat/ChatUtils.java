@@ -294,7 +294,7 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines The lines to send
    */
-  public static void tellMessage(CommandSender sender, String... lines) {
+  public static void tell(CommandSender sender, String... lines) {
     Objects.requireNonNull(sender, "Sender is null");
 
     if (lines == null) {
@@ -305,12 +305,12 @@ public class ChatUtils {
   }
 
   /**
-   * Does the same thing as {@link #tellMessage(CommandSender, String...)}, but without the prefix.
+   * Does the same thing as {@link #tell(CommandSender, String...)}, but without the prefix.
    *
    * @param sender The command sender that will receive the message
    * @param lines The lines to send
    */
-  public static void tellMessageColored(CommandSender sender, String... lines) {
+  public static void tellColored(CommandSender sender, String... lines) {
     Objects.requireNonNull(sender, "Sender is null");
 
     if (lines == null) {

@@ -4,8 +4,11 @@ import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /** Commonly used methods and utilities. */
 public class Common {
@@ -82,6 +85,22 @@ public class Common {
   }
 
   /**
+   * Checks if the specified command sender has the permission node. If the permission node is null,
+   * empty, or equal to "none", the method will return true.
+   *
+   * @param sender The command sender to check
+   * @param permission The permission to check
+   * @return True if the command sender has the permission, false otherwise
+   */
+  public static boolean hasPermission(CommandSender sender, String permission) {
+    Objects.requireNonNull(sender, "Sender to check cannot be null");
+    return permission == null
+        || permission.isEmpty()
+        || permission.equalsIgnoreCase("none")
+        || sender.hasPermission(permission);
+  }
+
+  /**
    * Reports an error in the plugin.
    *
    * @param error The exception
@@ -104,7 +123,7 @@ public class Common {
         "&4" + ChatUtils.CONSOLE_LINE);
 
     for (Player p : players) {
-      ChatUtils.tellMessage(
+      ChatUtils.tell(
           p,
           "&6An internal error has occurred in "
               + Common.getName()
