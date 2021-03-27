@@ -1,17 +1,15 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
+import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.libby.Library;
 import dev.demeng.pluginbase.libby.managers.BukkitLibraryManager;
-import dev.demeng.pluginbase.command.CommandManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * An extended version of JavaPlugin. Main class must extend this class in order to use PluginBase.
  */
 public abstract class BasePlugin extends JavaPlugin {
-
-  // TODO Add more JavaDoc comments.
 
   private BukkitLibraryManager libraryManager;
   private CommandManager commandManager;
@@ -35,6 +33,18 @@ public abstract class BasePlugin extends JavaPlugin {
     commandManager.unregisterAll();
   }
 
+  /**
+   * Load a new library at runtime. Make sure to add the repository using the library manager before
+   * using this method.
+   *
+   * @see BukkitLibraryManager#addMavenCentral()
+   * @see BukkitLibraryManager#addRepository(String)
+   * @param groupId The group ID of the dependency
+   * @param artifactId The artifact ID of the dependency
+   * @param version The version of the dependency
+   * @param pattern The original packaging pattern, or null if you do not want to relocate
+   * @param shadedPattern The new packaging pattern, or null if you do not want to relocate
+   */
   public void loadLib(
       String groupId, String artifactId, String version, String pattern, String shadedPattern) {
 
@@ -53,6 +63,11 @@ public abstract class BasePlugin extends JavaPlugin {
     libraryManager.loadLibrary(builder.build());
   }
 
+  /**
+   * The library manager for the plugin.
+   *
+   * @return The library manager
+   */
   public BukkitLibraryManager getLibraryManager() {
     return libraryManager;
   }
@@ -66,6 +81,11 @@ public abstract class BasePlugin extends JavaPlugin {
     return commandManager;
   }
 
+  /**
+   * The settings the base should use.
+   *
+   * @return The base settings
+   */
   public abstract BaseSettings getBaseSettings();
 
   /** Code to perform at early plugin startup. */
