@@ -24,14 +24,15 @@
 
 package dev.demeng.pluginbase.plugin.annotation;
 
-import org.bukkit.plugin.PluginLoadOrder;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.bukkit.plugin.PluginLoadOrder;
 
-/** Annotation to automatically generate the plugin.yml. */
+/**
+ * Annotation to automatically generate the plugin.yml.
+ */
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
 public @interface Plugin {

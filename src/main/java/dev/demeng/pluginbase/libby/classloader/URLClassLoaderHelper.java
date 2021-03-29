@@ -25,13 +25,14 @@
 
 package dev.demeng.pluginbase.libby.classloader;
 
+import static java.util.Objects.requireNonNull;
+
+import dev.demeng.pluginbase.exceptions.BaseException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A reflection-based wrapper around {@link URLClassLoader} for adding URLs to the classpath.
@@ -40,10 +41,14 @@ import static java.util.Objects.requireNonNull;
  */
 public class URLClassLoaderHelper {
 
-  /** The class loader being managed by this helper. */
+  /**
+   * The class loader being managed by this helper.
+   */
   private final URLClassLoader classLoader;
 
-  /** A reflected method in {@link URLClassLoader}, when invoked adds a URL to the classpath. */
+  /**
+   * A reflected method in {@link URLClassLoader}, when invoked adds a URL to the classpath.
+   */
   private final Method addURLMethod;
 
   /**
@@ -52,7 +57,7 @@ public class URLClassLoaderHelper {
    * @param classLoader The class loader to manage
    * @throws RuntimeException NoSuchMethodException
    */
-  public URLClassLoaderHelper(URLClassLoader classLoader) throws RuntimeException {
+  public URLClassLoaderHelper(URLClassLoader classLoader) throws BaseException {
     this.classLoader = requireNonNull(classLoader, "classLoader");
 
     try {
@@ -60,7 +65,7 @@ public class URLClassLoaderHelper {
       addURLMethod.setAccessible(true);
 
     } catch (NoSuchMethodException ex) {
-      throw new RuntimeException(ex);
+      throw new BaseException(ex);
     }
   }
 
@@ -70,12 +75,12 @@ public class URLClassLoaderHelper {
    * @param url The URL to add
    * @throws RuntimeException ReflectiveOperationException
    */
-  public void addToClasspath(URL url) throws RuntimeException {
+  public void addToClasspath(URL url) throws BaseException {
     try {
       addURLMethod.invoke(classLoader, requireNonNull(url, "url"));
 
     } catch (ReflectiveOperationException ex) {
-      throw new RuntimeException(ex);
+      throw new BaseException(ex);
     }
   }
 
@@ -85,7 +90,7 @@ public class URLClassLoaderHelper {
    * @param path The path to add
    * @throws IllegalArgumentException MalformedURLException
    */
-  public void addToClasspath(Path path) throws RuntimeException {
+  public void addToClasspath(Path path) throws IllegalArgumentException {
     try {
       addToClasspath(requireNonNull(path, "path").toUri().toURL());
 

@@ -26,8 +26,14 @@ package dev.demeng.pluginbase;
 
 import java.util.Objects;
 
-/** Utlity class for checking and validating objects. */
+/**
+ * Utlity class for checking and validating objects.
+ */
 public class Validate {
+
+  private Validate() {
+    throw new IllegalStateException("Utility class");
+  }
 
   // -----------------------------------------------------------------------------------------------------
   // GENERAL

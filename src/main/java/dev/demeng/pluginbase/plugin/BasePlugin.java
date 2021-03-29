@@ -61,13 +61,13 @@ public abstract class BasePlugin extends JavaPlugin {
    * Load a new library at runtime. Make sure to add the repository using the library manager before
    * using this method.
    *
+   * @param groupId       The group ID of the dependency
+   * @param artifactId    The artifact ID of the dependency
+   * @param version       The version of the dependency
+   * @param pattern       The original packaging pattern, or null if you do not want to relocate
+   * @param shadedPattern The new packaging pattern, or null if you do not want to relocate
    * @see BukkitLibraryManager#addMavenCentral()
    * @see BukkitLibraryManager#addRepository(String)
-   * @param groupId The group ID of the dependency
-   * @param artifactId The artifact ID of the dependency
-   * @param version The version of the dependency
-   * @param pattern The original packaging pattern, or null if you do not want to relocate
-   * @param shadedPattern The new packaging pattern, or null if you do not want to relocate
    */
   public void loadLib(
       String groupId, String artifactId, String version, String pattern, String shadedPattern) {
@@ -112,12 +112,21 @@ public abstract class BasePlugin extends JavaPlugin {
    */
   public abstract BaseSettings getBaseSettings();
 
-  /** Code to perform at early plugin startup. */
-  protected void load() {}
+  /**
+   * Code to perform at early plugin startup.
+   */
+  protected void load() {
+  }
 
-  /** Code to perform on plugin enable. */
-  protected void enable() {}
+  /**
+   * Code to perform on plugin enable.
+   */
+  protected void enable() {
+  }
 
-  /** Code to perform on plugin disable. */
-  protected void disable() {}
+  /**
+   * Code to perform on plugin disable.
+   */
+  protected void disable() {
+  }
 }

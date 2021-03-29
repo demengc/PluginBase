@@ -47,10 +47,10 @@ public class Relocation {
   /**
    * Creates a new relocation.
    *
-   * @param pattern Search pattern
+   * @param pattern          Search pattern
    * @param relocatedPattern Replacement pattern
-   * @param includes Classes and resources to include
-   * @param excludes Classes and resources to exclude
+   * @param includes         Classes and resources to include
+   * @param excludes         Classes and resources to exclude
    */
   public Relocation(
       String pattern,
@@ -73,7 +73,7 @@ public class Relocation {
   /**
    * Creates a new relocation with empty includes and excludes.
    *
-   * @param pattern Search pattern
+   * @param pattern          Search pattern
    * @param relocatedPattern Replacement pattern
    */
   public Relocation(String pattern, String relocatedPattern) {

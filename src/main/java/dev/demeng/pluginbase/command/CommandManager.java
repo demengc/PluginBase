@@ -33,6 +33,12 @@ import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
 import dev.demeng.pluginbase.command.handlers.CommandHandler;
 import dev.demeng.pluginbase.command.handlers.CompletionHandler;
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
@@ -40,14 +46,9 @@ import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.event.Listener;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-/** Handles the custom commands registered using the library. */
+/**
+ * Handles the custom commands registered using the library.
+ */
 public final class CommandManager implements Listener {
 
   private CommandMap commandMap;
@@ -116,7 +117,9 @@ public final class CommandManager implements Listener {
     commands.put(commandName, commandHandler);
   }
 
-  /** Unregisters all commands registered by this plugin. */
+  /**
+   * Unregisters all commands registered by this plugin.
+   */
   public void unregisterAll() {
     commands.values().forEach(command -> command.unregister(commandMap));
   }

@@ -29,14 +29,13 @@ import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.command.objects.CommandData;
 import dev.demeng.pluginbase.command.objects.TypeResult;
 import dev.demeng.pluginbase.command.resolvers.ParameterResolver;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Handles and maps command arguments from string to the expected data type in method parameters.
@@ -99,7 +98,7 @@ public final class ArgumentHandler {
   /**
    * Registers a new argument type that can be used in method parameters.
    *
-   * @param clazz The type to be added
+   * @param clazz             The type to be added
    * @param parameterResolver The parameter resolver that will process this data type
    */
   public void register(Class<?> clazz, ParameterResolver parameterResolver) {
@@ -109,9 +108,9 @@ public final class ArgumentHandler {
   /**
    * Gets a type result based on the class type.
    *
-   * @param clazz The class to check
-   * @param object The input object of the functional interface
-   * @param data The command data
+   * @param clazz         The class to check
+   * @param object        The input object of the functional interface
+   * @param data          The command data
    * @param parameterName The parameter name from the method
    * @return The output object of the functional interface
    */

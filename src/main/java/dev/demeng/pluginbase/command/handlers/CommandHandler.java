@@ -29,22 +29,41 @@ import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.command.CommandBase;
+import dev.demeng.pluginbase.command.annotations.Alias;
+import dev.demeng.pluginbase.command.annotations.CompleteFor;
+import dev.demeng.pluginbase.command.annotations.Completion;
+import dev.demeng.pluginbase.command.annotations.Default;
 import dev.demeng.pluginbase.command.annotations.Optional;
-import dev.demeng.pluginbase.command.annotations.*;
+import dev.demeng.pluginbase.command.annotations.Permission;
+import dev.demeng.pluginbase.command.annotations.SubCommand;
 import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
 import dev.demeng.pluginbase.command.objects.CommandData;
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.*;
-import java.util.*;
-
-/** The handler for all the custom commands. For internal use. */
+/**
+ * The handler for all the custom commands. For internal use.
+ */
 public final class CommandHandler extends Command {
+
+  private static final String DEFAULT_NAME = "pb-default";
 
   private final Map<String, CommandData> commands = new HashMap<>();
 
@@ -73,7 +92,7 @@ public final class CommandHandler extends Command {
       final CommandData data = new CommandData(command);
 
       if ((!method.isAnnotationPresent(Default.class)
-              && !method.isAnnotationPresent(SubCommand.class))
+          && !method.isAnnotationPresent(SubCommand.class))
           || !Modifier.isPublic(method.getModifiers())) {
         continue;
       }
@@ -109,8 +128,8 @@ public final class CommandHandler extends Command {
       }
 
       if (data.isDef()) {
-        data.setName("pb-default");
-        commands.put("pb-default", data);
+        data.setName(DEFAULT_NAME);
+        commands.put(DEFAULT_NAME, data);
       }
 
       checkCompletionMethod(command, data);
@@ -136,7 +155,7 @@ public final class CommandHandler extends Command {
       }
 
       if (!(CommandSender.class.equals(data.getSenderClass())
-              || ConsoleCommandSender.class.equals(data.getSenderClass()))
+          || ConsoleCommandSender.class.equals(data.getSenderClass()))
           && !(sender instanceof Player)) {
         ChatUtils.tell(sender, settings.notPlayer());
         return true;
@@ -147,7 +166,7 @@ public final class CommandHandler extends Command {
 
     final String argCommand = arguments[0].toLowerCase();
 
-    if ((data != null && data.getArguments().size() == 0)
+    if ((data != null && data.getArguments().isEmpty())
         && (!commands.containsKey(argCommand) || getName().equalsIgnoreCase(argCommand))) {
       ChatUtils.tell(sender, settings.incorrectUsage());
       return true;
@@ -170,7 +189,7 @@ public final class CommandHandler extends Command {
     }
 
     if (!(CommandSender.class.equals(data.getSenderClass())
-            || ConsoleCommandSender.class.equals(data.getSenderClass()))
+        || ConsoleCommandSender.class.equals(data.getSenderClass()))
         && !(sender instanceof Player)) {
       ChatUtils.tell(sender, settings.notPlayer());
       return true;
@@ -186,9 +205,11 @@ public final class CommandHandler extends Command {
       final Method method = subCommand.getMethod();
 
       final List<String> argumentsList = new LinkedList<>(Arrays.asList(arguments));
-      if (!subCommand.isDef() && argumentsList.size() > 0) argumentsList.remove(0);
+      if (!subCommand.isDef() && !argumentsList.isEmpty()) {
+        argumentsList.remove(0);
+      }
 
-      if (subCommand.getArguments().size() == 0 && argumentsList.size() == 0) {
+      if (subCommand.getArguments().isEmpty() && argumentsList.isEmpty()) {
         method.invoke(subCommand.getCommandBase(), sender);
         return true;
       }
@@ -200,14 +221,14 @@ public final class CommandHandler extends Command {
       }
 
       if (subCommand.getArguments().size() != argumentsList.size() && !subCommand.hasOptional()) {
-        if (!subCommand.isDef() && subCommand.getArguments().size() == 0) {
+        if (!subCommand.isDef() && subCommand.getArguments().isEmpty()) {
           ChatUtils.tell(sender, settings.incorrectUsage());
           return true;
         }
 
         if (!String[]
             .class.isAssignableFrom(
-                subCommand.getArguments().get(subCommand.getArguments().size() - 1))) {
+            subCommand.getArguments().get(subCommand.getArguments().size() - 1))) {
           ChatUtils.tell(sender, settings.incorrectUsage());
           return true;
         }
@@ -291,7 +312,7 @@ public final class CommandHandler extends Command {
         if (completionMethod != null) {
           try {
             List<String> argsList = new LinkedList<>(Arrays.asList(args));
-            argsList.remove("pb-default");
+            argsList.remove(DEFAULT_NAME);
             //noinspection unchecked
             return (List<String>) completionMethod.invoke(data.getCommandBase(), argsList, sender);
           } catch (IllegalAccessException | InvocationTargetException e) {
@@ -301,7 +322,7 @@ public final class CommandHandler extends Command {
       }
 
       final List<String> subCmd = new ArrayList<>(commands.keySet());
-      subCmd.remove("pb-default");
+      subCmd.remove(DEFAULT_NAME);
 
       for (String subCmdName : commands.keySet()) {
         final CommandData subCmdData = commands.get(subCmdName);
@@ -325,7 +346,9 @@ public final class CommandHandler extends Command {
 
       if (!"".equals(args[0])) {
         for (String commandName : subCmd) {
-          if (!commandName.toLowerCase().startsWith(args[0].toLowerCase())) continue;
+          if (!commandName.toLowerCase().startsWith(args[0].toLowerCase())) {
+            continue;
+          }
           commandNames.add(commandName);
         }
       } else {
@@ -385,7 +408,9 @@ public final class CommandHandler extends Command {
 
     if (!"".equals(current)) {
       for (String completion : completionHandler.getTypeResult(id, inputClazz)) {
-        if (!completion.toLowerCase().contains(current.toLowerCase())) continue;
+        if (!completion.toLowerCase().contains(current.toLowerCase())) {
+          continue;
+        }
         completionList.add(completion);
       }
     } else {
@@ -397,7 +422,7 @@ public final class CommandHandler extends Command {
   }
 
   private CommandData getDefaultSubCommand() {
-    return commands.get("pb-default");
+    return commands.get(DEFAULT_NAME);
   }
 
   private void checkDefault(Method method, CommandData data) {
@@ -487,11 +512,8 @@ public final class CommandHandler extends Command {
   private void checkCompletionMethod(CommandBase command, CommandData data) {
 
     for (final Method method : command.getClass().getDeclaredMethods()) {
-      if (!method.isAnnotationPresent(CompleteFor.class)) {
-        continue;
-      }
-
-      if (!(method.getGenericReturnType() instanceof ParameterizedType)) {
+      if (!method.isAnnotationPresent(CompleteFor.class) || !(method
+          .getGenericReturnType() instanceof ParameterizedType)) {
         continue;
       }
 
@@ -505,25 +527,13 @@ public final class CommandHandler extends Command {
                 method.getName(), method.getClass().getName()));
       }
 
-      if (parametrizedReturnType.getRawType() != List.class) {
-        continue;
-      }
-
-      if (parametrizedReturnType.getActualTypeArguments().length != 1) {
-        continue;
-      }
-
-      if (parametrizedReturnType.getActualTypeArguments()[0] != String.class) {
-        continue;
-      }
-
-      if (!CommandSender.class.isAssignableFrom(method.getParameterTypes()[1])) {
-        continue;
-      }
-
       final String subCommandName = method.getAnnotation(CompleteFor.class).value();
 
-      if (!subCommandName.equalsIgnoreCase(data.getName())) {
+      if (parametrizedReturnType.getRawType() != List.class
+          || parametrizedReturnType.getActualTypeArguments().length != 1
+          || parametrizedReturnType.getActualTypeArguments()[0] != String.class
+          || !CommandSender.class.isAssignableFrom(method.getParameterTypes()[1])
+          || !subCommandName.equalsIgnoreCase(data.getName())) {
         continue;
       }
 
@@ -541,7 +551,9 @@ public final class CommandHandler extends Command {
       //noinspection UnnecessaryLocalVariable
       final CommandData aliasCD = data;
       data.setName(alias.toLowerCase());
-      if (aliasCD.isDef()) aliasCD.setDef(false);
+      if (aliasCD.isDef()) {
+        aliasCD.setDef(false);
+      }
       commands.put(alias.toLowerCase(), data);
     }
   }
@@ -554,7 +566,7 @@ public final class CommandHandler extends Command {
 
       if (i != method.getParameters().length - 1
           && parameter.isAnnotationPresent(
-              dev.demeng.pluginbase.command.annotations.Optional.class)) {
+          dev.demeng.pluginbase.command.annotations.Optional.class)) {
         throw new CustomCommandException(
             String.format(
                 "Optional arguments must be the last parameter for method %s in class %s",

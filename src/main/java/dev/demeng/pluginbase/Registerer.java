@@ -28,8 +28,14 @@ import dev.demeng.pluginbase.plugin.BaseLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
-/** Utility class for quickly registering commands, listeners, and more. */
+/**
+ * Utility class for quickly registering commands, listeners, and more.
+ */
 public class Registerer {
+
+  private Registerer() {
+    throw new IllegalStateException("Utility class");
+  }
 
   /**
    * Registers a listener.

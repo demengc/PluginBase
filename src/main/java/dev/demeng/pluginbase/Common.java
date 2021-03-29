@@ -27,15 +27,20 @@ package dev.demeng.pluginbase;
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-/** Commonly used methods and utilities. */
+/**
+ * Commonly used methods and utilities.
+ */
 public class Common {
+
+  private Common() {
+    throw new IllegalStateException("Utility class");
+  }
 
   /**
    * If the server software the plugin is running on is Spigot or a fork of Spigot. Used internally
@@ -100,7 +105,7 @@ public class Common {
    * Returns the nullable value if not null, or the default value if it is null.
    *
    * @param nullable The nullable value
-   * @param def The default value
+   * @param def      The default value
    * @return The nullable if not null, default otherwise
    */
   @NotNull
@@ -112,12 +117,12 @@ public class Common {
    * Checks if the specified command sender has the permission node. If the permission node is null,
    * empty, or equal to "none", the method will return true.
    *
-   * @param sender The command sender to check
+   * @param sender     The command sender to check
    * @param permission The permission to check
    * @return True if the command sender has the permission, false otherwise
    */
   public static boolean hasPermission(CommandSender sender, String permission) {
-    Objects.requireNonNull(sender, "Sender to check cannot be null");
+    Objects.requireNonNull(sender, "Sender to check is null");
     return permission == null
         || permission.isEmpty()
         || permission.equalsIgnoreCase("none")
@@ -127,10 +132,10 @@ public class Common {
   /**
    * Reports an error in the plugin.
    *
-   * @param error The exception
+   * @param error       The exception
    * @param description A brief description of the error
-   * @param disable If the plugin should be disabled
-   * @param players Any players associated with this error, a message will be sent to them
+   * @param disable     If the plugin should be disabled
+   * @param players     Any players associated with this error, a message will be sent to them
    */
   public static void error(
       Throwable error, String description, boolean disable, Player... players) {

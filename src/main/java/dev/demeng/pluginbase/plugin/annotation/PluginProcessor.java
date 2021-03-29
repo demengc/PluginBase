@@ -26,9 +26,18 @@
 
 package dev.demeng.pluginbase.plugin.annotation;
 
-import org.bukkit.plugin.PluginLoadOrder;
-import org.yaml.snakeyaml.Yaml;
-
+import dev.demeng.pluginbase.exceptions.BaseException;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -39,13 +48,12 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import org.bukkit.plugin.PluginLoadOrder;
+import org.yaml.snakeyaml.Yaml;
 
-/** Processes the {@link Plugin} annotation and generates a plugin.yml file at compile time. */
+/**
+ * Processes the {@link Plugin} annotation and generates a plugin.yml file at compile time.
+ */
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes({"dev.demeng.pluginbase.plugin.annotation.Plugin"})
 public final class PluginProcessor extends AbstractProcessor {
@@ -151,7 +159,7 @@ public final class PluginProcessor extends AbstractProcessor {
       return true;
 
     } catch (IOException ex) {
-      throw new RuntimeException("Failed to generate plugin.yml: " + ex.getMessage(), ex);
+      throw new BaseException("Failed to generate plugin.yml: " + ex.getMessage(), ex);
     }
   }
 }

@@ -25,13 +25,18 @@
 package dev.demeng.pluginbase;
 
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.util.function.Consumer;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
-
-/** Utilities for quickly creating various Bukkit runnables/tasks inside your plugin. */
+/**
+ * Utilities for quickly creating various Bukkit runnables/tasks inside your plugin.
+ */
 public class TaskUtils {
+
+  private TaskUtils() {
+    throw new IllegalStateException("Utility class");
+  }
 
   /**
    * Runs the task once on the primary thread, without delay nor repetition.
@@ -62,7 +67,7 @@ public class TaskUtils {
   /**
    * Runs the task once, with an initial delay.
    *
-   * @param task The task to run
+   * @param task  The task to run
    * @param delay The number of ticks to delay
    * @return The BukkitRunnable that was initialized for this task
    */
@@ -76,7 +81,7 @@ public class TaskUtils {
   /**
    * Runs the task once, asyncronously, with an initial delay.
    *
-   * @param task The task to run
+   * @param task  The task to run
    * @param delay The number of ticks to delay
    * @return The BukkitRunnable that was initialized for this task
    */
@@ -90,9 +95,9 @@ public class TaskUtils {
   /**
    * Runs the task repeatedly, with an initial delay and a delay between runs.
    *
-   * @param task The task to run
+   * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay The number of ticks between eech run
+   * @param repeatDelay  The number of ticks between eech run
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
@@ -106,9 +111,9 @@ public class TaskUtils {
   /**
    * Runs the task repeatedly, asyncronously, with an initial delay and a delay between runs.
    *
-   * @param task The task to run
+   * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay The number of ticks between eech run
+   * @param repeatDelay  The number of ticks between eech run
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
@@ -123,10 +128,10 @@ public class TaskUtils {
    * Runs the task repeatedly, with an initial delay, a delay between runs, and a number of
    * repetitions.
    *
-   * @param task The task to run
+   * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay The number of ticks between eech run
-   * @param limit The maximum number of times the task will be repeated
+   * @param repeatDelay  The number of ticks between eech run
+   * @param limit        The maximum number of times the task will be repeated
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
@@ -157,10 +162,10 @@ public class TaskUtils {
    * Runs the task repeatedly, asyncronously, with an initial delay, a delay between runs, and a
    * number of repetitions.
    *
-   * @param task The task to run
+   * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay The number of ticks between eech run
-   * @param limit The maximum number of times the task will be repeated
+   * @param repeatDelay  The number of ticks between eech run
+   * @param limit        The maximum number of times the task will be repeated
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull

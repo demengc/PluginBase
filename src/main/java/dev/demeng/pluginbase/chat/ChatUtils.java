@@ -26,12 +26,6 @@ package dev.demeng.pluginbase.chat;
 
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.plugin.BaseLoader;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,17 +35,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-/** Message-related utilities, including console and chat messages. */
+/**
+ * Message-related utilities, including console and chat messages.
+ */
 public class ChatUtils {
 
-  /** Pattern to amtch our HEX color format for MC 1.16+. */
+  private ChatUtils() {
+    throw new IllegalStateException("Utility class");
+  }
+
+  /**
+   * Pattern to amtch our HEX color format for MC 1.16+.
+   */
   public static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
-  /** Separation line for players (in-game chat). */
+  /**
+   * Separation line for players (in-game chat).
+   */
   public static final String CHAT_LINE = "&m-----------------------------------------------------";
 
-  /** Separation line for console. */
+  /**
+   * Separation line for console.
+   */
   public static final String CONSOLE_LINE =
       "*-----------------------------------------------------*";
 
@@ -76,7 +87,7 @@ public class ChatUtils {
    *
    * @param strings The plain string(s)
    * @return The colorized string(s), separated by a new line, or an empty string if the provided
-   *     string(s) is/are null
+   * string(s) is/are null
    */
   @NotNull
   public static String colorize(String... strings) {
@@ -126,7 +137,7 @@ public class ChatUtils {
    *
    * @param strings The plain, non-prefixed string(s)
    * @return The colorized string(s), separated by a new line, or an empty string if the provided
-   *     string(s) is/are null
+   * string(s) is/are null
    */
   @NotNull
   public static String format(String... strings) {
@@ -154,8 +165,8 @@ public class ChatUtils {
   /**
    * Applies the specified placeholder to the entire list of strings.
    *
-   * @param strList The list that will have its strings replaced
-   * @param toReplace The string to replace
+   * @param strList     The list that will have its strings replaced
+   * @param toReplace   The string to replace
    * @param replaceWith The string that matches will be replaced with
    * @return The replaced list, or an empty list if the provided one is null
    */
@@ -178,9 +189,9 @@ public class ChatUtils {
   /**
    * Applies the map of placeholders to the entire list of strings.
    *
-   * @param strList The list that will have its strings replaced
+   * @param strList      The list that will have its strings replaced
    * @param placeholders The map of placeholders, with the string to replace as the key and the
-   *     string matches will be replaced with as the value
+   *                     string matches will be replaced with as the value
    * @return The replaced list, or an empty list if the provided one is null
    */
   @NotNull
@@ -222,8 +233,8 @@ public class ChatUtils {
   /**
    * Fully strip all color from strings.
    *
-   * @see #strip(String)
    * @return The stripped string list, or an empty list if the provided one is null
+   * @see #strip(String)
    */
   @NotNull
   public static List<String> strip(List<String> strList) {
@@ -295,7 +306,7 @@ public class ChatUtils {
    * Log plain messages into the console.
    *
    * @param strings The messages to send
-   * @param level The logging level
+   * @param level   The logging level
    */
   public static void log(Level level, String... strings) {
 
@@ -316,7 +327,7 @@ public class ChatUtils {
    * Sends a colored and prefixed message to the command sender.
    *
    * @param sender The command sender that will receive the message
-   * @param lines The lines to send
+   * @param lines  The lines to send
    */
   public static void tell(CommandSender sender, String... lines) {
     Objects.requireNonNull(sender, "Sender is null");
@@ -332,7 +343,7 @@ public class ChatUtils {
    * Does the same thing as {@link #tell(CommandSender, String...)}, but without the prefix.
    *
    * @param sender The command sender that will receive the message
-   * @param lines The lines to send
+   * @param lines  The lines to send
    */
   public static void tellColored(CommandSender sender, String... lines) {
     Objects.requireNonNull(sender, "Sender is null");
@@ -349,7 +360,7 @@ public class ChatUtils {
    * used a custom font (resource pack), or if the message contains HEX colors.
    *
    * @param player The player that will receive the message
-   * @param lines The lines to send
+   * @param lines  The lines to send
    */
   public static void tellCentered(Player player, String... lines) {
     Objects.requireNonNull(player, "Player is null");
@@ -407,8 +418,8 @@ public class ChatUtils {
    * Broadcasts the message after coloring and formating them.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
-   *     the broadcast should be seen by everyone
-   * @param lines The lines to send
+   *                   the broadcast should be seen by everyone
+   * @param lines      The lines to send
    */
   public static void broadcast(String permission, String... lines) {
 

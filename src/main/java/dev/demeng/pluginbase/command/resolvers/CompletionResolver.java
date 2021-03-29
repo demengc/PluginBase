@@ -27,7 +27,9 @@ package dev.demeng.pluginbase.command.resolvers;
 
 import java.util.List;
 
-/** Simple functional interface of resolving command completions. Primarily for internal use. */
+/**
+ * Simple functional interface of resolving command completions. Primarily for internal use.
+ */
 @FunctionalInterface
 public interface CompletionResolver {
 

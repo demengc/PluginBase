@@ -24,7 +24,9 @@
 
 package dev.demeng.pluginbase.chat;
 
-/** Some information about characters, used for the best centered messages possible. */
+/**
+ * Some information about characters, used for the best centered messages possible.
+ */
 enum DefaultFontInfo {
   A('A', 5),
   a('a', 5),
@@ -140,13 +142,17 @@ enum DefaultFontInfo {
   }
 
   public int getBoldLength() {
-    if (this == DefaultFontInfo.SPACE) return this.getLength();
+    if (this == DefaultFontInfo.SPACE) {
+      return this.getLength();
+    }
     return this.length + 1;
   }
 
   public static DefaultFontInfo getDefaultFontInfo(char c) {
     for (DefaultFontInfo dFI : DefaultFontInfo.values()) {
-      if (dFI.getCharacter() == c) return dFI;
+      if (dFI.getCharacter() == c) {
+        return dFI;
+      }
     }
     return DefaultFontInfo.DEFAULT;
   }

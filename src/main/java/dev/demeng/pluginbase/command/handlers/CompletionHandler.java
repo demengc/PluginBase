@@ -28,12 +28,16 @@ package dev.demeng.pluginbase.command.handlers;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
 import dev.demeng.pluginbase.command.resolvers.CompletionResolver;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 /**
  * Handles command tab-completion and maps provided arguments to an auto-completion list. Primarily
@@ -43,7 +47,9 @@ public final class CompletionHandler {
 
   private final Map<String, CompletionResolver> registeredCompletions = new HashMap<>();
 
-  /** Registers all the default completions. */
+  /**
+   * Registers all the default completions.
+   */
   public CompletionHandler() {
     register(
         "#players",
@@ -61,15 +67,17 @@ public final class CompletionHandler {
         input -> {
           final String s = String.valueOf(input);
 
-          if (s.contains("class"))
+          if (s.contains("class")) {
             return IntStream.rangeClosed(1, 10)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.toList());
+          }
 
-          if (!s.contains("-"))
+          if (!s.contains("-")) {
             return IntStream.rangeClosed(1, Integer.parseInt(s))
                 .mapToObj(Integer::toString)
                 .collect(Collectors.toList());
+          }
 
           final String[] minMax = s.split("-");
           final int[] range =
@@ -104,7 +112,7 @@ public final class CompletionHandler {
   /**
    * Registers a new completion.
    *
-   * @param completionId The ID of the completion to register
+   * @param completionId       The ID of the completion to register
    * @param completionResolver A function with the result you want
    */
   public void register(String completionId, CompletionResolver completionResolver) {
@@ -121,7 +129,7 @@ public final class CompletionHandler {
    * Gets the values from the registered functions.
    *
    * @param completionId The completion ID to use
-   * @param input The input the output will be resolved from, typically not needed
+   * @param input        The input the output will be resolved from, typically not needed
    * @return The string list with all the completions
    */
   List<String> getTypeResult(String completionId, Object input) {

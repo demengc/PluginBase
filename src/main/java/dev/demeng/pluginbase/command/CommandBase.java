@@ -26,7 +26,6 @@
 package dev.demeng.pluginbase.command;
 
 import dev.demeng.pluginbase.command.annotations.Command;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,8 @@ public abstract class CommandBase {
   private final List<String> aliases = new ArrayList<>();
   private final Map<String, String> arguments = new HashMap<>();
 
-  public CommandBase() {}
+  public CommandBase() {
+  }
 
   public CommandBase(String command, List<String> aliases) {
     this.command = command;
@@ -72,14 +72,16 @@ public abstract class CommandBase {
   /**
    * Adds a new argument.
    *
-   * @param name The argument name
+   * @param name     The argument name
    * @param argument The argument value
    */
   public void addArgument(String name, String argument) {
     arguments.put(name, argument);
   }
 
-  /** Clears the stored arguments. */
+  /**
+   * Clears the stored arguments.
+   */
   public void clearArguments() {
     arguments.clear();
   }

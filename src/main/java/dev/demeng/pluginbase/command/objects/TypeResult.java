@@ -38,7 +38,7 @@ public final class TypeResult {
    * Creates a new type result that has already been resolved..
    *
    * @param resolvedValue The resolved value
-   * @param argumentName The argument name
+   * @param argumentName  The argument name
    */
   public TypeResult(Object resolvedValue, final Object argumentName) {
     this.resolvedValue = resolvedValue;

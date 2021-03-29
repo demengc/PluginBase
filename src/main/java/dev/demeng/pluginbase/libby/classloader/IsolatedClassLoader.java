@@ -25,16 +25,17 @@
 
 package dev.demeng.pluginbase.libby.classloader;
 
+import static java.util.Objects.requireNonNull;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * This class loader is a simple child of {@link URLClassLoader} that uses the JVM's Extensions
- * Class Loader as the parent instead of the system class loader to provide an unpolluted classpath.
+ * Class Loader as the parent instead of the system class loader to provide an unpolluted
+ * classpath.
  *
  * <p>Mainly for internal use.
  */

@@ -22,14 +22,23 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.command.exceptions;
+package dev.demeng.pluginbase.exceptions;
 
 /**
- * A custom command exception, thrown mostly due to annotation or method parameter errors.
+ * A custom runtime exception, used for throwing runtime errors related to improper API usage. For
+ * internal use.
  */
-public class CustomCommandException extends RuntimeException {
+public class BaseException extends RuntimeException {
 
-  public CustomCommandException(String message) {
+  public BaseException(String message) {
     super(message);
+  }
+
+  public BaseException(Throwable cause) {
+    super(cause);
+  }
+
+  public BaseException(String message, Throwable cause) {
+    super(message, cause);
   }
 }

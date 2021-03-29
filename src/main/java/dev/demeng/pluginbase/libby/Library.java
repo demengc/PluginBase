@@ -26,8 +26,11 @@
 package dev.demeng.pluginbase.libby;
 
 import dev.demeng.pluginbase.libby.relocation.Relocation;
-
-import java.util.*;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Objects;
 
 /**
  * An immutable representation of a Maven artifact that can be downloaded, relocated and then loaded
@@ -48,12 +51,12 @@ public class Library {
   /**
    * Creates a new library.
    *
-   * @param urls Direct download URLs
-   * @param groupId Maven group ID
-   * @param artifactId Maven artifact ID
-   * @param version Artifact version
-   * @param classifier Artifact classifier or null
-   * @param checksum Binary SHA-256 checksum or null
+   * @param urls        Direct download URLs
+   * @param groupId     Maven group ID
+   * @param artifactId  Maven artifact ID
+   * @param version     Artifact version
+   * @param classifier  Artifact classifier or null
+   * @param checksum    Binary SHA-256 checksum or null
    * @param relocations Jar relocations or null
    */
   private Library(
@@ -79,7 +82,7 @@ public class Library {
             ? Collections.unmodifiableList(new LinkedList<>(relocations))
             : Collections.emptyList();
 
-    String path =
+    String libPath =
         this.groupId.replace('.', '/')
             + '/'
             + artifactId
@@ -90,11 +93,11 @@ public class Library {
             + '-'
             + version;
     if (hasClassifier()) {
-      path += '-' + classifier;
+      libPath += '-' + classifier;
     }
 
-    this.path = path + ".jar";
-    relocatedPath = hasRelocations() ? path + "-relocated.jar" : null;
+    this.path = libPath + ".jar";
+    relocatedPath = hasRelocations() ? libPath + "-relocated.jar" : null;
   }
 
   /**

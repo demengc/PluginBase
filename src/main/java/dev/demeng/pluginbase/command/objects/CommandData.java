@@ -26,14 +26,15 @@
 package dev.demeng.pluginbase.command.objects;
 
 import dev.demeng.pluginbase.command.CommandBase;
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Stores all of the relevant data for a command. Primarily for internal use. */
+/**
+ * Stores all of the relevant data for a command. Primarily for internal use.
+ */
 public final class CommandData {
 
   private final CommandBase commandBase;
