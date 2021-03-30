@@ -29,9 +29,9 @@ import dev.demeng.pluginbase.libby.relocation.Relocation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * An immutable representation of a Maven artifact that can be downloaded, relocated and then loaded
@@ -63,9 +63,9 @@ public class Library {
    */
   private Library(
       Collection<String> urls,
-      String groupId,
-      String artifactId,
-      String version,
+      @NonNull String groupId,
+      @NonNull String artifactId,
+      @NonNull String version,
       String classifier,
       byte[] checksum,
       Collection<Relocation> relocations) {
@@ -74,9 +74,9 @@ public class Library {
         urls != null
             ? Collections.unmodifiableList(new LinkedList<>(urls))
             : Collections.emptyList();
-    this.groupId = Objects.requireNonNull(groupId, "groupId").replace("{}", ".");
-    this.artifactId = Objects.requireNonNull(artifactId, "artifactId");
-    this.version = Objects.requireNonNull(version, "version");
+    this.groupId = groupId.replace("{}", ".");
+    this.artifactId = artifactId;
+    this.version = version;
     this.classifier = classifier;
     this.checksum = checksum;
     this.relocations =

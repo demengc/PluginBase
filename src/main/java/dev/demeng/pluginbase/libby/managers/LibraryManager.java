@@ -51,8 +51,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
+import lombok.NonNull;
 
 /**
  * A runtime dependency manager for plugins.
@@ -75,9 +75,8 @@ public abstract class LibraryManager {
   private final List<String> repositories = new LinkedList<>();
   private RelocationHelper relocator;
 
-  protected LibraryManager(Path dataDirectory) {
-    saveDirectory =
-        Objects.requireNonNull(dataDirectory, "dataDirectory").toAbsolutePath().resolve("lib");
+  protected LibraryManager(@NonNull Path dataDirectory) {
+    saveDirectory = dataDirectory.toAbsolutePath().resolve("lib");
   }
 
   protected abstract void addToClasspath(Path file);
@@ -108,8 +107,8 @@ public abstract class LibraryManager {
    *
    * @param url Repository URL to add
    */
-  public void addRepository(String url) {
-    final String repo = Objects.requireNonNull(url, "url").endsWith("/") ? url : url + '/';
+  public void addRepository(@NonNull String url) {
+    final String repo = url.endsWith("/") ? url : url + '/';
     synchronized (repositories) {
       repositories.add(repo);
     }
@@ -158,9 +157,10 @@ public abstract class LibraryManager {
    * @param library The library to resolve
    * @return Download URLs
    */
-  public Collection<String> resolveLibrary(Library library) {
-    List<String> urls = new LinkedList<>(
-        Objects.requireNonNull(library, "Library is null").getUrls());
+  public Collection<String> resolveLibrary(@NonNull Library library) {
+
+    final List<String> urls = new LinkedList<>(library.getUrls());
+
     for (String repository : getRepositories()) {
       urls.add(repository + library.getPath());
     }
@@ -174,12 +174,12 @@ public abstract class LibraryManager {
    * @param url The URL to the library jar
    * @return Downloaded jar as byte array or null if nothing was downloaded
    */
-  private byte[] downloadLibrary(String url) {
+  private byte[] downloadLibrary(@NonNull String url) {
 
     final Logger logger = BaseLoader.getPlugin().getLogger();
 
     try {
-      final URLConnection connection = new URL(Objects.requireNonNull(url, "url")).openConnection();
+      final URLConnection connection = new URL(url).openConnection();
 
       connection.setConnectTimeout(5000);
       connection.setReadTimeout(5000);
@@ -244,11 +244,11 @@ public abstract class LibraryManager {
    * @return local file path to library
    * @see #loadLibrary(Library)
    */
-  public Path downloadLibrary(Library library) {
+  public Path downloadLibrary(@NonNull Library library) {
 
     final Logger logger = BaseLoader.getPlugin().getLogger();
 
-    Path file = saveDirectory.resolve(Objects.requireNonNull(library, "Library is null").getPath());
+    Path file = saveDirectory.resolve(library.getPath());
     if (Files.exists(file)) {
       return file;
     }
@@ -321,17 +321,15 @@ public abstract class LibraryManager {
    * @return the relocated file
    * @see RelocationHelper#relocate(Path, Path, Collection)
    */
-  private Path relocate(Path in, String out, Collection<Relocation> relocations) {
-    Objects.requireNonNull(in, "in");
-    Objects.requireNonNull(out, "out");
-    Objects.requireNonNull(relocations, "relocations");
+  private Path relocate(@NonNull Path in, @NonNull String out,
+      @NonNull Collection<Relocation> relocations) {
 
-    Path file = saveDirectory.resolve(out);
+    final Path file = saveDirectory.resolve(out);
     if (Files.exists(file)) {
       return file;
     }
 
-    Path tmpOut = file.resolveSibling(file.getFileName() + ".tmp");
+    final Path tmpOut = file.resolveSibling(file.getFileName() + ".tmp");
     tmpOut.toFile().deleteOnExit();
 
     synchronized (this) {
@@ -349,11 +347,14 @@ public abstract class LibraryManager {
           .info(() -> "Relocations applied to " + saveDirectory.getParent().relativize(in));
 
       return file;
+
     } catch (IOException e) {
       throw new UncheckedIOException(e);
+
     } finally {
       try {
         Files.deleteIfExists(tmpOut);
+
       } catch (IOException ignored) {
         // Ignored
       }
@@ -370,8 +371,10 @@ public abstract class LibraryManager {
    * @param library the library to load
    * @see #downloadLibrary(Library)
    */
-  public void loadLibrary(Library library) {
-    Path file = downloadLibrary(Objects.requireNonNull(library, "Library is null"));
+  public void loadLibrary(@NonNull Library library) {
+
+    Path file = downloadLibrary(library);
+
     if (library.hasRelocations()) {
       file = relocate(file, library.getRelocatedPath(), library.getRelocations());
     }

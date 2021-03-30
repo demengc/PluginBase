@@ -33,11 +33,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+import lombok.NonNull;
 
 /**
  * A reflection-based helper for relocating library jars. It automatically downloads and invokes
@@ -57,8 +58,7 @@ public class RelocationHelper {
    *
    * @param libraryManager The library manager used to download dependencies
    */
-  public RelocationHelper(LibraryManager libraryManager) {
-    Objects.requireNonNull(libraryManager, "libraryManager");
+  public RelocationHelper(@NonNull LibraryManager libraryManager) {
 
     try (IsolatedClassLoader classLoader = new IsolatedClassLoader()) {
       // ObjectWeb ASM Commons
@@ -68,7 +68,8 @@ public class RelocationHelper {
                   .groupId("org.ow2.asm")
                   .artifactId("asm-commons")
                   .version("6.0")
-                  .checksum("8bzlxkipagF73NAf5dWa+YRSl/17ebgcAVpvu9lxmr8=")
+                  .checksum("8bzlxkipagF73NAf5dWa+YRSl/17ebgcAVpvu9lxmr8="
+                      .getBytes(StandardCharsets.UTF_8))
                   .build()));
 
       // ObjectWeb ASM
@@ -78,7 +79,8 @@ public class RelocationHelper {
                   .groupId("org.ow2.asm")
                   .artifactId("asm")
                   .version("6.0")
-                  .checksum("3Ylxx0pOaXiZqOlcquTqh2DqbEhtxrl7F5XnV2BCBGE=")
+                  .checksum("3Ylxx0pOaXiZqOlcquTqh2DqbEhtxrl7F5XnV2BCBGE="
+                      .getBytes(StandardCharsets.UTF_8))
                   .build()));
 
       // Luck's Jar Relocator
@@ -88,7 +90,8 @@ public class RelocationHelper {
                   .groupId("me.lucko")
                   .artifactId("jar-relocator")
                   .version("1.3")
-                  .checksum("mmz3ltQbS8xXGA2scM0ZH6raISlt4nukjCiU2l9Jxfs=")
+                  .checksum("mmz3ltQbS8xXGA2scM0ZH6raISlt4nukjCiU2l9Jxfs="
+                      .getBytes(StandardCharsets.UTF_8))
                   .build()));
 
       final Class<?> jarRelocatorClass = classLoader
@@ -120,10 +123,8 @@ public class RelocationHelper {
    * @param out         output jar
    * @param relocations relocations to apply
    */
-  public void relocate(Path in, Path out, Collection<Relocation> relocations) {
-    Objects.requireNonNull(in, "in");
-    Objects.requireNonNull(out, "out");
-    Objects.requireNonNull(relocations, "relocations");
+  public void relocate(@NonNull Path in, @NonNull Path out,
+      @NonNull Collection<Relocation> relocations) {
 
     try {
       List<Object> rules = new LinkedList<>();

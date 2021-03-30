@@ -25,14 +25,13 @@
 
 package dev.demeng.pluginbase.libby.classloader;
 
-import static java.util.Objects.requireNonNull;
-
 import dev.demeng.pluginbase.exceptions.BaseException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
+import lombok.NonNull;
 
 /**
  * A reflection-based wrapper around {@link URLClassLoader} for adding URLs to the classpath.
@@ -55,8 +54,8 @@ public class UrlClassLoader {
    * @param classLoader The class loader to manage
    * @throws RuntimeException NoSuchMethodException
    */
-  public UrlClassLoader(URLClassLoader classLoader) throws BaseException {
-    this.classLoader = requireNonNull(classLoader, "classLoader");
+  public UrlClassLoader(@NonNull URLClassLoader classLoader) throws BaseException {
+    this.classLoader = classLoader;
 
     try {
       addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
@@ -73,10 +72,9 @@ public class UrlClassLoader {
    * @param url The URL to add
    * @throws RuntimeException ReflectiveOperationException
    */
-  public void addToClasspath(URL url) throws BaseException {
+  public void addToClasspath(@NonNull URL url) throws BaseException {
     try {
-      addUrlMethod.invoke(classLoader, requireNonNull(url, "url"));
-
+      addUrlMethod.invoke(classLoader, url);
     } catch (ReflectiveOperationException ex) {
       throw new BaseException(ex);
     }
@@ -88,10 +86,9 @@ public class UrlClassLoader {
    * @param path The path to add
    * @throws IllegalArgumentException MalformedURLException
    */
-  public void addToClasspath(Path path) throws IllegalArgumentException {
+  public void addToClasspath(@NonNull Path path) throws IllegalArgumentException {
     try {
-      addToClasspath(requireNonNull(path, "path").toUri().toURL());
-
+      addToClasspath(path.toUri().toURL());
     } catch (MalformedURLException ex) {
       throw new IllegalArgumentException(ex);
     }

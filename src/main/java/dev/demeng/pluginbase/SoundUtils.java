@@ -25,6 +25,7 @@
 package dev.demeng.pluginbase;
 
 import java.util.Objects;
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -55,8 +56,8 @@ public class SoundUtils {
    * @param volume    The volume of the sound
    * @param pitch     The pitch of the sound
    */
-  public static void playToPlayer(Player player, String soundName, float volume, float pitch) {
-    Objects.requireNonNull(player, "Player is null");
+  public static void playToPlayer(@NonNull Player player, String soundName, float volume,
+      float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
       return;
@@ -85,10 +86,7 @@ public class SoundUtils {
    * @param player  The player that will hear the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToPlayer(Player player, ConfigurationSection section) {
-    Objects.requireNonNull(player, "Player is null");
-    Objects.requireNonNull(section, "Configuration section is null");
-
+  public static void playToPlayer(@NonNull Player player, @NonNull ConfigurationSection section) {
     playToPlayer(
         player,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -105,8 +103,8 @@ public class SoundUtils {
    * @param volume    The volume of the sound
    * @param pitch     The pitch of the sound
    */
-  public static void playToLocation(Location loc, String soundName, float volume, float pitch) {
-    Objects.requireNonNull(loc, "Location is null");
+  public static void playToLocation(@NonNull Location loc, String soundName, float volume,
+      float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
       return;
@@ -135,10 +133,7 @@ public class SoundUtils {
    * @param loc     The location to play the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToLocation(Location loc, ConfigurationSection section) {
-    Objects.requireNonNull(loc, "Location is null");
-    Objects.requireNonNull(section, "Configuration section is null");
-
+  public static void playToLocation(@NonNull Location loc, @NonNull ConfigurationSection section) {
     playToLocation(
         loc,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -154,7 +149,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playVanillaToPlayer(Player player, Sound sound, float volume, float pitch) {
+  public static void playVanillaToPlayer(@NonNull Player player, @NonNull Sound sound, float volume,
+      float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
   }
 
@@ -166,7 +162,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playCustomToPlayer(Player player, String sound, float volume, float pitch) {
+  public static void playCustomToPlayer(@NonNull Player player, @NonNull String sound, float volume,
+      float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
   }
 
@@ -178,8 +175,9 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playVanillaToLocation(Location loc, Sound sound, float volume, float pitch) {
-    Objects.requireNonNull(loc.getWorld()).playSound(loc, sound, volume, pitch);
+  public static void playVanillaToLocation(@NonNull Location loc, @NonNull Sound sound,
+      float volume, float pitch) {
+    Objects.requireNonNull(loc.getWorld(), "World is null").playSound(loc, sound, volume, pitch);
   }
 
   /**
@@ -190,7 +188,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playCustomToLocation(Location loc, String sound, float volume, float pitch) {
-    Objects.requireNonNull(loc.getWorld()).playSound(loc, sound, volume, pitch);
+  public static void playCustomToLocation(@NonNull Location loc, @NonNull String sound,
+      float volume, float pitch) {
+    Objects.requireNonNull(loc.getWorld(), "World is null").playSound(loc, sound, volume, pitch);
   }
 }

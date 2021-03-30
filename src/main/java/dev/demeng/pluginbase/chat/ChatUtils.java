@@ -29,12 +29,12 @@ import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -330,14 +330,10 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tell(CommandSender sender, String... lines) {
-    Objects.requireNonNull(sender, "Sender is null");
-
-    if (lines == null) {
-      return;
+  public static void tell(@NonNull CommandSender sender, String... lines) {
+    if (lines != null) {
+      sender.sendMessage(format(lines));
     }
-
-    sender.sendMessage(format(lines));
   }
 
   /**
@@ -346,14 +342,10 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellColored(CommandSender sender, String... lines) {
-    Objects.requireNonNull(sender, "Sender is null");
-
-    if (lines == null) {
-      return;
+  public static void tellColored(@NonNull CommandSender sender, String... lines) {
+    if (lines != null) {
+      sender.sendMessage(colorize(lines));
     }
-
-    sender.sendMessage(colorize(lines));
   }
 
   /**
@@ -363,8 +355,7 @@ public class ChatUtils {
    * @param player The player that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellCentered(Player player, String... lines) {
-    Objects.requireNonNull(player, "Player is null");
+  public static void tellCentered(@NonNull Player player, String... lines) {
 
     if (lines == null) {
       return;

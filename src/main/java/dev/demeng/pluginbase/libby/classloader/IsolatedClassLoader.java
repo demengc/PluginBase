@@ -25,12 +25,11 @@
 
 package dev.demeng.pluginbase.libby.classloader;
 
-import static java.util.Objects.requireNonNull;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
+import lombok.NonNull;
 
 /**
  * This class loader is a simple child of {@link URLClassLoader} that uses the JVM's Extensions
@@ -48,8 +47,8 @@ public class IsolatedClassLoader extends URLClassLoader {
    *
    * @param urls The URLs to add to the classpath
    */
-  public IsolatedClassLoader(URL... urls) {
-    super(requireNonNull(urls, "urls"), ClassLoader.getSystemClassLoader().getParent());
+  public IsolatedClassLoader(@NonNull URL... urls) {
+    super(urls, ClassLoader.getSystemClassLoader().getParent());
   }
 
   /**
@@ -67,9 +66,9 @@ public class IsolatedClassLoader extends URLClassLoader {
    *
    * @param path The path to add
    */
-  public void addPath(Path path) {
+  public void addPath(@NonNull Path path) {
     try {
-      addURL(requireNonNull(path, "path").toUri().toURL());
+      addURL(path.toUri().toURL());
     } catch (MalformedURLException ex) {
       throw new IllegalArgumentException(ex);
     }

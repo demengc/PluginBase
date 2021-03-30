@@ -28,8 +28,8 @@ package dev.demeng.pluginbase.libby.relocation;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Objects;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Relocations are used to describe a search and replace pattern for renaming packages in a library
@@ -54,13 +54,12 @@ public class Relocation {
    * @param excludes         Classes and resources to exclude
    */
   public Relocation(
-      String pattern,
-      String relocatedPattern,
+      @NonNull String pattern,
+      @NonNull String relocatedPattern,
       Collection<String> includes,
       Collection<String> excludes) {
-    this.pattern = Objects.requireNonNull(pattern, "pattern").replace("{}", ".");
-    this.relocatedPattern =
-        Objects.requireNonNull(relocatedPattern, "relocatedPattern").replace("{}", ".");
+    this.pattern = pattern.replace("{}", ".");
+    this.relocatedPattern = relocatedPattern.replace("{}", ".");
     this.includes =
         includes != null
             ? Collections.unmodifiableList(new LinkedList<>(includes))
@@ -77,7 +76,7 @@ public class Relocation {
    * @param pattern          Search pattern
    * @param relocatedPattern Replacement pattern
    */
-  public Relocation(String pattern, String relocatedPattern) {
+  public Relocation(@NonNull String pattern, @NonNull String relocatedPattern) {
     this(pattern, relocatedPattern, null, null);
   }
 }
