@@ -40,8 +40,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Handles command tab-completion and maps provided arguments to an auto-completion list. Primarily
- * for internal use.
+ * Handles command tab-completion and maps provided arguments to an auto-completion list.
  */
 public final class CompletionHandler {
 

@@ -43,8 +43,6 @@ import java.util.Objects;
  * A reflection-based helper for relocating library jars. It automatically downloads and invokes
  * Luck's Jar Relocator to perform jar relocations.
  *
- * <p>Primarily for internal use.
- *
  * @see <a href="https://github.com/lucko/jar-relocator">Luck's Jar Relocator</a>
  */
 public class RelocationHelper {

@@ -28,6 +28,8 @@ import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.libby.Library;
 import dev.demeng.pluginbase.libby.managers.BukkitLibraryManager;
+import lombok.Getter;
+import lombok.NonNull;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -36,8 +38,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 @SuppressWarnings("unused")
 public abstract class BasePlugin extends JavaPlugin {
 
-  private BukkitLibraryManager libraryManager;
-  private CommandManager commandManager;
+  @Getter private BukkitLibraryManager libraryManager;
+  @Getter private CommandManager commandManager;
 
   @Override
   public final void onLoad() {
@@ -71,39 +73,19 @@ public abstract class BasePlugin extends JavaPlugin {
    * @see BukkitLibraryManager#addRepository(String)
    */
   public void loadLib(
-      String groupId, String artifactId, String version, String pattern, String shadedPattern) {
+      @NonNull String groupId, @NonNull String artifactId, @NonNull String version, String pattern,
+      String shadedPattern) {
 
-    if (groupId == null || artifactId == null || version == null) {
-      throw new NullPointerException("Library group ID, artifact ID, or version is null");
-    }
-
-    final Library.Builder builder = Library.builder();
+    final Library.LibraryBuilder builder = Library.builder();
 
     builder.groupId(groupId).artifactId(artifactId).version(version);
 
     if (pattern != null && shadedPattern != null) {
-      builder.relocate(pattern, shadedPattern);
+      builder.path(pattern);
+      builder.relocatedPath(shadedPattern);
     }
 
     libraryManager.loadLibrary(builder.build());
-  }
-
-  /**
-   * The library manager for the plugin.
-   *
-   * @return The library manager
-   */
-  public BukkitLibraryManager getLibraryManager() {
-    return libraryManager;
-  }
-
-  /**
-   * The command manager for the plugin.
-   *
-   * @return The command manager
-   */
-  public CommandManager getCommandManager() {
-    return commandManager;
   }
 
   /**

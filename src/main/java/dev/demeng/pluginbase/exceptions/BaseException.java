@@ -25,8 +25,7 @@
 package dev.demeng.pluginbase.exceptions;
 
 /**
- * A custom runtime exception, used for throwing runtime errors related to improper API usage. For
- * internal use.
+ * A custom runtime exception, used for throwing runtime errors related to improper API usage.
  */
 public class BaseException extends RuntimeException {
 

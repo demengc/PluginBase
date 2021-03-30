@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Objects;
+import lombok.Getter;
 
 /**
  * Relocations are used to describe a search and replace pattern for renaming packages in a library
@@ -39,10 +40,10 @@ import java.util.Objects;
  */
 public class Relocation {
 
-  private final String pattern;
-  private final String relocatedPattern;
-  private final Collection<String> includes;
-  private final Collection<String> excludes;
+  @Getter private final String pattern;
+  @Getter private final String relocatedPattern;
+  @Getter private final Collection<String> includes;
+  @Getter private final Collection<String> excludes;
 
   /**
    * Creates a new relocation.
@@ -78,41 +79,5 @@ public class Relocation {
    */
   public Relocation(String pattern, String relocatedPattern) {
     this(pattern, relocatedPattern, null, null);
-  }
-
-  /**
-   * Gets the search pattern.
-   *
-   * @return Pattern to search
-   */
-  public String getPattern() {
-    return pattern;
-  }
-
-  /**
-   * Gets the replacement pattern.
-   *
-   * @return Pattern to replace with
-   */
-  public String getRelocatedPattern() {
-    return relocatedPattern;
-  }
-
-  /**
-   * Gets included classes and resources.
-   *
-   * @return Classes and resources to include
-   */
-  public Collection<String> getIncludes() {
-    return includes;
-  }
-
-  /**
-   * Gets excluded classes and resources.
-   *
-   * @return Classes and resources to exclude
-   */
-  public Collection<String> getExcludes() {
-    return excludes;
   }
 }

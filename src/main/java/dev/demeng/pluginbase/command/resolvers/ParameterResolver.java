@@ -28,8 +28,7 @@ package dev.demeng.pluginbase.command.resolvers;
 import dev.demeng.pluginbase.command.objects.TypeResult;
 
 /**
- * Simple functional interface of resolving method parameters (command arguments). Primarily for
- * internal use.
+ * Simple functional interface of resolving method parameters (command arguments).
  */
 @FunctionalInterface
 public interface ParameterResolver {

@@ -25,14 +25,16 @@
 
 package dev.demeng.pluginbase.command.objects;
 
+import lombok.Getter;
+
 /**
  * Essentially a pair of objects- a command argument's resolved/mapped value, and the argument
- * argument name. Primarily for internal use.
+ * argument name.
  */
 public final class TypeResult {
 
-  private final Object resolvedValue;
-  private final String argumentName;
+  @Getter private final Object resolvedValue;
+  @Getter private final String argumentName;
 
   /**
    * Creates a new type result that has already been resolved..
@@ -52,23 +54,5 @@ public final class TypeResult {
    */
   public TypeResult(final Object argumentName) {
     this(null, argumentName);
-  }
-
-  /**
-   * Gets the resolved value.
-   *
-   * @return The resolved value
-   */
-  public Object getResolvedValue() {
-    return resolvedValue;
-  }
-
-  /**
-   * Gets the argument name.
-   *
-   * @return The argument name
-   */
-  public String getArgumentName() {
-    return argumentName;
   }
 }

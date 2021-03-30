@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
@@ -56,8 +57,8 @@ public final class CommandManager implements Listener {
   private final Map<String, CommandHandler> commands = new HashMap<>();
   private Map<String, org.bukkit.command.Command> bukkitCommands = new HashMap<>();
 
-  private final ArgumentHandler argumentHandler = new ArgumentHandler();
-  private final CompletionHandler completionHandler = new CompletionHandler();
+  @Getter private final ArgumentHandler argumentHandler = new ArgumentHandler();
+  @Getter private final CompletionHandler completionHandler = new CompletionHandler();
 
   /**
    * Creates a new command manager for the plugin. This constructor is designed for internal use-
@@ -142,23 +143,5 @@ public final class CommandManager implements Listener {
     } catch (ReflectiveOperationException ex) {
       Common.error(ex, "Failed to get command map.", false);
     }
-  }
-
-  /**
-   * The command arguments handler.
-   *
-   * @return The command arguments handler
-   */
-  public ArgumentHandler getParameterHandler() {
-    return argumentHandler;
-  }
-
-  /**
-   * The tab completion handler.
-   *
-   * @return The tab completion handler
-   */
-  public CompletionHandler getCompletionHandler() {
-    return completionHandler;
   }
 }

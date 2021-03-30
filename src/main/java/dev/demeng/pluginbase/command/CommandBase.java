@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 
 /**
  * Represents a custom command. Must be annotated with {@link Command} and registered using {@link
@@ -37,10 +38,10 @@ import java.util.Map;
  */
 public abstract class CommandBase {
 
-  private String command;
+  @Getter private String command;
 
-  private final List<String> aliases = new ArrayList<>();
-  private final Map<String, String> arguments = new HashMap<>();
+  @Getter private final List<String> aliases = new ArrayList<>();
+  @Getter private final Map<String, String> arguments = new HashMap<>();
 
   public CommandBase() {
   }
@@ -48,15 +49,6 @@ public abstract class CommandBase {
   public CommandBase(String command, List<String> aliases) {
     this.command = command;
     this.aliases.addAll(aliases);
-  }
-
-  /**
-   * Gets the command for this command base.
-   *
-   * @return The command for this command base.
-   */
-  public String getCommand() {
-    return command;
   }
 
   /**
@@ -84,23 +76,5 @@ public abstract class CommandBase {
    */
   public void clearArguments() {
     arguments.clear();
-  }
-
-  /**
-   * Gets the list of aliases.
-   *
-   * @return The aliases
-   */
-  public List<String> getAliases() {
-    return aliases;
-  }
-
-  /**
-   * Sets the list of aliases.
-   *
-   * @param newAliases The new list of aliases
-   */
-  public void setAliases(final List<String> newAliases) {
-    aliases.addAll(newAliases);
   }
 }

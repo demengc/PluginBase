@@ -59,7 +59,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The handler for all the custom commands. For internal use.
+ * The handler for all the custom commands.
  */
 public final class CommandHandler extends Command {
 
@@ -222,7 +222,7 @@ public final class CommandHandler extends Command {
         return;
       }
 
-      if (subCommand.getArguments().size() != argumentsList.size() && !subCommand.hasOptional()) {
+      if (subCommand.getArguments().size() != argumentsList.size() && !subCommand.isOptional()) {
         if (!subCommand.isDef() && subCommand.getArguments().isEmpty()) {
           ChatUtils.tell(sender, settings.incorrectUsage());
           return;
@@ -242,7 +242,7 @@ public final class CommandHandler extends Command {
       for (int i = 0; i < subCommand.getArguments().size(); i++) {
         final Class<?> parameter = subCommand.getArguments().get(i);
 
-        if (subCommand.hasOptional()) {
+        if (subCommand.isOptional()) {
           if (argumentsList.size() > subCommand.getArguments().size()) {
             ChatUtils.tell(sender, settings.incorrectUsage());
             return;

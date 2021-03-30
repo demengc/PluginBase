@@ -39,7 +39,6 @@ import org.bukkit.entity.Player;
 
 /**
  * Handles and maps command arguments from string to the expected data type in method parameters.
- * Primarily for internal use.
  */
 public final class ArgumentHandler {
 

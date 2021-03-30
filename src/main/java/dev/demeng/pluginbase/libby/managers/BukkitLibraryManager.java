@@ -31,7 +31,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Path;
 
 /**
- * A runtime dependency manager for Bukkit plugins. Intended for internal use.
+ * A runtime dependency manager for Bukkit plugins.
  */
 public final class BukkitLibraryManager extends LibraryManager {
 

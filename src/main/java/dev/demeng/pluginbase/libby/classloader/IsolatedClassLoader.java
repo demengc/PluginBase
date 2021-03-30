@@ -36,8 +36,6 @@ import java.nio.file.Path;
  * This class loader is a simple child of {@link URLClassLoader} that uses the JVM's Extensions
  * Class Loader as the parent instead of the system class loader to provide an unpolluted
  * classpath.
- *
- * <p>Mainly for internal use.
  */
 public class IsolatedClassLoader extends URLClassLoader {
 

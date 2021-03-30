@@ -24,9 +24,13 @@
 
 package dev.demeng.pluginbase.chat;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Some information about characters, used for the best centered messages possible.
  */
+@RequiredArgsConstructor
 enum DefaultFontInfo {
   A('A', 5),
   a('a', 5),
@@ -125,21 +129,8 @@ enum DefaultFontInfo {
   SPACE(' ', 3),
   DEFAULT('a', 4);
 
-  private final char character;
-  private final int length;
-
-  DefaultFontInfo(char character, int length) {
-    this.character = character;
-    this.length = length;
-  }
-
-  public char getCharacter() {
-    return this.character;
-  }
-
-  public int getLength() {
-    return this.length;
-  }
+  @Getter private final char character;
+  @Getter private final int length;
 
   public int getBoldLength() {
     if (this == DefaultFontInfo.SPACE) {

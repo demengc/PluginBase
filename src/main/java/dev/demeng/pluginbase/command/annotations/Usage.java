@@ -32,14 +32,15 @@ import java.lang.annotation.Target;
 
 /**
  * Command mangement annotation used for specifying the correct usage of the command. Has no
- * internal use, just used for incorrect usage error messages and such.
+ * functional use, just used for incorrect usage error messages and such.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface Usage {
 
   /**
-   * The command usage. Has no internal use, just used for incorrect usage error messages and such.
+   * The command usage. Has no functional use, just used for incorrect usage error messages and
+   * such.
    *
    * @return The command usage
    */

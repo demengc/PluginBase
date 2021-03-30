@@ -36,8 +36,6 @@ import java.nio.file.Path;
 
 /**
  * A reflection-based wrapper around {@link URLClassLoader} for adding URLs to the classpath.
- *
- * <p>Mainly for internal use.
  */
 public class UrlClassLoader {
 
