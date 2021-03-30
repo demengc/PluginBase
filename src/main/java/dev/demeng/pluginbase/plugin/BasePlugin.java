@@ -33,6 +33,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * An extended version of JavaPlugin. Main class must extend this class in order to use PluginBase.
  */
+@SuppressWarnings("unused")
 public abstract class BasePlugin extends JavaPlugin {
 
   private BukkitLibraryManager libraryManager;
@@ -116,17 +117,20 @@ public abstract class BasePlugin extends JavaPlugin {
    * Code to perform at early plugin startup.
    */
   protected void load() {
+    // Override if needed, otherwise nothing will be executed.
   }
 
   /**
    * Code to perform on plugin enable.
    */
   protected void enable() {
+    // Override if needed, otherwise nothing will be executed.
   }
 
   /**
    * Code to perform on plugin disable.
    */
   protected void disable() {
+    // Override if needed, otherwise nothing will be executed.
   }
 }

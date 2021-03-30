@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Utilities for quickly creating various Bukkit runnables/tasks inside your plugin.
  */
+@SuppressWarnings("unused")
 public class TaskUtils {
 
   private TaskUtils() {

@@ -161,7 +161,8 @@ public final class CommandHandler extends Command {
         return true;
       }
 
-      return executeCommand(data, sender, arguments, settings);
+      executeCommand(data, sender, arguments, settings);
+      return true;
     }
 
     final String argCommand = arguments[0].toLowerCase();
@@ -195,10 +196,11 @@ public final class CommandHandler extends Command {
       return true;
     }
 
-    return executeCommand(data, sender, arguments, settings);
+    executeCommand(data, sender, arguments, settings);
+    return true;
   }
 
-  private boolean executeCommand(
+  private void executeCommand(
       CommandData subCommand, CommandSender sender, String[] arguments, BaseSettings settings) {
     try {
 
@@ -211,26 +213,26 @@ public final class CommandHandler extends Command {
 
       if (subCommand.getArguments().isEmpty() && argumentsList.isEmpty()) {
         method.invoke(subCommand.getCommandBase(), sender);
-        return true;
+        return;
       }
 
       if (subCommand.getArguments().size() == 1
           && String[].class.isAssignableFrom(subCommand.getArguments().get(0))) {
         method.invoke(subCommand.getCommandBase(), sender, arguments);
-        return true;
+        return;
       }
 
       if (subCommand.getArguments().size() != argumentsList.size() && !subCommand.hasOptional()) {
         if (!subCommand.isDef() && subCommand.getArguments().isEmpty()) {
           ChatUtils.tell(sender, settings.incorrectUsage());
-          return true;
+          return;
         }
 
         if (!String[]
             .class.isAssignableFrom(
             subCommand.getArguments().get(subCommand.getArguments().size() - 1))) {
           ChatUtils.tell(sender, settings.incorrectUsage());
-          return true;
+          return;
         }
       }
 
@@ -243,12 +245,12 @@ public final class CommandHandler extends Command {
         if (subCommand.hasOptional()) {
           if (argumentsList.size() > subCommand.getArguments().size()) {
             ChatUtils.tell(sender, settings.incorrectUsage());
-            return true;
+            return;
           }
 
           if (argumentsList.size() < subCommand.getArguments().size() - 1) {
             ChatUtils.tell(sender, settings.incorrectUsage());
-            return true;
+            return;
           }
 
           if (argumentsList.size() < subCommand.getArguments().size()) {
@@ -258,7 +260,7 @@ public final class CommandHandler extends Command {
 
         if (subCommand.getArguments().size() > argumentsList.size()) {
           ChatUtils.tell(sender, settings.incorrectUsage());
-          return true;
+          return;
         }
 
         Object argument = argumentsList.get(i);
@@ -282,10 +284,9 @@ public final class CommandHandler extends Command {
       method.invoke(subCommand.getCommandBase(), invokeParams.toArray());
 
       subCommand.getCommandBase().clearArguments();
+      return;
 
-      return true;
-
-    } catch (Throwable ex) {
+    } catch (Exception ex) {
       if (sender instanceof Player) {
         Common.error(ex, "Failed to execute command.", false, (Player) sender);
       } else {
@@ -293,7 +294,7 @@ public final class CommandHandler extends Command {
       }
     }
 
-    return true;
+    return;
   }
 
   @Override

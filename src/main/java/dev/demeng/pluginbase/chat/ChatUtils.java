@@ -44,6 +44,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Message-related utilities, including console and chat messages.
  */
+@SuppressWarnings("unused")
 public class ChatUtils {
 
   private ChatUtils() {

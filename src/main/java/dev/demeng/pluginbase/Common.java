@@ -36,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Commonly used methods and utilities.
  */
+@SuppressWarnings("unused")
 public class Common {
 
   private Common() {
@@ -121,6 +122,7 @@ public class Common {
    * @param permission The permission to check
    * @return True if the command sender has the permission, false otherwise
    */
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   public static boolean hasPermission(CommandSender sender, String permission) {
     Objects.requireNonNull(sender, "Sender to check is null");
     return permission == null

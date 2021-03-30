@@ -31,6 +31,7 @@ import org.bukkit.event.Listener;
 /**
  * Utility class for quickly registering commands, listeners, and more.
  */
+@SuppressWarnings("unused")
 public class Registerer {
 
   private Registerer() {

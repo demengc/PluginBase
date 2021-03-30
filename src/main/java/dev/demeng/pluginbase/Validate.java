@@ -29,6 +29,7 @@ import java.util.Objects;
 /**
  * Utlity class for checking and validating objects.
  */
+@SuppressWarnings("unused")
 public class Validate {
 
   private Validate() {

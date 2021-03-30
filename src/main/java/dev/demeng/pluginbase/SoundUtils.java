@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 /**
  * Various utilities for playing sound effects.
  */
+@SuppressWarnings("unused")
 public class SoundUtils {
 
   /**
