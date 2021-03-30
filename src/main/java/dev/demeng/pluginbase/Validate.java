@@ -107,4 +107,20 @@ public class Validate {
       return null;
     }
   }
+
+  /**
+   * Checks if the provided string is a float.
+   *
+   * @param str The string to check
+   * @return The actual float if the string is an double, null otherwise
+   */
+  public static Float checkFloat(String str) {
+    Objects.requireNonNull(str, "String to check is null");
+
+    try {
+      return Float.parseFloat(str);
+    } catch (NumberFormatException ex) {
+      return null;
+    }
+  }
 }
