@@ -149,9 +149,9 @@ enum DefaultFontInfo {
   }
 
   public static DefaultFontInfo getDefaultFontInfo(char c) {
-    for (DefaultFontInfo dFI : DefaultFontInfo.values()) {
-      if (dFI.getCharacter() == c) {
-        return dFI;
+    for (DefaultFontInfo dfi : DefaultFontInfo.values()) {
+      if (dfi.getCharacter() == c) {
+        return dfi;
       }
     }
     return DefaultFontInfo.DEFAULT;

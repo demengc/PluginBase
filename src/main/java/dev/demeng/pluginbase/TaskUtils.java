@@ -109,22 +109,6 @@ public class TaskUtils {
   }
 
   /**
-   * Runs the task repeatedly, asyncronously, with an initial delay and a delay between runs.
-   *
-   * @param task         The task to run
-   * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay  The number of ticks between eech run
-   * @return The BukkitRunnable that was initialized for this task
-   */
-  @NotNull
-  public static BukkitRunnable repeatAsync(
-      Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskTimerAsynchronously(BaseLoader.getPlugin(), initialDelay, repeatDelay);
-    return runnable;
-  }
-
-  /**
    * Runs the task repeatedly, with an initial delay, a delay between runs, and a number of
    * repetitions.
    *
@@ -155,6 +139,22 @@ public class TaskUtils {
         };
 
     runnable.runTaskTimer(BaseLoader.getPlugin(), initialDelay, repeatDelay);
+    return runnable;
+  }
+
+  /**
+   * Runs the task repeatedly, asyncronously, with an initial delay and a delay between runs.
+   *
+   * @param task         The task to run
+   * @param initialDelay The number of ticks to delay before the task starts repeating
+   * @param repeatDelay  The number of ticks between eech run
+   * @return The BukkitRunnable that was initialized for this task
+   */
+  @NotNull
+  public static BukkitRunnable repeatAsync(
+      Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay) {
+    final BukkitRunnable runnable = createSimpleTask(task);
+    runnable.runTaskTimerAsynchronously(BaseLoader.getPlugin(), initialDelay, repeatDelay);
     return runnable;
   }
 

@@ -39,7 +39,7 @@ import java.nio.file.Path;
  *
  * <p>Mainly for internal use.
  */
-public class URLClassLoaderHelper {
+public class UrlClassLoader {
 
   /**
    * The class loader being managed by this helper.
@@ -49,7 +49,7 @@ public class URLClassLoaderHelper {
   /**
    * A reflected method in {@link URLClassLoader}, when invoked adds a URL to the classpath.
    */
-  private final Method addURLMethod;
+  private final Method addUrlMethod;
 
   /**
    * Creates a new URL class loader helper.
@@ -57,12 +57,12 @@ public class URLClassLoaderHelper {
    * @param classLoader The class loader to manage
    * @throws RuntimeException NoSuchMethodException
    */
-  public URLClassLoaderHelper(URLClassLoader classLoader) throws BaseException {
+  public UrlClassLoader(URLClassLoader classLoader) throws BaseException {
     this.classLoader = requireNonNull(classLoader, "classLoader");
 
     try {
-      addURLMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-      addURLMethod.setAccessible(true);
+      addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+      addUrlMethod.setAccessible(true);
 
     } catch (NoSuchMethodException ex) {
       throw new BaseException(ex);
@@ -77,7 +77,7 @@ public class URLClassLoaderHelper {
    */
   public void addToClasspath(URL url) throws BaseException {
     try {
-      addURLMethod.invoke(classLoader, requireNonNull(url, "url"));
+      addUrlMethod.invoke(classLoader, requireNonNull(url, "url"));
 
     } catch (ReflectiveOperationException ex) {
       throw new BaseException(ex);

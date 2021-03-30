@@ -79,6 +79,23 @@ public class SoundUtils {
   }
 
   /**
+   * Plays the sound in the configuration section to the player.
+   *
+   * @param player  The player that will hear the sound
+   * @param section The configuration section containing the sound
+   */
+  public static void playToPlayer(Player player, ConfigurationSection section) {
+    Objects.requireNonNull(player, "Player is null");
+    Objects.requireNonNull(section, "Configuration section is null");
+
+    playToPlayer(
+        player,
+        Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
+        (float) section.getDouble("volume"),
+        (float) section.getDouble("pitch"));
+  }
+
+  /**
    * Play a sound to a location.
    *
    * @param loc       The location the sound will be played
@@ -112,26 +129,9 @@ public class SoundUtils {
   }
 
   /**
-   * Plays the sound in the configuration section to the player.
-   *
-   * @param player  The player that will hear the sound
-   * @param section The configuration section containing the sound
-   */
-  public static void playToPlayer(Player player, ConfigurationSection section) {
-    Objects.requireNonNull(player, "Player is null");
-    Objects.requireNonNull(section, "Configuration section is null");
-
-    playToPlayer(
-        player,
-        Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
-        (float) section.getDouble("volume"),
-        (float) section.getDouble("pitch"));
-  }
-
-  /**
    * Plays the sound in the configuration section to the location.
    *
-   * @param player  The location to play the sound
+   * @param loc     The location to play the sound
    * @param section The configuration section containing the sound
    */
   public static void playToLocation(Location loc, ConfigurationSection section) {

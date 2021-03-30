@@ -140,7 +140,7 @@ public abstract class LibraryManager {
   /**
    * Adds the Bintray JCenter repository.
    */
-  public void addJCenter() {
+  public void addJcenter() {
     addRepository("https://jcenter.bintray.com/");
   }
 

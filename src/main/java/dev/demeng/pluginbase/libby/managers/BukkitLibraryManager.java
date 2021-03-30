@@ -25,7 +25,7 @@
 
 package dev.demeng.pluginbase.libby.managers;
 
-import dev.demeng.pluginbase.libby.classloader.URLClassLoaderHelper;
+import dev.demeng.pluginbase.libby.classloader.UrlClassLoader;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
@@ -35,7 +35,7 @@ import java.nio.file.Path;
  */
 public final class BukkitLibraryManager extends LibraryManager {
 
-  private final URLClassLoaderHelper classLoader;
+  private final UrlClassLoader classLoader;
 
   /**
    * Creates a new Bukkit library manager.
@@ -43,7 +43,7 @@ public final class BukkitLibraryManager extends LibraryManager {
   public BukkitLibraryManager() {
     super(BaseLoader.getPlugin().getDataFolder().toPath());
     classLoader =
-        new URLClassLoaderHelper(
+        new UrlClassLoader(
             (URLClassLoader) BaseLoader.getPlugin().getClass().getClassLoader());
   }
 

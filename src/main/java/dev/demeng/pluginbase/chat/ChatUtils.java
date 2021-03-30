@@ -66,9 +66,9 @@ public class ChatUtils {
   public static final String CONSOLE_LINE =
       "*-----------------------------------------------------*";
 
-  // -----------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------
   // FORMATTING
-  // -----------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------
 
   /**
    * Convenience method to get the current prefix of the plugin.
@@ -246,9 +246,9 @@ public class ChatUtils {
     return strList.stream().map(ChatUtils::strip).collect(Collectors.toList());
   }
 
-  // -----------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------
   // CONSOLE MESSAGES
-  // -----------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------
 
   /**
    * Send formatted console messages. Any message equaling "none" will be ignored.
@@ -319,9 +319,9 @@ public class ChatUtils {
     }
   }
 
-  // -----------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------
   // PLAYER MESSAGES
-  // -----------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------
 
   /**
    * Sends a colored and prefixed message to the command sender.
@@ -392,8 +392,8 @@ public class ChatUtils {
           isBold = c == 'l' || c == 'L';
 
         } else {
-          DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
-          messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
+          final DefaultFontInfo dfi = DefaultFontInfo.getDefaultFontInfo(c);
+          messagePxSize += isBold ? dfi.getBoldLength() : dfi.getLength();
           messagePxSize++;
         }
       }
@@ -403,7 +403,7 @@ public class ChatUtils {
       final int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
       int compensated = 0;
 
-      StringBuilder sb = new StringBuilder();
+      final StringBuilder sb = new StringBuilder();
 
       while (compensated < toCompensate) {
         sb.append(" ");

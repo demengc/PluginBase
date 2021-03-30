@@ -45,6 +45,9 @@ public final class ArgumentHandler {
 
   private final Map<Class<?>, ParameterResolver> registeredTypes = new HashMap<>();
 
+  /**
+   * Registers all default argument types.
+   */
   public ArgumentHandler() {
 
     register(

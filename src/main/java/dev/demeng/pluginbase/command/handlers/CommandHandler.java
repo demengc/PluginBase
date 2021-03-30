@@ -548,11 +548,9 @@ public final class CommandHandler extends Command {
     }
 
     for (String alias : method.getAnnotation(Alias.class).value()) {
-      //noinspection UnnecessaryLocalVariable
-      final CommandData aliasCD = data;
       data.setName(alias.toLowerCase());
-      if (aliasCD.isDef()) {
-        aliasCD.setDef(false);
+      if (data.isDef()) {
+        data.setDef(false);
       }
       commands.put(alias.toLowerCase(), data);
     }
