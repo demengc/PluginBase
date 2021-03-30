@@ -76,13 +76,12 @@ public abstract class BasePlugin extends JavaPlugin {
       @NonNull String groupId, @NonNull String artifactId, @NonNull String version, String pattern,
       String shadedPattern) {
 
-    final Library.LibraryBuilder builder = Library.builder();
+    final Library.Builder builder = Library.builder();
 
     builder.groupId(groupId).artifactId(artifactId).version(version);
 
     if (pattern != null && shadedPattern != null) {
-      builder.path(pattern);
-      builder.relocatedPath(shadedPattern);
+      builder.relocate(pattern, shadedPattern);
     }
 
     libraryManager.loadLibrary(builder.build());

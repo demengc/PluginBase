@@ -40,7 +40,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
- * Handles command tab-completion and maps provided arguments to an auto-completion list.
+ * Handles command tab-completion and maps provided arguments to an auto-completion list. A list of
+ * default completion IDs/shortcuts can be found below.
+ * <ul>
+ *   #players - A list of online players.
+ *   #boolean - True and false.
+ *   #empty - Empty completion.
+ *   #enum - All values of the enum inside your command method parameters.
+ *   #range - A range of numbers.
+ *   <ul>
+ *     #range:20 - Returns a list of numbers from 1 through 20 (inclusive).
+ *     #range:0-5 - Returns a list of numbers from 0 through 5 (inclusive).
+ *     #range - Return a list of numbers from 1 through 0 (inclusive).
+ *   </ul>
+ * </ul>
  */
 public final class CompletionHandler {
 
@@ -50,17 +63,39 @@ public final class CompletionHandler {
    * Registers all the default completions.
    */
   public CompletionHandler() {
+
+    register("#empty", input -> Collections.singletonList(""));
+
+    register("#boolean", input -> Arrays.asList("false", "true"));
+
     register(
         "#players",
         input -> {
           final List<String> players = new ArrayList<>();
+
           for (Player player : Bukkit.getOnlinePlayers()) {
             players.add(player.getName());
           }
+
           players.sort(String.CASE_INSENSITIVE_ORDER);
           return players;
         });
-    register("#empty", input -> Collections.singletonList(""));
+
+    register(
+        "#enum",
+        input -> {
+          // noinspection unchecked
+          final Class<? extends Enum<?>> enumCls = (Class<? extends Enum<?>>) input;
+          final List<String> values = new ArrayList<>();
+
+          for (Enum<?> enumValue : enumCls.getEnumConstants()) {
+            values.add(enumValue.name());
+          }
+
+          values.sort(String.CASE_INSENSITIVE_ORDER);
+          return values;
+        });
+
     register(
         "#range",
         input -> {
@@ -91,21 +126,6 @@ public final class CompletionHandler {
 
           return rangeList;
         });
-    register(
-        "#enum",
-        input -> {
-          // noinspection unchecked
-          final Class<? extends Enum<?>> enumCls = (Class<? extends Enum<?>>) input;
-          final List<String> values = new ArrayList<>();
-
-          for (Enum<?> enumValue : enumCls.getEnumConstants()) {
-            values.add(enumValue.name());
-          }
-
-          values.sort(String.CASE_INSENSITIVE_ORDER);
-          return values;
-        });
-    register("#boolean", input -> Arrays.asList("false", "true"));
   }
 
   /**

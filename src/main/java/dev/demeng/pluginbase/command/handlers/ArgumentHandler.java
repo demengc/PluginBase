@@ -38,7 +38,23 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 /**
- * Handles and maps command arguments from string to the expected data type in method parameters.
+ * Handles and maps command arguments from string to the expected data type in method parameters. A
+ * list of data types supported by defailt are as follows:
+ * <ul>
+ *   Short
+ *   Integer
+ *   Long
+ *   Float
+ *   Double
+ *   String
+ *   String[]
+ *   Boolean
+ *   boolean
+ *   Player
+ *   Material
+ *   Sound
+ *   World
+ * </ul>
  */
 public final class ArgumentHandler {
 
