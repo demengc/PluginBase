@@ -24,7 +24,8 @@
 
 package dev.demeng.pluginbase;
 
-import java.util.Objects;
+import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Utlity class for checking and validating objects.
@@ -46,9 +47,8 @@ public class Validate {
    * @param className The class's package and name (Example: dev.demeng.pluginbase.Validate)
    * @return The actul class if the class exists, null otherwise
    */
-  public static Class<?> checkClass(String className) {
-    Objects.requireNonNull(className, "Class name to check is null");
-
+  @Nullable
+  public static Class<?> checkClass(@NonNull String className) {
     try {
       return Class.forName(className);
     } catch (ClassNotFoundException ex) {
@@ -66,9 +66,8 @@ public class Validate {
    * @param str The string to check
    * @return The actual integer if the string is an integer, null otherwise
    */
-  public static Integer checkInt(String str) {
-    Objects.requireNonNull(str, "String to check is null");
-
+  @Nullable
+  public static Integer checkInt(@NonNull String str) {
     try {
       return Integer.parseInt(str);
     } catch (NumberFormatException ex) {
@@ -82,9 +81,8 @@ public class Validate {
    * @param str The string to check
    * @return The actual long if the string is an long, null otherwise
    */
-  public static Long checkLong(String str) {
-    Objects.requireNonNull(str, "String to check is null");
-
+  @Nullable
+  public static Long checkLong(@NonNull String str) {
     try {
       return Long.parseLong(str);
     } catch (NumberFormatException ex) {
@@ -98,9 +96,8 @@ public class Validate {
    * @param str The string to check
    * @return The actual double if the string is an double, null otherwise
    */
-  public static Double checkDouble(String str) {
-    Objects.requireNonNull(str, "String to check is null");
-
+  @Nullable
+  public static Double checkDouble(@NonNull String str) {
     try {
       return Double.parseDouble(str);
     } catch (NumberFormatException ex) {
@@ -114,9 +111,8 @@ public class Validate {
    * @param str The string to check
    * @return The actual float if the string is an double, null otherwise
    */
-  public static Float checkFloat(String str) {
-    Objects.requireNonNull(str, "String to check is null");
-
+  @Nullable
+  public static Float checkFloat(@NonNull String str) {
     try {
       return Float.parseFloat(str);
     } catch (NumberFormatException ex) {
