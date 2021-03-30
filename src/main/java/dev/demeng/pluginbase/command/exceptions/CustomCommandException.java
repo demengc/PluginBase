@@ -24,10 +24,12 @@
 
 package dev.demeng.pluginbase.command.exceptions;
 
+import dev.demeng.pluginbase.exceptions.BaseException;
+
 /**
  * A custom command exception, thrown mostly due to annotation or method parameter errors.
  */
-public class CustomCommandException extends RuntimeException {
+public class CustomCommandException extends BaseException {
 
   public CustomCommandException(String message) {
     super(message);

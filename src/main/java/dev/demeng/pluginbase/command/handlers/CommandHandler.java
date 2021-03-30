@@ -29,7 +29,7 @@ import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.command.CommandBase;
-import dev.demeng.pluginbase.command.annotations.Alias;
+import dev.demeng.pluginbase.command.annotations.Aliases;
 import dev.demeng.pluginbase.command.annotations.CompleteFor;
 import dev.demeng.pluginbase.command.annotations.Completion;
 import dev.demeng.pluginbase.command.annotations.Default;
@@ -119,7 +119,7 @@ public final class CommandHandler extends Command {
       checkPermission(method, data);
       checkOptionalParam(method, data);
       checkParamCompletion(method, data);
-      checkAlias(method, data);
+      checkAliases(method, data);
 
       if (!data.isDef() && method.isAnnotationPresent(SubCommand.class)) {
         final String name = method.getAnnotation(SubCommand.class).value().toLowerCase();
@@ -542,13 +542,13 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkAlias(Method method, CommandData data) {
+  private void checkAliases(Method method, CommandData data) {
 
-    if (!method.isAnnotationPresent(Alias.class)) {
+    if (!method.isAnnotationPresent(Aliases.class)) {
       return;
     }
 
-    for (String alias : method.getAnnotation(Alias.class).value()) {
+    for (String alias : method.getAnnotation(Aliases.class).value()) {
       data.setName(alias.toLowerCase());
       if (data.isDef()) {
         data.setDef(false);

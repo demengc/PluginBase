@@ -26,7 +26,7 @@
 package dev.demeng.pluginbase.command;
 
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.command.annotations.Alias;
+import dev.demeng.pluginbase.command.annotations.Aliases;
 import dev.demeng.pluginbase.command.annotations.Command;
 import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
 import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
@@ -92,8 +92,8 @@ public final class CommandManager implements Listener {
 
     final List<String> aliases = command.getAliases();
 
-    if (commandClass.isAnnotationPresent(Alias.class)) {
-      aliases.addAll(Arrays.asList(commandClass.getAnnotation(Alias.class).value()));
+    if (commandClass.isAnnotationPresent(Aliases.class)) {
+      aliases.addAll(Arrays.asList(commandClass.getAnnotation(Aliases.class).value()));
     }
 
     org.bukkit.command.Command oldCommand = commandMap.getCommand(commandName);

@@ -25,6 +25,7 @@
 
 package dev.demeng.pluginbase.command.annotations;
 
+import dev.demeng.pluginbase.command.handlers.CompletionHandler;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -40,7 +41,8 @@ public @interface Completion {
 
   /**
    * The completions for the command (if annotated on method) or a single argument (if annotated on
-   * parameter).
+   * parameter). A list of completion identifiers/shortcuts (such as a list of players, a range of
+   * numbers, or an enum) can be found in {@link CompletionHandler#CompletionHandler()}.
    *
    * @return The completions for the command or argument
    */
