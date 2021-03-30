@@ -211,7 +211,7 @@ public abstract class LibraryManager {
       logger.warning("File not found: " + url);
 
     } catch (SocketTimeoutException ex) {
-      logger.warning("Connect timed out: " + url);
+      logger.warning("Connection timed out: " + url);
 
     } catch (UnknownHostException ex) {
       logger.warning("Unknown host: " + url);

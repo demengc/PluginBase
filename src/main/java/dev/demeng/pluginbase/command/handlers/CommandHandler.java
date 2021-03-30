@@ -71,6 +71,16 @@ public final class CommandHandler extends Command {
   private final ArgumentHandler argumentHandler;
   private final CompletionHandler completionHandler;
 
+  /**
+   * Initializes a handler for the command. For internal use. To properly register your commands,
+   * use {@link dev.demeng.pluginbase.command.CommandManager#register(CommandBase)}.
+   *
+   * @param commandName       The name of the command
+   * @param command           The command base
+   * @param aliases           The commad aliases
+   * @param argumentHandler   The argument handler
+   * @param completionHandler The completion handler
+   */
   public CommandHandler(
       String commandName,
       CommandBase command,
@@ -86,6 +96,12 @@ public final class CommandHandler extends Command {
     this.completionHandler = completionHandler;
   }
 
+  /**
+   * Registers a new sub-command to the base command. For internal use only. To properly register
+   * your commands, use {@link dev.demeng.pluginbase.command.CommandManager#register(CommandBase)}.
+   *
+   * @param command The command base to have its sub-commands registered
+   */
   public void addSubCommands(CommandBase command) {
 
     for (Method method : command.getClass().getDeclaredMethods()) {
@@ -285,7 +301,6 @@ public final class CommandHandler extends Command {
       method.invoke(subCommand.getCommandBase(), invokeParams.toArray());
 
       subCommand.getCommandBase().clearArguments();
-      return;
 
     } catch (Exception ex) {
       if (sender instanceof Player) {
@@ -294,8 +309,6 @@ public final class CommandHandler extends Command {
         Common.error(ex, "Failed to execute command.", false);
       }
     }
-
-    return;
   }
 
   @Override

@@ -87,8 +87,7 @@ public class ChatUtils {
    * fork of Spigot.
    *
    * @param strings The plain string(s)
-   * @return The colorized string(s), separated by a new line, or an empty string if the provided
-   * string(s) is/are null
+   * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
   public static String colorize(String... strings) {
@@ -137,8 +136,7 @@ public class ChatUtils {
    * Appends the prefix, and then colorizes.
    *
    * @param strings The plain, non-prefixed string(s)
-   * @return The colorized string(s), separated by a new line, or an empty string if the provided
-   * string(s) is/are null
+   * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
   public static String format(String... strings) {

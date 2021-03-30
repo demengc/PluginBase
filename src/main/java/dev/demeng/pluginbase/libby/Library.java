@@ -26,18 +26,19 @@
 package dev.demeng.pluginbase.libby;
 
 import dev.demeng.pluginbase.libby.relocation.Relocation;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import lombok.Builder;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An immutable representation of a Maven artifact that can be downloaded, relocated and then loaded
  * into a plugin's classpath at runtime.
  */
-@Builder
 public class Library {
 
   @Getter private final Collection<String> urls;
@@ -142,5 +143,77 @@ public class Library {
     }
 
     return name;
+  }
+
+  /**
+   * Creates a new library builder.
+   *
+   * @return New library builder
+   */
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  /**
+   * Due to the constructor complexity of an immutable {@link Library}, instead this fluent builder
+   * is used to configure and then construct a new library.
+   */
+  public static class Builder {
+
+    private final Collection<String> urls = new LinkedList<>();
+    private String groupId;
+    private String artifactId;
+    private String version;
+    private String classifier;
+    private byte[] checksum;
+    private final Collection<Relocation> relocations = new LinkedList<>();
+
+    public Builder url(@NonNull String url) {
+      urls.add(url);
+      return this;
+    }
+
+    public Builder groupId(@NonNull String groupId) {
+      this.groupId = groupId;
+      return this;
+    }
+
+    public Builder artifactId(@NonNull String artifactId) {
+      this.artifactId = artifactId;
+      return this;
+    }
+
+    public Builder version(@NonNull String version) {
+      this.version = version;
+      return this;
+    }
+
+    public Builder classifier(@NonNull String classifier) {
+      this.classifier = classifier;
+      return this;
+    }
+
+    public Builder checksum(byte[] checksum) {
+      this.checksum = Objects.requireNonNull(checksum, "Checksum is null");
+      return this;
+    }
+
+    public Builder checksum(@NonNull String checksum) {
+      return checksum(Base64.getDecoder().decode(checksum));
+    }
+
+    public Builder relocate(@NonNull Relocation relocation) {
+      relocations.add(relocation);
+      return this;
+    }
+
+    public Builder relocate(@NonNull String pattern, @NonNull String relocatedPattern) {
+      return relocate(new Relocation(pattern, relocatedPattern));
+    }
+
+    @NotNull
+    public Library build() {
+      return new Library(urls, groupId, artifactId, version, classifier, checksum, relocations);
+    }
   }
 }
