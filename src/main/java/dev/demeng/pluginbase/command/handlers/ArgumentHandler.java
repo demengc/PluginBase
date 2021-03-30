@@ -59,7 +59,7 @@ public final class ArgumentHandler {
 
     register(Integer.class, arg -> new TypeResult(Validate.checkInt(String.valueOf(arg)), arg));
     register(Long.class, arg -> new TypeResult(Validate.checkLong(String.valueOf(arg)), arg));
-    // register(Float.class, arg -> new TypeResult(Floats.tryParse(String.valueOf(arg)), arg));
+    register(Float.class, arg -> new TypeResult(Validate.checkFloat(String.valueOf(arg)), arg));
     register(Double.class, arg -> new TypeResult(Validate.checkDouble(String.valueOf(arg)), arg));
 
     register(
