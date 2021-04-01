@@ -2,7 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021 Demeng Chen
- * Copyright (c) 2019 Matt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.command.handlers;
+package dev.demeng.pluginbase.command.internal;
 
 import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Common;
@@ -33,10 +32,14 @@ import dev.demeng.pluginbase.command.annotations.Aliases;
 import dev.demeng.pluginbase.command.annotations.CompleteFor;
 import dev.demeng.pluginbase.command.annotations.Completion;
 import dev.demeng.pluginbase.command.annotations.Default;
+import dev.demeng.pluginbase.command.annotations.Description;
 import dev.demeng.pluginbase.command.annotations.Optional;
 import dev.demeng.pluginbase.command.annotations.Permission;
 import dev.demeng.pluginbase.command.annotations.SubCommand;
+import dev.demeng.pluginbase.command.annotations.Usage;
 import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
+import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
+import dev.demeng.pluginbase.command.handlers.CompletionHandler;
 import dev.demeng.pluginbase.command.objects.CommandData;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.lang.reflect.InvocationTargetException;
@@ -51,7 +54,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import lombok.NonNull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -131,12 +133,13 @@ public final class CommandHandler extends Command {
       data.setMethod(method);
       data.setSenderClass(method.getParameterTypes()[0]);
 
-      checkRegisteredParams(method, data);
-      checkDefault(method, data);
-      checkPermission(method, data);
-      checkOptionalParam(method, data);
-      checkParamCompletion(method, data);
-      checkAliases(method, data);
+      checkParameters(method, data);
+      checkDefaultAnnotation(method, data);
+      checkDescriptionAnnotation(method, data);
+      checkUsageAnnotation(method, data);
+      checkPermissionAnnotation(method, data);
+      checkOptionalAnnotation(method, data);
+      checkParametersCompletionAnnnotation(method, data);
 
       if (!data.isDef() && method.isAnnotationPresent(SubCommand.class)) {
         final String name = method.getAnnotation(SubCommand.class).value().toLowerCase();
@@ -149,10 +152,21 @@ public final class CommandHandler extends Command {
         commands.put(DEFAULT_NAME, data);
       }
 
-      checkCompletionMethod(command, data);
+      checkCompletionMethodAnnotation(command, data);
+      checkAliasesAnnotation(method, data);
     }
   }
 
+  /**
+   * Overrides the default command execution method and instead use it to map all of our arguments,
+   * check the requirements, etc. before actually invoking the execution method and executing the
+   * command. You probably shouldn't be calling this method yourself.
+   *
+   * @param sender    The command sender
+   * @param label     The command label
+   * @param arguments The command arguments
+   * @return Always true
+   */
   @Override
   public boolean execute(@NonNull CommandSender sender, @NonNull String label, String[] arguments) {
 
@@ -166,141 +180,78 @@ public final class CommandHandler extends Command {
         return true;
       }
 
-      if (!Common.hasPermission(sender, data.getPermission())) {
-        ChatUtils.tell(sender, settings.insufficientPermission());
-        return true;
+      if (checkSender(sender, data)) {
+        runCommand(data, sender, arguments);
       }
 
-      if (!(CommandSender.class.equals(data.getSenderClass())
-          || ConsoleCommandSender.class.equals(data.getSenderClass()))
-          && !(sender instanceof Player)) {
-        ChatUtils.tell(sender, settings.notPlayer());
-        return true;
-      }
-
-      executeCommand(data, sender, arguments, settings);
       return true;
     }
 
-    final String argCommand = arguments[0].toLowerCase();
+    final String firstArg = arguments[0].toLowerCase();
 
-    if ((data != null && data.getArguments().isEmpty())
-        && (!commands.containsKey(argCommand) || getName().equalsIgnoreCase(argCommand))) {
+    if (((data != null && data.getArguments().isEmpty())
+        && (!commands.containsKey(firstArg) || getName().equalsIgnoreCase(firstArg))) || (
+        data == null && !commands.containsKey(firstArg))) {
       ChatUtils.tell(sender, settings.incorrectUsage());
       return true;
     }
 
-    if (data == null && !commands.containsKey(argCommand)) {
-      ChatUtils.tell(sender, settings.incorrectUsage());
-      return true;
+    if (commands.containsKey(firstArg)) {
+      data = commands.get(firstArg);
     }
 
-    if (commands.containsKey(argCommand)) {
-      data = commands.get(argCommand);
+    if (data == null) {
+      throw new CustomCommandException(String.format("Command data is null for '%s'", firstArg));
     }
 
-    Objects.requireNonNull(data);
-
-    if (!Common.hasPermission(sender, data.getPermission())) {
-      ChatUtils.tell(sender, settings.insufficientPermission());
-      return true;
+    if (checkSender(sender, data)) {
+      runCommand(data, sender, arguments);
     }
 
-    if (!(CommandSender.class.equals(data.getSenderClass())
-        || ConsoleCommandSender.class.equals(data.getSenderClass()))
-        && !(sender instanceof Player)) {
-      ChatUtils.tell(sender, settings.notPlayer());
-      return true;
-    }
-
-    executeCommand(data, sender, arguments, settings);
     return true;
   }
 
-  private void executeCommand(
-      CommandData subCommand, CommandSender sender, String[] arguments, BaseSettings settings) {
+  private void runCommand(
+      CommandData data, CommandSender sender, String[] arguments) {
+
     try {
-
-      final Method method = subCommand.getMethod();
-
+      final Method method = data.getMethod();
       final List<String> argumentsList = new LinkedList<>(Arrays.asList(arguments));
-      if (!subCommand.isDef() && !argumentsList.isEmpty()) {
+
+      if (!data.isDef() && !argumentsList.isEmpty()) {
         argumentsList.remove(0);
       }
 
-      if (subCommand.getArguments().isEmpty() && argumentsList.isEmpty()) {
-        method.invoke(subCommand.getCommandBase(), sender);
+      if (data.getArguments().isEmpty() && argumentsList.isEmpty()) {
+        method.invoke(data.getCommandBase(), sender);
         return;
       }
 
-      if (subCommand.getArguments().size() == 1
-          && String[].class.isAssignableFrom(subCommand.getArguments().get(0))) {
-        method.invoke(subCommand.getCommandBase(), sender, arguments);
+      if (data.getArguments().size() == 1
+          && String[].class.isAssignableFrom(data.getArguments().get(0))) {
+        method.invoke(data.getCommandBase(), sender, arguments);
         return;
       }
 
-      if (subCommand.getArguments().size() != argumentsList.size() && !subCommand.isOptional()) {
-        if (!subCommand.isDef() && subCommand.getArguments().isEmpty()) {
+      if (data.getArguments().size() != argumentsList.size() && !data
+          .isOptionalArgument()) {
+
+        final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
+
+        if (!data.isDef() && data.getArguments().isEmpty()) {
           ChatUtils.tell(sender, settings.incorrectUsage());
           return;
         }
 
         if (!String[]
             .class.isAssignableFrom(
-            subCommand.getArguments().get(subCommand.getArguments().size() - 1))) {
+            data.getArguments().get(data.getArguments().size() - 1))) {
           ChatUtils.tell(sender, settings.incorrectUsage());
           return;
         }
       }
 
-      final List<Object> invokeParams = new ArrayList<>();
-      invokeParams.add(sender);
-
-      for (int i = 0; i < subCommand.getArguments().size(); i++) {
-        final Class<?> parameter = subCommand.getArguments().get(i);
-
-        if (subCommand.isOptional()) {
-          if (argumentsList.size() > subCommand.getArguments().size()) {
-            ChatUtils.tell(sender, settings.incorrectUsage());
-            return;
-          }
-
-          if (argumentsList.size() < subCommand.getArguments().size() - 1) {
-            ChatUtils.tell(sender, settings.incorrectUsage());
-            return;
-          }
-
-          if (argumentsList.size() < subCommand.getArguments().size()) {
-            argumentsList.add(null);
-          }
-        }
-
-        if (subCommand.getArguments().size() > argumentsList.size()) {
-          ChatUtils.tell(sender, settings.incorrectUsage());
-          return;
-        }
-
-        Object argument = argumentsList.get(i);
-
-        if (parameter.equals(String[].class)) {
-          String[] args = new String[argumentsList.size() - i];
-
-          for (int j = 0; j < args.length; j++) {
-            args[j] = argumentsList.get(i + j);
-          }
-
-          argument = args;
-        }
-
-        final Object result =
-            argumentHandler.getTypeResult(
-                parameter, argument, subCommand, subCommand.getArgumentNames().get(i));
-        invokeParams.add(result);
-      }
-
-      method.invoke(subCommand.getCommandBase(), invokeParams.toArray());
-
-      subCommand.getCommandBase().clearArguments();
+      runCommandWithParameters(data, sender, argumentsList);
 
     } catch (Exception ex) {
       if (sender instanceof Player) {
@@ -309,6 +260,59 @@ public final class CommandHandler extends Command {
         Common.error(ex, "Failed to execute command.", false);
       }
     }
+  }
+
+  private void runCommandWithParameters(CommandData data, CommandSender sender,
+      List<String> argumentsList)
+      throws InvocationTargetException, IllegalAccessException {
+
+    final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
+
+    final List<Object> invokeParams = new ArrayList<>();
+    invokeParams.add(sender);
+
+    for (int index = 0; index < data.getArguments().size(); index++) {
+      final Class<?> parameter = data.getArguments().get(index);
+
+      if (data.isOptionalArgument()) {
+        if (argumentsList.size() > data.getArguments().size()) {
+          ChatUtils.tell(sender, settings.incorrectUsage());
+          return;
+        }
+
+        if (argumentsList.size() < data.getArguments().size() - 1) {
+          ChatUtils.tell(sender, settings.incorrectUsage());
+          return;
+        }
+
+        if (argumentsList.size() < data.getArguments().size()) {
+          argumentsList.add(null);
+        }
+      }
+
+      if (data.getArguments().size() > argumentsList.size()) {
+        ChatUtils.tell(sender, settings.incorrectUsage());
+        return;
+      }
+
+      Object argument = argumentsList.get(index);
+
+      if (parameter.equals(String[].class)) {
+        String[] args = new String[argumentsList.size() - index];
+
+        for (int n = 0; n < args.length; n++) {
+          args[n] = argumentsList.get(index + n);
+        }
+
+        argument = args;
+      }
+
+      invokeParams.add(argumentHandler.getTypeResult(
+          parameter, argument, data, data.getArgumentNames().get(index)));
+    }
+
+    data.getMethod().invoke(data.getCommandBase(), invokeParams.toArray());
+    data.getCommandBase().clearArguments();
   }
 
   @Override
@@ -323,50 +327,45 @@ public final class CommandHandler extends Command {
       final CommandData data = getDefaultSubCommand();
 
       if (data != null) {
-        final Method completionMethod = data.getCompletionMethod();
+        final List<String> result = invokeCompletionMethod(data.getCompletionMethod(),
+            data.getCommandBase(), DEFAULT_NAME, sender, args);
 
-        if (completionMethod != null) {
-          try {
-            List<String> argsList = new LinkedList<>(Arrays.asList(args));
-            argsList.remove(DEFAULT_NAME);
-            //noinspection unchecked
-            return (List<String>) completionMethod.invoke(data.getCommandBase(), argsList, sender);
-          } catch (IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-          }
+        if (result != null) {
+          return result;
         }
       }
 
       final List<String> subCmd = new ArrayList<>(commands.keySet());
       subCmd.remove(DEFAULT_NAME);
 
-      for (String subCmdName : commands.keySet()) {
-        final CommandData subCmdData = commands.get(subCmdName);
-        if (!Common.hasPermission(sender, subCmdData.getPermission())) {
-          subCmd.remove(subCmdName);
+      for (Map.Entry<String, CommandData> entry : commands.entrySet()) {
+        if (!Common.hasPermission(sender, entry.getValue().getPermission())) {
+          subCmd.remove(entry.getKey());
         }
       }
 
       if (data != null && data.getCompletions().size() != 0) {
         String id = data.getCompletions().get(1);
-        Object inputClss = data.getArguments().get(0);
+        Object inputClazz = data.getArguments().get(0);
 
         if (id.contains(":")) {
           String[] values = id.split(":");
           id = values[0];
-          inputClss = values[1];
+          inputClazz = values[1];
         }
 
-        subCmd.addAll(completionHandler.getTypeResult(id, inputClss));
+        subCmd.addAll(completionHandler.getTypeResult(id, inputClazz));
       }
 
-      if (!"".equals(args[0])) {
+      if (!args[0].equals("")) {
         for (String commandName : subCmd) {
           if (!commandName.toLowerCase().startsWith(args[0].toLowerCase())) {
             continue;
           }
+
           commandNames.add(commandName);
         }
+
       } else {
         commandNames = subCmd;
       }
@@ -395,13 +394,11 @@ public final class CommandHandler extends Command {
     final Method completionMethod = data.getCompletionMethod();
 
     if (completionMethod != null) {
-      try {
-        List<String> argsList = new LinkedList<>(Arrays.asList(args));
-        argsList.remove(subCommandArg);
-        //noinspection unchecked
-        return (List<String>) completionMethod.invoke(data.getCommandBase(), argsList, sender);
-      } catch (IllegalAccessException | InvocationTargetException e) {
-        e.printStackTrace();
+      final List<String> result = invokeCompletionMethod(completionMethod, data.getCommandBase(),
+          subCommandArg, sender, args);
+
+      if (result != null) {
+        return result;
       }
     }
 
@@ -422,13 +419,15 @@ public final class CommandHandler extends Command {
 
     final String current = args[args.length - 1];
 
-    if (!"".equals(current)) {
+    if (!current.equals("")) {
       for (String completion : completionHandler.getTypeResult(id, inputClazz)) {
         if (!completion.toLowerCase().contains(current.toLowerCase())) {
           continue;
         }
+
         completionList.add(completion);
       }
+
     } else {
       completionList = new ArrayList<>(completionHandler.getTypeResult(id, inputClazz));
     }
@@ -441,20 +440,12 @@ public final class CommandHandler extends Command {
     return commands.get(DEFAULT_NAME);
   }
 
-  private void checkDefault(Method method, CommandData data) {
-    if (!method.isAnnotationPresent(Default.class)) {
-      return;
-    }
-
-    data.setDef(true);
-  }
-
-  private void checkRegisteredParams(Method method, CommandData data) {
+  private void checkParameters(Method method, CommandData data) {
 
     for (int i = 1; i < method.getParameterTypes().length; i++) {
       final Class<?> clazz = method.getParameterTypes()[i];
 
-      if (clazz.equals(String[].class) && i != method.getParameterTypes().length - 1) {
+      if (clazz.equals(String[].class) && method.getParameterTypes().length - 1 != i) {
         throw new CustomCommandException(
             String.format(
                 "'String[] args' must be the last parameter for method %s in class %s",
@@ -473,108 +464,30 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkPermission(Method method, CommandData data) {
-    if (!method.isAnnotationPresent(Permission.class)) {
-      return;
-    }
-
-    data.setPermission(method.getAnnotation(Permission.class).value());
+  private void checkDefaultAnnotation(Method method, CommandData data) {
+    data.setDef(method.isAnnotationPresent(Default.class));
   }
 
-  private void checkParamCompletion(Method method, CommandData data) {
-
-    for (int i = 0; i < method.getParameters().length; i++) {
-      final Parameter parameter = method.getParameters()[i];
-
-      if (i == 0 && parameter.isAnnotationPresent(Completion.class)) {
-        throw new CustomCommandException(
-            String.format(
-                "Illegal @Completion annotation for method %s in class %s",
-                method.getName(), method.getClass().getName()));
-      }
-
-      final String[] values;
-      if (parameter.isAnnotationPresent(Completion.class)) {
-        values = parameter.getAnnotation(Completion.class).value();
-      } else {
-        continue;
-      }
-
-      if (values.length != 1) {
-        throw new CustomCommandException(
-            String.format(
-                "Parameter completion can only have one value for method %s in class %s",
-                method.getName(), method.getClass().getName()));
-      }
-
-      if (!values[0].startsWith("#")) {
-        throw new CustomCommandException(
-            String.format(
-                "Completion ID must start with '#' for method %s in class %s",
-                method.getName(), method.getClass().getName()));
-      }
-
-      if (completionHandler.isNotRegistered(values[0])) {
-        throw new CustomCommandException(
-            String.format(
-                "Unregistered completion ID '%s' for method %s in class %s",
-                values[0], method.getName(), method.getClass().getName()));
-      }
-
-      data.getCompletions().put(i, values[0]);
+  private void checkDescriptionAnnotation(Method method, CommandData data) {
+    if (method.isAnnotationPresent(Description.class)) {
+      data.setDescription(method.getAnnotation(Description.class).value());
     }
   }
 
-  private void checkCompletionMethod(CommandBase command, CommandData data) {
-
-    for (final Method method : command.getClass().getDeclaredMethods()) {
-      if (!method.isAnnotationPresent(CompleteFor.class) || !(method
-          .getGenericReturnType() instanceof ParameterizedType)) {
-        continue;
-      }
-
-      final ParameterizedType parametrizedReturnType =
-          (ParameterizedType) method.getGenericReturnType();
-
-      if (method.getParameterTypes().length != 2) {
-        throw new CustomCommandException(
-            String.format(
-                "2 parameters, 'args, sender` required for method %s in class %s",
-                method.getName(), method.getClass().getName()));
-      }
-
-      final String subCommandName = method.getAnnotation(CompleteFor.class).value();
-
-      if (parametrizedReturnType.getRawType() != List.class
-          || parametrizedReturnType.getActualTypeArguments().length != 1
-          || parametrizedReturnType.getActualTypeArguments()[0] != String.class
-          || !CommandSender.class.isAssignableFrom(method.getParameterTypes()[1])
-          || !subCommandName.equalsIgnoreCase(data.getName())) {
-        continue;
-      }
-
-      data.setCompletionMethod(method);
+  private void checkUsageAnnotation(Method method, CommandData data) {
+    if (method.isAnnotationPresent(Usage.class)) {
+      data.setUsage(method.getAnnotation(Usage.class).value());
     }
   }
 
-  private void checkAliases(Method method, CommandData data) {
-
-    if (!method.isAnnotationPresent(Aliases.class)) {
-      return;
-    }
-
-    for (String alias : method.getAnnotation(Aliases.class).value()) {
-      data.setName(alias.toLowerCase());
-      if (data.isDef()) {
-        data.setDef(false);
-      }
-      commands.put(alias.toLowerCase(), data);
+  private void checkPermissionAnnotation(Method method, CommandData data) {
+    if (method.isAnnotationPresent(Permission.class)) {
+      data.setPermission(method.getAnnotation(Permission.class).value());
     }
   }
 
-  private void checkOptionalParam(Method method, CommandData data) {
+  private void checkOptionalAnnotation(Method method, CommandData data) {
 
-    // Checks for completion on the parameters.
     for (int i = 0; i < method.getParameters().length; i++) {
       final Parameter parameter = method.getParameters()[i];
 
@@ -588,8 +501,133 @@ public final class CommandHandler extends Command {
       }
 
       if (parameter.isAnnotationPresent(Optional.class)) {
-        data.setOptional(true);
+        data.setOptionalArgument(true);
       }
+    }
+  }
+
+  private void checkParametersCompletionAnnnotation(Method method, CommandData data) {
+
+    for (int i = 0; i < method.getParameters().length; i++) {
+      final Parameter parameter = method.getParameters()[i];
+
+      if (!parameter.isAnnotationPresent(Completion.class)) {
+        continue;
+      }
+
+      if (i == 0) {
+        throw new CustomCommandException(
+            String.format(
+                "Illegal @Completion annotation for method %s in class %s",
+                method.getName(), method.getClass().getName()));
+      }
+
+      final String value = parameter.getAnnotation(Completion.class).value();
+
+      if (!value.startsWith("#")) {
+        throw new CustomCommandException(
+            String.format(
+                "Completion ID must start with '#' for method %s in class %s",
+                method.getName(), method.getClass().getName()));
+      }
+
+      if (completionHandler.isRegistered(value)) {
+        throw new CustomCommandException(
+            String.format(
+                "Unregistered completion ID '%s' for method %s in class %s",
+                value, method.getName(), method.getClass().getName()));
+      }
+
+      data.getCompletions().put(i, value);
+    }
+  }
+
+  private void checkCompletionMethodAnnotation(CommandBase command, CommandData data) {
+
+    for (Method method : command.getClass().getDeclaredMethods()) {
+      if (!method.isAnnotationPresent(CompleteFor.class) || !(method
+          .getGenericReturnType() instanceof ParameterizedType)) {
+        continue;
+      }
+
+      final ParameterizedType returnType =
+          (ParameterizedType) method.getGenericReturnType();
+
+      if (method.getParameterTypes().length != 2) {
+        throw new CustomCommandException(
+            String.format(
+                "2 parameters, 'args, sender` required for method %s in class %s",
+                method.getName(), method.getClass().getName()));
+      }
+
+      if (isCompletionMethod(method, returnType, data)) {
+        data.setCompletionMethod(method);
+      }
+    }
+  }
+
+  private boolean isCompletionMethod(Method method, ParameterizedType returnType,
+      CommandData data) {
+    return returnType.getRawType() == List.class
+        && returnType.getActualTypeArguments().length == 1
+        && returnType.getActualTypeArguments()[0] == String.class
+        && CommandSender.class.isAssignableFrom(method.getParameterTypes()[1])
+        && method.getAnnotation(CompleteFor.class).value().equalsIgnoreCase(data.getName());
+  }
+
+  private void checkAliasesAnnotation(Method method, CommandData data) {
+
+    if (!method.isAnnotationPresent(Aliases.class)) {
+      return;
+    }
+
+    for (String alias : method.getAnnotation(Aliases.class).value()) {
+      final CommandData clone = data.copy();
+
+      clone.setName(alias.toLowerCase());
+      clone.setDef(false);
+      commands.put(alias.toLowerCase(), clone);
+    }
+  }
+
+  private boolean checkSender(CommandSender sender, CommandData data) {
+
+    final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
+
+    if (!(CommandSender.class.equals(data.getSenderClass())
+        || ConsoleCommandSender.class.equals(data.getSenderClass()))
+        && !(sender instanceof Player)) {
+      ChatUtils.tell(sender, settings.notPlayer());
+      return false;
+    }
+
+    if (!Common.hasPermission(sender, data.getPermission())) {
+      ChatUtils.tell(sender, settings.insufficientPermission());
+      return false;
+    }
+
+    return true;
+  }
+
+  private List<String> invokeCompletionMethod(Method method, CommandBase base, String arg,
+      CommandSender sender,
+      String[] args) {
+
+    if (method == null) {
+      return null;
+    }
+
+    try {
+      final List<String> argsList = new LinkedList<>(Arrays.asList(args));
+      argsList.remove(arg);
+
+      //noinspection unchecked
+      return (List<String>) method.invoke(base, argsList, sender);
+
+    } catch (IllegalAccessException | InvocationTargetException ex) {
+      throw new CustomCommandException(String
+          .format("Could not invoke completion method for method %s in class %s",
+              method.getName(), method.getClass().getName()), ex);
     }
   }
 }

@@ -37,7 +37,7 @@ public final class TypeResult {
   @Getter private final String argumentName;
 
   /**
-   * Creates a new type result that has already been resolved..
+   * Creates a new type result that has already been resolved.
    *
    * @param resolvedValue The resolved value
    * @param argumentName  The argument name

@@ -34,4 +34,12 @@ public class CustomCommandException extends BaseException {
   public CustomCommandException(String message) {
     super(message);
   }
+
+  public CustomCommandException(Throwable cause) {
+    super(cause);
+  }
+
+  public CustomCommandException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

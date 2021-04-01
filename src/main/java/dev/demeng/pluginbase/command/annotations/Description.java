@@ -25,26 +25,22 @@
 
 package dev.demeng.pluginbase.command.annotations;
 
-import dev.demeng.pluginbase.command.handlers.CompletionHandler;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Command mangement annotation used for specifying the tab-completions for the annotated method or
- * parameter (command argument).
+ * Command mangement annotation used for specifying a brief description of the command.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.PARAMETER)
-public @interface Completion {
+@Target(ElementType.METHOD)
+public @interface Description {
 
   /**
-   * The completions for the command (if annotated on method) or a single argument (if annotated on
-   * parameter). A list of completion identifiers/shortcuts (such as a list of players, a range of
-   * numbers, or an enum) can be found in {@link CompletionHandler#CompletionHandler()}.
+   * A brief description of the command.
    *
-   * @return The completions for the command or argument
+   * @return A command description
    */
   String value();
 }

@@ -132,7 +132,8 @@ public final class ArgumentHandler {
    * @param parameterName The parameter name from the method
    * @return The output object of the functional interface
    */
-  Object getTypeResult(Class<?> clazz, Object object, CommandData data, String parameterName) {
+  public Object getTypeResult(Class<?> clazz, Object object, CommandData data,
+      String parameterName) {
     final TypeResult result = registeredTypes.get(clazz).resolve(object);
     data.getCommandBase().addArgument(parameterName, result.getArgumentName());
 
@@ -145,7 +146,7 @@ public final class ArgumentHandler {
    * @param clazz The class type to check
    * @return True if registered, false otherwise
    */
-  boolean isRegisteredType(Class<?> clazz) {
+  public boolean isRegisteredType(Class<?> clazz) {
     return registeredTypes.get(clazz) != null;
   }
 }

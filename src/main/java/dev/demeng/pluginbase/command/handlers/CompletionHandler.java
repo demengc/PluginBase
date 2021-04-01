@@ -151,7 +151,7 @@ public final class CompletionHandler {
    * @param input        The input the output will be resolved from, typically not needed
    * @return The string list with all the completions
    */
-  List<String> getTypeResult(String completionId, Object input) {
+  public List<String> getTypeResult(String completionId, Object input) {
     return ChatUtils.colorize(registeredCompletions.get(completionId).resolve(input));
   }
 
@@ -161,13 +161,13 @@ public final class CompletionHandler {
    * @param id The ID to check
    * @return True if registered, false otherwise
    */
-  boolean isNotRegistered(String id) {
+  public boolean isRegistered(String id) {
     String identifier = id;
 
     if (id.contains(":")) {
       identifier = identifier.split(":")[0];
     }
 
-    return registeredCompletions.get(identifier) == null;
+    return registeredCompletions.get(identifier) != null;
   }
 }
