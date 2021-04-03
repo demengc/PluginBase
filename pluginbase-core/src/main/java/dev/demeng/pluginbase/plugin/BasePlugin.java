@@ -25,12 +25,12 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.command.CommandManager;
-import dev.demeng.pluginbase.libby.Library;
-import dev.demeng.pluginbase.libby.managers.BukkitLibraryManager;
+import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import lombok.Getter;
-import lombok.NonNull;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An extended version of JavaPlugin. Main class must extend this class in order to use PluginBase.
@@ -38,53 +38,66 @@ import org.bukkit.plugin.java.JavaPlugin;
 @SuppressWarnings("unused")
 public abstract class BasePlugin extends JavaPlugin {
 
-  @Getter private BukkitLibraryManager libraryManager;
+  /**
+   * The dependency engine for this plugin.
+   */
+  private final @NotNull DependencyEngine dependencyEngine;
+
+  /**
+   * The command manager for this plugin.
+   */
   @Getter private CommandManager commandManager;
+
+  protected BasePlugin() {
+    this.dependencyEngine = DependencyEngine
+        .createNew(this.getDataFolder().toPath().resolve("dependencies"));
+  }
 
   @Override
   public final void onLoad() {
+
     BaseLoader.setPlugin(this);
-    libraryManager = new BukkitLibraryManager();
+
+    dependencyEngine
+        .addDependenciesFromClass(getClass())
+        .loadDependencies()
+        .exceptionally(ex -> {
+          dependencyEngine.getErrors().add(ex);
+          return null;
+        })
+        .join();
+
+    if (!dependencyEngine.getErrors().isEmpty()) {
+      for (Throwable t : dependencyEngine.getErrors()) {
+        Common.error(t, "Failed to download dependencies.", false);
+      }
+
+      return;
+    }
+
     commandManager = new CommandManager();
     load();
   }
 
   @Override
   public final void onEnable() {
+
+    if (!dependencyEngine.getErrors().isEmpty()) {
+      return;
+    }
+
     enable();
   }
 
   @Override
   public final void onDisable() {
-    disable();
-    commandManager.unregisterAll();
-  }
 
-  /**
-   * Load a new library at runtime. Make sure to add the repository using the library manager before
-   * using this method.
-   *
-   * @param groupId       The group ID of the dependency
-   * @param artifactId    The artifact ID of the dependency
-   * @param version       The version of the dependency
-   * @param pattern       The original packaging pattern, or null if you do not want to relocate
-   * @param shadedPattern The new packaging pattern, or null if you do not want to relocate
-   * @see BukkitLibraryManager#addMavenCentral()
-   * @see BukkitLibraryManager#addRepository(String)
-   */
-  public void loadLib(
-      @NonNull String groupId, @NonNull String artifactId, @NonNull String version, String pattern,
-      String shadedPattern) {
-
-    final Library.Builder builder = Library.builder();
-
-    builder.groupId(groupId).artifactId(artifactId).version(version);
-
-    if (pattern != null && shadedPattern != null) {
-      builder.relocate(pattern, shadedPattern);
+    if (!dependencyEngine.getErrors().isEmpty()) {
+      return;
     }
 
-    libraryManager.loadLibrary(builder.build());
+    disable();
+    commandManager.unregisterAll();
   }
 
   /**
@@ -95,21 +108,21 @@ public abstract class BasePlugin extends JavaPlugin {
   public abstract BaseSettings getBaseSettings();
 
   /**
-   * Code to perform at early plugin startup.
+   * Executes at early plugin startup.
    */
   protected void load() {
     // Override if needed, otherwise nothing will be executed.
   }
 
   /**
-   * Code to perform on plugin enable.
+   * Executes on plugin enable.
    */
   protected void enable() {
     // Override if needed, otherwise nothing will be executed.
   }
 
   /**
-   * Code to perform on plugin disable.
+   * Executes on plugin disable.
    */
   protected void disable() {
     // Override if needed, otherwise nothing will be executed.

@@ -1,8 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021 Demeng Chen
- * Copyright (c) 2019 Matthew Harris
+ * Copyright (c) 2021 Justin Heflin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +20,54 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
  */
 
-package dev.demeng.pluginbase.libby.managers;
+package dev.demeng.pluginbase.dependencyloader.relocation;
 
-import dev.demeng.pluginbase.libby.classloader.UrlClassLoader;
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
+import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * A runtime dependency manager for Bukkit plugins.
+ * This class handles loading some dependencies that are needed for loading other dependencies, but
+ * not need afterwards.
  */
-public final class BukkitLibraryManager extends LibraryManager {
+public final class IsolatedClassLoader extends URLClassLoader {
 
-  private final UrlClassLoader classLoader;
+  static {
+    ClassLoader.registerAsParallelCapable();
+  }
 
   /**
-   * Creates a new Bukkit library manager.
+   * Instantiates a new Isolated class loader.
+   *
+   * @param urls the urls
    */
-  public BukkitLibraryManager() {
-    super(BaseLoader.getPlugin().getDataFolder().toPath());
-    classLoader =
-        new UrlClassLoader(
-            (URLClassLoader) BaseLoader.getPlugin().getClass().getClassLoader());
+  public IsolatedClassLoader(final @NotNull URL... urls) {
+    super(Objects.requireNonNull(urls), ClassLoader.getSystemClassLoader().getParent());
   }
 
   @Override
-  protected void addToClasspath(Path file) {
-    classLoader.addToClasspath(file);
+  public void addURL(final @NotNull URL url) {
+    super.addURL(url);
+  }
+
+  /**
+   * Add path boolean.
+   *
+   * @param path the path
+   * @return the boolean
+   */
+  public boolean addPath(final @NotNull Path path) {
+    try {
+      this.addURL(path.toUri().toURL());
+      return true;
+    } catch (MalformedURLException e) {
+      return false;
+    }
   }
 }
