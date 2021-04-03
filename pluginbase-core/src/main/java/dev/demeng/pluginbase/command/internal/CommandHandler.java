@@ -66,6 +66,8 @@ import org.jetbrains.annotations.NotNull;
 public final class CommandHandler extends Command {
 
   private static final String DEFAULT_NAME = "pb-default";
+  private static final String PERMISSION_PLACEHOLDER = "%permission%";
+  private static final String USAGE_PLACEHOLDER = "%usage%";
 
   private final Map<String, CommandData> commands = new HashMap<>();
 
@@ -175,7 +177,8 @@ public final class CommandHandler extends Command {
     if (arguments.length == 0 || arguments[0].isEmpty()) {
 
       if (data == null) {
-        ChatUtils.tell(sender, settings.incorrectUsage());
+        ChatUtils.tell(sender, settings.incorrectUsage()
+            .replace(USAGE_PLACEHOLDER, settings.notApplicable()));
         return true;
       }
 
@@ -191,7 +194,10 @@ public final class CommandHandler extends Command {
     if (((data != null && data.getArguments().isEmpty())
         && (!commands.containsKey(firstArg) || getName().equalsIgnoreCase(firstArg))) || (
         data == null && !commands.containsKey(firstArg))) {
-      ChatUtils.tell(sender, settings.incorrectUsage());
+      ChatUtils.tell(sender, settings.incorrectUsage()
+          .replace(USAGE_PLACEHOLDER,
+              data == null ? settings.notApplicable()
+                  : Common.getOrDefault(data.getUsage(), settings.notApplicable())));
       return true;
     }
 
@@ -607,7 +613,8 @@ public final class CommandHandler extends Command {
     }
 
     if (!Common.hasPermission(sender, data.getPermission())) {
-      ChatUtils.tell(sender, settings.insufficientPermission());
+      ChatUtils.tell(sender, settings.insufficientPermission()
+          .replace(PERMISSION_PLACEHOLDER, data.getPermission()));
       return false;
     }
 

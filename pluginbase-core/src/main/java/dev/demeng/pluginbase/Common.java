@@ -31,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Commonly used methods and utilities.
@@ -109,7 +110,7 @@ public class Common {
    * @return The nullable if not null, default otherwise
    */
   @NotNull
-  public static <T> T getOrDefault(T nullable, T def) {
+  public static <T> T getOrDefault(@Nullable T nullable, @NotNull T def) {
     return nullable != null ? nullable : def;
   }
 

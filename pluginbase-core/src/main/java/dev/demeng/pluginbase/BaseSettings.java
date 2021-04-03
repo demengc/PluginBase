@@ -41,6 +41,10 @@ public interface BaseSettings {
     return "&8[&b" + Common.getName() + "&8] &r";
   }
 
+  // ---------------------------------------------------------------------------------
+  // COMMAND MESSAGES
+  // ---------------------------------------------------------------------------------
+
   /**
    * The message to send if the console attempts to execute a players-only command.
    *
@@ -79,5 +83,18 @@ public interface BaseSettings {
    */
   default String incorrectUsage() {
     return "&cIncorrect usage. Did you mean: &f%usage%";
+  }
+
+  // ---------------------------------------------------------------------------------
+  // WORDS AND PHRASES
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * The string to use if something does not exist, is not applicable, is null, etc.
+   *
+   * @return The not applicable phrase
+   */
+  default String notApplicable() {
+    return "N/A";
   }
 }
