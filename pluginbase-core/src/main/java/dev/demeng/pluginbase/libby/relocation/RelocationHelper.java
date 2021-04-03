@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -68,8 +67,6 @@ public class RelocationHelper {
                   .groupId("org.ow2.asm")
                   .artifactId("asm-commons")
                   .version("6.0")
-                  .checksum("8bzlxkipagF73NAf5dWa+YRSl/17ebgcAVpvu9lxmr8="
-                      .getBytes(StandardCharsets.UTF_8))
                   .build()));
 
       // ObjectWeb ASM
@@ -79,8 +76,6 @@ public class RelocationHelper {
                   .groupId("org.ow2.asm")
                   .artifactId("asm")
                   .version("6.0")
-                  .checksum("3Ylxx0pOaXiZqOlcquTqh2DqbEhtxrl7F5XnV2BCBGE="
-                      .getBytes(StandardCharsets.UTF_8))
                   .build()));
 
       // Luck's Jar Relocator
@@ -90,8 +85,6 @@ public class RelocationHelper {
                   .groupId("me.lucko")
                   .artifactId("jar-relocator")
                   .version("1.3")
-                  .checksum("mmz3ltQbS8xXGA2scM0ZH6raISlt4nukjCiU2l9Jxfs="
-                      .getBytes(StandardCharsets.UTF_8))
                   .build()));
 
       final Class<?> jarRelocatorClass = classLoader

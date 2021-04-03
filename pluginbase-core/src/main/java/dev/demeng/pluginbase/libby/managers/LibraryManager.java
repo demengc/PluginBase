@@ -286,7 +286,7 @@ public abstract class LibraryManager {
             logger.warning("*** INVALID CHECKSUM ***");
             logger.warning(() -> "Library: " + library);
             logger.warning(() -> "URL: " + url);
-            logger.warning(() -> "Actual: " + Base64.getEncoder().encodeToString(checksum));
+            logger.warning(() -> "Provided: " + Base64.getEncoder().encodeToString(checksum));
             logger.warning(
                 () -> "Expected: " + Base64.getEncoder().encodeToString(library.getChecksum()));
             continue;
@@ -315,10 +315,10 @@ public abstract class LibraryManager {
    * Processes the input jar and generates an output jar with the provided relocation rules applied,
    * then returns the path to the relocated jar.
    *
-   * @param in          input jar
-   * @param out         output jar
-   * @param relocations relocations to apply
-   * @return the relocated file
+   * @param in          The input jar
+   * @param out         The output jar
+   * @param relocations The relocations to apply
+   * @return The relocated file
    * @see RelocationHelper#relocate(Path, Path, Collection)
    */
   private Path relocate(@NonNull Path in, @NonNull String out,
@@ -332,10 +332,8 @@ public abstract class LibraryManager {
     final Path tmpOut = file.resolveSibling(file.getFileName() + ".tmp");
     tmpOut.toFile().deleteOnExit();
 
-    synchronized (this) {
-      if (relocator == null) {
-        relocator = new RelocationHelper(this);
-      }
+    if (relocator == null) {
+      relocator = new RelocationHelper(this);
     }
 
     try {
