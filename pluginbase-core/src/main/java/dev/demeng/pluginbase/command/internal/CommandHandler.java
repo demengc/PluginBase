@@ -90,11 +90,11 @@ public final class CommandHandler extends Command {
       CompletionHandler completionHandler) {
     super(commandName);
 
-    addSubCommands(command);
-    setAliases(aliases);
-
     this.argumentHandler = argumentHandler;
     this.completionHandler = completionHandler;
+
+    addSubCommands(command);
+    setAliases(aliases);
   }
 
   /**
@@ -532,7 +532,7 @@ public final class CommandHandler extends Command {
                 method.getName(), method.getClass().getName()));
       }
 
-      if (completionHandler.isRegistered(value)) {
+      if (!completionHandler.isRegistered(value)) {
         throw new CustomCommandException(
             String.format(
                 "Unregistered completion ID '%s' for method %s in class %s",
