@@ -78,7 +78,7 @@ public final class CommandHandler extends Command {
    *
    * @param commandName       The name of the command
    * @param command           The command base
-   * @param aliases           The commad aliases
+   * @param aliases           The command aliases
    * @param argumentHandler   The argument handler
    * @param completionHandler The completion handler
    */
@@ -450,6 +450,8 @@ public final class CommandHandler extends Command {
                 "'String[] args' must be the last parameter for method %s in class %s",
                 method.getName(), method.getClass().getName()));
       }
+
+      System.out.println(argumentHandler == null);
 
       if (!argumentHandler.isRegisteredType(clazz)) {
         throw new CustomCommandException(
