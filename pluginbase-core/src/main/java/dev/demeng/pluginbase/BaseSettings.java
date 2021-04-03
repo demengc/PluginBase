@@ -51,6 +51,15 @@ public interface BaseSettings {
   }
 
   /**
+   * The message to send if a player attempts to execute a console-only command.
+   *
+   * @return The not console message
+   */
+  default String notConsole() {
+    return "&cThis command must be executed in console.";
+  }
+
+  /**
    * The message to send if the command executor does not have the required permission.
    *
    * <p>Use %permission% for the required permission.

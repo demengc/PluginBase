@@ -595,9 +595,13 @@ public final class CommandHandler extends Command {
 
     final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
 
-    if (!(CommandSender.class.equals(data.getSenderClass())
-        || ConsoleCommandSender.class.equals(data.getSenderClass()))
-        && !(sender instanceof Player)) {
+    if (data.getSenderClass().equals(ConsoleCommandSender.class)
+        && !(sender instanceof ConsoleCommandSender)) {
+      ChatUtils.tell(sender, settings.notConsole());
+      return false;
+    }
+
+    if (data.getSenderClass().equals(Player.class) && !(sender instanceof Player)) {
       ChatUtils.tell(sender, settings.notPlayer());
       return false;
     }
