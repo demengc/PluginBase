@@ -24,7 +24,6 @@
 
 package dev.demeng.pluginbase;
 
-import lombok.NonNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -48,7 +47,7 @@ public class Validate {
    * @return The actul class if the class exists, null otherwise
    */
   @Nullable
-  public static Class<?> checkClass(@NonNull String className) {
+  public static Class<?> checkClass(@NotNull String className) {
     try {
       return Class.forName(className);
     } catch (ClassNotFoundException ex) {
@@ -67,7 +66,7 @@ public class Validate {
    * @return The actual integer if the string is an integer, null otherwise
    */
   @Nullable
-  public static Integer checkInt(@NonNull String str) {
+  public static Integer checkInt(@NotNull String str) {
     try {
       return Integer.parseInt(str);
     } catch (NumberFormatException ex) {
@@ -82,7 +81,7 @@ public class Validate {
    * @return The actual long if the string is an long, null otherwise
    */
   @Nullable
-  public static Long checkLong(@NonNull String str) {
+  public static Long checkLong(@NotNull String str) {
     try {
       return Long.parseLong(str);
     } catch (NumberFormatException ex) {
@@ -97,7 +96,7 @@ public class Validate {
    * @return The actual double if the string is an double, null otherwise
    */
   @Nullable
-  public static Double checkDouble(@NonNull String str) {
+  public static Double checkDouble(@NotNull String str) {
     try {
       return Double.parseDouble(str);
     } catch (NumberFormatException ex) {
@@ -112,7 +111,7 @@ public class Validate {
    * @return The actual float if the string is an double, null otherwise
    */
   @Nullable
-  public static Float checkFloat(@NonNull String str) {
+  public static Float checkFloat(@NotNull String str) {
     try {
       return Float.parseFloat(str);
     } catch (NumberFormatException ex) {

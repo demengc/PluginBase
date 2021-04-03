@@ -25,7 +25,6 @@
 package dev.demeng.pluginbase;
 
 import dev.demeng.pluginbase.plugin.BaseLoader;
-import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 
@@ -44,7 +43,7 @@ public class Registerer {
    *
    * @param listener The listener to register
    */
-  public static void registerListener(@NonNull Listener listener) {
+  public static void registerListener(@NotNull Listener listener) {
     Bukkit.getPluginManager().registerEvents(listener, BaseLoader.getPlugin());
   }
 }

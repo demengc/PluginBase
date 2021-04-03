@@ -27,7 +27,6 @@ package dev.demeng.pluginbase;
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseLoader;
-import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -123,7 +122,7 @@ public class Common {
    * @return True if the command sender has the permission, false otherwise
    */
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  public static boolean hasPermission(@NonNull CommandSender sender, String permission) {
+  public static boolean hasPermission(@NotNull CommandSender sender, String permission) {
     return permission == null
         || permission.isEmpty()
         || permission.equalsIgnoreCase("none")

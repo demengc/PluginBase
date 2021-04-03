@@ -34,7 +34,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -328,7 +327,7 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tell(@NonNull CommandSender sender, String... lines) {
+  public static void tell(@NotNull CommandSender sender, String... lines) {
     if (lines != null) {
       sender.sendMessage(format(lines));
     }
@@ -340,7 +339,7 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellColored(@NonNull CommandSender sender, String... lines) {
+  public static void tellColored(@NotNull CommandSender sender, String... lines) {
     if (lines != null) {
       sender.sendMessage(colorize(lines));
     }
@@ -353,7 +352,7 @@ public class ChatUtils {
    * @param player The player that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellCentered(@NonNull Player player, String... lines) {
+  public static void tellCentered(@NotNull Player player, String... lines) {
 
     if (lines == null) {
       return;

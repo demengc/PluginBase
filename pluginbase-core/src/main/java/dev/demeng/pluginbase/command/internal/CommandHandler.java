@@ -54,7 +54,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import lombok.NonNull;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -168,7 +167,7 @@ public final class CommandHandler extends Command {
    * @return Always true
    */
   @Override
-  public boolean execute(@NonNull CommandSender sender, @NonNull String label, String[] arguments) {
+  public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] arguments) {
 
     final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
     CommandData data = getDefaultSubCommand();
@@ -318,7 +317,7 @@ public final class CommandHandler extends Command {
   @Override
   @NotNull
   public List<String> tabComplete(
-      @NonNull CommandSender sender, @NonNull String alias, String[] args)
+      @NotNull CommandSender sender, @NotNull String alias, String[] args)
       throws IllegalArgumentException {
 
     if (args.length == 1) {
