@@ -27,6 +27,7 @@ package dev.demeng.pluginbase;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility class for quickly registering commands, listeners, and more.
