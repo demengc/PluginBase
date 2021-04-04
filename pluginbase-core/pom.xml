@@ -54,6 +54,16 @@
                   <pattern>net.kyori.adventure</pattern>
                   <shadedPattern>dev.demeng.pluginbase.internal.adventure</shadedPattern>
                 </relocation>
+                <relocation>
+                  <pattern>net.kyori.examination</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.internal.adventure.shaded.examination
+                  </shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.checkerframework</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.internal.adventure.shaded.checkerframework
+                  </shadedPattern>
+                </relocation>
               </relocations>
               <filters>
                 <filter>
