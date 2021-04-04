@@ -69,7 +69,7 @@ public final class CommandData {
   /**
    * The name of the command.
    */
-  @NotNull @Getter @Setter private String name;
+  @Nullable @Getter @Setter private String name;
 
   /**
    * The method to invoke when the command is executed.
