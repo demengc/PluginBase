@@ -34,6 +34,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -52,6 +55,12 @@ public class ChatUtils {
   }
 
   /**
+   * The prefix to look for in messages to determine if the advanced parser should be used. Any
+   * messages that do not contain this prefix will be parsed normally.
+   */
+  private static final String ADVANCED_PREFIX = "advanced:";
+
+  /**
    * Pattern to amtch our HEX color format for MC 1.16+.
    */
   public static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
@@ -66,6 +75,11 @@ public class ChatUtils {
    */
   public static final String CONSOLE_LINE =
       "*-----------------------------------------------------*";
+
+  public static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
+      .markdown()
+      .markdownFlavor(DiscordFlavor.get())
+      .build();
 
   // ---------------------------------------------------------------------------------
   // FORMATTING
@@ -90,7 +104,7 @@ public class ChatUtils {
    * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
-  public static String colorize(@Nullable final String... strings) {
+  public static String colorize(final String... strings) {
 
     if (strings == null) {
       return "";
@@ -139,7 +153,7 @@ public class ChatUtils {
    * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
-  public static String format(@Nullable final String... strings) {
+  public static String format(final String... strings) {
 
     if (strings == null) {
       return "";
@@ -159,6 +173,33 @@ public class ChatUtils {
     }
 
     return builder.toString();
+  }
+
+  /**
+   * Parses the string using the advanced Adventure and MiniMessage library. Format:
+   * https://docs.adventure.kyori.net/minimessage.html#format
+   *
+   * @param strings The raw string(s)
+   * @return The result component for the strings, or empty if the provided strings are null
+   */
+  @NotNull
+  public static Component parseAdvanced(final String... strings) {
+
+    if (strings == null) {
+      return Component.empty();
+    }
+
+    if (strings.length == 1) {
+      return MINI_MESSAGE.parse(strings[0]);
+    }
+
+    Component component = MINI_MESSAGE.parse(strings[0]);
+
+    for (int i = 1; i < strings.length; i++) {
+      component = component.append(MINI_MESSAGE.parse("\n" + strings[i]));
+    }
+
+    return component;
   }
 
   /**
@@ -332,7 +373,12 @@ public class ChatUtils {
    * @param lines  The lines to send
    */
   public static void tell(@NotNull final CommandSender sender, final String... lines) {
-    if (lines != null) {
+
+    if (lines == null) {
+      return;
+    }
+
+    if (!attemptTellAdvanced(sender, lines)) {
       sender.sendMessage(format(lines));
     }
   }
@@ -344,9 +390,26 @@ public class ChatUtils {
    * @param lines  The lines to send
    */
   public static void tellColored(@NotNull final CommandSender sender, final String... lines) {
-    if (lines != null) {
+
+    if (lines == null) {
+      return;
+    }
+
+    if (!attemptTellAdvanced(sender, lines)) {
       sender.sendMessage(colorize(lines));
     }
+  }
+
+  /**
+   * Sends the {@link Component} to the player as a chat message.
+   *
+   * @param player    The player who should receive the component
+   * @param component The component to send
+   * @see #parseAdvanced(String...)
+   */
+  public static void tellAdvanced(@NotNull final Player player,
+      @NotNull final Component component) {
+    BaseLoader.getPlugin().getAdventure().player(player).sendMessage(component);
   }
 
   /**
@@ -445,5 +508,25 @@ public class ChatUtils {
     }
 
     Bukkit.broadcast(colorize(lines), permission);
+  }
+
+  // ---------------------------------------------------------------------------------
+  // INTERNAL
+  // ---------------------------------------------------------------------------------
+
+  private static boolean attemptTellAdvanced(CommandSender sender, String... lines) {
+
+    if (!(sender instanceof Player)) {
+      return false;
+    }
+
+    final String joined = String.join("\n", lines);
+
+    if (!joined.startsWith(ADVANCED_PREFIX)) {
+      return false;
+    }
+
+    tellAdvanced((Player) sender, parseAdvanced(lines));
+    return true;
   }
 }

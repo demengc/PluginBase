@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import lombok.Getter;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,6 +48,11 @@ public abstract class BasePlugin extends JavaPlugin {
    * The command manager for this plugin.
    */
   @Getter private CommandManager commandManager;
+
+  /**
+   * An instance of the Adventure library, for internal use.
+   */
+  @Getter private BukkitAudiences adventure;
 
   protected BasePlugin() {
     this.dependencyEngine = DependencyEngine
@@ -82,6 +88,8 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onEnable() {
 
+    adventure = BukkitAudiences.create(this);
+
     if (!dependencyEngine.getErrors().isEmpty()) {
       return;
     }
@@ -92,12 +100,19 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onDisable() {
 
+    if (adventure != null) {
+      adventure.close();
+      adventure = null;
+    }
+
     if (!dependencyEngine.getErrors().isEmpty()) {
       return;
     }
 
     disable();
     commandManager.unregisterAll();
+
+    BaseLoader.setPlugin(null);
   }
 
   /**
