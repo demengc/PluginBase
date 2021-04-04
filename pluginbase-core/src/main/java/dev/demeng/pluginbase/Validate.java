@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Utlity class for checking and validating objects.
+ * Utility class for checking and validating objects.
  */
 @SuppressWarnings("unused")
 public class Validate {
