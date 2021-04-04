@@ -203,8 +203,8 @@ public final class DependencyEngine {
                 if (this.errors.isEmpty()) {
                   loader.loadDependencies((URLClassLoader) this.getClass().getClassLoader());
                 }
-              } catch (final Exception e) {
-                this.errors.add(e);
+              } catch (final Exception ex) {
+                this.errors.add(ex);
               }
             }),
         executor

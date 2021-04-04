@@ -136,8 +136,8 @@ public final class Relocator {
           Collection.class,
           Collection.class
       );
-    } catch (final Exception e) {
-      throw new DependencyLoadException(ASM, e);
+    } catch (final Exception ex) {
+      throw new DependencyLoadException(ASM, ex);
     }
   }
 

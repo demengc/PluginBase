@@ -211,8 +211,8 @@ public final class MavenDependencyLoader extends
                 Files.deleteIfExists(downloadLocation);
                 Files.copy(is, downloadLocation);
               }
-            } catch (final IOException e) {
-              super.addError(new DependencyLoadException(dependency, e));
+            } catch (final IOException ex) {
+              super.addError(new DependencyLoadException(dependency, ex));
             }
           }
         });
@@ -230,10 +230,10 @@ public final class MavenDependencyLoader extends
 
         Files.delete(super.getBasePath().resolve(dependency.getDownloadedFileName()));
       }
-    } catch (final DependencyLoadException e) {
-      super.addError(e);
-    } catch (final Exception e) {
-      super.addError(new DependencyLoadException(dependency, e));
+    } catch (final DependencyLoadException ex) {
+      super.addError(ex);
+    } catch (final Exception ex) {
+      super.addError(new DependencyLoadException(dependency, ex));
     }
   }
 
@@ -250,8 +250,8 @@ public final class MavenDependencyLoader extends
             }
             this.relocateDependency(relocator, dependency);
           });
-    } catch (final DependencyLoadException e) {
-      super.addError(e);
+    } catch (final DependencyLoadException ex) {
+      super.addError(ex);
     }
   }
 
@@ -284,12 +284,14 @@ public final class MavenDependencyLoader extends
               }
 
               dependency.setLoaded(true);
-            } catch (final IllegalAccessException | InvocationTargetException | MalformedURLException e) {
-              super.addError(new DependencyLoadException(dependency, e));
+            } catch (final IllegalAccessException
+                | InvocationTargetException
+                | MalformedURLException ex) {
+              super.addError(new DependencyLoadException(dependency, ex));
             }
           });
-    } catch (final Exception e) {
-      super.addError(e);
+    } catch (final Exception ex) {
+      super.addError(ex);
     }
   }
 
