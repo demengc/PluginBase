@@ -136,7 +136,7 @@ public final class Relocator {
           Collection.class,
           Collection.class
       );
-    } catch (Exception e) {
+    } catch (final Exception e) {
       throw new DependencyLoadException(ASM, e);
     }
   }
@@ -157,7 +157,7 @@ public final class Relocator {
   ) throws IllegalAccessException, InvocationTargetException, InstantiationException {
     final Set<Object> rules = new LinkedHashSet<>();
 
-    for (RelocationInfo relocation : relocations) {
+    for (final RelocationInfo relocation : relocations) {
       rules.add(this.relocationConstructor.newInstance(
           relocation.getFrom().replace(relocation.getSeparator(), "."),
           relocation.getTo().replace(relocation.getSeparator(), "."),

@@ -108,7 +108,7 @@ public abstract class DependencyLoader<@NotNull T extends Dependency> implements
 
         addOpensMethod
             .invoke(urlClassLoaderModule, URLClassLoader.class.getPackage().getName(), thisModule);
-      } catch (Exception ignored) {
+      } catch (final Exception ignored) {
         //Will throw error on <Java9
       }
       return null;

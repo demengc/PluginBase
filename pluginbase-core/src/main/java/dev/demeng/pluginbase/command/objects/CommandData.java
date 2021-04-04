@@ -116,7 +116,7 @@ public final class CommandData {
    *
    * @param commandBase The command base this data is relevant to
    */
-  public CommandData(CommandBase commandBase) {
+  public CommandData(final CommandBase commandBase) {
     this.commandBase = commandBase;
     this.arguments = new ArrayList<>();
     this.argumentNames = new ArrayList<>();

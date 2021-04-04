@@ -68,7 +68,7 @@ public abstract class BasePlugin extends JavaPlugin {
         .join();
 
     if (!dependencyEngine.getErrors().isEmpty()) {
-      for (Throwable t : dependencyEngine.getErrors()) {
+      for (final Throwable t : dependencyEngine.getErrors()) {
         Common.error(t, "Failed to download dependencies.", false);
       }
 

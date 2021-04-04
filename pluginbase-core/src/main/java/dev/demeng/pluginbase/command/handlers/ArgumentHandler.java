@@ -119,7 +119,7 @@ public final class ArgumentHandler {
    * @param clazz             The type to be added
    * @param parameterResolver The parameter resolver that will process this data type
    */
-  public void register(Class<?> clazz, ParameterResolver parameterResolver) {
+  public void register(final Class<?> clazz, final ParameterResolver parameterResolver) {
     registeredTypes.put(clazz, parameterResolver);
   }
 
@@ -132,8 +132,8 @@ public final class ArgumentHandler {
    * @param parameterName The parameter name from the method
    * @return The output object of the functional interface
    */
-  public Object getTypeResult(Class<?> clazz, Object object, CommandData data,
-      String parameterName) {
+  public Object getTypeResult(final Class<?> clazz, final Object object, final CommandData data,
+      final String parameterName) {
     final TypeResult result = registeredTypes.get(clazz).resolve(object);
     data.getCommandBase().addArgument(parameterName, result.getArgumentName());
 
@@ -146,7 +146,7 @@ public final class ArgumentHandler {
    * @param clazz The class type to check
    * @return True if registered, false otherwise
    */
-  public boolean isRegisteredType(Class<?> clazz) {
+  public boolean isRegisteredType(final Class<?> clazz) {
     return registeredTypes.get(clazz) != null;
   }
 }

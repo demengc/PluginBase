@@ -74,11 +74,11 @@ public final class CommandManager implements Listener {
    *
    * @param command The command to register
    */
-  public void register(CommandBase command) {
+  public void register(final CommandBase command) {
 
     final Class<?> commandClass = command.getClass();
 
-    String commandName;
+    final String commandName;
 
     if (!commandClass.isAnnotationPresent(Command.class)) {
       commandName = command.getCommand();
@@ -97,7 +97,7 @@ public final class CommandManager implements Listener {
       aliases.addAll(Arrays.asList(commandClass.getAnnotation(Aliases.class).value()));
     }
 
-    org.bukkit.command.Command oldCommand = commandMap.getCommand(commandName);
+    final org.bukkit.command.Command oldCommand = commandMap.getCommand(commandName);
 
     if (oldCommand instanceof PluginIdentifiableCommand
         && ((PluginIdentifiableCommand) oldCommand).getPlugin() == BaseLoader.getPlugin()) {
@@ -140,7 +140,7 @@ public final class CommandManager implements Listener {
       //noinspection unchecked
       this.bukkitCommands = (Map<String, org.bukkit.command.Command>) knownCommands.get(commandMap);
 
-    } catch (ReflectiveOperationException ex) {
+    } catch (final ReflectiveOperationException ex) {
       Common.error(ex, "Failed to get command map.", false);
     }
   }

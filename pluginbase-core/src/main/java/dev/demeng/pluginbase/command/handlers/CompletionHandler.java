@@ -73,7 +73,7 @@ public final class CompletionHandler {
         input -> {
           final List<String> players = new ArrayList<>();
 
-          for (Player player : Bukkit.getOnlinePlayers()) {
+          for (final Player player : Bukkit.getOnlinePlayers()) {
             players.add(player.getName());
           }
 
@@ -88,7 +88,7 @@ public final class CompletionHandler {
           final Class<? extends Enum<?>> enumCls = (Class<? extends Enum<?>>) input;
           final List<String> values = new ArrayList<>();
 
-          for (Enum<?> enumValue : enumCls.getEnumConstants()) {
+          for (final Enum<?> enumValue : enumCls.getEnumConstants()) {
             values.add(enumValue.name());
           }
 
@@ -120,7 +120,7 @@ public final class CompletionHandler {
 
           final List<String> rangeList = new ArrayList<>();
 
-          for (int number : range) {
+          for (final int number : range) {
             rangeList.add(String.valueOf(number));
           }
 
@@ -134,7 +134,7 @@ public final class CompletionHandler {
    * @param completionId       The ID of the completion to register
    * @param completionResolver A function with the result you want
    */
-  public void register(String completionId, CompletionResolver completionResolver) {
+  public void register(final String completionId, final CompletionResolver completionResolver) {
 
     if (!completionId.startsWith("#")) {
       throw new CustomCommandException(
@@ -151,7 +151,7 @@ public final class CompletionHandler {
    * @param input        The input the output will be resolved from, typically not needed
    * @return The string list with all the completions
    */
-  public List<String> getTypeResult(String completionId, Object input) {
+  public List<String> getTypeResult(final String completionId, final Object input) {
     return ChatUtils.colorize(registeredCompletions.get(completionId).resolve(input));
   }
 
@@ -161,7 +161,7 @@ public final class CompletionHandler {
    * @param id The ID to check
    * @return True if registered, false otherwise
    */
-  public boolean isRegistered(String id) {
+  public boolean isRegistered(final String id) {
     String identifier = id;
 
     if (id.contains(":")) {

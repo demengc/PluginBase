@@ -31,15 +31,15 @@ import dev.demeng.pluginbase.exceptions.BaseException;
  */
 public class CustomCommandException extends BaseException {
 
-  public CustomCommandException(String message) {
+  public CustomCommandException(final String message) {
     super(message);
   }
 
-  public CustomCommandException(Throwable cause) {
+  public CustomCommandException(final Throwable cause) {
     super(cause);
   }
 
-  public CustomCommandException(String message, Throwable cause) {
+  public CustomCommandException(final String message, final Throwable cause) {
     super(message, cause);
   }
 }

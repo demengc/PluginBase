@@ -60,7 +60,7 @@ public final class BaseLoader {
    *
    * @param newPlugin The new instance of {@link BasePlugin}.
    */
-  public static void setPlugin(BasePlugin newPlugin) {
+  public static void setPlugin(final BasePlugin newPlugin) {
     plugin = newPlugin;
   }
 }

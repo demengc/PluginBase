@@ -157,7 +157,7 @@ public final class MavenDependencyLoader extends
       final @NotNull MavenDependencyInfo dependency
   ) throws IOException {
     Optional<SimpleImmutableEntry<String, URL>> downloadUrl = Optional.empty();
-    for (MavenRepositoryInfo repo : this.repos) {
+    for (final MavenRepositoryInfo repo : this.repos) {
       final URL tempUrl = new URL((repo.getUrl().endsWith("/")
           ? repo.getUrl()
           : repo.getUrl() + "/") + dependency.getRelativeDownloadString());
@@ -206,12 +206,12 @@ public final class MavenDependencyLoader extends
                 ));
               }
 
-              try (InputStream is = downloadUrl.get().getValue().openStream()) {
+              try (final InputStream is = downloadUrl.get().getValue().openStream()) {
                 Files.createDirectories(downloadLocation.getParent());
                 Files.deleteIfExists(downloadLocation);
                 Files.copy(is, downloadLocation);
               }
-            } catch (IOException e) {
+            } catch (final IOException e) {
               super.addError(new DependencyLoadException(dependency, e));
             }
           }
@@ -230,9 +230,9 @@ public final class MavenDependencyLoader extends
 
         Files.delete(super.getBasePath().resolve(dependency.getDownloadedFileName()));
       }
-    } catch (DependencyLoadException e) {
+    } catch (final DependencyLoadException e) {
       super.addError(e);
-    } catch (Exception e) {
+    } catch (final Exception e) {
       super.addError(new DependencyLoadException(dependency, e));
     }
   }
@@ -250,7 +250,7 @@ public final class MavenDependencyLoader extends
             }
             this.relocateDependency(relocator, dependency);
           });
-    } catch (DependencyLoadException e) {
+    } catch (final DependencyLoadException e) {
       super.addError(e);
     }
   }
@@ -284,11 +284,11 @@ public final class MavenDependencyLoader extends
               }
 
               dependency.setLoaded(true);
-            } catch (IllegalAccessException | InvocationTargetException | MalformedURLException e) {
+            } catch (final IllegalAccessException | InvocationTargetException | MalformedURLException e) {
               super.addError(new DependencyLoadException(dependency, e));
             }
           });
-    } catch (Exception e) {
+    } catch (final Exception e) {
       super.addError(e);
     }
   }

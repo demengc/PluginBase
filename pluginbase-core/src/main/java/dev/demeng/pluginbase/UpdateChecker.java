@@ -21,17 +21,17 @@ public class UpdateChecker {
    * @param resourceId The ID of the resource to check
    * @return The latest version string, or null if failed to retrieve version
    */
-  public static String getLatestVersion(int resourceId) {
+  public static String getLatestVersion(final int resourceId) {
 
-    try (InputStream inputStream = new URL(
+    try (final InputStream inputStream = new URL(
         "https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream();
-        Scanner scanner = new Scanner(inputStream)) {
+        final Scanner scanner = new Scanner(inputStream)) {
 
       if (scanner.hasNext()) {
         return scanner.next();
       }
 
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       return null;
     }
 
@@ -44,7 +44,7 @@ public class UpdateChecker {
    * @param resourceId The ID of the resource to check
    * @return The update check result
    */
-  public static UpdateChecker.Result isUpToDate(int resourceId) {
+  public static UpdateChecker.Result isUpToDate(final int resourceId) {
 
     final String latest = getLatestVersion(resourceId);
 

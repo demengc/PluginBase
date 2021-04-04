@@ -56,8 +56,8 @@ public class SoundUtils {
    * @param volume    The volume of the sound
    * @param pitch     The pitch of the sound
    */
-  public static void playToPlayer(@NotNull Player player, String soundName, float volume,
-      float pitch) {
+  public static void playToPlayer(@NotNull final Player player, final String soundName, final float volume,
+      final float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
       return;
@@ -72,7 +72,7 @@ public class SoundUtils {
 
     try {
       sound = Sound.valueOf(soundName);
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       Common.error(ex, "Invalid sound: " + soundName, false);
       return;
     }
@@ -86,7 +86,7 @@ public class SoundUtils {
    * @param player  The player that will hear the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToPlayer(@NotNull Player player, @NotNull ConfigurationSection section) {
+  public static void playToPlayer(@NotNull final Player player, @NotNull final ConfigurationSection section) {
     playToPlayer(
         player,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -103,8 +103,8 @@ public class SoundUtils {
    * @param volume    The volume of the sound
    * @param pitch     The pitch of the sound
    */
-  public static void playToLocation(@NotNull Location loc, String soundName, float volume,
-      float pitch) {
+  public static void playToLocation(@NotNull final Location loc, final String soundName, final float volume,
+      final float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
       return;
@@ -119,7 +119,7 @@ public class SoundUtils {
 
     try {
       sound = Sound.valueOf(soundName);
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       Common.error(ex, "Invalid sound: " + soundName, false);
       return;
     }
@@ -133,7 +133,7 @@ public class SoundUtils {
    * @param loc     The location to play the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToLocation(@NotNull Location loc, @NotNull ConfigurationSection section) {
+  public static void playToLocation(@NotNull final Location loc, @NotNull final ConfigurationSection section) {
     playToLocation(
         loc,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -149,8 +149,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playVanillaToPlayer(@NotNull Player player, @NotNull Sound sound, float volume,
-      float pitch) {
+  public static void playVanillaToPlayer(@NotNull final Player player, @NotNull final Sound sound, final float volume,
+      final float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
   }
 
@@ -162,8 +162,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playCustomToPlayer(@NotNull Player player, @NotNull String sound, float volume,
-      float pitch) {
+  public static void playCustomToPlayer(@NotNull final Player player, @NotNull final String sound, final float volume,
+      final float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
   }
 
@@ -175,8 +175,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playVanillaToLocation(@NotNull Location loc, @NotNull Sound sound,
-      float volume, float pitch) {
+  public static void playVanillaToLocation(@NotNull final Location loc, @NotNull final Sound sound,
+      final float volume, final float pitch) {
     Objects.requireNonNull(loc.getWorld(), "World is null").playSound(loc, sound, volume, pitch);
   }
 
@@ -188,8 +188,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playCustomToLocation(@NotNull Location loc, @NotNull String sound,
-      float volume, float pitch) {
+  public static void playCustomToLocation(@NotNull final Location loc, @NotNull final String sound,
+      final float volume, final float pitch) {
     Objects.requireNonNull(loc.getWorld(), "World is null").playSound(loc, sound, volume, pitch);
   }
 }

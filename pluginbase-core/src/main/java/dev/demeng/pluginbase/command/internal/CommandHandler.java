@@ -85,11 +85,11 @@ public final class CommandHandler extends Command {
    * @param completionHandler The completion handler
    */
   public CommandHandler(
-      String commandName,
-      CommandBase command,
-      List<String> aliases,
-      ArgumentHandler argumentHandler,
-      CompletionHandler completionHandler) {
+      final String commandName,
+      final CommandBase command,
+      final List<String> aliases,
+      final ArgumentHandler argumentHandler,
+      final CompletionHandler completionHandler) {
     super(commandName);
 
     this.argumentHandler = argumentHandler;
@@ -105,9 +105,9 @@ public final class CommandHandler extends Command {
    *
    * @param command The command base to have its sub-commands registered
    */
-  public void addSubCommands(CommandBase command) {
+  public void addSubCommands(final CommandBase command) {
 
-    for (Method method : command.getClass().getDeclaredMethods()) {
+    for (final Method method : command.getClass().getDeclaredMethods()) {
 
       final CommandData data = new CommandData(command);
 
@@ -169,7 +169,7 @@ public final class CommandHandler extends Command {
    * @return Always true
    */
   @Override
-  public boolean execute(@NotNull CommandSender sender, @NotNull String label, String[] arguments) {
+  public boolean execute(@NotNull final CommandSender sender, @NotNull final String label, final String[] arguments) {
 
     final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
     CommandData data = getDefaultSubCommand();
@@ -217,7 +217,7 @@ public final class CommandHandler extends Command {
   }
 
   private void runCommand(
-      CommandData data, CommandSender sender, String[] arguments) {
+      final CommandData data, final CommandSender sender, final String[] arguments) {
 
     try {
       final Method method = data.getMethod();
@@ -258,7 +258,7 @@ public final class CommandHandler extends Command {
 
       runCommandWithParameters(data, sender, argumentsList);
 
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       if (sender instanceof Player) {
         Common.error(ex, "Failed to execute command.", false, (Player) sender);
       } else {
@@ -267,8 +267,8 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void runCommandWithParameters(CommandData data, CommandSender sender,
-      List<String> argumentsList)
+  private void runCommandWithParameters(final CommandData data, final CommandSender sender,
+      final List<String> argumentsList)
       throws InvocationTargetException, IllegalAccessException {
 
     final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
@@ -303,7 +303,7 @@ public final class CommandHandler extends Command {
       Object argument = argumentsList.get(index);
 
       if (parameter.equals(String[].class)) {
-        String[] args = new String[argumentsList.size() - index];
+        final String[] args = new String[argumentsList.size() - index];
 
         for (int n = 0; n < args.length; n++) {
           args[n] = argumentsList.get(index + n);
@@ -323,7 +323,7 @@ public final class CommandHandler extends Command {
   @Override
   @NotNull
   public List<String> tabComplete(
-      @NotNull CommandSender sender, @NotNull String alias, String[] args)
+      @NotNull final CommandSender sender, @NotNull final String alias, final String[] args)
       throws IllegalArgumentException {
 
     if (args.length == 1) {
@@ -343,7 +343,7 @@ public final class CommandHandler extends Command {
       final List<String> subCmd = new ArrayList<>(commands.keySet());
       subCmd.remove(DEFAULT_NAME);
 
-      for (Map.Entry<String, CommandData> entry : commands.entrySet()) {
+      for (final Map.Entry<String, CommandData> entry : commands.entrySet()) {
         if (!Common.hasPermission(sender, entry.getValue().getPermission())) {
           subCmd.remove(entry.getKey());
         }
@@ -354,7 +354,7 @@ public final class CommandHandler extends Command {
         Object inputClazz = data.getArguments().get(0);
 
         if (id.contains(":")) {
-          String[] values = id.split(":");
+          final String[] values = id.split(":");
           id = values[0];
           inputClazz = values[1];
         }
@@ -363,7 +363,7 @@ public final class CommandHandler extends Command {
       }
 
       if (!args[0].equals("")) {
-        for (String commandName : subCmd) {
+        for (final String commandName : subCmd) {
           if (!commandName.toLowerCase().startsWith(args[0].toLowerCase())) {
             continue;
           }
@@ -417,7 +417,7 @@ public final class CommandHandler extends Command {
     Object inputClazz = data.getArguments().get(args.length - 2);
 
     if (id.contains(":")) {
-      String[] values = id.split(":");
+      final String[] values = id.split(":");
       id = values[0];
       inputClazz = values[1];
     }
@@ -425,7 +425,7 @@ public final class CommandHandler extends Command {
     final String current = args[args.length - 1];
 
     if (!current.equals("")) {
-      for (String completion : completionHandler.getTypeResult(id, inputClazz)) {
+      for (final String completion : completionHandler.getTypeResult(id, inputClazz)) {
         if (!completion.toLowerCase().contains(current.toLowerCase())) {
           continue;
         }
@@ -445,7 +445,7 @@ public final class CommandHandler extends Command {
     return commands.get(DEFAULT_NAME);
   }
 
-  private void checkParameters(Method method, CommandData data) {
+  private void checkParameters(final Method method, final CommandData data) {
 
     for (int i = 1; i < method.getParameterTypes().length; i++) {
       final Class<?> clazz = method.getParameterTypes()[i];
@@ -469,29 +469,29 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkDefaultAnnotation(Method method, CommandData data) {
+  private void checkDefaultAnnotation(final Method method, final CommandData data) {
     data.setDef(method.isAnnotationPresent(Default.class));
   }
 
-  private void checkDescriptionAnnotation(Method method, CommandData data) {
+  private void checkDescriptionAnnotation(final Method method, final CommandData data) {
     if (method.isAnnotationPresent(Description.class)) {
       data.setDescription(method.getAnnotation(Description.class).value());
     }
   }
 
-  private void checkUsageAnnotation(Method method, CommandData data) {
+  private void checkUsageAnnotation(final Method method, final CommandData data) {
     if (method.isAnnotationPresent(Usage.class)) {
       data.setUsage(method.getAnnotation(Usage.class).value());
     }
   }
 
-  private void checkPermissionAnnotation(Method method, CommandData data) {
+  private void checkPermissionAnnotation(final Method method, final CommandData data) {
     if (method.isAnnotationPresent(Permission.class)) {
       data.setPermission(method.getAnnotation(Permission.class).value());
     }
   }
 
-  private void checkOptionalAnnotation(Method method, CommandData data) {
+  private void checkOptionalAnnotation(final Method method, final CommandData data) {
 
     for (int i = 0; i < method.getParameters().length; i++) {
       final Parameter parameter = method.getParameters()[i];
@@ -511,7 +511,7 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkParametersCompletionAnnnotation(Method method, CommandData data) {
+  private void checkParametersCompletionAnnnotation(final Method method, final CommandData data) {
 
     for (int i = 0; i < method.getParameters().length; i++) {
       final Parameter parameter = method.getParameters()[i];
@@ -547,9 +547,9 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkCompletionMethodAnnotation(CommandBase command, CommandData data) {
+  private void checkCompletionMethodAnnotation(final CommandBase command, final CommandData data) {
 
-    for (Method method : command.getClass().getDeclaredMethods()) {
+    for (final Method method : command.getClass().getDeclaredMethods()) {
       if (!method.isAnnotationPresent(CompleteFor.class) || !(method
           .getGenericReturnType() instanceof ParameterizedType)) {
         continue;
@@ -571,8 +571,8 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private boolean isCompletionMethod(Method method, ParameterizedType returnType,
-      CommandData data) {
+  private boolean isCompletionMethod(final Method method, final ParameterizedType returnType,
+      final CommandData data) {
     return returnType.getRawType() == List.class
         && returnType.getActualTypeArguments().length == 1
         && returnType.getActualTypeArguments()[0] == String.class
@@ -580,13 +580,13 @@ public final class CommandHandler extends Command {
         && method.getAnnotation(CompleteFor.class).value().equalsIgnoreCase(data.getName());
   }
 
-  private void checkAliasesAnnotation(Method method, CommandData data) {
+  private void checkAliasesAnnotation(final Method method, final CommandData data) {
 
     if (!method.isAnnotationPresent(Aliases.class)) {
       return;
     }
 
-    for (String alias : method.getAnnotation(Aliases.class).value()) {
+    for (final String alias : method.getAnnotation(Aliases.class).value()) {
       final CommandData clone = data.copy();
 
       clone.setName(alias.toLowerCase());
@@ -595,7 +595,7 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private boolean checkSender(CommandSender sender, CommandData data) {
+  private boolean checkSender(final CommandSender sender, final CommandData data) {
 
     final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
 
@@ -619,9 +619,10 @@ public final class CommandHandler extends Command {
     return true;
   }
 
-  private List<String> invokeCompletionMethod(Method method, CommandBase base, String arg,
-      CommandSender sender,
-      String[] args) {
+  private List<String> invokeCompletionMethod(
+      final Method method, final CommandBase base, final String arg,
+      final CommandSender sender,
+      final String[] args) {
 
     if (method == null) {
       return null;
@@ -634,7 +635,7 @@ public final class CommandHandler extends Command {
       //noinspection unchecked
       return (List<String>) method.invoke(base, argsList, sender);
 
-    } catch (IllegalAccessException | InvocationTargetException ex) {
+    } catch (final IllegalAccessException | InvocationTargetException ex) {
       throw new CustomCommandException(String
           .format("Could not invoke completion method for method %s in class %s",
               method.getName(), method.getClass().getName()), ex);

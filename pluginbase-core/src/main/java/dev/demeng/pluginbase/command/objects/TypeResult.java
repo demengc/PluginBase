@@ -42,7 +42,7 @@ public final class TypeResult {
    * @param resolvedValue The resolved value
    * @param argumentName  The argument name
    */
-  public TypeResult(Object resolvedValue, final Object argumentName) {
+  public TypeResult(final Object resolvedValue, final Object argumentName) {
     this.resolvedValue = resolvedValue;
     this.argumentName = String.valueOf(argumentName);
   }

@@ -94,7 +94,7 @@ public class Common {
    * @param version The minimum major version
    * @return True if equal or greater to the provided version, false otherwise
    */
-  public static boolean isServerVersionAtLeast(int version) {
+  public static boolean isServerVersionAtLeast(final int version) {
     return getServerMajorVersion() >= version;
   }
 
@@ -110,7 +110,7 @@ public class Common {
    * @return The nullable if not null, default otherwise
    */
   @NotNull
-  public static <T> T getOrDefault(@Nullable T nullable, @NotNull T def) {
+  public static <T> T getOrDefault(@Nullable final T nullable, @NotNull final T def) {
     return nullable != null ? nullable : def;
   }
 
@@ -123,7 +123,7 @@ public class Common {
    * @return True if the command sender has the permission, false otherwise
    */
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  public static boolean hasPermission(@NotNull CommandSender sender, String permission) {
+  public static boolean hasPermission(@NotNull final CommandSender sender, final String permission) {
     return permission == null
         || permission.isEmpty()
         || permission.equalsIgnoreCase("none")
@@ -139,7 +139,7 @@ public class Common {
    * @param players     Any players associated with this error, a message will be sent to them
    */
   public static void error(
-      Throwable error, String description, boolean disable, Player... players) {
+      final Throwable error, final String description, final boolean disable, final Player... players) {
 
     if (error != null) {
       error.printStackTrace();
@@ -152,7 +152,7 @@ public class Common {
         "&cDescription: &6" + description,
         "&4" + ChatUtils.CONSOLE_LINE);
 
-    for (Player p : players) {
+    for (final Player p : players) {
       ChatUtils.tell(
           p,
           "&6An internal error has occurred in "

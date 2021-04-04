@@ -48,10 +48,10 @@ public class Validate {
    * @return The actul class if the class exists, null otherwise
    */
   @Nullable
-  public static Class<?> checkClass(@NotNull String className) {
+  public static Class<?> checkClass(@NotNull final String className) {
     try {
       return Class.forName(className);
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       return null;
     }
   }
@@ -67,10 +67,10 @@ public class Validate {
    * @return The actual integer if the string is an integer, null otherwise
    */
   @Nullable
-  public static Integer checkInt(@NotNull String str) {
+  public static Integer checkInt(@NotNull final String str) {
     try {
       return Integer.parseInt(str);
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       return null;
     }
   }
@@ -82,10 +82,10 @@ public class Validate {
    * @return The actual long if the string is an long, null otherwise
    */
   @Nullable
-  public static Long checkLong(@NotNull String str) {
+  public static Long checkLong(@NotNull final String str) {
     try {
       return Long.parseLong(str);
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       return null;
     }
   }
@@ -97,10 +97,10 @@ public class Validate {
    * @return The actual double if the string is an double, null otherwise
    */
   @Nullable
-  public static Double checkDouble(@NotNull String str) {
+  public static Double checkDouble(@NotNull final String str) {
     try {
       return Double.parseDouble(str);
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       return null;
     }
   }
@@ -112,10 +112,10 @@ public class Validate {
    * @return The actual float if the string is an double, null otherwise
    */
   @Nullable
-  public static Float checkFloat(@NotNull String str) {
+  public static Float checkFloat(@NotNull final String str) {
     try {
       return Float.parseFloat(str);
-    } catch (NumberFormatException ex) {
+    } catch (final NumberFormatException ex) {
       return null;
     }
   }

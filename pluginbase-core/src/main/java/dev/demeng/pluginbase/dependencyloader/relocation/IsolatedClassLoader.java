@@ -66,7 +66,7 @@ public final class IsolatedClassLoader extends URLClassLoader {
     try {
       this.addURL(path.toUri().toURL());
       return true;
-    } catch (MalformedURLException e) {
+    } catch (final MalformedURLException e) {
       return false;
     }
   }

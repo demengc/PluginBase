@@ -89,7 +89,7 @@ public class ChatUtils {
    * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
-  public static String colorize(String... strings) {
+  public static String colorize(final String... strings) {
 
     if (strings == null) {
       return "";
@@ -122,7 +122,7 @@ public class ChatUtils {
    * @see #colorize(String...)
    */
   @NotNull
-  public static List<String> colorize(List<String> strList) {
+  public static List<String> colorize(final List<String> strList) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -138,7 +138,7 @@ public class ChatUtils {
    * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
-  public static String format(String... strings) {
+  public static String format(final String... strings) {
 
     if (strings == null) {
       return "";
@@ -169,7 +169,8 @@ public class ChatUtils {
    * @return The replaced list, or an empty list if the provided one is null
    */
   @NotNull
-  public static List<String> replace(List<String> strList, String toReplace, String replaceWith) {
+  public static List<String> replace(
+      final List<String> strList, final String toReplace, final String replaceWith) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -193,7 +194,7 @@ public class ChatUtils {
    * @return The replaced list, or an empty list if the provided one is null
    */
   @NotNull
-  public static List<String> replace(List<String> strList, Map<String, String> placeholders) {
+  public static List<String> replace(final List<String> strList, final Map<String, String> placeholders) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -205,7 +206,7 @@ public class ChatUtils {
 
     Stream<String> stream = strList.stream();
 
-    for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+    for (final Map.Entry<String, String> entry : placeholders.entrySet()) {
       stream = stream.map(str -> str.replace(entry.getKey(), entry.getValue()));
     }
 
@@ -219,7 +220,7 @@ public class ChatUtils {
    * @return The stripped string, or an empty string if the provided one is null
    */
   @NotNull
-  public static String strip(String str) {
+  public static String strip(final String str) {
 
     if (str == null) {
       return "";
@@ -235,7 +236,7 @@ public class ChatUtils {
    * @see #strip(String)
    */
   @NotNull
-  public static List<String> strip(List<String> strList) {
+  public static List<String> strip(final List<String> strList) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -253,13 +254,13 @@ public class ChatUtils {
    *
    * @param strings The messages to send
    */
-  public static void console(String... strings) {
+  public static void console(final String... strings) {
 
     if (strings == null) {
       return;
     }
 
-    for (String s : strings) {
+    for (final String s : strings) {
       if (!s.equalsIgnoreCase("none")) {
         Bukkit.getConsoleSender().sendMessage(format(s));
       }
@@ -271,13 +272,13 @@ public class ChatUtils {
    *
    * @param strings The messages to send
    */
-  public static void coloredConsole(String... strings) {
+  public static void coloredConsole(final String... strings) {
 
     if (strings == null) {
       return;
     }
 
-    for (String s : strings) {
+    for (final String s : strings) {
       if (!s.equalsIgnoreCase("none")) {
         Bukkit.getConsoleSender().sendMessage(colorize(s));
       }
@@ -289,13 +290,13 @@ public class ChatUtils {
    *
    * @param strings The messages to send
    */
-  public static void log(String... strings) {
+  public static void log(final String... strings) {
 
     if (strings == null) {
       return;
     }
 
-    for (String s : strings) {
+    for (final String s : strings) {
       BaseLoader.getPlugin().getLogger().info(s);
     }
   }
@@ -306,13 +307,13 @@ public class ChatUtils {
    * @param strings The messages to send
    * @param level   The logging level
    */
-  public static void log(Level level, String... strings) {
+  public static void log(final Level level, final String... strings) {
 
     if (strings == null) {
       return;
     }
 
-    for (String s : strings) {
+    for (final String s : strings) {
       BaseLoader.getPlugin().getLogger().log(level, s);
     }
   }
@@ -327,7 +328,7 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tell(@NotNull CommandSender sender, String... lines) {
+  public static void tell(@NotNull final CommandSender sender, final String... lines) {
     if (lines != null) {
       sender.sendMessage(format(lines));
     }
@@ -339,7 +340,7 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellColored(@NotNull CommandSender sender, String... lines) {
+  public static void tellColored(@NotNull final CommandSender sender, final String... lines) {
     if (lines != null) {
       sender.sendMessage(colorize(lines));
     }
@@ -352,7 +353,7 @@ public class ChatUtils {
    * @param player The player that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellCentered(@NotNull Player player, String... lines) {
+  public static void tellCentered(@NotNull final Player player, final String... lines) {
 
     if (lines == null) {
       return;
@@ -371,7 +372,7 @@ public class ChatUtils {
       boolean previousCode = false;
       boolean isBold = false;
 
-      for (char c : line.toCharArray()) {
+      for (final char c : line.toCharArray()) {
 
         if (c == ChatColor.COLOR_CHAR) {
           previousCode = true;
@@ -410,7 +411,7 @@ public class ChatUtils {
    *                   the broadcast should be seen by everyone
    * @param lines      The lines to send
    */
-  public static void broadcast(String permission, String... lines) {
+  public static void broadcast(final String permission, final String... lines) {
 
     if (lines == null) {
       return;
@@ -429,7 +430,7 @@ public class ChatUtils {
    *
    * @see #broadcast(String, String...)
    */
-  public static void broadcastColored(String permission, String... lines) {
+  public static void broadcastColored(final String permission, final String... lines) {
 
     if (lines == null) {
       return;

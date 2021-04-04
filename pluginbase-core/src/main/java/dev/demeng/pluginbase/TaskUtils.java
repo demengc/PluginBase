@@ -46,7 +46,7 @@ public class TaskUtils {
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable runSync(Consumer<BukkitRunnable> task) {
+  public static BukkitRunnable runSync(final Consumer<BukkitRunnable> task) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTask(BaseLoader.getPlugin());
     return runnable;
@@ -59,7 +59,7 @@ public class TaskUtils {
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable runAsync(Consumer<BukkitRunnable> task) {
+  public static BukkitRunnable runAsync(final Consumer<BukkitRunnable> task) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskAsynchronously(BaseLoader.getPlugin());
     return runnable;
@@ -73,7 +73,7 @@ public class TaskUtils {
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable delay(Consumer<BukkitRunnable> task, long delay) {
+  public static BukkitRunnable delay(final Consumer<BukkitRunnable> task, final long delay) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskLater(BaseLoader.getPlugin(), delay);
     return runnable;
@@ -87,7 +87,7 @@ public class TaskUtils {
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable delayAsync(Consumer<BukkitRunnable> task, long delay) {
+  public static BukkitRunnable delayAsync(final Consumer<BukkitRunnable> task, final long delay) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskLaterAsynchronously(BaseLoader.getPlugin(), delay);
     return runnable;
@@ -103,7 +103,7 @@ public class TaskUtils {
    */
   @NotNull
   public static BukkitRunnable repeat(
-      Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay) {
+      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskTimer(BaseLoader.getPlugin(), initialDelay, repeatDelay);
     return runnable;
@@ -121,7 +121,7 @@ public class TaskUtils {
    */
   @NotNull
   public static BukkitRunnable repeat(
-      Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay, int limit) {
+      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay, final int limit) {
 
     final BukkitRunnable runnable =
         new BukkitRunnable() {
@@ -153,7 +153,7 @@ public class TaskUtils {
    */
   @NotNull
   public static BukkitRunnable repeatAsync(
-      Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay) {
+      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay) {
     final BukkitRunnable runnable = createSimpleTask(task);
     runnable.runTaskTimerAsynchronously(BaseLoader.getPlugin(), initialDelay, repeatDelay);
     return runnable;
@@ -171,7 +171,7 @@ public class TaskUtils {
    */
   @NotNull
   public static BukkitRunnable repeatAsync(
-      Consumer<BukkitRunnable> task, long initialDelay, long repeatDelay, int limit) {
+      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay, final int limit) {
 
     final BukkitRunnable runnable =
         new BukkitRunnable() {
@@ -193,7 +193,7 @@ public class TaskUtils {
     return runnable;
   }
 
-  private static BukkitRunnable createSimpleTask(Consumer<BukkitRunnable> task) {
+  private static BukkitRunnable createSimpleTask(final Consumer<BukkitRunnable> task) {
     return new BukkitRunnable() {
       @Override
       public void run() {

@@ -46,7 +46,7 @@ public abstract class CommandBase {
   public CommandBase() {
   }
 
-  public CommandBase(String command, List<String> aliases) {
+  public CommandBase(final String command, final List<String> aliases) {
     this.command = command;
     this.aliases.addAll(aliases);
   }
@@ -57,7 +57,7 @@ public abstract class CommandBase {
    * @param name The argument name
    * @return The argument value
    */
-  public String getArgument(String name) {
+  public String getArgument(final String name) {
     return arguments.get(name);
   }
 
@@ -67,7 +67,7 @@ public abstract class CommandBase {
    * @param name     The argument name
    * @param argument The argument value
    */
-  public void addArgument(String name, String argument) {
+  public void addArgument(final String name, final String argument) {
     arguments.put(name, argument);
   }
 

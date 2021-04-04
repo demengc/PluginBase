@@ -44,7 +44,7 @@ public class Registerer {
    *
    * @param listener The listener to register
    */
-  public static void registerListener(@NotNull Listener listener) {
+  public static void registerListener(@NotNull final Listener listener) {
     Bukkit.getPluginManager().registerEvents(listener, BaseLoader.getPlugin());
   }
 }
