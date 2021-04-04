@@ -60,10 +60,10 @@ public final class RelocationInfo {
   /**
    * Creates a new relocation based off of the passed in information.
    *
-   * @param from      the package to find.
-   * @param to        The package to replace with.
-   * @param separator The separator used to indicate package names.
-   * @return A new {@link RelocationInfo} instance.
+   * @param from      The package to find
+   * @param to        The package to replace with
+   * @param separator The separator used to indicate package names
+   * @return A new {@link RelocationInfo} instance
    */
   @Contract("_,_,_ -> new")
   public static @NotNull RelocationInfo of(
@@ -78,9 +78,9 @@ public final class RelocationInfo {
    * Creates a new relocation based off of the passed in information. Uses the {@link
    * DependencyLoader#DEFAULT_SEPARATOR} as the separator.
    *
-   * @param from the package to find.
-   * @param to   The package to replace with.
-   * @return A new {@link RelocationInfo} instance.
+   * @param from The package to find
+   * @param to   The package to replace with
+   * @return A new {@link RelocationInfo} instance
    */
   @Contract("_,_-> new")
   public static @NotNull RelocationInfo of(
@@ -93,8 +93,8 @@ public final class RelocationInfo {
   /**
    * Creates a new relocation from the passed in {@link Relocation} annotation.
    *
-   * @param relocation The {@link Relocation} annotation.
-   * @return A new {@link RelocationInfo} instance.
+   * @param relocation The {@link Relocation} annotation
+   * @return A new {@link RelocationInfo} instance
    */
   @Contract("_ -> new")
   public static @NotNull RelocationInfo of(final @NotNull Relocation relocation) {

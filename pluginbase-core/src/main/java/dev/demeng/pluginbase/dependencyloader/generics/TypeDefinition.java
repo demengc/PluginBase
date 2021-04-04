@@ -37,7 +37,7 @@ public interface TypeDefinition<T> {
   /**
    * Returns the generic type of this class.
    *
-   * @return The generic type.
+   * @return The generic type
    */
   @NotNull Class<T> getGenericType();
 }

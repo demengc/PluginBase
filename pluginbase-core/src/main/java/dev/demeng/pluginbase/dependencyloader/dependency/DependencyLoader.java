@@ -83,8 +83,8 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
    * Creates a new dependency loader with the specified base path. Storage destination is used as a
    * relative sub directory for dependencies.
    *
-   * @param basePath           The base path for dependencies.
-   * @param storageDestination The relative path to dependencies in this dependency loader.
+   * @param basePath           The base path for dependencies
+   * @param storageDestination The relative path to dependencies in this dependency loader
    */
   protected DependencyLoader(
       final @NotNull Path basePath,
@@ -109,7 +109,7 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
         addOpensMethod
             .invoke(urlClassLoaderModule, URLClassLoader.class.getPackage().getName(), thisModule);
       } catch (final Exception ignored) {
-        //Will throw error on <Java9
+        // Will throw error on <Java9
       }
       return null;
     });
@@ -118,16 +118,16 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
   /**
    * Adds an error to the error set.
    *
-   * @param e The error that occurred.
+   * @param ex The error that occurred
    */
-  protected void addError(final @NotNull Exception e) {
-    this.errors.add(e);
+  protected void addError(final @NotNull Exception ex) {
+    this.errors.add(ex);
   }
 
   /**
    * Adds a dependency to be handled by this dependency loader.
    *
-   * @param dependency the dependency to add.
+   * @param dependency The dependency to add
    */
   public void addDependency(final @NotNull T dependency) {
     this.dependencies.add(dependency);
@@ -136,14 +136,14 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
   /**
    * Used to load dependencies from a class.
    *
-   * @param clazz that class to load dependency annotations from.
+   * @param clazz The class to load dependency annotations from
    */
   public abstract void loadDependenciesFrom(@NotNull Class<?> clazz);
 
   /**
    * Used to load dependencies from a dependency provider.
    *
-   * @param dependencyProvider the dependency provider to load dependencies from.
+   * @param dependencyProvider The dependency provider to load dependencies from
    */
   public abstract void loadDependenciesFrom(@NotNull DependencyProvider<T> dependencyProvider);
 
@@ -155,7 +155,7 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
   /**
    * Loads the dependencies to be used by the plugin.
    *
-   * @param classLoader The class loader to add the dependencies to.
+   * @param classLoader The class loader to add the dependencies to
    */
   public abstract void loadDependencies(@NotNull URLClassLoader classLoader);
 }

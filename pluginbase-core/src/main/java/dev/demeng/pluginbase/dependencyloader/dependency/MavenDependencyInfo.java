@@ -88,10 +88,8 @@ public final class MavenDependencyInfo implements RelocatableDependency {
     this.validateAndSetValues(separator, groupId, artifactId, version);
   }
 
-  private MavenDependencyInfo(
-      final @NotNull String separator,
-      final @NotNull String singleLineDependency
-  ) {
+  private MavenDependencyInfo(final @NotNull String separator,
+      final @NotNull String singleLineDependency) {
     if (singleLineDependency.isEmpty()) {
       throw new InvalidDependencyException(String.format(
           "Invalid single line dependency passed. dependency = '%s'.",
@@ -126,11 +124,11 @@ public final class MavenDependencyInfo implements RelocatableDependency {
   /**
    * Creates a new {@link MavenDependencyInfo} based off the passed in information.
    *
-   * @param separator  The separator to use instead of '.' or '/'.
-   * @param groupId    The group ID of the dependency.
-   * @param artifactId The artifact ID of the dependency.
-   * @param version    The version of the dependency.
-   * @return A {@link MavenDependencyInfo} representing the passed in arguments.
+   * @param separator  The separator to use instead of '.' or '/'
+   * @param groupId    The group ID of the dependency
+   * @param artifactId The artifact ID of the dependency
+   * @param version    The version of the dependency
+   * @return A {@link MavenDependencyInfo} representing the passed in arguments
    */
   @Contract("_,_,_,_ -> new")
   public static @NotNull MavenDependencyInfo of(
@@ -145,9 +143,9 @@ public final class MavenDependencyInfo implements RelocatableDependency {
   /**
    * Create a new dependency information object.
    *
-   * @param separator            The separator to use instead of '.' or '/'.
-   * @param singleLineDependency A Gradle style single line dependency.
-   * @return A {@link MavenDependencyInfo} representing the passed in arguments.
+   * @param separator            The separator to use instead of '.' or '/'
+   * @param singleLineDependency A Gradle style single line dependency
+   * @return A {@link MavenDependencyInfo} representing the passed in arguments
    */
   @Contract("_,_ -> new")
   public static @NotNull MavenDependencyInfo of(
@@ -160,8 +158,8 @@ public final class MavenDependencyInfo implements RelocatableDependency {
   /**
    * Creates a new {@link MavenDependencyInfo} based off of an {@link MavenDependency} annotation.
    *
-   * @param dependency The {@link MavenDependency} annotation.
-   * @return A {@link MavenDependencyInfo} representing the passed in arguments.
+   * @param dependency The {@link MavenDependency} annotation
+   * @return A {@link MavenDependencyInfo} representing the passed in arguments
    */
   @Contract("_ -> new")
   public static @NotNull MavenDependencyInfo of(

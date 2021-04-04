@@ -32,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This is used to define the order dependency loader's should be executed in.
+ * This is used to define the order dependency loaders should be executed in.
  */
 @Documented
 @Target(ElementType.TYPE)
@@ -40,9 +40,9 @@ import java.lang.annotation.Target;
 public @interface LoaderPriority {
 
   /**
-   * Lower values go first. Default value 1000.
+   * The priority of the loader. Lower values go first. Default value 1000.
    *
-   * @return The loader priority.
+   * @return The loader priority
    */
   int value() default 1000;
 }

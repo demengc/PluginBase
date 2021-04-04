@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public final class MavenRepositoryInfo {
 
   /**
-   * The url for this Maven repository.
+   * The URL for this Maven repository.
    */
   @Getter private final @NotNull String url;
 

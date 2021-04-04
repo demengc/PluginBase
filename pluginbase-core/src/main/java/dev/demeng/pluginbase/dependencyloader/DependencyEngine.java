@@ -79,8 +79,8 @@ public final class DependencyEngine {
    * Creates a new Dependency Engine with the specified base path. It includes all the default
    * DependencyLoader's by default.
    *
-   * @param basePath The base path for all dependencies to be downloaded.
-   * @return A new {@link DependencyEngine}.
+   * @param basePath The base path for all dependencies to be downloaded
+   * @return A new {@link DependencyEngine}
    */
   @Contract("_ -> new")
   public static @NotNull DependencyEngine createNew(final @NotNull Path basePath) {
@@ -90,9 +90,9 @@ public final class DependencyEngine {
   /**
    * Creates a new Dependency Engine with the specified base path.
    *
-   * @param basePath         The base path for all dependencies to be downloaded.
-   * @param addDefaultLoader Whether or not to include the default dependency loaders.
-   * @return A new {@link DependencyEngine}.
+   * @param basePath         The base path for all dependencies to be downloaded
+   * @param addDefaultLoader Whether or not to include the default dependency loaders
+   * @return A new {@link DependencyEngine}
    */
   @Contract("_,_ -> new")
   public static @NotNull DependencyEngine createNew(
@@ -116,7 +116,7 @@ public final class DependencyEngine {
    * Adds a new dependency loader to the dependency engine. If a duplicate dependency loader is
    * added an error is thrown.
    *
-   * @param loader The loader to add to the dependency engine.
+   * @param loader The loader to add to the dependency engine
    * @return this
    */
   @Contract("_ -> this")
@@ -136,7 +136,7 @@ public final class DependencyEngine {
    * Adds dependency annotations from a class to the currently loaded dependency loaders in this
    * engine. These are not added retroactively, you need to add the dependency loaders first.
    *
-   * @param clazz The class to load the annotations from.
+   * @param clazz The class to load the annotations from
    * @return this
    */
   @Contract("_ -> this")
@@ -151,7 +151,7 @@ public final class DependencyEngine {
    * Adds dependencies to the dependency loaders based on the input dependency provider. These are
    * not added retroactively, you need to add the dependency loaders first.
    *
-   * @param provider The provider to add the dependencies from.
+   * @param provider The provider to add the dependencies from
    * @return this
    */
   @Contract("_ -> this")
@@ -170,8 +170,8 @@ public final class DependencyEngine {
   /**
    * Loads all the dependencies in the specified executor.
    *
-   * @param executor An executor to load the dependencies in.
-   * @return A completable future that completes when all dependencies are loaded.
+   * @param executor An executor to load the dependencies in
+   * @return A completable future that completes when all dependencies are loaded
    */
   @Contract("_ -> new")
   public @NotNull CompletableFuture<Void> loadDependencies(final @NotNull Executor executor) {
@@ -214,7 +214,7 @@ public final class DependencyEngine {
   /**
    * Loads all dependencies in {@link ForkJoinPool#commonPool()}.
    *
-   * @return A completable future that completes when all dependencies are loaded.
+   * @return A completable future that completes when all dependencies are loaded
    */
   @Contract("-> new")
   public @NotNull CompletableFuture<Void> loadDependencies() {

@@ -93,7 +93,7 @@ public final class Relocator {
   /**
    * Creates a new relocator instance.
    *
-   * @param basePath The base path for relocations.
+   * @param basePath The base path for relocations
    */
   public Relocator(final @NotNull Path basePath) {
     this.basePath = basePath;
@@ -144,12 +144,12 @@ public final class Relocator {
   /**
    * Relocates the packages in a jar file based on the specified relocations.
    *
-   * @param relocations A collection of {@link RelocationInfo} used for relocation information.
-   * @param dependency  The dependency to relocate.
-   * @throws IllegalAccessException    If the relocator was denied access to any of the methods.
-   * @throws InvocationTargetException If there was an error while relocating the jar files.
+   * @param relocations A collection of {@link RelocationInfo} used for relocation information
+   * @param dependency  The dependency to relocate
+   * @throws IllegalAccessException    If the relocator was denied access to any of the methods
+   * @throws InvocationTargetException If there was an error while relocating the jar files
    * @throws InstantiationException    If there was an error while creating a new relocation
-   *                                   instance.
+   *                                   instance
    */
   public void relocate(
       final @NotNull Collection<RelocationInfo> relocations,

@@ -33,14 +33,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Base level dependency provider.
  *
- * @param <T> The dependency this class provides.
+ * @param <T> The dependency this class provides
  */
 public interface DependencyProvider<T extends Dependency> extends TypeDefinition<T> {
 
   /**
    * Gets the set of dependencies attached to this provider.
    *
-   * @return The set of dependencies attached to this provider.
+   * @return The set of dependencies attached to this provider
    */
   @NotNull Set<T> getDependencies();
 }

@@ -56,35 +56,35 @@ public @interface MavenDependency {
    * <p>eg: 'com.google.guava:guava:30.1-jre'; if you would like to declare dependencies in a
    * structured manner use the other variables.
    *
-   * @return A Gradle style single line dependency string.
+   * @return A Gradle style single line dependency string
    */
   @NotNull String value() default "";
 
   /**
    * Used to define a group ID for a Maven dependency.
    *
-   * @return The group ID.
+   * @return The group ID
    */
   @NotNull String groupId() default "";
 
   /**
    * Used to define an artifact ID for a Maven dependency.
    *
-   * @return The artifact ID.
+   * @return The artifact ID
    */
   @NotNull String artifactId() default "";
 
   /**
    * Used to define the version for a Maven dependency.
    *
-   * @return The version.
+   * @return The version
    */
   @NotNull String version() default "";
 
   /**
    * Used to define the package path separator.
    *
-   * @return The separator to use instead of '.' or '/'.
+   * @return The separator to use instead of '.' or '/'
    */
   @NotNull String separator() default DependencyLoader.DEFAULT_SEPARATOR;
 
@@ -99,7 +99,7 @@ public @interface MavenDependency {
     /**
      * Used to define an array of {@link MavenDependency} annotations.
      *
-     * @return An array of {@link MavenDependency} annotations.
+     * @return An array of {@link MavenDependency} annotations
      */
     @NotNull MavenDependency[] value() default {};
   }

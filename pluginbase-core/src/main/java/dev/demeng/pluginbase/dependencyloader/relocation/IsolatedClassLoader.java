@@ -45,7 +45,7 @@ public final class IsolatedClassLoader extends URLClassLoader {
   /**
    * Instantiates a new Isolated class loader.
    *
-   * @param urls the urls
+   * @param urls The URLs
    */
   public IsolatedClassLoader(final @NotNull URL... urls) {
     super(Objects.requireNonNull(urls), ClassLoader.getSystemClassLoader().getParent());
@@ -59,14 +59,14 @@ public final class IsolatedClassLoader extends URLClassLoader {
   /**
    * Add path boolean.
    *
-   * @param path the path
-   * @return the boolean
+   * @param path The path
+   * @return The boolean
    */
   public boolean addPath(final @NotNull Path path) {
     try {
       this.addURL(path.toUri().toURL());
       return true;
-    } catch (final MalformedURLException e) {
+    } catch (final MalformedURLException ex) {
       return false;
     }
   }

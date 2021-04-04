@@ -60,26 +60,26 @@ public @interface Relocation {
   /**
    * The original package location.
    *
-   * @return The original package location.
+   * @return The original package location
    */
   @NotNull String from();
 
   /**
    * Where to move the package to.
    *
-   * @return Where to move the package to.
+   * @return Where to move the package to
    */
   @NotNull String to();
 
   /**
    * The separator to use.
    *
-   * @return The separator to use instead of '.' or '/'.
+   * @return The separator to use instead of '.' or '/'
    */
   @NotNull String separator() default DependencyLoader.DEFAULT_SEPARATOR;
 
   /**
-   * Used to store multiple {@link Relocation} annotations on a single class type.
+   * Used to store multiple {@link Relocation} annotations on a single class type
    */
   @Documented
   @Retention(RetentionPolicy.RUNTIME)
@@ -89,7 +89,7 @@ public @interface Relocation {
     /**
      * An array of {@link Relocation} annotations.
      *
-     * @return An array of {@link Relocation} annotations.
+     * @return An array of {@link Relocation} annotations
      */
     @NotNull Relocation[] value() default {};
   }

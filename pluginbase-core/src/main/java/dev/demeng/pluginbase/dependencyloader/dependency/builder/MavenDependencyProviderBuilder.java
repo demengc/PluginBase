@@ -80,8 +80,8 @@ public final class MavenDependencyProviderBuilder implements
    * Creates a new Maven dependency provider builder.
    *
    * @param groupId    The group ID of the Maven dependency
-   * @param artifactId the artifact ID of the Maven dependency
-   * @param version    the version of the Maven dependency
+   * @param artifactId The artifact ID of the Maven dependency
+   * @param version    The version of the Maven dependency
    * @return this
    */
   @Contract("_,_,_ -> this")
@@ -103,8 +103,8 @@ public final class MavenDependencyProviderBuilder implements
    *
    * @param separator  The separator used for package names
    * @param groupId    The group ID of the Maven dependency
-   * @param artifactId the artifact ID of the Maven dependency
-   * @param version    the version of the Maven dependency
+   * @param artifactId The artifact ID of the Maven dependency
+   * @param version    The version of the Maven dependency
    * @return this
    */
   @Contract("_,_,_,_ -> this")
@@ -120,7 +120,7 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Creates a new Maven dependency provider builder.
    *
-   * @param separator            the separator used for package separation
+   * @param separator            The separator used for package separation
    * @param singleLineDependency The Gradle style single line dependency string
    * @return this
    */
@@ -149,8 +149,8 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Creates a new Maven dependency provider builder.
    *
-   * @param repository The repository.
-   * @return The same instance.
+   * @param repository The repository
+   * @return The same instance
    * @see MavenRepositoryInfo
    */
   @Contract("_ -> this")
@@ -162,8 +162,8 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Sets the repository URL.
    *
-   * @param url String URL representation of a Maven repository.
-   * @return The same instance.
+   * @param url String URL representation of a Maven repository
+   * @return The same instance
    */
   @Contract("_ -> this")
   public MavenDependencyProviderBuilder repository(final @NotNull String url) {
@@ -173,8 +173,8 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Sets the repository URL.
    *
-   * @param url URL representation of a Maven repository.
-   * @return The same instance.
+   * @param url URL representation of a Maven repository
+   * @return The same instance
    */
   @Contract("_ -> this")
   public MavenDependencyProviderBuilder repository(final @NotNull URL url) {
@@ -184,8 +184,8 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Sets the relocation.
    *
-   * @param relocation The relocation.
-   * @return The same instance.
+   * @param relocation The relocation
+   * @return The same instance
    * @see RelocationInfo
    */
   @Contract("_ -> this")
@@ -197,10 +197,10 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Sets the relocation.
    *
-   * @param from      Original package destination name.
-   * @param to        Target package destination name.
-   * @param separator The separator to use instead of '.' or '/'.
-   * @return The same instance.
+   * @param from      Original package destination name
+   * @param to        Target package destination name
+   * @param separator The separator to use instead of '.' or '/'
+   * @return The same instance
    */
   @Contract("_,_,_ -> this")
   public MavenDependencyProviderBuilder relocation(
@@ -214,15 +214,13 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * Sets the relocation.
    *
-   * @param from the package to relocate from
-   * @param to   the package to relocate to
+   * @param from The package to relocate from
+   * @param to   The package to relocate to
    * @return this
    */
   @Contract("_,_ -> this")
-  public MavenDependencyProviderBuilder relocation(
-      final @NotNull String from,
-      final @NotNull String to
-  ) {
+  public MavenDependencyProviderBuilder relocation(final @NotNull String from,
+      final @NotNull String to) {
     return this.relocation(RelocationInfo.of(from, to, DependencyLoader.DEFAULT_SEPARATOR));
   }
 

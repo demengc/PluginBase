@@ -39,7 +39,7 @@ public interface RelocatableDependency extends Dependency {
   /**
    * Used to get the relocated location of a dependency. This path is relative.
    *
-   * @return The relocation jar location of this dependency.
+   * @return The relocation jar location of this dependency
    */
   @NotNull String getRelocatedFileName();
 }

@@ -42,8 +42,8 @@ public final class DependencyLoadException extends RuntimeException {
   /**
    * Creates a new dependency load exception.
    *
-   * @param dependency The dependency that had an error while loading.
-   * @param message    The message to pass.
+   * @param dependency The dependency that had an error while loading
+   * @param message    The message to pass
    */
   public DependencyLoadException(
       final @NotNull Dependency dependency,
@@ -56,8 +56,8 @@ public final class DependencyLoadException extends RuntimeException {
   /**
    * Creates a new dependency load exception.
    *
-   * @param dependency The dependency that had an error while loading.
-   * @param cause      The cause of the error.
+   * @param dependency The dependency that had an error while loading
+   * @param cause      The cause of the error
    */
   public DependencyLoadException(
       final @NotNull Dependency dependency,

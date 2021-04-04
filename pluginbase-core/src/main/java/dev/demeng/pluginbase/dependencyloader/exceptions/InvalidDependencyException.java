@@ -42,8 +42,8 @@ public final class InvalidDependencyException extends RuntimeException {
   /**
    * Creates a new invalid dependency exception.
    *
-   * @param message The message to pass.
-   * @param cause   The cause of the error.
+   * @param message The message to pass
+   * @param cause   The cause of the error
    */
   public InvalidDependencyException(
       final @NotNull String message,
@@ -54,7 +54,7 @@ public final class InvalidDependencyException extends RuntimeException {
   /**
    * Creates a new invalid dependency exception.
    *
-   * @param cause The cause of the error.
+   * @param cause The cause of the error
    */
   public InvalidDependencyException(final @NotNull Throwable cause) {
     super(cause);
@@ -63,7 +63,7 @@ public final class InvalidDependencyException extends RuntimeException {
   /**
    * Creates a new invalid dependency exception.
    *
-   * @param message The message to pass.
+   * @param message The message to pass
    */
   public InvalidDependencyException(final @NotNull String message) {
     super(message);

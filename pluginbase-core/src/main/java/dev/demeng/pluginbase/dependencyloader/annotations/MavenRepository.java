@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Used to define a Maven repo url for the dependencies.
+ * Used to define a Maven repo URL for the dependencies.
  *
  * @see MavenRepositoryInfo
  */
@@ -45,7 +45,9 @@ import org.jetbrains.annotations.NotNull;
 public @interface MavenRepository {
 
   /**
-   * @return A string that represents the URL to a Maven repo.
+   * The URL to the Maven repository.
+   *
+   * @return A string that represents the URL to a Maven repo
    */
   @NotNull String value() default "https://repo1.maven.org/maven2/";
 
@@ -58,6 +60,8 @@ public @interface MavenRepository {
   @interface List {
 
     /**
+     * An array of maven repositories.
+     *
      * @return An array of {@link MavenRepository} annotations.
      */
     @NotNull MavenRepository @NotNull [] value() default {};

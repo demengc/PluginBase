@@ -36,42 +36,42 @@ public interface Dependency {
    * If there is an issue downloading the dependency this is used to get the manual download
    * location.
    *
-   * @return The manual download url.
+   * @return The manual download url
    */
   @NotNull String getManualDownloadString();
 
   /**
-   * Used to get the download url of a dependency.
+   * Used to get the download URL of a dependency.
    *
-   * @return The relative download url.
+   * @return The relative download url
    */
   @NotNull String getRelativeDownloadString();
 
   /**
    * Used to get where the dependency should be stored on download. The path is relative.
    *
-   * @return The downloaded location of this dependency.
+   * @return The downloaded location of this dependency
    */
   @NotNull String getDownloadedFileName();
 
   /**
    * Used to get the name of the dependency for logging information.
    *
-   * @return The name of this dependency.
+   * @return The name of this dependency
    */
   @NotNull String getName();
 
   /**
    * Set where or not this dependency has been loaded.
    *
-   * @param loaded Whether or not this dependency has been loaded.
+   * @param loaded Whether or not this dependency has been loaded
    */
   void setLoaded(boolean loaded);
 
   /**
    * Whether or not this dependency has been loaded into the class path.
    *
-   * @return true if it has been loaded already.
+   * @return True if it has been loaded already, false otherwise
    */
   boolean isLoaded();
 }

@@ -32,14 +32,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Base level implementation of DependencyBuilder.
  *
- * @param <T> The dependency type.
+ * @param <T> The dependency type
  */
 public interface DependencyBuilder<T extends Dependency> {
 
   /**
    * Add a dependency to the dependency builder.
    *
-   * @param dependency The dependency to add.
+   * @param dependency The dependency to add
    * @return this
    */
   @Contract("_ -> this")
@@ -48,7 +48,7 @@ public interface DependencyBuilder<T extends Dependency> {
   /**
    * Creates a new {@link DependencyProvider} from the builder.
    *
-   * @return A new {@link DependencyProvider}.
+   * @return A new {@link DependencyProvider}
    */
   @Contract("-> new")
   @NotNull DependencyProvider<T> build();
