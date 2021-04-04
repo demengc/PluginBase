@@ -457,8 +457,6 @@ public final class CommandHandler extends Command {
                 method.getName(), method.getClass().getName()));
       }
 
-      System.out.println(argumentHandler == null);
-
       if (!argumentHandler.isRegisteredType(clazz)) {
         throw new CustomCommandException(
             String.format(
