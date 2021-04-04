@@ -30,7 +30,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Utilities for quickly creating various Bukkit runnables/tasks inside your plugin.
+ * Utilities for quickly creating various Bukkit tasks inside your plugin.
  */
 @SuppressWarnings("unused")
 public class TaskUtils {
@@ -53,7 +53,7 @@ public class TaskUtils {
   }
 
   /**
-   * Runs the task once, asyncronously, without delay nor repetition.
+   * Runs the task once, asynchronously, without delay nor repetition.
    *
    * @param task The task to run
    * @return The BukkitRunnable that was initialized for this task
@@ -80,7 +80,7 @@ public class TaskUtils {
   }
 
   /**
-   * Runs the task once, asyncronously, with an initial delay.
+   * Runs the task once, asynchronously, with an initial delay.
    *
    * @param task  The task to run
    * @param delay The number of ticks to delay
@@ -145,11 +145,11 @@ public class TaskUtils {
   }
 
   /**
-   * Runs the task repeatedly, asyncronously, with an initial delay and a delay between runs.
+   * Runs the task repeatedly, asynchronously, with an initial delay and a delay between runs.
    *
    * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay  The number of ticks between eech run
+   * @param repeatDelay  The number of ticks between each run
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
@@ -161,12 +161,12 @@ public class TaskUtils {
   }
 
   /**
-   * Runs the task repeatedly, asyncronously, with an initial delay, a delay between runs, and a
+   * Runs the task repeatedly, asynchronously, with an initial delay, a delay between runs, and a
    * number of repetitions.
    *
    * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay  The number of ticks between eech run
+   * @param repeatDelay  The number of ticks between each run
    * @param limit        The maximum number of times the task will be repeated
    * @return The BukkitRunnable that was initialized for this task
    */
