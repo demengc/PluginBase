@@ -46,6 +46,7 @@ import org.bukkit.command.CommandMap;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles the custom commands registered using the library.
@@ -54,8 +55,8 @@ public final class CommandManager implements Listener {
 
   private CommandMap commandMap;
 
-  private final Map<String, CommandHandler> commands = new HashMap<>();
-  private Map<String, org.bukkit.command.Command> bukkitCommands = new HashMap<>();
+  @NotNull private final Map<String, CommandHandler> commands = new HashMap<>();
+  @NotNull private Map<String, org.bukkit.command.Command> bukkitCommands = new HashMap<>();
 
   @Getter private final ArgumentHandler argumentHandler = new ArgumentHandler();
   @Getter private final CompletionHandler completionHandler = new CompletionHandler();
@@ -74,7 +75,7 @@ public final class CommandManager implements Listener {
    *
    * @param command The command to register
    */
-  public void register(final CommandBase command) {
+  public void register(@NotNull final CommandBase command) {
 
     final Class<?> commandClass = command.getClass();
 

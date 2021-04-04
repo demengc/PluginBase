@@ -36,6 +36,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles and maps command arguments from string to the expected data type in method parameters. A
@@ -119,7 +121,8 @@ public final class ArgumentHandler {
    * @param clazz             The type to be added
    * @param parameterResolver The parameter resolver that will process this data type
    */
-  public void register(final Class<?> clazz, final ParameterResolver parameterResolver) {
+  public void register(@NotNull final Class<?> clazz,
+      @NotNull final ParameterResolver parameterResolver) {
     registeredTypes.put(clazz, parameterResolver);
   }
 
@@ -132,8 +135,13 @@ public final class ArgumentHandler {
    * @param parameterName The parameter name from the method
    * @return The output object of the functional interface
    */
-  public Object getTypeResult(final Class<?> clazz, final Object object, final CommandData data,
-      final String parameterName) {
+  @Nullable
+  public Object getTypeResult(
+      @NotNull final Class<?> clazz,
+      @NotNull final Object object,
+      @NotNull final CommandData data,
+      @NotNull final String parameterName
+  ) {
     final TypeResult result = registeredTypes.get(clazz).resolve(object);
     data.getCommandBase().addArgument(parameterName, result.getArgumentName());
 
@@ -146,7 +154,7 @@ public final class ArgumentHandler {
    * @param clazz The class type to check
    * @return True if registered, false otherwise
    */
-  public boolean isRegisteredType(final Class<?> clazz) {
+  public boolean isRegisteredType(@NotNull final Class<?> clazz) {
     return registeredTypes.get(clazz) != null;
   }
 }

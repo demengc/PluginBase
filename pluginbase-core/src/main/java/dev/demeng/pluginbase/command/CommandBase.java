@@ -31,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a custom command. Must be annotated with {@link Command} and registered using {@link
@@ -38,15 +40,15 @@ import lombok.Getter;
  */
 public abstract class CommandBase {
 
-  @Getter private String command;
+  @Nullable @Getter private String command;
 
-  @Getter private final List<String> aliases = new ArrayList<>();
-  @Getter private final Map<String, String> arguments = new HashMap<>();
+  @NotNull @Getter private final List<String> aliases = new ArrayList<>();
+  @NotNull @Getter private final Map<String, String> arguments = new HashMap<>();
 
-  public CommandBase() {
+  protected CommandBase() {
   }
 
-  public CommandBase(final String command, final List<String> aliases) {
+  protected CommandBase(@NotNull final String command, @NotNull final List<String> aliases) {
     this.command = command;
     this.aliases.addAll(aliases);
   }
@@ -57,7 +59,8 @@ public abstract class CommandBase {
    * @param name The argument name
    * @return The argument value
    */
-  public String getArgument(final String name) {
+  @Nullable
+  public String getArgument(@NotNull final String name) {
     return arguments.get(name);
   }
 
@@ -67,7 +70,7 @@ public abstract class CommandBase {
    * @param name     The argument name
    * @param argument The argument value
    */
-  public void addArgument(final String name, final String argument) {
+  public void addArgument(@NotNull final String name, @NotNull final String argument) {
     arguments.put(name, argument);
   }
 

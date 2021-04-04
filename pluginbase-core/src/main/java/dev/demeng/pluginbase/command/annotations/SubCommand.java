@@ -29,6 +29,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for marking the command method as a sub-command of the base
@@ -43,5 +44,6 @@ public @interface SubCommand {
    *
    * @return The name of the sub-command
    */
+  @NotNull
   String value();
 }

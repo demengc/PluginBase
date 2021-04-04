@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Handles command tab-completion and maps provided arguments to an auto-completion list. A list of
@@ -134,7 +135,8 @@ public final class CompletionHandler {
    * @param completionId       The ID of the completion to register
    * @param completionResolver A function with the result you want
    */
-  public void register(final String completionId, final CompletionResolver completionResolver) {
+  public void register(@NotNull final String completionId,
+      @NotNull final CompletionResolver completionResolver) {
 
     if (!completionId.startsWith("#")) {
       throw new CustomCommandException(
@@ -151,7 +153,9 @@ public final class CompletionHandler {
    * @param input        The input the output will be resolved from, typically not needed
    * @return The string list with all the completions
    */
-  public List<String> getTypeResult(final String completionId, final Object input) {
+  @NotNull
+  public List<String> getTypeResult(@NotNull final String completionId,
+      @NotNull final Object input) {
     return ChatUtils.colorize(registeredCompletions.get(completionId).resolve(input));
   }
 
@@ -161,7 +165,7 @@ public final class CompletionHandler {
    * @param id The ID to check
    * @return True if registered, false otherwise
    */
-  public boolean isRegistered(final String id) {
+  public boolean isRegistered(@NotNull final String id) {
     String identifier = id;
 
     if (id.contains(":")) {

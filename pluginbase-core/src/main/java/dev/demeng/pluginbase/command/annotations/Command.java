@@ -29,6 +29,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for marking {@link dev.demeng.pluginbase.command.CommandBase}
@@ -43,5 +44,6 @@ public @interface Command {
    *
    * @return The command name
    */
+  @NotNull
   String value();
 }

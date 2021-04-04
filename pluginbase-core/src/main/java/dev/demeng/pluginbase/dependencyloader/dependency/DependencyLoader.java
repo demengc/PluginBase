@@ -45,7 +45,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> Type of dependency implementation.
  * @see MavenDependencyLoader
  */
-public abstract class DependencyLoader<@NotNull T extends Dependency> implements TypeDefinition<T> {
+public abstract class DependencyLoader<T extends Dependency> implements TypeDefinition<T> {
 
   /**
    * The default separator used to have compatibility with gradle/Maven relocation.

@@ -46,17 +46,17 @@ public final class MavenDependencyProviderBuilder implements
   /**
    * The set of repositories to add to the provider.
    */
-  private final @NotNull Set<@NotNull MavenRepositoryInfo> repositories;
+  private final @NotNull Set<MavenRepositoryInfo> repositories;
 
   /**
    * The set of Maven dependencies to add to the provider.
    */
-  private final @NotNull Set<@NotNull MavenDependencyInfo> dependencies;
+  private final @NotNull Set<MavenDependencyInfo> dependencies;
 
   /**
    * The set of relocations to add to the provider.
    */
-  private final @NotNull Set<@NotNull RelocationInfo> relocations;
+  private final @NotNull Set<RelocationInfo> relocations;
 
   /**
    * Creates a new dependency builder.

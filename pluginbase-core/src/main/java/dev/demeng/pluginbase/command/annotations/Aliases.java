@@ -29,6 +29,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for specifying any aliases of the command. Also works for
@@ -43,5 +44,6 @@ public @interface Aliases {
    *
    * @return A list of aliases
    */
+  @NotNull
   String[] value();
 }

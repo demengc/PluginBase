@@ -29,6 +29,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for specifying the required permission to execute the command.
@@ -43,5 +44,6 @@ public @interface Permission {
    *
    * @return The required permission
    */
+  @NotNull
   String value();
 }

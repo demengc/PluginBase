@@ -152,7 +152,7 @@ public final class Relocator {
    *                                   instance.
    */
   public void relocate(
-      final @NotNull Collection<@NotNull RelocationInfo> relocations,
+      final @NotNull Collection<RelocationInfo> relocations,
       final @NotNull RelocatableDependency dependency
   ) throws IllegalAccessException, InvocationTargetException, InstantiationException {
     final Set<Object> rules = new LinkedHashSet<>();

@@ -45,17 +45,17 @@ public final class MavenDependencyProvider implements DependencyProvider<MavenDe
   /**
    * The repositories in this provider.
    */
-  @Getter private final @NotNull Set<@NotNull MavenRepositoryInfo> repositories;
+  @Getter private final @NotNull Set<MavenRepositoryInfo> repositories;
 
   /**
    * The dependencies in this provider.
    */
-  @Getter private final @NotNull Set<@NotNull MavenDependencyInfo> dependencies;
+  @Getter private final @NotNull Set<MavenDependencyInfo> dependencies;
 
   /**
    * The relocations in this provider.
    */
-  @Getter private final @NotNull Set<@NotNull RelocationInfo> relocations;
+  @Getter private final @NotNull Set<RelocationInfo> relocations;
 
   /**
    * Creates a new {@link MavenDependencyProviderBuilder} instance.

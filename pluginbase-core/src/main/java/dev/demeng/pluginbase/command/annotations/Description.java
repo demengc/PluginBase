@@ -29,6 +29,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for specifying a brief description of the command.
@@ -42,5 +43,6 @@ public @interface Description {
    *
    * @return A command description
    */
+  @NotNull
   String value();
 }

@@ -26,6 +26,8 @@
 package dev.demeng.pluginbase.command.objects;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Essentially a pair of objects- a command argument's resolved/mapped value, and the argument
@@ -33,8 +35,8 @@ import lombok.Getter;
  */
 public final class TypeResult {
 
-  @Getter private final Object resolvedValue;
-  @Getter private final String argumentName;
+  @Nullable @Getter private final Object resolvedValue;
+  @NotNull @Getter private final String argumentName;
 
   /**
    * Creates a new type result that has already been resolved.
@@ -42,7 +44,7 @@ public final class TypeResult {
    * @param resolvedValue The resolved value
    * @param argumentName  The argument name
    */
-  public TypeResult(final Object resolvedValue, final Object argumentName) {
+  public TypeResult(@Nullable final Object resolvedValue, @NotNull final Object argumentName) {
     this.resolvedValue = resolvedValue;
     this.argumentName = String.valueOf(argumentName);
   }
@@ -52,7 +54,7 @@ public final class TypeResult {
    *
    * @param argumentName The argument name
    */
-  public TypeResult(final Object argumentName) {
+  public TypeResult(@NotNull final Object argumentName) {
     this(null, argumentName);
   }
 }

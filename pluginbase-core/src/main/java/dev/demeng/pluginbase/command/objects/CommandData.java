@@ -35,6 +35,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Stores all of the relevant data for a command.
@@ -46,33 +48,33 @@ public final class CommandData {
   /**
    * The command base this command data is relevant to.
    */
-  @Getter private final CommandBase commandBase;
+  @NotNull @Getter private final CommandBase commandBase;
 
   /**
    * The list of argument types, in order.
    */
-  @Getter private final List<Class<?>> arguments;
+  @NotNull @Getter private final List<Class<?>> arguments;
 
   /**
    * The list of argument names, in order.
    */
-  @Getter private final List<String> argumentNames;
+  @NotNull @Getter private final List<String> argumentNames;
 
   /**
    * Map of argument indexes and its completion ID. Used for parameter completions ({@link
    * dev.demeng.pluginbase.command.annotations.Completion}).
    */
-  @Getter private final Map<Integer, String> completions;
+  @NotNull @Getter private final Map<Integer, String> completions;
 
   /**
    * The name of the command.
    */
-  @Getter @Setter private String name;
+  @NotNull @Getter @Setter private String name;
 
   /**
    * The method to invoke when the command is executed.
    */
-  @Getter @Setter private Method method;
+  @NotNull @Getter @Setter private Method method;
 
   /**
    * If this command is the default command of the command base or not.
@@ -83,28 +85,28 @@ public final class CommandData {
    * The completion method to invoke. Only used for completion methods ({@link
    * dev.demeng.pluginbase.command.annotations.CompleteFor}).
    */
-  @Getter @Setter private Method completionMethod;
+  @Nullable @Getter @Setter private Method completionMethod;
 
   /**
    * The type of the expected command sender, which is either console, player, or a CommandSender in
    * general.
    */
-  @Getter @Setter private Class<?> senderClass;
+  @NotNull @Getter @Setter private Class<?> senderClass;
 
   /**
    * A brief description of the command.
    */
-  @Getter @Setter private String description;
+  @Nullable @Getter @Setter private String description;
 
   /**
    * The usage of the command.
    */
-  @Getter @Setter private String usage;
+  @Nullable @Getter @Setter private String usage;
 
   /**
    * The permission required to use the command.
    */
-  @Getter @Setter private String permission;
+  @Nullable @Getter @Setter private String permission;
 
   /**
    * If this method contains an optional argument at the end or not.
@@ -116,7 +118,7 @@ public final class CommandData {
    *
    * @param commandBase The command base this data is relevant to
    */
-  public CommandData(final CommandBase commandBase) {
+  public CommandData(@NotNull final CommandBase commandBase) {
     this.commandBase = commandBase;
     this.arguments = new ArrayList<>();
     this.argumentNames = new ArrayList<>();

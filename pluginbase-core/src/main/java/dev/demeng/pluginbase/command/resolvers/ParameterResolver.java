@@ -26,6 +26,7 @@
 package dev.demeng.pluginbase.command.resolvers;
 
 import dev.demeng.pluginbase.command.objects.TypeResult;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Simple functional interface of resolving method parameters (command arguments).
@@ -39,5 +40,6 @@ public interface ParameterResolver {
    * @param argument The object to be resolved
    * @return The result of the function
    */
-  TypeResult resolve(Object argument);
+  @NotNull
+  TypeResult resolve(@NotNull Object argument);
 }

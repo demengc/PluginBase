@@ -75,11 +75,11 @@ public final class MavenDependencyLoader extends
   /**
    * The repos attached to these dependencies.
    */
-  private final @NotNull Set<@NotNull MavenRepositoryInfo> repos;
+  private final @NotNull Set<MavenRepositoryInfo> repos;
   /**
    * Any relocations that should be ran on the incoming dependencies.
    */
-  private final @NotNull Set<@NotNull RelocationInfo> relocations;
+  private final @NotNull Set<RelocationInfo> relocations;
 
   /**
    * Creates a new Maven dependency loader with the specified base path.

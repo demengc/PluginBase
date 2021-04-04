@@ -25,21 +25,22 @@
 package dev.demeng.pluginbase.command.exceptions;
 
 import dev.demeng.pluginbase.exceptions.BaseException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A custom command exception, thrown mostly due to annotation or method parameter errors.
  */
 public class CustomCommandException extends BaseException {
 
-  public CustomCommandException(final String message) {
+  public CustomCommandException(@NotNull final String message) {
     super(message);
   }
 
-  public CustomCommandException(final Throwable cause) {
+  public CustomCommandException(@NotNull final Throwable cause) {
     super(cause);
   }
 
-  public CustomCommandException(final String message, final Throwable cause) {
+  public CustomCommandException(@NotNull final String message, @NotNull final Throwable cause) {
     super(message, cause);
   }
 }

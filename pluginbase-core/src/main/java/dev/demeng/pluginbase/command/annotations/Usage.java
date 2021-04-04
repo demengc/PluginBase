@@ -29,6 +29,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for specifying the correct usage of the command. Has no
@@ -44,5 +45,6 @@ public @interface Usage {
    *
    * @return The command usage
    */
+  @NotNull
   String value();
 }

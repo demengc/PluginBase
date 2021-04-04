@@ -39,6 +39,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Message-related utilities, including console and chat messages.
@@ -89,7 +90,7 @@ public class ChatUtils {
    * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
-  public static String colorize(final String... strings) {
+  public static String colorize(@Nullable final String... strings) {
 
     if (strings == null) {
       return "";
@@ -122,7 +123,7 @@ public class ChatUtils {
    * @see #colorize(String...)
    */
   @NotNull
-  public static List<String> colorize(final List<String> strList) {
+  public static List<String> colorize(@Nullable final List<String> strList) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -138,7 +139,7 @@ public class ChatUtils {
    * @return Colorized strings separated by new lines, or empty if the provided strings are null
    */
   @NotNull
-  public static String format(final String... strings) {
+  public static String format(@Nullable final String... strings) {
 
     if (strings == null) {
       return "";
@@ -170,7 +171,8 @@ public class ChatUtils {
    */
   @NotNull
   public static List<String> replace(
-      final List<String> strList, final String toReplace, final String replaceWith) {
+      @Nullable final List<String> strList, @Nullable final String toReplace,
+      @Nullable final String replaceWith) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -194,8 +196,8 @@ public class ChatUtils {
    * @return The replaced list, or an empty list if the provided one is null
    */
   @NotNull
-  public static List<String> replace(final List<String> strList,
-      final Map<String, String> placeholders) {
+  public static List<String> replace(@Nullable final List<String> strList,
+      @Nullable final Map<String, String> placeholders) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -221,7 +223,7 @@ public class ChatUtils {
    * @return The stripped string, or an empty string if the provided one is null
    */
   @NotNull
-  public static String strip(final String str) {
+  public static String strip(@Nullable final String str) {
 
     if (str == null) {
       return "";
@@ -237,7 +239,7 @@ public class ChatUtils {
    * @see #strip(String)
    */
   @NotNull
-  public static List<String> strip(final List<String> strList) {
+  public static List<String> strip(@Nullable final List<String> strList) {
 
     if (strList == null) {
       return Collections.emptyList();
@@ -412,7 +414,7 @@ public class ChatUtils {
    *                   the broadcast should be seen by everyone
    * @param lines      The lines to send
    */
-  public static void broadcast(final String permission, final String... lines) {
+  public static void broadcast(@Nullable final String permission, final String... lines) {
 
     if (lines == null) {
       return;
@@ -431,7 +433,7 @@ public class ChatUtils {
    *
    * @see #broadcast(String, String...)
    */
-  public static void broadcastColored(final String permission, final String... lines) {
+  public static void broadcastColored(@Nullable final String permission, final String... lines) {
 
     if (lines == null) {
       return;

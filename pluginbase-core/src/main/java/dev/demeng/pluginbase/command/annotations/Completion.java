@@ -30,6 +30,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Command mangement annotation used for specifying the tab-completions for the annotated method or
@@ -46,5 +47,6 @@ public @interface Completion {
    *
    * @return The completions for the command or argument
    */
+  @NotNull
   String value();
 }

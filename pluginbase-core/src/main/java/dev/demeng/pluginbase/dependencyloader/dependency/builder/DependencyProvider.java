@@ -42,5 +42,5 @@ public interface DependencyProvider<T extends Dependency> extends TypeDefinition
    *
    * @return The set of dependencies attached to this provider.
    */
-  @NotNull Set<@NotNull T> getDependencies();
+  @NotNull Set<T> getDependencies();
 }

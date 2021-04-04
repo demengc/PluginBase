@@ -26,6 +26,7 @@
 package dev.demeng.pluginbase.command.resolvers;
 
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Simple functional interface of resolving command completions.
@@ -39,5 +40,6 @@ public interface CompletionResolver {
    * @param input An input from the completion event
    * @return A string list with all the completion values
    */
-  List<String> resolve(Object input);
+  @NotNull
+  List<String> resolve(@NotNull Object input);
 }
