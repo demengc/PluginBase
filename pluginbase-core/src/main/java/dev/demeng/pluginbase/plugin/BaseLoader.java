@@ -28,7 +28,7 @@ import dev.demeng.pluginbase.exceptions.BaseException;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Simple class containg a method to get the {@link BasePlugin} the library is working with.
+ * Simple class containing a method to get the {@link BasePlugin} the library is working with.
  */
 public final class BaseLoader {
 
