@@ -169,7 +169,8 @@ public final class CommandHandler extends Command {
    * @return Always true
    */
   @Override
-  public boolean execute(@NotNull final CommandSender sender, @NotNull final String label, final String[] arguments) {
+  public boolean execute(@NotNull final CommandSender sender, @NotNull final String label,
+      final String[] arguments) {
 
     final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
     CommandData data = getDefaultSubCommand();

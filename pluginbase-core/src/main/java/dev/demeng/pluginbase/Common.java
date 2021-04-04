@@ -123,7 +123,8 @@ public class Common {
    * @return True if the command sender has the permission, false otherwise
    */
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  public static boolean hasPermission(@NotNull final CommandSender sender, final String permission) {
+  public static boolean hasPermission(@NotNull final CommandSender sender,
+      final String permission) {
     return permission == null
         || permission.isEmpty()
         || permission.equalsIgnoreCase("none")
@@ -139,7 +140,8 @@ public class Common {
    * @param players     Any players associated with this error, a message will be sent to them
    */
   public static void error(
-      final Throwable error, final String description, final boolean disable, final Player... players) {
+      final Throwable error, final String description, final boolean disable,
+      final Player... players) {
 
     if (error != null) {
       error.printStackTrace();

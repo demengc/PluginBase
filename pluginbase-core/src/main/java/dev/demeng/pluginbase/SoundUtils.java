@@ -56,7 +56,8 @@ public class SoundUtils {
    * @param volume    The volume of the sound
    * @param pitch     The pitch of the sound
    */
-  public static void playToPlayer(@NotNull final Player player, final String soundName, final float volume,
+  public static void playToPlayer(@NotNull final Player player, final String soundName,
+      final float volume,
       final float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
@@ -86,7 +87,8 @@ public class SoundUtils {
    * @param player  The player that will hear the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToPlayer(@NotNull final Player player, @NotNull final ConfigurationSection section) {
+  public static void playToPlayer(@NotNull final Player player,
+      @NotNull final ConfigurationSection section) {
     playToPlayer(
         player,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -103,7 +105,8 @@ public class SoundUtils {
    * @param volume    The volume of the sound
    * @param pitch     The pitch of the sound
    */
-  public static void playToLocation(@NotNull final Location loc, final String soundName, final float volume,
+  public static void playToLocation(@NotNull final Location loc, final String soundName,
+      final float volume,
       final float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
@@ -133,7 +136,8 @@ public class SoundUtils {
    * @param loc     The location to play the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToLocation(@NotNull final Location loc, @NotNull final ConfigurationSection section) {
+  public static void playToLocation(@NotNull final Location loc,
+      @NotNull final ConfigurationSection section) {
     playToLocation(
         loc,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -149,7 +153,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playVanillaToPlayer(@NotNull final Player player, @NotNull final Sound sound, final float volume,
+  public static void playVanillaToPlayer(@NotNull final Player player, @NotNull final Sound sound,
+      final float volume,
       final float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
   }
@@ -162,7 +167,8 @@ public class SoundUtils {
    * @param volume The volume of the sound
    * @param pitch  The pitch of the sound
    */
-  public static void playCustomToPlayer(@NotNull final Player player, @NotNull final String sound, final float volume,
+  public static void playCustomToPlayer(@NotNull final Player player, @NotNull final String sound,
+      final float volume,
       final float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
   }

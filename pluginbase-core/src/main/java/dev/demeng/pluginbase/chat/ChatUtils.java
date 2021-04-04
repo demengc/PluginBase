@@ -194,7 +194,8 @@ public class ChatUtils {
    * @return The replaced list, or an empty list if the provided one is null
    */
   @NotNull
-  public static List<String> replace(final List<String> strList, final Map<String, String> placeholders) {
+  public static List<String> replace(final List<String> strList,
+      final Map<String, String> placeholders) {
 
     if (strList == null) {
       return Collections.emptyList();

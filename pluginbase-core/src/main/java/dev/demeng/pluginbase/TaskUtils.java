@@ -121,7 +121,8 @@ public class TaskUtils {
    */
   @NotNull
   public static BukkitRunnable repeat(
-      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay, final int limit) {
+      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay,
+      final int limit) {
 
     final BukkitRunnable runnable =
         new BukkitRunnable() {
@@ -171,7 +172,8 @@ public class TaskUtils {
    */
   @NotNull
   public static BukkitRunnable repeatAsync(
-      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay, final int limit) {
+      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay,
+      final int limit) {
 
     final BukkitRunnable runnable =
         new BukkitRunnable() {
