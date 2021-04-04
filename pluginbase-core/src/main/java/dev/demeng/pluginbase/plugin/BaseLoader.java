@@ -49,7 +49,7 @@ public final class BaseLoader {
   public static BasePlugin getPlugin() {
 
     if (plugin == null) {
-      throw new BaseException("Main class does not extend DemPlugin");
+      throw new BaseException("Main class does not extend BasePlugin");
     }
 
     return plugin;
