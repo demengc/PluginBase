@@ -149,7 +149,7 @@ public class Common {
 
     ChatUtils.coloredConsole(
         "&4" + ChatUtils.CONSOLE_LINE,
-        "&cAn internal error has occured in " + Common.getName() + "!",
+        "&cAn internal error has occurred in " + Common.getName() + "!",
         "&cContact the plugin author if you cannot fix this error.",
         "&cDescription: &6" + description,
         "&4" + ChatUtils.CONSOLE_LINE);

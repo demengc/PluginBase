@@ -63,7 +63,7 @@ public final class CommandManager implements Listener {
 
   /**
    * Creates a new command manager for the plugin. This constructor is designed for internal use-
-   * you should only have 1 command manager per plugin, and that maanger is already created by
+   * you should only have 1 command manager per plugin, and that manager is already created by
    * {@link dev.demeng.pluginbase.plugin.BasePlugin}.
    */
   public CommandManager() {

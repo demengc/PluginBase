@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for specifying any aliases of the command. Also works for
+ * Command management annotation used for specifying any aliases of the command. Also works for
  * sub-commands.
  */
 @Retention(RetentionPolicy.RUNTIME)

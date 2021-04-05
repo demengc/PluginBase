@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for marking the command method as a sub-command of the base
+ * Command management annotation used for marking the command method as a sub-command of the base
  * command.
  */
 @Retention(RetentionPolicy.RUNTIME)

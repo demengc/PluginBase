@@ -41,7 +41,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles and maps command arguments from string to the expected data type in method parameters. A
- * list of data types supported by defailt are as follows:
+ * list of data types supported by default are as follows:
  * <ul>
  *   Short
  *   Integer

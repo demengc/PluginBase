@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for specifying the correct usage of the command. Has no
+ * Command management annotation used for specifying the correct usage of the command. Has no
  * functional use, just used for incorrect usage error messages and such.
  */
 @Retention(RetentionPolicy.RUNTIME)

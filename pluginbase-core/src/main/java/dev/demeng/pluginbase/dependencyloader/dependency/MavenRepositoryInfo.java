@@ -51,7 +51,7 @@ public final class MavenRepositoryInfo {
    * Creates a new Maven repository from a {@link URL}.
    *
    * @param url The url
-   * @return a new {@link MavenRepositoryInfo}.
+   * @return A new {@link MavenRepositoryInfo}.
    */
   @Contract("_ -> new")
   public static @NotNull MavenRepositoryInfo of(final @NotNull URL url) {
@@ -62,7 +62,7 @@ public final class MavenRepositoryInfo {
    * Creates a new Maven repository from a {@link MavenRepository} annotation.
    *
    * @param repository The annotation
-   * @return a new {@link MavenRepositoryInfo}.
+   * @return A new {@link MavenRepositoryInfo}.
    */
   @Contract("_ -> new")
   public static @NotNull MavenRepositoryInfo of(final @NotNull MavenRepository repository) {
@@ -73,7 +73,7 @@ public final class MavenRepositoryInfo {
    * Creates a new Maven repository from a string representing a url.
    *
    * @param url the url
-   * @return a new {@link MavenRepositoryInfo}.
+   * @return A new {@link MavenRepositoryInfo}.
    */
   @Contract("_ -> new")
   public static @NotNull MavenRepositoryInfo of(final @NotNull String url) {

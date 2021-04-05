@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for specifying the tab-completions for the annotated method or
+ * Command management annotation used for specifying the tab-completions for the annotated method or
  * parameter (command argument).
  */
 @Retention(RetentionPolicy.RUNTIME)

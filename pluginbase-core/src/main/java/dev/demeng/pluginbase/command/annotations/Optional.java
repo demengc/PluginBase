@@ -31,7 +31,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Command mangement annotation used for marking arguments in a command method's parameters as
+ * Command management annotation used for marking arguments in a command method's parameters as
  * optional. Can only be used on the last parameter(s) of the method.
  */
 @Retention(RetentionPolicy.RUNTIME)

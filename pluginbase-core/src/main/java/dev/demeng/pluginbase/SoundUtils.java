@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
 public class SoundUtils {
 
   /**
-   * The prefix that the util will search for, used to detemine if the plugin should play a vanilla
+   * The prefix that the util will search for, used to determine if the plugin should play a vanilla
    * sound or a custom sound (such as one in a resource pack).
    */
   public static final String CUSTOM_PREFIX = "custom:";

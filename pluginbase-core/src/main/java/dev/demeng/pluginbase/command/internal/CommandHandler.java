@@ -140,7 +140,7 @@ public final class CommandHandler extends Command {
       checkUsageAnnotation(method, data);
       checkPermissionAnnotation(method, data);
       checkOptionalAnnotation(method, data);
-      checkParametersCompletionAnnnotation(method, data);
+      checkParametersCompletionAnnotation(method, data);
 
       if (!data.isDef() && method.isAnnotationPresent(SubCommand.class)) {
         final String name = method.getAnnotation(SubCommand.class).value().toLowerCase();
@@ -512,7 +512,7 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkParametersCompletionAnnnotation(final Method method, final CommandData data) {
+  private void checkParametersCompletionAnnotation(final Method method, final CommandData data) {
 
     for (int i = 0; i < method.getParameters().length; i++) {
       final Parameter parameter = method.getParameters()[i];

@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for specifying the required permission to execute the command.
+ * Command management annotation used for specifying the required permission to execute the command.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

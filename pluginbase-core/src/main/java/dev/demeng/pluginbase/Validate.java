@@ -45,7 +45,7 @@ public class Validate {
    * Simple method to check if a class exists.
    *
    * @param className The class's package and name (Example: dev.demeng.pluginbase.Validate)
-   * @return The actul class if the class exists, null otherwise
+   * @return The actual class if the class exists, null otherwise
    */
   @Nullable
   public static Class<?> checkClass(@NotNull final String className) {

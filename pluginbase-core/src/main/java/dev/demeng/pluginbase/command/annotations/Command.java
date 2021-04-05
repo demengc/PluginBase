@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for marking {@link dev.demeng.pluginbase.command.CommandBase}
+ * Command management annotation used for marking {@link dev.demeng.pluginbase.command.CommandBase}
  * classes as an actual command. This annotation is required for all CommandBase classes.
  */
 @Retention(RetentionPolicy.RUNTIME)

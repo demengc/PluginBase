@@ -61,7 +61,7 @@ public class ChatUtils {
   private static final String ADVANCED_PREFIX = "advanced:";
 
   /**
-   * Pattern to amtch our HEX color format for MC 1.16+.
+   * Pattern to match our HEX color format for MC 1.16+.
    */
   public static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
@@ -471,7 +471,7 @@ public class ChatUtils {
   }
 
   /**
-   * Broadcasts the message after coloring and formating them.
+   * Broadcasts the message after coloring and formatting them.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
    *                   the broadcast should be seen by everyone

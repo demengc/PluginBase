@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for marking a method as the tab-completion processing method
+ * Command management annotation used for marking a method as the tab-completion processing method
  * for the command.
  */
 @Retention(RetentionPolicy.RUNTIME)

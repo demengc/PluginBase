@@ -32,7 +32,7 @@ import java.lang.annotation.Target;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Command mangement annotation used for specifying a brief description of the command.
+ * Command management annotation used for specifying a brief description of the command.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

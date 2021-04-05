@@ -98,7 +98,7 @@ public class TaskUtils {
    *
    * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay  The number of ticks between eech run
+   * @param repeatDelay  The number of ticks between each run
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
@@ -115,7 +115,7 @@ public class TaskUtils {
    *
    * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
-   * @param repeatDelay  The number of ticks between eech run
+   * @param repeatDelay  The number of ticks between each run
    * @param limit        The maximum number of times the task will be repeated
    * @return The BukkitRunnable that was initialized for this task
    */
