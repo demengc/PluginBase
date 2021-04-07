@@ -25,6 +25,7 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.exceptions.BaseException;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 public final class BaseLoader {
 
   private static BasePlugin plugin = null;
+  private static Thread mainThread = null;
 
   private BaseLoader() {
     throw new IllegalStateException("Utility class");
@@ -62,5 +64,20 @@ public final class BaseLoader {
    */
   public static void setPlugin(final BasePlugin newPlugin) {
     plugin = newPlugin;
+  }
+
+  /**
+   * Gets the main thread of the server that is using the plugin.
+   *
+   * @return The main thread
+   */
+  @NotNull
+  public static synchronized Thread getMainThread() {
+
+    if (mainThread == null && Bukkit.getServer().isPrimaryThread()) {
+      mainThread = Thread.currentThread();
+    }
+
+    return mainThread;
   }
 }
