@@ -59,7 +59,8 @@ public class YamlConfig {
    * @throws InvalidConfigurationException If there was a formatting/parsing error in the config
    * @throws IOException                   If the file could not be created and/or loaded
    */
-  public YamlConfig(File parent, String name) throws InvalidConfigurationException, IOException {
+  public YamlConfig(final File parent, final String name)
+      throws InvalidConfigurationException, IOException {
 
     final String completeName =
         name.endsWith(".yml") || name.endsWith(".yaml") ? name : name + ".yml";
@@ -104,11 +105,11 @@ public class YamlConfig {
    * @param currentVersion The expected value of the config version
    * @return true if the config is update to date, false otherwise
    */
-  public boolean configUpToDate(int currentVersion) {
+  public boolean configUpToDate(final int currentVersion) {
     return config.getInt(VERSION_KEY, -1) >= currentVersion;
   }
 
-  private InputStream getFileFromResourceAsStream(String fileName) {
+  private InputStream getFileFromResourceAsStream(final String fileName) {
 
     final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
 
@@ -129,7 +130,7 @@ public class YamlConfig {
 
     try {
       source.close();
-    } catch (IOException ignored) {
+    } catch (final IOException ignored) {
       // Close quietly.
     }
   }

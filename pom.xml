@@ -12,6 +12,7 @@
 
   <modules>
     <module>pluginbase-core</module>
+    <module>pluginbase-mysql</module>
   </modules>
 
   <packaging>pom</packaging>

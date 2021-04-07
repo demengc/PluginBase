@@ -60,7 +60,7 @@ public interface Terminable extends AutoCloseable {
     try {
       close();
       return null;
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       return ex;
     }
   }

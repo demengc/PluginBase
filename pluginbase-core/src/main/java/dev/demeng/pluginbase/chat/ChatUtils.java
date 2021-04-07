@@ -514,7 +514,7 @@ public class ChatUtils {
   // INTERNAL
   // ---------------------------------------------------------------------------------
 
-  private static boolean attemptTellAdvanced(CommandSender sender, String... lines) {
+  private static boolean attemptTellAdvanced(final CommandSender sender, final String... lines) {
 
     if (!(sender instanceof Player)) {
       return false;

@@ -2,8 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021 Demeng Chen
- * Copyright (c) lucko (Luck) <luck@lucko.me>
- * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +22,38 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.promise;
+package dev.demeng.pluginbase.mysql;
 
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import lombok.Data;
 
 /**
- * Represents the two main types of {@link Thread} on the server.
+ * The POJO containing the credentials to a SQL database.
  */
-public enum ThreadContext {
-
-  SYNC, ASYNC;
-
-  /**
-   * Gets the thread context of the current thread.
-   *
-   * @return The threat context of the current thread
-   */
-  public static ThreadContext forCurrentThread() {
-    return forThread(Thread.currentThread());
-  }
+@Data
+public final class DatabaseCredentials {
 
   /**
-   * Gets the thread context of the specified thread.
-   *
-   * @param thread The thread to get the context of
-   * @return The thread context of the specified thread
+   * The host (IP) of the database. Local host is supported.
    */
-  public static ThreadContext forThread(final Thread thread) {
-    return thread == BaseLoader.getMainThread() ? SYNC : ASYNC;
-  }
+  private final String host;
+
+  /**
+   * The port to the database, typically 3306.
+   */
+  private final int port;
+
+  /**
+   * The name of the database.
+   */
+  private final String database;
+
+  /**
+   * The username to the database.
+   */
+  private final String user;
+
+  /**
+   * The password to the database.
+   */
+  private final String password;
 }

@@ -26,9 +26,9 @@
 
 package dev.demeng.pluginbase.promise;
 
-import dev.demeng.pluginbase.utils.TaskUtils;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.delegate.Delegate;
+import dev.demeng.pluginbase.utils.TaskUtils;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -63,12 +63,12 @@ final class BasePromise<V> implements Promise<V> {
   }
 
   @NotNull
-  static <U> BasePromise<U> completed(@Nullable U value) {
+  static <U> BasePromise<U> completed(@Nullable final U value) {
     return new BasePromise<>(value);
   }
 
   @NotNull
-  static <U> BasePromise<U> exceptionally(@NotNull Throwable t) {
+  static <U> BasePromise<U> exceptionally(@NotNull final Throwable t) {
     return new BasePromise<>(t);
   }
 
@@ -92,17 +92,17 @@ final class BasePromise<V> implements Promise<V> {
     this.fut = new CompletableFuture<>();
   }
 
-  private BasePromise(@Nullable V v) {
+  private BasePromise(@Nullable final V v) {
     this.fut = CompletableFuture.completedFuture(v);
     this.supplied.set(true);
   }
 
-  private BasePromise(@NotNull Throwable t) {
+  private BasePromise(@NotNull final Throwable t) {
     (this.fut = new CompletableFuture<>()).completeExceptionally(t);
     this.supplied.set(true);
   }
 
-  private BasePromise(@NotNull CompletableFuture<V> fut) {
+  private BasePromise(@NotNull final CompletableFuture<V> fut) {
     this.fut = Objects.requireNonNull(fut, "future");
     this.supplied.set(true);
     this.cancelled.set(fut.isCancelled());
@@ -110,7 +110,7 @@ final class BasePromise<V> implements Promise<V> {
 
   /* utility methods */
 
-  private void executeSync(@NotNull Runnable runnable) {
+  private void executeSync(@NotNull final Runnable runnable) {
     if (ThreadContext.forCurrentThread() == ThreadContext.SYNC) {
       runnable.run();
     } else {
@@ -118,11 +118,11 @@ final class BasePromise<V> implements Promise<V> {
     }
   }
 
-  private void executeAsync(@NotNull Runnable runnable) {
+  private void executeAsync(@NotNull final Runnable runnable) {
     TaskUtils.runAsync(task -> runnable.run());
   }
 
-  private void executeDelayedSync(@NotNull Runnable runnable, long delayTicks) {
+  private void executeDelayedSync(@NotNull final Runnable runnable, final long delayTicks) {
     if (delayTicks <= 0) {
       executeSync(runnable);
     } else {
@@ -130,7 +130,7 @@ final class BasePromise<V> implements Promise<V> {
     }
   }
 
-  private void executeDelayedAsync(@NotNull Runnable runnable, long delayTicks) {
+  private void executeDelayedAsync(@NotNull final Runnable runnable, final long delayTicks) {
     if (delayTicks <= 0) {
       executeAsync(runnable);
     } else {
@@ -138,16 +138,16 @@ final class BasePromise<V> implements Promise<V> {
     }
   }
 
-  private boolean complete(V value) {
-    return !this.cancelled.get() && this.fut.complete(value);
+  private boolean complete(final V value) {
+    return !cancelled.get() && fut.complete(value);
   }
 
-  private boolean completeExceptionally(@NotNull Throwable t) {
-    return !this.cancelled.get() && this.fut.completeExceptionally(t);
+  private boolean completeExceptionally(@NotNull final Throwable t) {
+    return !cancelled.get() && fut.completeExceptionally(t);
   }
 
   private void markAsSupplied() {
-    if (!this.supplied.compareAndSet(false, true)) {
+    if (!supplied.compareAndSet(false, true)) {
       throw new IllegalStateException("Promise is already being supplied.");
     }
   }
@@ -155,45 +155,45 @@ final class BasePromise<V> implements Promise<V> {
   /* future methods */
 
   @Override
-  public boolean cancel(boolean mayInterruptIfRunning) {
-    this.cancelled.set(true);
-    return this.fut.cancel(mayInterruptIfRunning);
+  public boolean cancel(final boolean mayInterruptIfRunning) {
+    cancelled.set(true);
+    return fut.cancel(mayInterruptIfRunning);
   }
 
   @Override
   public boolean isCancelled() {
-    return this.fut.isCancelled();
+    return fut.isCancelled();
   }
 
   @Override
   public boolean isDone() {
-    return this.fut.isDone();
+    return fut.isDone();
   }
 
   @Override
   public V get() throws InterruptedException, ExecutionException {
-    return this.fut.get();
+    return fut.get();
   }
 
   @Override
-  public V get(long timeout, @NotNull TimeUnit unit)
+  public V get(final long timeout, @NotNull final TimeUnit unit)
       throws InterruptedException, ExecutionException, TimeoutException {
-    return this.fut.get(timeout, unit);
+    return fut.get(timeout, unit);
   }
 
   @Override
   public V join() {
-    return this.fut.join();
+    return fut.join();
   }
 
   @Override
-  public V getNow(V valueIfAbsent) {
-    return this.fut.getNow(valueIfAbsent);
+  public V getNow(final V valueIfAbsent) {
+    return fut.getNow(valueIfAbsent);
   }
 
   @Override
   public CompletableFuture<V> toCompletableFuture() {
-    return this.fut.thenApply(Function.identity());
+    return fut.thenApply(Function.identity());
   }
 
   @Override
@@ -210,7 +210,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supply(@Nullable V value) {
+  public Promise<V> supply(@Nullable final V value) {
     markAsSupplied();
     complete(value);
     return this;
@@ -218,7 +218,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyException(@NotNull Throwable exception) {
+  public Promise<V> supplyException(@NotNull final Throwable exception) {
     markAsSupplied();
     completeExceptionally(exception);
     return this;
@@ -226,7 +226,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplySync(@NotNull Supplier<V> supplier) {
+  public Promise<V> supplySync(@NotNull final Supplier<V> supplier) {
     markAsSupplied();
     executeSync(new SupplyRunnable(supplier));
     return this;
@@ -234,7 +234,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyAsync(@NotNull Supplier<V> supplier) {
+  public Promise<V> supplyAsync(@NotNull final Supplier<V> supplier) {
     markAsSupplied();
     executeAsync(new SupplyRunnable(supplier));
     return this;
@@ -242,7 +242,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyDelayedSync(@NotNull Supplier<V> supplier, long delayTicks) {
+  public Promise<V> supplyDelayedSync(@NotNull final Supplier<V> supplier, final long delayTicks) {
     markAsSupplied();
     executeDelayedSync(new SupplyRunnable(supplier), delayTicks);
     return this;
@@ -250,7 +250,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyDelayedAsync(@NotNull Supplier<V> supplier, long delayTicks) {
+  public Promise<V> supplyDelayedAsync(@NotNull final Supplier<V> supplier, final long delayTicks) {
     markAsSupplied();
     executeDelayedAsync(new SupplyRunnable(supplier), delayTicks);
     return this;
@@ -258,7 +258,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyExceptionallySync(@NotNull Callable<V> callable) {
+  public Promise<V> supplyExceptionallySync(@NotNull final Callable<V> callable) {
     markAsSupplied();
     executeSync(new ThrowingSupplyRunnable(callable));
     return this;
@@ -266,7 +266,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyExceptionallyAsync(@NotNull Callable<V> callable) {
+  public Promise<V> supplyExceptionallyAsync(@NotNull final Callable<V> callable) {
     markAsSupplied();
     executeAsync(new ThrowingSupplyRunnable(callable));
     return this;
@@ -274,7 +274,8 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyExceptionallyDelayedSync(@NotNull Callable<V> callable, long delayTicks) {
+  public Promise<V> supplyExceptionallyDelayedSync(@NotNull final Callable<V> callable,
+      final long delayTicks) {
     markAsSupplied();
     executeDelayedSync(new ThrowingSupplyRunnable(callable), delayTicks);
     return this;
@@ -282,8 +283,8 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> supplyExceptionallyDelayedAsync(@NotNull Callable<V> callable,
-      long delayTicks) {
+  public Promise<V> supplyExceptionallyDelayedAsync(@NotNull final Callable<V> callable,
+      final long delayTicks) {
     markAsSupplied();
     executeDelayedAsync(new ThrowingSupplyRunnable(callable), delayTicks);
     return this;
@@ -291,9 +292,9 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public <U> Promise<U> thenApplySync(@NotNull Function<? super V, ? extends U> fn) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public <U> Promise<U> thenApplySync(@NotNull final Function<? super V, ? extends U> fn) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -305,9 +306,9 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public <U> Promise<U> thenApplyAsync(@NotNull Function<? super V, ? extends U> fn) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public <U> Promise<U> thenApplyAsync(@NotNull final Function<? super V, ? extends U> fn) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -319,10 +320,10 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public <U> Promise<U> thenApplyDelayedSync(@NotNull Function<? super V, ? extends U> fn,
-      long delayTicks) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public <U> Promise<U> thenApplyDelayedSync(@NotNull final Function<? super V, ? extends U> fn,
+      final long delayTicks) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -334,10 +335,10 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public <U> Promise<U> thenApplyDelayedAsync(@NotNull Function<? super V, ? extends U> fn,
-      long delayTicks) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public <U> Promise<U> thenApplyDelayedAsync(@NotNull final Function<? super V, ? extends U> fn,
+      final long delayTicks) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -349,9 +350,10 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public <U> Promise<U> thenComposeSync(@NotNull Function<? super V, ? extends Promise<U>> fn) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public <U> Promise<U> thenComposeSync(
+      @NotNull final Function<? super V, ? extends Promise<U>> fn) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -363,9 +365,10 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public <U> Promise<U> thenComposeAsync(@NotNull Function<? super V, ? extends Promise<U>> fn) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public <U> Promise<U> thenComposeAsync(
+      @NotNull final Function<? super V, ? extends Promise<U>> fn) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -378,9 +381,9 @@ final class BasePromise<V> implements Promise<V> {
   @NotNull
   @Override
   public <U> Promise<U> thenComposeDelayedSync(
-      @NotNull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+      @NotNull final Function<? super V, ? extends Promise<U>> fn, final long delayTicks) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -393,9 +396,9 @@ final class BasePromise<V> implements Promise<V> {
   @NotNull
   @Override
   public <U> Promise<U> thenComposeDelayedAsync(
-      @NotNull Function<? super V, ? extends Promise<U>> fn, long delayTicks) {
-    BasePromise<U> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+      @NotNull final Function<? super V, ? extends Promise<U>> fn, final long delayTicks) {
+    final BasePromise<U> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t != null) {
         promise.completeExceptionally(t);
       } else {
@@ -407,9 +410,9 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> exceptionallySync(@NotNull Function<Throwable, ? extends V> fn) {
-    BasePromise<V> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public Promise<V> exceptionallySync(@NotNull final Function<Throwable, ? extends V> fn) {
+    final BasePromise<V> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t == null) {
         promise.complete(value);
       } else {
@@ -421,9 +424,9 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> exceptionallyAsync(@NotNull Function<Throwable, ? extends V> fn) {
-    BasePromise<V> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public Promise<V> exceptionallyAsync(@NotNull final Function<Throwable, ? extends V> fn) {
+    final BasePromise<V> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t == null) {
         promise.complete(value);
       } else {
@@ -435,10 +438,10 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> exceptionallyDelayedSync(@NotNull Function<Throwable, ? extends V> fn,
-      long delayTicks) {
-    BasePromise<V> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public Promise<V> exceptionallyDelayedSync(@NotNull final Function<Throwable, ? extends V> fn,
+      final long delayTicks) {
+    final BasePromise<V> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t == null) {
         promise.complete(value);
       } else {
@@ -450,10 +453,10 @@ final class BasePromise<V> implements Promise<V> {
 
   @NotNull
   @Override
-  public Promise<V> exceptionallyDelayedAsync(@NotNull Function<Throwable, ? extends V> fn,
-      long delayTicks) {
-    BasePromise<V> promise = empty();
-    this.fut.whenComplete((value, t) -> {
+  public Promise<V> exceptionallyDelayedAsync(@NotNull final Function<Throwable, ? extends V> fn,
+      final long delayTicks) {
+    final BasePromise<V> promise = empty();
+    fut.whenComplete((value, t) -> {
       if (t == null) {
         promise.complete(value);
       } else {
@@ -469,13 +472,13 @@ final class BasePromise<V> implements Promise<V> {
 
     private final Callable<V> supplier;
 
-    private ThrowingSupplyRunnable(Callable<V> supplier) {
+    private ThrowingSupplyRunnable(final Callable<V> supplier) {
       this.supplier = supplier;
     }
 
     @Override
     public Callable<V> getDelegate() {
-      return this.supplier;
+      return supplier;
     }
 
     @Override
@@ -485,7 +488,7 @@ final class BasePromise<V> implements Promise<V> {
       }
       try {
         BasePromise.this.fut.complete(this.supplier.call());
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         EXCEPTION_CONSUMER.accept(t);
         BasePromise.this.fut.completeExceptionally(t);
       }
@@ -496,7 +499,7 @@ final class BasePromise<V> implements Promise<V> {
 
     private final Supplier<V> supplier;
 
-    private SupplyRunnable(Supplier<V> supplier) {
+    private SupplyRunnable(final Supplier<V> supplier) {
       this.supplier = supplier;
     }
 
@@ -512,7 +515,7 @@ final class BasePromise<V> implements Promise<V> {
       }
       try {
         BasePromise.this.fut.complete(this.supplier.get());
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         EXCEPTION_CONSUMER.accept(t);
         BasePromise.this.fut.completeExceptionally(t);
       }
@@ -538,7 +541,7 @@ final class BasePromise<V> implements Promise<V> {
       }
       try {
         this.promise.complete(this.function.apply(this.value));
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         EXCEPTION_CONSUMER.accept(t);
         this.promise.completeExceptionally(t);
       }
@@ -564,7 +567,7 @@ final class BasePromise<V> implements Promise<V> {
         return;
       }
       try {
-        Promise<U> p = this.function.apply(this.value);
+        final Promise<U> p = this.function.apply(this.value);
         if (p == null) {
           this.promise.complete(null);
         } else {
@@ -574,7 +577,7 @@ final class BasePromise<V> implements Promise<V> {
             p.thenAcceptAsync(this.promise::complete);
           }
         }
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         EXCEPTION_CONSUMER.accept(t);
         this.promise.completeExceptionally(t);
       }
@@ -600,7 +603,7 @@ final class BasePromise<V> implements Promise<V> {
       }
       try {
         this.promise.complete(this.function.apply(this.t));
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         EXCEPTION_CONSUMER.accept(t);
         this.promise.completeExceptionally(t);
       }
