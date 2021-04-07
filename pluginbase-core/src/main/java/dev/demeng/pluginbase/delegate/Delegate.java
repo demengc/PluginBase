@@ -2,8 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021 Demeng Chen
- * Copyright (c) lucko (Luck) <luck@lucko.me>
- * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +22,34 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.promise;
-
-import dev.demeng.pluginbase.plugin.BaseLoader;
+package dev.demeng.pluginbase.delegate;
 
 /**
- * Represents the two main types of {@link Thread} on the server.
+ * Represents a class which delegates calls to a different object.
+ *
+ * @param <T> The delegate type
  */
-public enum ThreadContext {
-
-  SYNC, ASYNC;
+public interface Delegate<T> {
 
   /**
-   * Gets the thread context of the current thread.
+   * Resolves for the provided object.
    *
-   * @return The threat context of the current thread
+   * @param obj The object to resolve
+   * @return The delegated result
    */
-  public static ThreadContext forCurrentThread() {
-    return forThread(Thread.currentThread());
+  static Object resolve(Object obj) {
+    while (obj instanceof Delegate<?>) {
+      Delegate<?> delegate = (Delegate<?>) obj;
+      obj = delegate.getDelegate();
+    }
+
+    return obj;
   }
 
   /**
-   * Gets the thread context of the specified thread.
+   * Gets the delegate object.
    *
-   * @param thread The thread to get the context of
-   * @return The thread context of the specified thread
+   * @return The delegate object
    */
-  public static ThreadContext forThread(Thread thread) {
-    return thread == BaseLoader.getMainThread() ? SYNC : ASYNC;
-  }
+  T getDelegate();
 }

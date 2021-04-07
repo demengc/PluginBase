@@ -2,8 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021 Demeng Chen
- * Copyright (c) lucko (Luck) <luck@lucko.me>
- * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +22,46 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.promise;
+package dev.demeng.pluginbase.terminable;
 
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents the two main types of {@link Thread} on the server.
+ * An extension of {@link AutoCloseable}.
  */
-public enum ThreadContext {
+@FunctionalInterface
+public interface Terminable extends AutoCloseable {
 
-  SYNC, ASYNC;
+  Terminable EMPTY = () -> {
+  };
 
   /**
-   * Gets the thread context of the current thread.
-   *
-   * @return The threat context of the current thread
+   * Closes this resource.
    */
-  public static ThreadContext forCurrentThread() {
-    return forThread(Thread.currentThread());
+  @Override
+  void close() throws Exception;
+
+  /**
+   * Gets if the object represented by this instance is already permanently closed.
+   *
+   * @return True if this terminable is closed permanently
+   */
+  default boolean isClosed() {
+    return false;
   }
 
   /**
-   * Gets the thread context of the specified thread.
+   * Silently closes this resource, and returns the exception if one is thrown.
    *
-   * @param thread The thread to get the context of
-   * @return The thread context of the specified thread
+   * @return The exception is one is thrown
    */
-  public static ThreadContext forThread(Thread thread) {
-    return thread == BaseLoader.getMainThread() ? SYNC : ASYNC;
+  @Nullable
+  default Exception closeSilently() {
+    try {
+      close();
+      return null;
+    } catch (Exception ex) {
+      return ex;
+    }
   }
 }
