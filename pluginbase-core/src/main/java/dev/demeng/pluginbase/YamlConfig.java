@@ -54,16 +54,23 @@ public class YamlConfig {
    * Loads a YAML configuration file. If the file does not exist, a new file will be copied from the
    * project's resources folder.
    *
-   * @param name The name of the configuration
+   * @param parent The folder the file should go in- should be your plugin data folder
+   * @param name   The name of the config, ending in .yml or .yaml
    * @throws InvalidConfigurationException If there was a formatting/parsing error in the config
    * @throws IOException                   If the file could not be created and/or loaded
    */
-  public YamlConfig(String name) throws InvalidConfigurationException, IOException {
+  public YamlConfig(File parent, String name) throws InvalidConfigurationException, IOException {
 
-    config = new YamlFile(name);
+    final String completeName =
+        name.endsWith(".yml") || name.endsWith(".yaml") ? name : name + ".yml";
+
+    final String completePath =
+        parent == null ? completeName : parent.toPath().toString() + File.separator + completeName;
+
+    config = new YamlFile(completePath);
 
     if (!config.exists()) {
-      copyInputStreamToFile(getFileFromResourceAsStream(name), new File(name));
+      copyInputStreamToFile(getFileFromResourceAsStream(name), new File(completePath));
 
     } else {
       config.createNewFile(false);
