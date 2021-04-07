@@ -26,7 +26,7 @@
 
 package dev.demeng.pluginbase.promise;
 
-import dev.demeng.pluginbase.TaskUtils;
+import dev.demeng.pluginbase.utils.TaskUtils;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.delegate.Delegate;
 import java.util.Objects;

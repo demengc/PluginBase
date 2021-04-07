@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase;
+package dev.demeng.pluginbase.utils;
 
+import dev.demeng.pluginbase.Common;
 import java.util.Objects;
 import org.bukkit.Location;
 import org.bukkit.Sound;
