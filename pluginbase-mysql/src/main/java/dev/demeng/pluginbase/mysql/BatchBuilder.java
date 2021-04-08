@@ -29,14 +29,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a statement meant to be executed more than a single time. It will be executed all at
  * once, using a single database connection.
  */
-@RequiredArgsConstructor
 public class BatchBuilder {
 
   /**
@@ -48,13 +47,19 @@ public class BatchBuilder {
   /**
    * The statement to be executed.
    */
-  @Getter @NotNull private final String statement;
+  @NotNull @Getter private final String statement;
 
   /**
    * A linked list of PreparedStatement handlers.
    */
-  @Getter @NotNull private final
+  @NotNull @Getter private final
   LinkedList<SqlConsumer<PreparedStatement>> handlers = new LinkedList<>();
+
+  public BatchBuilder(@NotNull SqlDatabase owner,
+      @NotNull @Language("SQL") final String statement) {
+    this.owner = owner;
+    this.statement = statement;
+  }
 
   /**
    * Adds an additional handler which will be used on the statement.

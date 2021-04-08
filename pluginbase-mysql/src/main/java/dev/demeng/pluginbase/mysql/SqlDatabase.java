@@ -59,8 +59,8 @@ public class SqlDatabase {
   private static final long CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
   private static final long LEAK_DETECTION_THRESHOLD = TimeUnit.SECONDS.toMillis(10);
 
-  @Getter @NotNull private final HikariDataSource source;
-  @Getter @NotNull private final SqlStream stream;
+  @NotNull @Getter private final HikariDataSource source;
+  @NotNull @Getter private final SqlStream stream;
 
   /**
    * Creates a new SQL database with the most optimal settings. Initializes a new Hikari data source
@@ -74,7 +74,7 @@ public class SqlDatabase {
 
     hikari.setPoolName("helper-sql-" + POOL_COUNTER.getAndIncrement());
 
-    hikari.setDriverClassName("com.mysql.cj.jdbc.Driver");
+    hikari.setDriverClassName("com.mysql.jdbc.Driver");
     hikari.setJdbcUrl(
         "jdbc:mysql://" + credentials.getHost() + ":" + credentials.getPort() + "/" + credentials
             .getDatabase());
@@ -133,7 +133,7 @@ public class SqlDatabase {
    * @throws SQLException If the statement could not be executed
    */
   public final void execute(
-      final @NotNull @Language("MySQL") String sql,
+      final @NotNull @Language("SQL") String sql,
       final @NotNull SqlConsumer<PreparedStatement> preparer) throws SQLException {
 
     try (final Connection connection = getConnection();
@@ -156,7 +156,7 @@ public class SqlDatabase {
    * @throws SQLException If the statement could not be executed
    */
   public <R> Optional<R> query(
-      @NotNull @Language("MySQL") final String sql,
+      @NotNull @Language("SQL") final String sql,
       @NotNull final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) throws SQLException {
 
@@ -205,7 +205,7 @@ public class SqlDatabase {
    * @param statement The statement the batch builder should be based off of
    * @return The batch builder
    */
-  public BatchBuilder batch(@Language("MySQL") @NotNull final String statement) {
+  public BatchBuilder batch(@NotNull @Language("SQL") final String statement) {
     return new BatchBuilder(this, statement);
   }
 
