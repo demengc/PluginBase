@@ -188,8 +188,8 @@ public class SqlDatabase {
       return;
     }
 
-    try (final Connection connection = getConnection(); final PreparedStatement statement = connection
-        .prepareStatement(builder.getStatement())) {
+    try (final Connection connection = getConnection();
+        final PreparedStatement statement = connection.prepareStatement(builder.getStatement())) {
       for (final SqlConsumer<PreparedStatement> handlers : builder.getHandlers()) {
         handlers.accept(statement);
         statement.addBatch();

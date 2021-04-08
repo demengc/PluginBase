@@ -55,7 +55,7 @@ public class BatchBuilder {
   @NotNull @Getter private final
   LinkedList<SqlConsumer<PreparedStatement>> handlers = new LinkedList<>();
 
-  public BatchBuilder(@NotNull SqlDatabase owner,
+  public BatchBuilder(@NotNull final SqlDatabase owner,
       @NotNull @Language("SQL") final String statement) {
     this.owner = owner;
     this.statement = statement;

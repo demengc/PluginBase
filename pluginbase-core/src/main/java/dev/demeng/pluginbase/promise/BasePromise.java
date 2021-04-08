@@ -29,7 +29,6 @@ package dev.demeng.pluginbase.promise;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.delegate.Delegate;
 import dev.demeng.pluginbase.utils.TaskUtils;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -98,17 +97,10 @@ final class BasePromise<V> implements Promise<V> {
   }
 
   private BasePromise(@NotNull final Throwable t) {
-    (this.fut = new CompletableFuture<>()).completeExceptionally(t);
+    this.fut = new CompletableFuture<>();
+    fut.completeExceptionally(t);
     this.supplied.set(true);
   }
-
-  private BasePromise(@NotNull final CompletableFuture<V> fut) {
-    this.fut = Objects.requireNonNull(fut, "future");
-    this.supplied.set(true);
-    this.cancelled.set(fut.isCancelled());
-  }
-
-  /* utility methods */
 
   private void executeSync(@NotNull final Runnable runnable) {
     if (ThreadContext.forCurrentThread() == ThreadContext.SYNC) {
@@ -483,14 +475,17 @@ final class BasePromise<V> implements Promise<V> {
 
     @Override
     public void run() {
+
       if (BasePromise.this.cancelled.get()) {
         return;
       }
+
       try {
-        BasePromise.this.fut.complete(this.supplier.call());
-      } catch (final Throwable t) {
-        EXCEPTION_CONSUMER.accept(t);
-        BasePromise.this.fut.completeExceptionally(t);
+        BasePromise.this.fut.complete(supplier.call());
+
+      } catch (final Exception ex) {
+        EXCEPTION_CONSUMER.accept(ex);
+        BasePromise.this.fut.completeExceptionally(ex);
       }
     }
   }
@@ -505,51 +500,59 @@ final class BasePromise<V> implements Promise<V> {
 
     @Override
     public Supplier<V> getDelegate() {
-      return this.supplier;
+      return supplier;
     }
 
     @Override
     public void run() {
+
       if (BasePromise.this.cancelled.get()) {
         return;
       }
+
       try {
-        BasePromise.this.fut.complete(this.supplier.get());
-      } catch (final Throwable t) {
-        EXCEPTION_CONSUMER.accept(t);
-        BasePromise.this.fut.completeExceptionally(t);
+        BasePromise.this.fut.complete(supplier.get());
+
+      } catch (final Exception ex) {
+        EXCEPTION_CONSUMER.accept(ex);
+        BasePromise.this.fut.completeExceptionally(ex);
       }
     }
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  private final class ApplyRunnable<U> implements Runnable, Delegate<Function> {
+  private final class ApplyRunnable<U> implements Runnable,
+      Delegate<Function<? super V, ? extends U>> {
 
     private final BasePromise<U> promise;
     private final Function<? super V, ? extends U> function;
     private final V value;
 
     @Override
-    public Function getDelegate() {
-      return this.function;
+    public Function<? super V, ? extends U> getDelegate() {
+      return function;
     }
 
     @Override
     public void run() {
+
       if (BasePromise.this.cancelled.get()) {
         return;
       }
+
       try {
-        this.promise.complete(this.function.apply(this.value));
-      } catch (final Throwable t) {
-        EXCEPTION_CONSUMER.accept(t);
-        this.promise.completeExceptionally(t);
+        promise.complete(function.apply(this.value));
+
+      } catch (final Exception ex) {
+        EXCEPTION_CONSUMER.accept(ex);
+        promise.completeExceptionally(ex);
       }
     }
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  private final class ComposeRunnable<U> implements Runnable, Delegate<Function> {
+  private final class ComposeRunnable<U> implements Runnable,
+      Delegate<Function<? super V, ? extends Promise<U>>> {
 
     private final BasePromise<U> promise;
     private final Function<? super V, ? extends Promise<U>> function;
@@ -557,55 +560,65 @@ final class BasePromise<V> implements Promise<V> {
     private final boolean sync;
 
     @Override
-    public Function getDelegate() {
-      return this.function;
+    public Function<? super V, ? extends Promise<U>> getDelegate() {
+      return function;
     }
 
     @Override
     public void run() {
+
       if (BasePromise.this.cancelled.get()) {
         return;
       }
+
       try {
-        final Promise<U> p = this.function.apply(this.value);
+        final Promise<U> p = function.apply(value);
+
         if (p == null) {
-          this.promise.complete(null);
+          promise.complete(null);
+
         } else {
-          if (this.sync) {
-            p.thenAcceptSync(this.promise::complete);
+          if (sync) {
+            p.thenAcceptSync(promise::complete);
+
           } else {
-            p.thenAcceptAsync(this.promise::complete);
+            p.thenAcceptAsync(promise::complete);
           }
         }
-      } catch (final Throwable t) {
-        EXCEPTION_CONSUMER.accept(t);
-        this.promise.completeExceptionally(t);
+
+      } catch (final Exception ex) {
+        EXCEPTION_CONSUMER.accept(ex);
+        promise.completeExceptionally(ex);
       }
     }
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  private final class ExceptionallyRunnable<U> implements Runnable, Delegate<Function> {
+  private final class ExceptionallyRunnable<U> implements Runnable,
+      Delegate<Function<Throwable, ? extends U>> {
 
     private final BasePromise<U> promise;
     private final Function<Throwable, ? extends U> function;
-    private final Throwable t;
+    private final Throwable throwable;
 
     @Override
-    public Function getDelegate() {
-      return this.function;
+    public Function<Throwable, ? extends U> getDelegate() {
+      return function;
     }
 
     @Override
     public void run() {
+
       if (BasePromise.this.cancelled.get()) {
         return;
       }
+
       try {
-        this.promise.complete(this.function.apply(this.t));
-      } catch (final Throwable t) {
-        EXCEPTION_CONSUMER.accept(t);
-        this.promise.completeExceptionally(t);
+        promise.complete(function.apply(throwable));
+
+      } catch (final Exception ex) {
+        EXCEPTION_CONSUMER.accept(ex);
+        promise.completeExceptionally(ex);
       }
     }
   }

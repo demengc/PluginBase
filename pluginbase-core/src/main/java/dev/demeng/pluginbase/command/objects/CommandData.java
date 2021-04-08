@@ -74,7 +74,7 @@ public final class CommandData {
   /**
    * The method to invoke when the command is executed.
    */
-  @NotNull @Getter @Setter private Method method;
+  @Getter @Setter private Method method;
 
   /**
    * If this command is the default command of the command base or not.

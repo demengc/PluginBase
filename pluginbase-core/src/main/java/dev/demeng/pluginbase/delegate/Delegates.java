@@ -26,6 +26,7 @@
 
 package dev.demeng.pluginbase.delegate;
 
+import dev.demeng.pluginbase.exceptions.BaseException;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
@@ -76,7 +77,7 @@ public final class Delegates {
     return new RunnableToFunction<>(runnable);
   }
 
-  private static abstract class AbstractDelegate<T> implements Delegate<T> {
+  private abstract static class AbstractDelegate<T> implements Delegate<T> {
 
     final T delegate;
 
@@ -114,10 +115,10 @@ public final class Delegates {
     public T get() {
       try {
         return delegate.call();
-      } catch (final RuntimeException | Error e) {
-        throw e;
-      } catch (final Exception e) {
-        throw new RuntimeException(e);
+      } catch (final RuntimeException ex) {
+        throw ex;
+      } catch (final Exception ex) {
+        throw new BaseException(ex);
       }
     }
   }

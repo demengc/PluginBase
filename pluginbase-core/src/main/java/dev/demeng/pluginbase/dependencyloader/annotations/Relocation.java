@@ -79,7 +79,7 @@ public @interface Relocation {
   @NotNull String separator() default DependencyLoader.DEFAULT_SEPARATOR;
 
   /**
-   * Used to store multiple {@link Relocation} annotations on a single class type
+   * Used to store multiple {@link Relocation} annotations on a single class type.
    */
   @Documented
   @Retention(RetentionPolicy.RUNTIME)
