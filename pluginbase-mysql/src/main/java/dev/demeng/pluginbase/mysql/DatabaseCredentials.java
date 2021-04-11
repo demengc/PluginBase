@@ -25,6 +25,8 @@
 package dev.demeng.pluginbase.mysql;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The POJO containing the credentials to a SQL database.
@@ -35,7 +37,7 @@ public final class DatabaseCredentials {
   /**
    * The host (IP) of the database. Local host is supported.
    */
-  private final String host;
+  @Nullable private final String host;
 
   /**
    * The port to the database, typically 3306.
@@ -45,15 +47,15 @@ public final class DatabaseCredentials {
   /**
    * The name of the database.
    */
-  private final String database;
+  @NotNull private final String database;
 
   /**
    * The username to the database.
    */
-  private final String user;
+  @Nullable private final String user;
 
   /**
    * The password to the database.
    */
-  private final String password;
+  @Nullable private final String password;
 }

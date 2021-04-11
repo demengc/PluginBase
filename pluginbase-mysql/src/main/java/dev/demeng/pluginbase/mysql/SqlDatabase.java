@@ -29,10 +29,14 @@ import be.bendem.sqlstreams.util.SqlConsumer;
 import be.bendem.sqlstreams.util.SqlFunction;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -40,8 +44,10 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an SQL database. Contains several useful utilities such as quickly querying and
@@ -68,16 +74,16 @@ public class SqlDatabase {
    *
    * @param credentials The database credentials POJO
    */
-  public SqlDatabase(final @NotNull DatabaseCredentials credentials) {
+  public SqlDatabase(final @NotNull DriverType driverType,
+      final @NotNull DatabaseCredentials credentials,
+      final @NotNull String additionalOptions) {
 
     final HikariConfig hikari = new HikariConfig();
 
-    hikari.setPoolName("helper-sql-" + POOL_COUNTER.getAndIncrement());
+    hikari.setPoolName(Common.getName() + "-" + POOL_COUNTER.getAndIncrement());
 
-    hikari.setDriverClassName("com.mysql.jdbc.Driver");
-    hikari.setJdbcUrl(
-        "jdbc:mysql://" + credentials.getHost() + ":" + credentials.getPort() + "/" + credentials
-            .getDatabase());
+    hikari.setDriverClassName(driverType.getDriverClass());
+    hikari.setJdbcUrl(driverType.getJdbcUrl(credentials, additionalOptions));
 
     hikari.setUsername(credentials.getUser());
     hikari.setPassword(credentials.getPassword());
@@ -205,6 +211,7 @@ public class SqlDatabase {
    * @param statement The statement the batch builder should be based off of
    * @return The batch builder
    */
+  @NotNull
   public BatchBuilder batch(@NotNull @Language("SQL") final String statement) {
     return new BatchBuilder(this, statement);
   }
@@ -214,5 +221,76 @@ public class SqlDatabase {
    */
   public void close() {
     source.close();
+  }
+
+  /**
+   * An enum containing the available driver types to choose from.
+   */
+  @RequiredArgsConstructor
+  public enum DriverType {
+
+    /**
+     * A local embedded database.
+     *
+     * @see <a href="https://www.h2database.com/html/main.html">https://h2database.com</a>
+     */
+    H2(true, "org.h2.Driver", "jdbc:h2:{path};mode=MySQL"),
+
+    /**
+     * A standard MySQL database.
+     */
+    MYSQL(false, "com.mysql.jdbc.Driver",
+        "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
+
+    /**
+     * A more efficient version of the {@link DriverType#MYSQL} driver.
+     */
+    MARIADB(false, "org.mariadb.jdbc.driver",
+        "jdbc:mariadb://{host}:{port}/{database}{additionalOptions}");
+
+    @Getter private final boolean local;
+    @NotNull @Getter private final String driverClass;
+    @NotNull private final String jdbcUrl;
+
+    /**
+     * Gets a driver type from a string. Not case-sensitive.
+     *
+     * @param strDriver The name of the driver type
+     * @return The driver type with the given name
+     */
+    @Nullable
+    public static DriverType fromString(final String strDriver) {
+      return Arrays.stream(DriverType.values())
+          .filter(driverType -> strDriver.equalsIgnoreCase(driverType.name())).findFirst()
+          .orElse(null);
+    }
+
+    /**
+     * Gets the JDBC URL for the specified driver type, with its placeholders filled based on the
+     * database credentials and additional options provided.
+     *
+     * @param credentials       The database credentials
+     * @param additionalOptions The additional options to append to the JDBC URL
+     * @return The JDBC URL with its placeholders replaced
+     */
+    public final String getJdbcUrl(DatabaseCredentials credentials, String additionalOptions) {
+
+      if (local) {
+        final String path =
+            BaseLoader.getPlugin().getDataFolder().getAbsolutePath() + File.separator + credentials
+                .getDatabase();
+
+        return jdbcUrl.replace("{path}", path)
+            .replace("{additionalOptions}", additionalOptions);
+      }
+
+      final String host = Objects.requireNonNull(credentials.getHost(), "Database host is null");
+
+      return jdbcUrl
+          .replace("{host}", host)
+          .replace("{port}", "" + credentials.getPort())
+          .replace("{database}", credentials.getDatabase())
+          .replace("{additionalOptions}", additionalOptions);
+    }
   }
 }
