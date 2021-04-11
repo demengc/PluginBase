@@ -131,6 +131,7 @@
       <groupId>me.carleslc.Simple-YAML</groupId>
       <artifactId>Simple-Yaml</artifactId>
       <version>1.7.2</version>
+      <scope>compile</scope>
       <optional>true</optional>
     </dependency>
   </dependencies>

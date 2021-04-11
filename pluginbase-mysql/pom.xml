@@ -74,7 +74,7 @@
       <groupId>dev.demeng</groupId>
       <artifactId>pluginbase-core</artifactId>
       <version>1.0.0-SNAPSHOT</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.zaxxer</groupId>
@@ -96,6 +96,12 @@
       <version>1.0.0</version>
       <scope>compile</scope>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>me.carleslc.Simple-YAML</groupId>
+      <artifactId>Simple-Yaml</artifactId>
+      <version>1.7.2</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
