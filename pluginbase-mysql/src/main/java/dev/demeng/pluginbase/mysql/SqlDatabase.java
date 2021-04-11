@@ -273,7 +273,8 @@ public class SqlDatabase {
      * @param additionalOptions The additional options to append to the JDBC URL
      * @return The JDBC URL with its placeholders replaced
      */
-    public final String getJdbcUrl(DatabaseCredentials credentials, String additionalOptions) {
+    public final String getJdbcUrl(final DatabaseCredentials credentials,
+        final String additionalOptions) {
 
       if (local) {
         final String path =
