@@ -27,6 +27,7 @@ package dev.demeng.pluginbase.mysql;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.simpleyaml.configuration.ConfigurationSection;
 
 /**
  * The POJO containing the credentials to a SQL database.
@@ -58,4 +59,18 @@ public final class DatabaseCredentials {
    * The password to the database.
    */
   @Nullable private final String password;
+
+  /**
+   * Retrieves the database credentials from a configuration section.
+   *
+   * @param section The configuration section containing the credentials
+   * @return The {@link DatabaseCredentials} object with the specified credentials
+   */
+  public static DatabaseCredentials fromConfig(@NotNull final ConfigurationSection section) {
+    return new DatabaseCredentials(section.getString("host"),
+        section.getInt("port"),
+        section.getString("database"),
+        section.getString("user"),
+        section.getString("password"));
+  }
 }
