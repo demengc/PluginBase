@@ -91,7 +91,7 @@ public final class CommandData {
    * The type of the expected command sender, which is either console, player, or a CommandSender in
    * general.
    */
-  @NotNull @Getter @Setter private Class<?> senderClass;
+  @Getter @Setter private Class<?> senderClass;
 
   /**
    * A brief description of the command.

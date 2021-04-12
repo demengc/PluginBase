@@ -26,7 +26,7 @@
 
 package dev.demeng.pluginbase.promise;
 
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.delegate.Delegate;
 import dev.demeng.pluginbase.utils.TaskUtils;
 import java.util.concurrent.Callable;
@@ -38,7 +38,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -51,10 +50,8 @@ import org.jetbrains.annotations.Nullable;
  */
 final class BasePromise<V> implements Promise<V> {
 
-  private static final Consumer<Throwable> EXCEPTION_CONSUMER = throwable -> {
-    ChatUtils.log(Level.SEVERE, "[SCHEDULER] Exception thrown whilst executing task");
-    throwable.printStackTrace();
-  };
+  private static final Consumer<Throwable> EXCEPTION_CONSUMER = throwable -> Common
+      .error(throwable, "Exception thrown whilst executing task. (Scheduler)", false);
 
   @NotNull
   static <U> BasePromise<U> empty() {
