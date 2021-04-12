@@ -46,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Implementation of {@link Promise} using the server scheduler.
  *
- * @param <V> the result type
+ * @param <V> The result type
  */
 final class BasePromise<V> implements Promise<V> {
 
@@ -454,8 +454,6 @@ final class BasePromise<V> implements Promise<V> {
     });
     return promise;
   }
-
-  /* delegating behaviour runnables */
 
   private final class ThrowingSupplyRunnable implements Runnable, Delegate<Callable<V>> {
 
