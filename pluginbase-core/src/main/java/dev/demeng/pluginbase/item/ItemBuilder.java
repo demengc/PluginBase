@@ -1,0 +1,418 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 Demeng Chen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package dev.demeng.pluginbase.item;
+
+import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.chat.ChatUtils;
+import io.github.bananapuncher714.nbteditor.NBTEditor;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Consumer;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * A utility for quickly creating {@link ItemStack}s.
+ */
+@SuppressWarnings("unused")
+public class ItemBuilder {
+
+  /**
+   * The item stack that is being built- can be retrieved at any time.
+   */
+  @NotNull private final ItemStack stack;
+
+  // ---------------------------------------------------------------------------------
+  // CONSTRUCTORS
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Creates a new builder from a material, amount, and durability.
+   *
+   * @param material   The material of the stack, replaced with AIR if null
+   * @param amount     The amount of the stack
+   * @param durability The durability of the stack
+   */
+  public ItemBuilder(@Nullable Material material, int amount, byte durability) {
+    //noinspection deprecation
+    this.stack = new ItemStack(Common.getOrDefault(material, Material.AIR), amount, durability);
+  }
+
+  /**
+   * Creates a new builder from a material and an amount.
+   *
+   * @param material The material of the stack, replaced with AIR if null
+   * @param amount   The amount of the stack
+   */
+  public ItemBuilder(@Nullable Material material, int amount) {
+    this.stack = new ItemStack(Common.getOrDefault(material, Material.AIR), amount);
+  }
+
+  /**
+   * Creates a new builder from a simple material.
+   *
+   * @param material The material of the stack, replaced with AIR if null
+   */
+  public ItemBuilder(@Nullable Material material) {
+    this(material, 1);
+  }
+
+  /**
+   * Creates a new builder from an existing item stack.
+   *
+   * @param stack The item stack to clone, replaced with a normal AIR item stack if null
+   */
+  public ItemBuilder(@Nullable ItemStack stack) {
+    this.stack = Common.getOrDefault(stack, new ItemStack(Material.AIR)).clone();
+  }
+
+  // ---------------------------------------------------------------------------------
+  // GENERAL OPTIONS
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Changes the durability of the item.
+   *
+   * @param durability The new durability
+   * @return this
+   */
+  public ItemBuilder durability(short durability) {
+    //noinspection deprecation
+    stack.setDurability(durability);
+    return this;
+  }
+
+  /**
+   * Sets the display name of the item.
+   *
+   * @param name The new display name, colorized internally
+   * @return this
+   */
+  public ItemBuilder name(@NotNull String name) {
+    updateMeta(meta -> meta.setDisplayName(ChatUtils.colorize(name)));
+    return this;
+  }
+
+  /**
+   * Adds an enchant with customizable safety.
+   *
+   * @param enchant The enchantment to add
+   * @param level   The level of the enchantment
+   * @param safe    If the enchantment should be safe
+   * @return this
+   */
+  public ItemBuilder enchant(@NotNull Enchantment enchant, int level, boolean safe) {
+    updateMeta(meta -> meta.addEnchant(enchant, level, !safe));
+    return this;
+  }
+
+  /**
+   * Adds a safe enchantment.
+   *
+   * @param enchant The enchantment to add
+   * @param level   The level of the enchantment
+   * @return this
+   */
+  public ItemBuilder enchant(@NotNull Enchantment enchant, int level) {
+    return enchant(enchant, level, true);
+  }
+
+  /**
+   * Adds all the enchants specified in the map, with the key being the enchantment and the value
+   * being the level.
+   *
+   * @param enchants The enchants to add
+   * @return this
+   */
+  public ItemBuilder enchant(@NotNull Map<Enchantment, Integer> enchants) {
+    stack.addEnchantments(enchants);
+    return this;
+  }
+
+  /**
+   * Removes the specified enchantment.
+   *
+   * @param enchant The enchantment to remove
+   * @return this
+   */
+  public ItemBuilder unenchant(@NotNull Enchantment enchant) {
+    updateMeta(meta -> meta.removeEnchant(enchant));
+    return this;
+  }
+
+  /**
+   * Clears any enchantments that have been applied.
+   *
+   * @return this
+   */
+  public ItemBuilder clearEnchants() {
+
+    updateMeta(meta -> {
+      for (Enchantment enchant : meta.getEnchants().keySet()) {
+        meta.removeEnchant(enchant);
+      }
+    });
+
+    return this;
+  }
+
+  /**
+   * Sets the lore to the specified list.
+   *
+   * @param lore The lore lines, colorized internally
+   * @return this
+   */
+  public ItemBuilder lore(List<String> lore) {
+    updateMeta(meta -> meta.setLore(ChatUtils.colorize(lore)));
+    return this;
+  }
+
+  /**
+   * Sets the lore to the specified string(s). Each string represents a new line.
+   *
+   * @param lore The lore line(s), colorized internally
+   * @return this
+   */
+  public ItemBuilder lore(String... lore) {
+    return lore(Arrays.asList(lore));
+  }
+
+  /**
+   * Adds a single line of lore on top of the current lore.
+   *
+   * @param line The lore line to add, colorized internally
+   * @return this
+   */
+  public ItemBuilder addLore(String line) {
+
+    updateMeta(meta -> {
+      final List<String> lore = new ArrayList<>(
+          Common.getOrDefault(meta.getLore(), Collections.emptyList()));
+      lore.add(ChatUtils.colorize(line));
+      meta.setLore(lore);
+    });
+
+    return this;
+  }
+
+  /**
+   * Clears the item lore.
+   *
+   * @return this
+   */
+  public ItemBuilder clearLore() {
+    updateMeta(meta -> meta.setLore(Collections.emptyList()));
+    return this;
+  }
+
+  /**
+   * Makes the item unbreakable (have infinite durability).
+   *
+   * @return this
+   */
+  public ItemBuilder unbreakable() {
+    NBTEditor.set(stack, true, "Unbreakable");
+    return this;
+  }
+
+  /**
+   * Sets the item flags.
+   *
+   * @param flags The flags to set
+   * @return this
+   */
+  public ItemBuilder flags(ItemFlag... flags) {
+    updateMeta(meta -> meta.addItemFlags(flags));
+    return this;
+  }
+
+  /**
+   * Clears all current item flags.
+   *
+   * @return this
+   */
+  public ItemBuilder clearFlags() {
+
+    updateMeta(meta -> {
+      for (ItemFlag flag : meta.getItemFlags()) {
+        meta.removeItemFlags(flag);
+      }
+    });
+
+    return this;
+  }
+
+  /**
+   * Gives the item a durability enchantment to make it appear glowing, then adds the hide
+   * enchantment item flag. Note that this will also hide all of your other enchantments in the
+   * lore! This option should only be used for GUI aesthetic purposes.
+   *
+   * @return this
+   */
+  public ItemBuilder glow() {
+    enchant(Enchantment.DURABILITY, 1);
+    flags(ItemFlag.HIDE_ENCHANTS);
+    return this;
+  }
+
+  /**
+   * Sets the custom model data of the item, which is only supported in 1.14+. If the server version
+   * does not support custom model data, this option is simply ignored.
+   *
+   * @param modelData The custom model data
+   * @return this
+   */
+  public ItemBuilder modelData(int modelData) {
+
+    if (Common.isServerVersionAtLeast(14)) {
+      updateMeta(meta -> meta.setCustomModelData(modelData));
+    }
+
+    return this;
+  }
+
+  /**
+   * Adds an NBT tag to the item stack.
+   *
+   * @param key   The key of the tag
+   * @param value The value of the tag
+   * @return this
+   */
+  public ItemBuilder nbtTag(String key, Object value) {
+    NBTEditor.set(stack, value, key);
+    return this;
+  }
+
+  // ---------------------------------------------------------------------------------
+  // ITEM-SPECIFIC OPTIONS
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Sets the skull owner of a skull item. Ignored if the item type is not a player skull.
+   *
+   * @param owner The username of the skull owner
+   * @return this
+   */
+  public ItemBuilder skullOwner(String owner) {
+
+    try {
+      final SkullMeta meta = (SkullMeta) stack.getItemMeta();
+      meta.setOwner(owner);
+      stack.setItemMeta(meta);
+    } catch (ClassCastException ignored) {
+      // Ignore if not skull.
+    }
+
+    return this;
+  }
+
+  /**
+   * Sets the skull owner of a skull item. Ignored if the item type is not a player skull.
+   *
+   * @param owner The UUId of the skull owner
+   * @return this
+   */
+  public ItemBuilder skullOwner(UUID owner) {
+
+    try {
+      final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
+
+      if (Common.isServerVersionAtLeast(12)) {
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(owner));
+      } else {
+        return skullOwner(Bukkit.getOfflinePlayer(owner).getName());
+      }
+
+      stack.setItemMeta(meta);
+    } catch (ClassCastException ignored) {
+      // Ignore if not skull.
+    }
+
+    return this;
+  }
+
+  /**
+   * Sets the color of leather armor. Ignored if the item type is not leather armor.
+   *
+   * @param color The color to change the armor to
+   * @return this
+   */
+  public ItemBuilder armorColor(Color color) {
+
+    try {
+      final LeatherArmorMeta meta = Objects.requireNonNull((LeatherArmorMeta) stack.getItemMeta());
+      meta.setColor(color);
+      stack.setItemMeta(meta);
+    } catch (ClassCastException ignored) {
+      // Ignore if not leather armor.
+    }
+
+    return this;
+  }
+
+  // ---------------------------------------------------------------------------------
+  // UTILITIES
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Gets the current current item stack.
+   *
+   * @return The current item stack
+   */
+  @NotNull
+  public ItemStack get() {
+    return stack;
+  }
+
+  /**
+   * Clones this item builder.
+   *
+   * @return The cloned instance
+   */
+  @NotNull
+  public ItemBuilder copy() {
+    return new ItemBuilder(stack);
+  }
+
+  private void updateMeta(Consumer<ItemMeta> consumer) {
+    final ItemMeta meta = stack.getItemMeta();
+    consumer.accept(meta);
+    stack.setItemMeta(meta);
+  }
+}
