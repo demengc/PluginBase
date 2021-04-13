@@ -134,17 +134,17 @@ public class Common {
   /**
    * Reports an error in the plugin.
    *
-   * @param error       The exception
+   * @param throwable   The throwable
    * @param description A brief description of the error
    * @param disable     If the plugin should be disabled
    * @param players     Any players associated with this error, a message will be sent to them
    */
   public static void error(
-      @Nullable final Throwable error, @NotNull final String description, final boolean disable,
+      @Nullable final Throwable throwable, @NotNull final String description, final boolean disable,
       @NotNull final Player... players) {
 
-    if (error != null) {
-      error.printStackTrace();
+    if (throwable != null) {
+      throwable.printStackTrace();
     }
 
     ChatUtils.coloredConsole(
