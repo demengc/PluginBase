@@ -69,7 +69,7 @@ public class ItemBuilder {
    * @param amount     The amount of the stack
    * @param durability The durability of the stack
    */
-  public ItemBuilder(@Nullable Material material, int amount, byte durability) {
+  public ItemBuilder(@Nullable final Material material, final int amount, final byte durability) {
     //noinspection deprecation
     this.stack = new ItemStack(Common.getOrDefault(material, Material.AIR), amount, durability);
   }
@@ -80,7 +80,7 @@ public class ItemBuilder {
    * @param material The material of the stack, replaced with AIR if null
    * @param amount   The amount of the stack
    */
-  public ItemBuilder(@Nullable Material material, int amount) {
+  public ItemBuilder(@Nullable final Material material, final int amount) {
     this.stack = new ItemStack(Common.getOrDefault(material, Material.AIR), amount);
   }
 
@@ -89,7 +89,7 @@ public class ItemBuilder {
    *
    * @param material The material of the stack, replaced with AIR if null
    */
-  public ItemBuilder(@Nullable Material material) {
+  public ItemBuilder(@Nullable final Material material) {
     this(material, 1);
   }
 
@@ -98,7 +98,7 @@ public class ItemBuilder {
    *
    * @param stack The item stack to clone, replaced with a normal AIR item stack if null
    */
-  public ItemBuilder(@Nullable ItemStack stack) {
+  public ItemBuilder(@Nullable final ItemStack stack) {
     this.stack = Common.getOrDefault(stack, new ItemStack(Material.AIR)).clone();
   }
 
@@ -112,7 +112,7 @@ public class ItemBuilder {
    * @param durability The new durability
    * @return this
    */
-  public ItemBuilder durability(short durability) {
+  public ItemBuilder durability(final short durability) {
     //noinspection deprecation
     stack.setDurability(durability);
     return this;
@@ -124,7 +124,7 @@ public class ItemBuilder {
    * @param name The new display name, colorized internally
    * @return this
    */
-  public ItemBuilder name(@NotNull String name) {
+  public ItemBuilder name(@NotNull final String name) {
     updateMeta(meta -> meta.setDisplayName(ChatUtils.colorize(name)));
     return this;
   }
@@ -137,7 +137,8 @@ public class ItemBuilder {
    * @param safe    If the enchantment should be safe
    * @return this
    */
-  public ItemBuilder enchant(@NotNull Enchantment enchant, int level, boolean safe) {
+  public ItemBuilder enchant(@NotNull final Enchantment enchant, final int level,
+      final boolean safe) {
     updateMeta(meta -> meta.addEnchant(enchant, level, !safe));
     return this;
   }
@@ -149,7 +150,7 @@ public class ItemBuilder {
    * @param level   The level of the enchantment
    * @return this
    */
-  public ItemBuilder enchant(@NotNull Enchantment enchant, int level) {
+  public ItemBuilder enchant(@NotNull final Enchantment enchant, final int level) {
     return enchant(enchant, level, true);
   }
 
@@ -160,7 +161,7 @@ public class ItemBuilder {
    * @param enchants The enchants to add
    * @return this
    */
-  public ItemBuilder enchant(@NotNull Map<Enchantment, Integer> enchants) {
+  public ItemBuilder enchant(@NotNull final Map<Enchantment, Integer> enchants) {
     stack.addEnchantments(enchants);
     return this;
   }
@@ -171,7 +172,7 @@ public class ItemBuilder {
    * @param enchant The enchantment to remove
    * @return this
    */
-  public ItemBuilder unenchant(@NotNull Enchantment enchant) {
+  public ItemBuilder unenchant(@NotNull final Enchantment enchant) {
     updateMeta(meta -> meta.removeEnchant(enchant));
     return this;
   }
@@ -184,7 +185,7 @@ public class ItemBuilder {
   public ItemBuilder clearEnchants() {
 
     updateMeta(meta -> {
-      for (Enchantment enchant : meta.getEnchants().keySet()) {
+      for (final Enchantment enchant : meta.getEnchants().keySet()) {
         meta.removeEnchant(enchant);
       }
     });
@@ -198,7 +199,7 @@ public class ItemBuilder {
    * @param lore The lore lines, colorized internally
    * @return this
    */
-  public ItemBuilder lore(List<String> lore) {
+  public ItemBuilder lore(final List<String> lore) {
     updateMeta(meta -> meta.setLore(ChatUtils.colorize(lore)));
     return this;
   }
@@ -209,7 +210,7 @@ public class ItemBuilder {
    * @param lore The lore line(s), colorized internally
    * @return this
    */
-  public ItemBuilder lore(String... lore) {
+  public ItemBuilder lore(final String... lore) {
     return lore(Arrays.asList(lore));
   }
 
@@ -219,7 +220,7 @@ public class ItemBuilder {
    * @param line The lore line to add, colorized internally
    * @return this
    */
-  public ItemBuilder addLore(String line) {
+  public ItemBuilder addLore(final String line) {
 
     updateMeta(meta -> {
       final List<String> lore = new ArrayList<>(
@@ -257,7 +258,7 @@ public class ItemBuilder {
    * @param flags The flags to set
    * @return this
    */
-  public ItemBuilder flags(ItemFlag... flags) {
+  public ItemBuilder flags(final ItemFlag... flags) {
     updateMeta(meta -> meta.addItemFlags(flags));
     return this;
   }
@@ -270,7 +271,7 @@ public class ItemBuilder {
   public ItemBuilder clearFlags() {
 
     updateMeta(meta -> {
-      for (ItemFlag flag : meta.getItemFlags()) {
+      for (final ItemFlag flag : meta.getItemFlags()) {
         meta.removeItemFlags(flag);
       }
     });
@@ -298,7 +299,7 @@ public class ItemBuilder {
    * @param modelData The custom model data
    * @return this
    */
-  public ItemBuilder modelData(int modelData) {
+  public ItemBuilder modelData(final int modelData) {
 
     if (Common.isServerVersionAtLeast(14)) {
       updateMeta(meta -> meta.setCustomModelData(modelData));
@@ -314,7 +315,7 @@ public class ItemBuilder {
    * @param value The value of the tag
    * @return this
    */
-  public ItemBuilder nbtTag(String key, Object value) {
+  public ItemBuilder nbtTag(final String key, final Object value) {
     NBTEditor.set(stack, value, key);
     return this;
   }
@@ -329,13 +330,13 @@ public class ItemBuilder {
    * @param owner The username of the skull owner
    * @return this
    */
-  public ItemBuilder skullOwner(String owner) {
+  public ItemBuilder skullOwner(final String owner) {
 
     try {
       final SkullMeta meta = (SkullMeta) stack.getItemMeta();
       meta.setOwner(owner);
       stack.setItemMeta(meta);
-    } catch (ClassCastException ignored) {
+    } catch (final ClassCastException ignored) {
       // Ignore if not skull.
     }
 
@@ -348,7 +349,7 @@ public class ItemBuilder {
    * @param owner The UUId of the skull owner
    * @return this
    */
-  public ItemBuilder skullOwner(UUID owner) {
+  public ItemBuilder skullOwner(final UUID owner) {
 
     try {
       final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
@@ -360,7 +361,7 @@ public class ItemBuilder {
       }
 
       stack.setItemMeta(meta);
-    } catch (ClassCastException ignored) {
+    } catch (final ClassCastException ignored) {
       // Ignore if not skull.
     }
 
@@ -373,13 +374,13 @@ public class ItemBuilder {
    * @param color The color to change the armor to
    * @return this
    */
-  public ItemBuilder armorColor(Color color) {
+  public ItemBuilder armorColor(final Color color) {
 
     try {
       final LeatherArmorMeta meta = Objects.requireNonNull((LeatherArmorMeta) stack.getItemMeta());
       meta.setColor(color);
       stack.setItemMeta(meta);
-    } catch (ClassCastException ignored) {
+    } catch (final ClassCastException ignored) {
       // Ignore if not leather armor.
     }
 
@@ -410,7 +411,7 @@ public class ItemBuilder {
     return new ItemBuilder(stack);
   }
 
-  private void updateMeta(Consumer<ItemMeta> consumer) {
+  private void updateMeta(final Consumer<ItemMeta> consumer) {
     final ItemMeta meta = stack.getItemMeta();
     consumer.accept(meta);
     stack.setItemMeta(meta);
