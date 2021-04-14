@@ -213,8 +213,6 @@ public abstract class PagedMenu implements IMenu {
                   PagedMenu.this.open(playerCurrentPage + 1, p);
                 }
               }));
-
-      super.setBackground(settings.getBackground());
     }
   }
 
