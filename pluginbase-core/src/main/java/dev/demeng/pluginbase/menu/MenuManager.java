@@ -75,8 +75,7 @@ public class MenuManager implements Listener {
   @EventHandler(priority = EventPriority.HIGH)
   public void onInventoryClick(final InventoryClickEvent event) {
 
-    if (event.getClickedInventory() == null
-        || event.getClickedInventory().getType() == InventoryType.PLAYER) {
+    if (event.getClickedInventory() == null) {
       return;
     }
 
@@ -85,6 +84,10 @@ public class MenuManager implements Listener {
 
     if (inventoryUuid != null) {
       event.setCancelled(true);
+
+      if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+        return;
+      }
 
       final Consumer<InventoryClickEvent> actions =
           menus.get(inventoryUuid).getActions().get(event.getSlot());
