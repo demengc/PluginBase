@@ -58,6 +58,12 @@ public class MenuManager implements Listener {
   @NotNull @Getter private static final Map<UUID, UUID> openedMenus = new HashMap<>();
 
   /**
+   * A map of the paged menu a player has open, with the key being the UUID of the player, and the
+   * value being the UUID of the paged menu they have open.
+   */
+  @NotNull @Getter private static final Map<UUID, UUID> openedPagedMenus = new HashMap<>();
+
+  /**
    * The current page of the menu each player is on, with the key being the player and the value
    * being the page index. Used for paged menus.
    */

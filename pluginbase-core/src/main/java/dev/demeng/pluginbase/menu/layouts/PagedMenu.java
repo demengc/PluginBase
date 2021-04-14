@@ -89,22 +89,22 @@ public abstract class PagedMenu implements IMenu {
    */
   public void fill(final List<MenuButton> buttons) {
 
-    int currentSlot = settings.getStartingSlot() - 1;
+    int currentSlot = settings.getStartingSlot();
 
     Menu page = new Page(pageSize, title.replace(CURRENT_PAGE_PLACEHOLDER, "" + 1), settings);
     pages.add(page);
 
     for (final MenuButton button : buttons) {
 
-      if (currentSlot == settings.getEndingSlot()
-          || page.getInventory().firstEmpty() == settings.getEndingSlot() + 1
+      if (currentSlot > settings.getEndingSlot()
+          || page.getInventory().firstEmpty() > settings.getEndingSlot()
           || page.getInventory().firstEmpty() == -1) {
 
         page = new Page(pageSize,
             title.replace(CURRENT_PAGE_PLACEHOLDER, String.valueOf(pages.size() + 1)), settings);
         pages.add(page);
 
-        currentSlot = settings.getStartingSlot() - 1;
+        currentSlot = settings.getStartingSlot();
       }
 
       button.setSlot(currentSlot);
@@ -151,7 +151,7 @@ public abstract class PagedMenu implements IMenu {
   public void open(final Player... players) {
     for (final Player player : players) {
       pages.get(0).open(player);
-      MenuManager.getOpenedMenus().put(player.getUniqueId(), uuid);
+      MenuManager.getOpenedPagedMenus().put(player.getUniqueId(), uuid);
       MenuManager.getOpenedPages().put(player.getUniqueId(), 0);
     }
   }
@@ -165,7 +165,7 @@ public abstract class PagedMenu implements IMenu {
   public void open(final int index, final Player... players) {
     for (final Player player : players) {
       pages.get(index).open(player);
-      MenuManager.getOpenedMenus().put(player.getUniqueId(), uuid);
+      MenuManager.getOpenedPagedMenus().put(player.getUniqueId(), uuid);
       MenuManager.getOpenedPages().put(player.getUniqueId(), index);
     }
   }
