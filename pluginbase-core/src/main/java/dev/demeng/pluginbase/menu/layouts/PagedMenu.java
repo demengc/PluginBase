@@ -340,12 +340,12 @@ public abstract class PagedMenu implements IMenu {
 
         @Override
         public int getStartingSlot() {
-          return section.getInt("listing-range.start");
+          return section.getInt("listing-range.start") - 1;
         }
 
         @Override
         public int getEndingSlot() {
-          return section.getInt("listing-range.end");
+          return section.getInt("listing-range.end") - 1;
         }
       };
     }
