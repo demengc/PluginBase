@@ -27,8 +27,8 @@ package dev.demeng.pluginbase.menu.layouts;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
-import dev.demeng.pluginbase.menu.models.MenuButton;
 import dev.demeng.pluginbase.menu.MenuManager;
+import dev.demeng.pluginbase.menu.models.MenuButton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -107,16 +107,16 @@ public abstract class Menu implements IMenu {
   }
 
   @Override
-  public void setBackground(@Nullable final Material material) {
+  public void setBackground(@Nullable final ItemStack stack) {
 
-    if (material == null || material == Material.AIR) {
+    if (stack == null || stack.getType() == Material.AIR) {
       return;
     }
 
     for (int slot = 0; slot < inventory.getSize(); slot++) {
       final ItemStack current = inventory.getItem(slot);
       if (current == null || current.getType() == Material.AIR) {
-        setItem(new MenuButton(slot, new ItemBuilder(material).name("&0").get(), null));
+        setItem(new MenuButton(slot, new ItemBuilder(stack).name("&0").get(), null));
       }
     }
   }
@@ -125,7 +125,7 @@ public abstract class Menu implements IMenu {
   public void open(final Player... players) {
     for (final Player player : players) {
       player.openInventory(inventory);
-      MenuManager.getOpenMenus().put(player.getUniqueId(), uuid);
+      MenuManager.getOpenedMenus().put(player.getUniqueId(), uuid);
     }
   }
 }

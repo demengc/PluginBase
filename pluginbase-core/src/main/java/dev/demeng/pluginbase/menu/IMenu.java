@@ -24,8 +24,8 @@
 
 package dev.demeng.pluginbase.menu;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * An interface containing common methods between the different menu layouts.
@@ -45,5 +45,5 @@ public interface IMenu {
    *
    * @param material The background material of the menu, usually stained glass panes
    */
-  void setBackground(final Material material);
+  void setBackground(final ItemStack stack);
 }

@@ -55,7 +55,13 @@ public class MenuManager implements Listener {
    * A map of the menu a player has open, with the key being the UUID of the player, and the value
    * being the UUID of the menu they have open.
    */
-  @NotNull @Getter protected static final Map<UUID, UUID> openMenus = new HashMap<>();
+  @NotNull @Getter private static final Map<UUID, UUID> openedMenus = new HashMap<>();
+
+  /**
+   * The current page of the menu each player is on, with the key being the player and the value
+   * being the page index. Used for paged menus.
+   */
+  @NotNull @Getter private static final Map<UUID, Integer> openedPages = new HashMap<>();
 
   /**
    * Handles button interaction within menus.
@@ -69,7 +75,7 @@ public class MenuManager implements Listener {
     }
 
     final Player p = (Player) event.getWhoClicked();
-    final UUID inventoryUuid = openMenus.get(p.getUniqueId());
+    final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
 
     if (inventoryUuid != null) {
       event.setCancelled(true);
@@ -88,7 +94,7 @@ public class MenuManager implements Listener {
    */
   @EventHandler(priority = EventPriority.MONITOR)
   public void onInventoryClose(final InventoryCloseEvent event) {
-    openMenus.remove(event.getPlayer().getUniqueId());
+    cleanup((Player) event.getPlayer());
   }
 
   /**
@@ -96,6 +102,12 @@ public class MenuManager implements Listener {
    */
   @EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerQuit(final PlayerQuitEvent event) {
-    openMenus.remove(event.getPlayer().getUniqueId());
+    cleanup(event.getPlayer());
+  }
+
+  private void cleanup(final Player p) {
+    final UUID uuid = p.getUniqueId();
+    openedMenus.remove(uuid);
+    openedPages.remove(uuid);
   }
 }
