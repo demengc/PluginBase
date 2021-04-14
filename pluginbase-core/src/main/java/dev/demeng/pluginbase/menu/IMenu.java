@@ -28,7 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
- * An interface containing common methods between the different types of menus.
+ * An interface containing common methods between the different menu layouts.
  */
 @SuppressWarnings("unused")
 public interface IMenu {

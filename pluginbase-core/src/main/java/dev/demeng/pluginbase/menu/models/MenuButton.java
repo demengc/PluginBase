@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.menu;
+package dev.demeng.pluginbase.menu.models;
 
 import dev.demeng.pluginbase.item.ItemBuilder;
+import dev.demeng.pluginbase.menu.layouts.Menu;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
