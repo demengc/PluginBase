@@ -66,7 +66,7 @@ public class YamlConfig {
         name.endsWith(".yml") || name.endsWith(".yaml") ? name : name + ".yml";
 
     final String completePath =
-        parent == null ? completeName : parent.toPath().toString() + File.separator + completeName;
+        parent == null ? completeName : parent.toPath() + File.separator + completeName;
 
     config = new YamlFile(completePath);
 

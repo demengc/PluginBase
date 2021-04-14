@@ -466,7 +466,7 @@ public class ChatUtils {
         compensated += spaceLength;
       }
 
-      player.sendMessage(sb.toString() + line);
+      player.sendMessage(sb + line);
     }
   }
 
