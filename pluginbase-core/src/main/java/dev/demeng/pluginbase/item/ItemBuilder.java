@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.item;
 
+import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import io.github.bananapuncher714.nbteditor.NBTEditor;
@@ -33,6 +34,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import org.bukkit.Bukkit;
@@ -46,6 +48,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.simpleyaml.configuration.ConfigurationSection;
 
 /**
  * A utility for quickly creating {@link ItemStack}s.
@@ -415,5 +418,96 @@ public class ItemBuilder {
     final ItemMeta meta = stack.getItemMeta();
     consumer.accept(meta);
     stack.setItemMeta(meta);
+  }
+
+  // ---------------------------------------------------------------------------------
+  // DESERIALIZATION
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Gets a material from a string. Note that this actually returns an item stack as a data values
+   * may need to be included on legacy versions.
+   *
+   * @param strMaterial The string material to parse
+   * @return A standard item stack with no meta, or null if the material is invalid or unsupported
+   */
+  @NotNull
+  public static Optional<ItemStack> getMaterialSafe(@NotNull String strMaterial) {
+
+    final Optional<XMaterial> matchOptional = XMaterial.matchXMaterial(strMaterial);
+    if (matchOptional.isEmpty()) {
+      return Optional.empty();
+    }
+
+    final XMaterial match = matchOptional.get();
+
+    if (!match.isSupported()) {
+      return Optional.empty();
+    }
+
+    return Optional.ofNullable(match.parseItem());
+  }
+
+  /**
+   * Gets a material from a string. Throws an error if the material is invalid or unsupported,
+   * unlike {@link #getMaterialSafe(String)}.
+   *
+   * @param strMaterial The string material to parse
+   * @return A standard item stack with no meta, or stone if invalid/unsupported
+   * @see #getMaterialSafe(String)
+   */
+  @NotNull
+  public static ItemStack getMaterial(@NotNull String strMaterial) {
+
+    final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
+
+    if (stack == null) {
+      Common.error(null, "Invalid material: " + strMaterial, false);
+      return new ItemStack(Material.STONE);
+    }
+
+    return stack;
+  }
+
+  /**
+   * Attempts to get a material from a string, but returns the default item stack if the result of
+   * the provided material string is invalid or unsupported, instead of throwing an error and just
+   * returning stone like {@link #getMaterial(String)}.
+   *
+   * @param strMaterial The string material to parse
+   * @param def         The default material if the provided material is invalid or unsupported
+   * @return A standard item stack with no meta, or the default stack if invalid/unsupported
+   * @see #getMaterial(String)
+   */
+  @NotNull
+  public static ItemStack getMaterialOrDef(@NotNull String strMaterial, @NotNull ItemStack def) {
+
+    final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
+
+    if (stack == null) {
+      return def;
+    }
+
+    return stack;
+  }
+
+  /**
+   * Gets an item stack from a configuration section.
+   *
+   * @param section The section to deserialize
+   * @return The item stack deserialized from the configuration section
+   */
+  @NotNull
+  public static ItemStack fromConfig(@NotNull ConfigurationSection section) {
+
+    final ItemBuilder builder = new ItemBuilder(getMaterial(section.getString("material")));
+
+    builder.name(section.getString("display-name")).lore(section.getStringList("lore"));
+
+    if (section.getBoolean("glow")) {
+      builder.glow();
+    }
+
+    return builder.get();
   }
 }
