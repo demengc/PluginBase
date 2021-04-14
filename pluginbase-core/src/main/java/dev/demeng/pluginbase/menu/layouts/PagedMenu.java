@@ -172,8 +172,8 @@ public abstract class PagedMenu implements IMenu {
 
   private class Page extends Menu {
 
-    public Page(final int slots, final String title, final Settings settings) {
-      super(slots, title);
+    public Page(final int pageSize, final String title, final Settings settings) {
+      super(pageSize, title);
 
       if (settings.getSeparator() != null && settings.getSeparatorRow() > 0) {
         for (int i = 0; i < 9; i++) {
@@ -182,14 +182,14 @@ public abstract class PagedMenu implements IMenu {
           final ItemStack stack = getInventory().getItem(slot);
 
           if (stack == null || stack.getType() == Material.AIR) {
-            addButton(
+            super.addButton(
                 new MenuButton(slot, new ItemBuilder(settings.getSeparator()).name("&0").get(),
                     null));
           }
         }
       }
 
-      addButton(
+      super.addButton(
           new MenuButton(
               settings.getPreviousButton().getSlot(),
               settings.getPreviousButton().getStack(),
@@ -201,7 +201,7 @@ public abstract class PagedMenu implements IMenu {
                 }
               }));
 
-      addButton(
+      super.addButton(
           new MenuButton(
               settings.getNextButton().getSlot(),
               settings.getNextButton().getStack(),
@@ -213,6 +213,8 @@ public abstract class PagedMenu implements IMenu {
                   PagedMenu.this.open(playerCurrentPage + 1, p);
                 }
               }));
+
+      super.setBackground(settings.getBackground());
     }
   }
 

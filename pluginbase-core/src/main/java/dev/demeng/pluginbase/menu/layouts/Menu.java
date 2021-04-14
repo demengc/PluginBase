@@ -106,7 +106,11 @@ public abstract class Menu implements IMenu {
     addButton(new MenuButton(slot, stack, actions));
   }
 
-  @Override
+  /**
+   * Sets the background material of the menu.
+   *
+   * @param stack The background material of the menu, usually stained glass panes
+   */
   public void setBackground(@Nullable final ItemStack stack) {
 
     if (stack == null || stack.getType() == Material.AIR) {
