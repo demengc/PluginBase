@@ -31,9 +31,11 @@ import dev.demeng.pluginbase.menu.models.MenuButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -106,12 +108,12 @@ public abstract class PagedMenu implements IMenu {
       }
 
       button.setSlot(currentSlot);
-      page.setItem(button);
+      page.addButton(button);
       currentSlot++;
     }
 
-    pages.get(0).setItem(settings.getDummyPreviousButton());
-    pages.get(pages.size() - 1).setItem(settings.getDummyNextButton());
+    pages.get(0).addButton(settings.getDummyPreviousButton());
+    pages.get(pages.size() - 1).addButton(settings.getDummyNextButton());
 
     for (final Menu menu : pages) {
       menu.setBackground(settings.getBackground());
@@ -119,14 +121,29 @@ public abstract class PagedMenu implements IMenu {
   }
 
   /**
-   * Sets a static item that will be displayed on all pages. Must be done AFTER the {@link
+   * Adds a static item that will be displayed on all pages. Must be done AFTER the {@link
    * #fill(List)} method.
    *
    * @param button The button to set on all pages
    */
-  protected void setStaticItem(final MenuButton button) {
+  protected void addStaticButton(final MenuButton button) {
     for (final Menu page : pages) {
-      page.setItem(button);
+      page.addButton(button);
+    }
+  }
+
+  /**
+   * Creates and adds a static item that will be displayed on all pages. Must be done AFTER the
+   * {@link #fill(List)} method.
+   *
+   * @param slot    The slot of the button
+   * @param stack   The stack of the button
+   * @param actions The actions of the button
+   */
+  public void addButton(final int slot, @NotNull final ItemStack stack,
+      @Nullable final Consumer<InventoryClickEvent> actions) {
+    for (final Menu page : pages) {
+      page.addButton(new MenuButton(slot, stack, actions));
     }
   }
 
@@ -165,13 +182,14 @@ public abstract class PagedMenu implements IMenu {
           final ItemStack stack = getInventory().getItem(slot);
 
           if (stack == null || stack.getType() == Material.AIR) {
-            setItem(new MenuButton(slot, new ItemBuilder(settings.getSeparator()).name("&0").get(),
-                null));
+            addButton(
+                new MenuButton(slot, new ItemBuilder(settings.getSeparator()).name("&0").get(),
+                    null));
           }
         }
       }
 
-      setItem(
+      addButton(
           new MenuButton(
               settings.getPreviousButton().getSlot(),
               settings.getPreviousButton().getStack(),
@@ -183,7 +201,7 @@ public abstract class PagedMenu implements IMenu {
                 }
               }));
 
-      setItem(
+      addButton(
           new MenuButton(
               settings.getNextButton().getSlot(),
               settings.getNextButton().getStack(),

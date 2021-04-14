@@ -77,23 +77,11 @@ public abstract class Menu implements IMenu {
   }
 
   /**
-   * Creates and adds a new button to the menu.
-   *
-   * @param slot    The slot of the button
-   * @param stack   The stack of the button
-   * @param actions The actions of the button
-   */
-  public void setItem(final int slot, @NotNull final ItemStack stack,
-      @Nullable final Consumer<InventoryClickEvent> actions) {
-    setItem(new MenuButton(slot, stack, actions));
-  }
-
-  /**
    * Adds a new button to the menu.
    *
    * @param button The button to add
    */
-  public void setItem(@Nullable final MenuButton button) {
+  public void addButton(@Nullable final MenuButton button) {
 
     if (button == null || button.getSlot() < 0) {
       return;
@@ -106,6 +94,18 @@ public abstract class Menu implements IMenu {
     }
   }
 
+  /**
+   * Creates and adds a new button to the menu.
+   *
+   * @param slot    The slot of the button
+   * @param stack   The stack of the button
+   * @param actions The actions of the button
+   */
+  public void addButton(final int slot, @NotNull final ItemStack stack,
+      @Nullable final Consumer<InventoryClickEvent> actions) {
+    addButton(new MenuButton(slot, stack, actions));
+  }
+
   @Override
   public void setBackground(@Nullable final ItemStack stack) {
 
@@ -116,7 +116,7 @@ public abstract class Menu implements IMenu {
     for (int slot = 0; slot < inventory.getSize(); slot++) {
       final ItemStack current = inventory.getItem(slot);
       if (current == null || current.getType() == Material.AIR) {
-        setItem(new MenuButton(slot, new ItemBuilder(stack).name("&0").get(), null));
+        addButton(new MenuButton(slot, new ItemBuilder(stack).name("&0").get(), null));
       }
     }
   }
