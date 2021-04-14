@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.command.objects;
+package dev.demeng.pluginbase.command.models;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;

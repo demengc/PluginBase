@@ -40,7 +40,7 @@ import dev.demeng.pluginbase.command.annotations.Usage;
 import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
 import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
 import dev.demeng.pluginbase.command.handlers.CompletionHandler;
-import dev.demeng.pluginbase.command.objects.CommandData;
+import dev.demeng.pluginbase.command.models.CommandData;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

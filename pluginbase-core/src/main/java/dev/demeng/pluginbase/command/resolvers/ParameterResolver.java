@@ -25,7 +25,7 @@
 
 package dev.demeng.pluginbase.command.resolvers;
 
-import dev.demeng.pluginbase.command.objects.TypeResult;
+import dev.demeng.pluginbase.command.models.TypeResult;
 import org.jetbrains.annotations.NotNull;
 
 /**
