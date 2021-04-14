@@ -29,7 +29,7 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Registerer;
 import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
-import dev.demeng.pluginbase.menu.internal.MenuHandler;
+import dev.demeng.pluginbase.menu.MenuManager;
 import lombok.Getter;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -96,7 +96,7 @@ public abstract class BasePlugin extends JavaPlugin {
       return;
     }
 
-    Registerer.registerListener(new MenuHandler());
+    Registerer.registerListener(new MenuManager());
 
     enable();
   }

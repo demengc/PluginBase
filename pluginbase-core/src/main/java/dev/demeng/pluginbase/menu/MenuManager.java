@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.menu.internal;
+package dev.demeng.pluginbase.menu;
 
-import dev.demeng.pluginbase.menu.Menu;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -35,17 +37,30 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Internal listener for handling menu interactions.
  */
-public class MenuHandler implements Listener {
+public class MenuManager implements Listener {
+
+  /**
+   * A map of all menus created within the plugin, with the key being the UUID of the menu, and the
+   * value being the menu object.
+   */
+  @NotNull @Getter private static final Map<UUID, Menu> menus = new HashMap<>();
+
+  /**
+   * A map of the menu a player has open, with the key being the UUID of the player, and the value
+   * being the UUID of the menu they have open.
+   */
+  @NotNull @Getter protected static final Map<UUID, UUID> openMenus = new HashMap<>();
 
   /**
    * Handles button interaction within menus.
    */
   @EventHandler(priority = EventPriority.HIGH)
-  public void onInventoryClick(InventoryClickEvent event) {
+  public void onInventoryClick(final InventoryClickEvent event) {
 
     if (event.getClickedInventory() == null
         || event.getClickedInventory().getType() == InventoryType.PLAYER) {
@@ -53,13 +68,13 @@ public class MenuHandler implements Listener {
     }
 
     final Player p = (Player) event.getWhoClicked();
-    final UUID inventoryUuid = Menu.getOpenMenus().get(p.getUniqueId());
+    final UUID inventoryUuid = openMenus.get(p.getUniqueId());
 
     if (inventoryUuid != null) {
       event.setCancelled(true);
 
       final Consumer<InventoryClickEvent> actions =
-          Menu.getMenus().get(inventoryUuid).getActions().get(event.getSlot());
+          menus.get(inventoryUuid).getActions().get(event.getSlot());
 
       if (actions != null) {
         actions.accept(event);
@@ -71,15 +86,15 @@ public class MenuHandler implements Listener {
    * Handles cleanup when a menu is closed.
    */
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onInventoryClose(InventoryCloseEvent event) {
-    Menu.getOpenMenus().remove(event.getPlayer().getUniqueId());
+  public void onInventoryClose(final InventoryCloseEvent event) {
+    openMenus.remove(event.getPlayer().getUniqueId());
   }
 
   /**
    * Handles cleanup when a player leaves.
    */
   @EventHandler(priority = EventPriority.MONITOR)
-  public void onPlayerQuit(PlayerQuitEvent event) {
-    Menu.getOpenMenus().remove(event.getPlayer().getUniqueId());
+  public void onPlayerQuit(final PlayerQuitEvent event) {
+    openMenus.remove(event.getPlayer().getUniqueId());
   }
 }

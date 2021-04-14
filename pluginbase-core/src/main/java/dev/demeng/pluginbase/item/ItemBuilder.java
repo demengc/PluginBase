@@ -432,7 +432,7 @@ public class ItemBuilder {
    * @return A standard item stack with no meta, or null if the material is invalid or unsupported
    */
   @NotNull
-  public static Optional<ItemStack> getMaterialSafe(@NotNull String strMaterial) {
+  public static Optional<ItemStack> getMaterialSafe(@NotNull final String strMaterial) {
 
     final Optional<XMaterial> matchOptional = XMaterial.matchXMaterial(strMaterial);
     if (matchOptional.isEmpty()) {
@@ -457,7 +457,7 @@ public class ItemBuilder {
    * @see #getMaterialSafe(String)
    */
   @NotNull
-  public static ItemStack getMaterial(@NotNull String strMaterial) {
+  public static ItemStack getMaterial(@NotNull final String strMaterial) {
 
     final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
 
@@ -480,7 +480,8 @@ public class ItemBuilder {
    * @see #getMaterial(String)
    */
   @NotNull
-  public static ItemStack getMaterialOrDef(@NotNull String strMaterial, @NotNull ItemStack def) {
+  public static ItemStack getMaterialOrDef(@NotNull final String strMaterial,
+      @NotNull final ItemStack def) {
 
     final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
 
@@ -498,7 +499,7 @@ public class ItemBuilder {
    * @return The item stack deserialized from the configuration section
    */
   @NotNull
-  public static ItemStack fromConfig(@NotNull ConfigurationSection section) {
+  public static ItemStack fromConfig(@NotNull final ConfigurationSection section) {
 
     final ItemBuilder builder = new ItemBuilder(getMaterial(section.getString("material")));
 

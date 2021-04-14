@@ -43,19 +43,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A GUI menu (custom inventory) that will be displayed to a player.
  */
-public abstract class Menu {
-
-  /**
-   * A map of all menus created within the plugin, with the key being the UUID of the menu, and the
-   * value being the menu object.
-   */
-  @NotNull @Getter private static final Map<UUID, Menu> menus = new HashMap<>();
-
-  /**
-   * A map of the menu a player has open, with the key being the UUID of the player, and the value
-   * being the UUID of the menu they have open.
-   */
-  @NotNull @Getter protected static final Map<UUID, UUID> openMenus = new HashMap<>();
+public abstract class Menu implements IMenu {
 
   /**
    * The unique ID of this menu.
@@ -82,7 +70,7 @@ public abstract class Menu {
    */
   protected Menu(final int size, @NotNull final String title) {
     this.inventory = Bukkit.createInventory(null, size, ChatUtils.colorize(title));
-    menus.put(getUuid(), this);
+    MenuManager.getMenus().put(getUuid(), this);
   }
 
   /**
@@ -115,11 +103,7 @@ public abstract class Menu {
     }
   }
 
-  /**
-   * Sets the background material of the menu.
-   *
-   * @param material The background material of the menu, usually stained glass panes
-   */
+  @Override
   public void setBackground(@Nullable final Material material) {
 
     if (material == null || material == Material.AIR) {
@@ -134,15 +118,11 @@ public abstract class Menu {
     }
   }
 
-  /**
-   * Opens the menu for the provided player(s).
-   *
-   * @param players The players the menu should be opened to
-   */
+  @Override
   public void open(final Player... players) {
     for (final Player player : players) {
       player.openInventory(inventory);
-      openMenus.put(player.getUniqueId(), uuid);
+      MenuManager.getOpenMenus().put(player.getUniqueId(), uuid);
     }
   }
 }
