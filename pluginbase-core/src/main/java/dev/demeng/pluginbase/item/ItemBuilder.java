@@ -435,7 +435,7 @@ public class ItemBuilder {
   public static Optional<ItemStack> getMaterialSafe(@NotNull final String strMaterial) {
 
     final Optional<XMaterial> matchOptional = XMaterial.matchXMaterial(strMaterial);
-    if (matchOptional.isEmpty()) {
+    if (!matchOptional.isPresent()) {
       return Optional.empty();
     }
 
