@@ -245,14 +245,17 @@ public final class CommandHandler extends Command {
         final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
 
         if (!data.isDef() && data.getArguments().isEmpty()) {
-          ChatUtils.tell(sender, settings.incorrectUsage());
+          ChatUtils.tell(sender, settings.incorrectUsage()
+              .replace(USAGE_PLACEHOLDER,
+                  Common.getOrDefault(data.getUsage(), settings.notApplicable())));
           return;
         }
 
         if (!String[]
             .class.isAssignableFrom(
             data.getArguments().get(data.getArguments().size() - 1))) {
-          ChatUtils.tell(sender, settings.incorrectUsage());
+          ChatUtils.tell(sender, settings.incorrectUsage().replace(USAGE_PLACEHOLDER,
+              Common.getOrDefault(data.getUsage(), settings.notApplicable())));
           return;
         }
       }
@@ -282,12 +285,14 @@ public final class CommandHandler extends Command {
 
       if (data.isOptionalArgument()) {
         if (argumentsList.size() > data.getArguments().size()) {
-          ChatUtils.tell(sender, settings.incorrectUsage());
+          ChatUtils.tell(sender, settings.incorrectUsage().replace(USAGE_PLACEHOLDER,
+              Common.getOrDefault(data.getUsage(), settings.notApplicable())));
           return;
         }
 
         if (argumentsList.size() < data.getArguments().size() - 1) {
-          ChatUtils.tell(sender, settings.incorrectUsage());
+          ChatUtils.tell(sender, settings.incorrectUsage().replace(USAGE_PLACEHOLDER,
+              Common.getOrDefault(data.getUsage(), settings.notApplicable())));
           return;
         }
 
@@ -297,7 +302,8 @@ public final class CommandHandler extends Command {
       }
 
       if (data.getArguments().size() > argumentsList.size()) {
-        ChatUtils.tell(sender, settings.incorrectUsage());
+        ChatUtils.tell(sender, settings.incorrectUsage().replace(USAGE_PLACEHOLDER,
+            Common.getOrDefault(data.getUsage(), settings.notApplicable())));
         return;
       }
 
