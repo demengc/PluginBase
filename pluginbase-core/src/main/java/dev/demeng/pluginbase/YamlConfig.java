@@ -24,10 +24,9 @@
 
 package dev.demeng.pluginbase;
 
+import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.StandardCopyOption;
 import lombok.Getter;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -54,30 +53,24 @@ public class YamlConfig {
    * Loads a YAML configuration file. If the file does not exist, a new file will be copied from the
    * project's resources folder.
    *
-   * @param parent The folder the file should go in- should be your plugin data folder
-   * @param name   The name of the config, ending in .yml or .yaml
+   * @param name The name of the config, ending in .yml
    * @throws InvalidConfigurationException If there was a formatting/parsing error in the config
    * @throws IOException                   If the file could not be created and/or loaded
    */
-  public YamlConfig(final File parent, final String name)
+  public YamlConfig(final String name)
       throws InvalidConfigurationException, IOException {
 
-    final String completeName =
-        name.endsWith(".yml") || name.endsWith(".yaml") ? name : name + ".yml";
+    final String completeName = name.endsWith(".yml") ? name : name + ".yml";
 
-    final String completePath =
-        parent == null ? completeName : parent.toPath() + File.separator + completeName;
+    final File file = new File(BaseLoader.getPlugin().getDataFolder(), completeName);
 
-    config = new YamlFile(completePath);
-
-    if (!config.exists()) {
-      copyInputStreamToFile(getFileFromResourceAsStream(name), new File(completePath));
-
-    } else {
-      config.createNewFile(false);
+    if (!file.exists()) {
+      file.mkdirs();
+      BaseLoader.getPlugin().saveResource(completeName, false);
     }
 
-    config.load();
+    this.config = new YamlFile(file);
+    reload();
   }
 
   /**
@@ -107,31 +100,5 @@ public class YamlConfig {
    */
   public boolean configUpToDate(final int currentVersion) {
     return config.getInt(VERSION_KEY, -1) >= currentVersion;
-  }
-
-  private InputStream getFileFromResourceAsStream(final String fileName) {
-
-    final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
-
-    if (inputStream == null) {
-      throw new IllegalArgumentException("File not found in JAR file: " + fileName);
-    } else {
-      return inputStream;
-    }
-  }
-
-  private static void copyInputStreamToFile(final InputStream source, final File destination)
-      throws IOException {
-
-    java.nio.file.Files.copy(
-        source,
-        destination.toPath(),
-        StandardCopyOption.REPLACE_EXISTING);
-
-    try {
-      source.close();
-    } catch (final IOException ignored) {
-      // Close quietly.
-    }
   }
 }
