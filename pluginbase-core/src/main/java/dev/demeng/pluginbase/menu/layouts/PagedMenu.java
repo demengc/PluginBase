@@ -297,15 +297,12 @@ public abstract class PagedMenu implements IMenu {
       return new Settings() {
         @Override
         public ItemStack getBackground() {
-          return ItemBuilder
-              .getMaterialOrDef(section.getString("background"), new ItemStack(Material.AIR));
+          return ItemBuilder.getMaterial(section.getString("background"));
         }
 
         @Override
         public ItemStack getSeparator() {
-          return ItemBuilder
-              .getMaterialOrDef(section.getString("separator.material"),
-                  new ItemStack(Material.AIR));
+          return ItemBuilder.getMaterial(section.getString("separator.material"));
         }
 
         @Override
