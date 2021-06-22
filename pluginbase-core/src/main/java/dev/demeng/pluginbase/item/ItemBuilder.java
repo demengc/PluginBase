@@ -68,29 +68,29 @@ public class ItemBuilder {
   /**
    * Creates a new builder from a material, amount, and durability.
    *
-   * @param material   The material of the stack, replaced with AIR if null
+   * @param material   The material of the stack, replaced with STONE if null
    * @param amount     The amount of the stack
    * @param durability The durability of the stack
    */
   public ItemBuilder(@Nullable final Material material, final int amount, final byte durability) {
     //noinspection deprecation
-    this.stack = new ItemStack(Common.getOrDefault(material, Material.AIR), amount, durability);
+    this.stack = new ItemStack(Common.getOrDefault(material, Material.STONE), amount, durability);
   }
 
   /**
    * Creates a new builder from a material and an amount.
    *
-   * @param material The material of the stack, replaced with AIR if null
+   * @param material The material of the stack, replaced with STONE if null
    * @param amount   The amount of the stack
    */
   public ItemBuilder(@Nullable final Material material, final int amount) {
-    this.stack = new ItemStack(Common.getOrDefault(material, Material.AIR), amount);
+    this.stack = new ItemStack(Common.getOrDefault(material, Material.STONE), amount);
   }
 
   /**
    * Creates a new builder from a simple material.
    *
-   * @param material The material of the stack, replaced with AIR if null
+   * @param material The material of the stack, replaced with STONE if null
    */
   public ItemBuilder(@Nullable final Material material) {
     this(material, 1);
@@ -99,10 +99,10 @@ public class ItemBuilder {
   /**
    * Creates a new builder from an existing item stack.
    *
-   * @param stack The item stack to clone, replaced with a normal AIR item stack if null
+   * @param stack The item stack to clone, replaced with STONE item stack if null
    */
   public ItemBuilder(@Nullable final ItemStack stack) {
-    this.stack = Common.getOrDefault(stack, new ItemStack(Material.AIR)).clone();
+    this.stack = Common.getOrDefault(stack, new ItemStack(Material.STONE)).clone();
   }
 
   // ---------------------------------------------------------------------------------
