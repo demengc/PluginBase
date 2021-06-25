@@ -48,10 +48,6 @@
                   <shadedPattern>dev.demeng.pluginbase.internal.hikari</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>org.hibernate</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.internal.hibernate</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>be.bendem.sqlstreams</pattern>
                   <shadedPattern>dev.demeng.pluginbase.internal.sqlstreams</shadedPattern>
                 </relocation>
@@ -87,13 +83,6 @@
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>4.0.3</version>
-      <scope>compile</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-      <version>5.4.30.Final</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>

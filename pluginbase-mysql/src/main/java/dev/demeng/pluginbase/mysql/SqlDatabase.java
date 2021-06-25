@@ -51,8 +51,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an SQL database. Contains several useful utilities such as quickly querying and
- * executing (prepared) statements as well as initializing the database with optimal settings. Most
- * of the utilities here can be ignored if you are using Hibernate ORM.
+ * executing (prepared) statements as well as initializing the database with optimal settings.
  */
 public class SqlDatabase {
 
@@ -132,7 +131,7 @@ public class SqlDatabase {
   }
 
   /**
-   * Executes a new SQL statement. You should only use this if you aren't using Hibernate ORM.
+   * Executes a new SQL statement.
    *
    * @param sql      The SQL statement
    * @param preparer The preparer for the statement- this is where you should set your placeholders
@@ -151,8 +150,7 @@ public class SqlDatabase {
   }
 
   /**
-   * Executes a new query to the SQL database. You should only use this if you aren't using
-   * Hibernate ORM.
+   * Executes a new query to the SQL database.
    *
    * @param sql      The SQL statement
    * @param preparer The preparer for the statement- this is where you should set your placeholders
@@ -177,8 +175,7 @@ public class SqlDatabase {
   }
 
   /**
-   * Executes a batch statement (multiple statements in 1 connection). You should only use this if
-   * you aren't using Hibernate ORM.
+   * Executes a batch statement (multiple statements in 1 connection).
    *
    * @param builder The batch builder
    * @throws SQLException If the batch statement could not be executed
