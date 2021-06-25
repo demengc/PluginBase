@@ -36,7 +36,7 @@ import lombok.Getter;
 @SuppressWarnings("unused")
 public class UpdateChecker {
 
-  private final int resourceId;
+  @Getter private final int resourceId;
   @Getter private final String latestVersion;
 
   /**
