@@ -501,9 +501,11 @@ public class ItemBuilder {
   @NotNull
   public static ItemStack fromConfig(@NotNull final ConfigurationSection section) {
 
-    final ItemBuilder builder = new ItemBuilder(getMaterial(section.getString("material")));
+    final ItemBuilder builder = new ItemBuilder(getMaterial(
+        Objects.requireNonNull(section.getString("material"))));
 
-    builder.name(section.getString("display-name")).lore(section.getStringList("lore"));
+    builder.name(Objects.requireNonNull(section.getString("display-name")))
+        .lore(section.getStringList("lore"));
 
     if (section.getBoolean("glow")) {
       builder.glow();

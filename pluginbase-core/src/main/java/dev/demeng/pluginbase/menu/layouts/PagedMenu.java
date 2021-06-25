@@ -30,6 +30,7 @@ import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.models.MenuButton;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import lombok.Getter;
@@ -297,12 +298,13 @@ public abstract class PagedMenu implements IMenu {
       return new Settings() {
         @Override
         public ItemStack getBackground() {
-          return ItemBuilder.getMaterial(section.getString("background"));
+          return ItemBuilder.getMaterial(Objects.requireNonNull(section.getString("background")));
         }
 
         @Override
         public ItemStack getSeparator() {
-          return ItemBuilder.getMaterial(section.getString("separator.material"));
+          return ItemBuilder.getMaterial(
+              Objects.requireNonNull(section.getString("separator.material")));
         }
 
         @Override
@@ -313,26 +315,31 @@ public abstract class PagedMenu implements IMenu {
         @Override
         public @NotNull MenuButton getPreviousButton() {
           return MenuButton
-              .fromConfig(section.getConfigurationSection("previous-page"), null);
+              .fromConfig(Objects.requireNonNull(section.getConfigurationSection("previous-page")),
+                  null);
         }
 
         @Override
         public @NotNull MenuButton getDummyPreviousButton() {
           return MenuButton
-              .fromConfig(section.getConfigurationSection("previous-page.no-more-pages"),
+              .fromConfig(Objects
+                      .requireNonNull(section.getConfigurationSection("previous-page.no-more-pages")),
                   null);
         }
 
         @Override
         public @NotNull MenuButton getNextButton() {
           return MenuButton
-              .fromConfig(section.getConfigurationSection("next-page"), null);
+              .fromConfig(Objects.requireNonNull(section.getConfigurationSection("next-page")),
+                  null);
         }
 
         @Override
         public @NotNull MenuButton getDummyNextButton() {
           return MenuButton
-              .fromConfig(section.getConfigurationSection("next-page.no-more-pages"), null);
+              .fromConfig(Objects
+                      .requireNonNull(section.getConfigurationSection("next-page.no-more-pages")),
+                  null);
         }
 
         @Override
