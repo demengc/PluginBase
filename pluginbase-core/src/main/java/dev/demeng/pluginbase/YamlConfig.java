@@ -28,13 +28,12 @@ import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.io.File;
 import java.io.IOException;
 import lombok.Getter;
-import org.simpleyaml.configuration.file.YamlFile;
-import org.simpleyaml.exceptions.InvalidConfigurationException;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * A standard YAML configuration file with several shortcuts to common methods including such as
- * reloading or saving. Uses the SimpleYAML library rather than Bukkit's YAML library as it allows
- * more features such as persistent comments.
+ * reloading or saving.
  */
 public class YamlConfig {
 
@@ -45,9 +44,14 @@ public class YamlConfig {
   private static final String VERSION_KEY = "config-version";
 
   /**
+   * The system file of the config.
+   */
+  @Getter private final File file;
+
+  /**
    * The actual configuration object which is what you use for modifying and accessing the config.
    */
-  @Getter private final YamlFile config;
+  @Getter private final YamlConfiguration config;
 
   /**
    * Loads a YAML configuration file. If the file does not exist, a new file will be copied from the
@@ -62,14 +66,16 @@ public class YamlConfig {
 
     final String completeName = name.endsWith(".yml") ? name : name + ".yml";
 
-    final File file = new File(BaseLoader.getPlugin().getDataFolder(), completeName);
+    final File configFile = new File(BaseLoader.getPlugin().getDataFolder(), completeName);
 
-    if (!file.exists()) {
-      file.mkdirs();
+    if (!configFile.exists()) {
+      //noinspection ResultOfMethodCallIgnored
+      configFile.mkdirs();
       BaseLoader.getPlugin().saveResource(completeName, false);
     }
 
-    this.config = new YamlFile(file);
+    this.file = configFile;
+    this.config = YamlConfiguration.loadConfiguration(file);
     reload();
   }
 
@@ -80,7 +86,7 @@ public class YamlConfig {
    * @throws IOException                   If the file could not be reloaded
    */
   public void reload() throws InvalidConfigurationException, IOException {
-    config.load();
+    config.load(file);
   }
 
   /**
@@ -89,7 +95,7 @@ public class YamlConfig {
    * @throws IOException If the file could not be saved
    */
   public void save() throws IOException {
-    config.save();
+    config.save(file);
   }
 
   /**

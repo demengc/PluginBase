@@ -34,12 +34,12 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import lombok.Getter;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.simpleyaml.configuration.ConfigurationSection;
 
 /**
  * A paginated GUI menu that will be displayed to a player.

@@ -51,10 +51,6 @@
                   <shadedPattern>dev.demeng.pluginbase.lib</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>org.simpleyaml</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.internal.simpleyaml</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>org.bstats</pattern>
                   <shadedPattern>dev.demeng.pluginbase.lib.bstats</shadedPattern>
                 </relocation>
@@ -119,13 +115,6 @@
       <groupId>io.github.bananapuncher714</groupId>
       <artifactId>nbteditor</artifactId>
       <version>7.16.1</version>
-      <scope>compile</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>me.carleslc.Simple-YAML</groupId>
-      <artifactId>Simple-Yaml</artifactId>
-      <version>1.7.2</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
