@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
+import lombok.Getter;
 
 /**
  * Simple utility for checking for resource updates on SpigotMC.
@@ -35,17 +36,39 @@ import java.util.Scanner;
 @SuppressWarnings("unused")
 public class UpdateChecker {
 
-  private UpdateChecker() {
-    throw new IllegalStateException("Utility class");
+  private final int resourceId;
+  @Getter private final String latestVersion;
+
+  /**
+   * Creates a new update checker instance and caches the latest version from Spigot. Should be
+   * called asynchronously.
+   *
+   * @param resourceId The resource ID on SpigotMC
+   */
+  public UpdateChecker(final int resourceId) {
+    this.resourceId = resourceId;
+    this.latestVersion = retrieveVersionFromSpigot();
   }
 
   /**
-   * Gets the latest version of the resource with the specified resource ID.
+   * Checks if this plugin version is the same as the one on Spigot.
    *
-   * @param resourceId The ID of the resource to check
-   * @return The latest version string, or null if failed to retrieve version
+   * @return The update check result
    */
-  public static String getLatestVersion(final int resourceId) {
+  public UpdateChecker.Result getResult() {
+
+    if (latestVersion == null) {
+      return UpdateChecker.Result.ERROR;
+    }
+
+    if (Common.getVersion().equals(latestVersion)) {
+      return UpdateChecker.Result.UP_TO_DATE;
+    }
+
+    return UpdateChecker.Result.OUTDATED;
+  }
+
+  private String retrieveVersionFromSpigot() {
 
     try (final InputStream inputStream = new URL(
         "https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream();
@@ -60,27 +83,6 @@ public class UpdateChecker {
     }
 
     return null;
-  }
-
-  /**
-   * Checks if this plugin version is the same as the one with the specified resource ID.
-   *
-   * @param resourceId The ID of the resource to check
-   * @return The update check result
-   */
-  public static UpdateChecker.Result isUpToDate(final int resourceId) {
-
-    final String latest = getLatestVersion(resourceId);
-
-    if (latest == null) {
-      return UpdateChecker.Result.ERROR;
-    }
-
-    if (Common.getVersion().equals(latest)) {
-      return UpdateChecker.Result.UP_TO_DATE;
-    }
-
-    return UpdateChecker.Result.OUTDATED;
   }
 
   /**
