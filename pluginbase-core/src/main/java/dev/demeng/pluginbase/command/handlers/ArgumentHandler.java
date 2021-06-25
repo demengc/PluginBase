@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.command.models.CommandData;
 import dev.demeng.pluginbase.command.models.TypeResult;
 import dev.demeng.pluginbase.command.resolvers.ParameterResolver;
+import dev.demeng.pluginbase.item.ItemBuilder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,10 +94,9 @@ public final class ArgumentHandler {
 
     register(Player.class, arg -> new TypeResult(Bukkit.getPlayer(String.valueOf(arg)), arg));
 
-    /*
     register(
-        Material.class, arg -> new TypeResult(XMaterial.matchXMaterial(String.valueOf(arg)), arg));
-     */
+        ItemStack.class,
+        arg -> new TypeResult(ItemBuilder.getMaterialSafe(String.valueOf(arg)).orElse(null), arg));
 
     register(
         Sound.class,
