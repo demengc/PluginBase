@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
@@ -51,7 +52,7 @@ public class YamlConfig {
   /**
    * The actual configuration object which is what you use for modifying and accessing the config.
    */
-  @Getter private final YamlConfiguration config;
+  @Getter private final FileConfiguration config;
 
   /**
    * Loads a YAML configuration file. If the file does not exist, a new file will be copied from the
@@ -70,7 +71,7 @@ public class YamlConfig {
 
     if (!configFile.exists()) {
       //noinspection ResultOfMethodCallIgnored
-      configFile.mkdirs();
+      configFile.getParentFile().mkdirs();
       BaseLoader.getPlugin().saveResource(completeName, false);
     }
 
