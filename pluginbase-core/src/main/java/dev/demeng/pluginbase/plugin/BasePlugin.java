@@ -33,18 +33,13 @@ import dev.demeng.pluginbase.menu.MenuManager;
 import lombok.Getter;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An extended version of JavaPlugin. Main class must extend this class in order to use PluginBase.
  */
 @SuppressWarnings("unused")
 public abstract class BasePlugin extends JavaPlugin {
-
-  /**
-   * The dependency engine for this plugin.
-   */
-  private final @NotNull DependencyEngine dependencyEngine;
 
   /**
    * The command manager for this plugin.
@@ -56,32 +51,15 @@ public abstract class BasePlugin extends JavaPlugin {
    */
   @Getter private BukkitAudiences adventure;
 
-  protected BasePlugin() {
-    this.dependencyEngine = DependencyEngine
-        .createNew(this.getDataFolder().toPath().resolve("dependencies"));
-  }
+  /**
+   * The dependency engine for this plugin.
+   */
+  private @Nullable DependencyEngine dependencyEngine;
 
   @Override
   public final void onLoad() {
 
     BaseLoader.setPlugin(this);
-
-    dependencyEngine
-        .addDependenciesFromClass(getClass())
-        .loadDependencies()
-        .exceptionally(ex -> {
-          dependencyEngine.getErrors().add(ex);
-          return null;
-        })
-        .join();
-
-    if (!dependencyEngine.getErrors().isEmpty()) {
-      for (final Throwable t : dependencyEngine.getErrors()) {
-        Common.error(t, "Failed to download dependencies.", false);
-      }
-
-      return;
-    }
 
     commandManager = new CommandManager();
     load();
@@ -92,7 +70,7 @@ public abstract class BasePlugin extends JavaPlugin {
 
     adventure = BukkitAudiences.create(this);
 
-    if (!dependencyEngine.getErrors().isEmpty()) {
+    if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
       return;
     }
 
@@ -109,7 +87,7 @@ public abstract class BasePlugin extends JavaPlugin {
       adventure = null;
     }
 
-    if (!dependencyEngine.getErrors().isEmpty()) {
+    if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
       return;
     }
 
@@ -145,5 +123,35 @@ public abstract class BasePlugin extends JavaPlugin {
    */
   protected void disable() {
     // Override if needed, otherwise nothing will be executed.
+  }
+
+  /**
+   * Loads the dependency engine for the plugin. Call on {@link #load()} only if needed.
+   *
+   * @return True if successful, false otherwise
+   */
+  protected boolean loadDependencyEngine() {
+
+    dependencyEngine = DependencyEngine
+        .createNew(getDataFolder().toPath().resolve("dependencies"));
+
+    dependencyEngine
+        .addDependenciesFromClass(getClass())
+        .loadDependencies()
+        .exceptionally(ex -> {
+          dependencyEngine.getErrors().add(ex);
+          return null;
+        })
+        .join();
+
+    if (!dependencyEngine.getErrors().isEmpty()) {
+      for (final Throwable t : dependencyEngine.getErrors()) {
+        Common.error(t, "Failed to download dependencies.", false);
+      }
+
+      return false;
+    }
+
+    return true;
   }
 }
