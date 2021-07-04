@@ -26,18 +26,16 @@ package dev.demeng.pluginbase.utils;
 
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.util.function.Consumer;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Utilities for quickly creating various Bukkit tasks inside your plugin.
  */
-@SuppressWarnings("unused")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TaskUtils {
-
-  private TaskUtils() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /**
    * Runs the task once on the primary thread, without delay nor repetition.

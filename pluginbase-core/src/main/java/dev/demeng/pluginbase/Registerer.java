@@ -25,6 +25,8 @@
 package dev.demeng.pluginbase;
 
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -33,11 +35,8 @@ import org.jetbrains.annotations.NotNull;
  * Utility class for quickly registering commands, listeners, and more.
  */
 @SuppressWarnings("unused")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Registerer {
-
-  private Registerer() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /**
    * Registers a listener.

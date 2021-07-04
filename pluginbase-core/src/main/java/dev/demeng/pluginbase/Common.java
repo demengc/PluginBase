@@ -27,6 +27,8 @@ package dev.demeng.pluginbase;
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -37,11 +39,8 @@ import org.jetbrains.annotations.Nullable;
  * Commonly used methods and utilities.
  */
 @SuppressWarnings("unused")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Common {
-
-  private Common() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /**
    * If the server software the plugin is running on is Spigot or a fork of Spigot. Used internally

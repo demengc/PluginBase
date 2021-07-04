@@ -34,6 +34,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
@@ -48,11 +50,8 @@ import org.jetbrains.annotations.Nullable;
  * Message-related utilities, including console and chat messages.
  */
 @SuppressWarnings("unused")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatUtils {
-
-  private ChatUtils() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /**
    * The prefix to look for in messages to determine if the advanced parser should be used. Any

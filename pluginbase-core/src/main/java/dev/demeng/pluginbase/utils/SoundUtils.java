@@ -26,6 +26,8 @@ package dev.demeng.pluginbase.utils;
 
 import dev.demeng.pluginbase.Common;
 import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -36,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
  * Various utilities for playing sound effects.
  */
 @SuppressWarnings("unused")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SoundUtils {
 
   /**
@@ -43,10 +46,6 @@ public class SoundUtils {
    * sound or a custom sound (such as one in a resource pack).
    */
   public static final String CUSTOM_PREFIX = "custom:";
-
-  private SoundUtils() {
-    throw new IllegalStateException("Utility class");
-  }
 
   /**
    * Play a sound to a player.

@@ -24,6 +24,8 @@
 
 package dev.demeng.pluginbase;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,11 +33,8 @@ import org.jetbrains.annotations.Nullable;
  * Utility class for checking and validating objects.
  */
 @SuppressWarnings("unused")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Validate {
-
-  private Validate() {
-    throw new IllegalStateException("Utility class");
-  }
 
   // ---------------------------------------------------------------------------------
   // GENERAL
