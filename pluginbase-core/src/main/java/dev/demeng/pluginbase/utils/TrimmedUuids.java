@@ -50,7 +50,6 @@ public final class TrimmedUuids {
         + digits(uuid.getLeastSignificantBits(), 12));
   }
 
-
   /**
    * Parses a UUID from a trimmed string.
    *
