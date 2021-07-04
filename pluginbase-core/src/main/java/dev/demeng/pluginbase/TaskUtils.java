@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.utils;
+package dev.demeng.pluginbase;
 
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.util.function.Consumer;

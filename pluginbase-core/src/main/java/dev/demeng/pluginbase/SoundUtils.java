@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.utils;
+package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.Common;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
