@@ -31,7 +31,7 @@ import java.time.temporal.ChronoUnit;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Utility for formatting {@link Duration} into a human-friendly format.
+ * Utility for formatting durations into a human-friendly format.
  */
 public enum DurationFormatter {
 
@@ -80,29 +80,29 @@ public enum DurationFormatter {
   }
 
   /**
-   * Formats {@link Duration} into a human readable format.
+   * Formats seconds into a human-friendly format.
    *
-   * @param duration The duration
+   * @param seconds The number of seconds
    * @return The formatted string
    */
   @NotNull
-  public String format(final Duration duration) {
+  public String format(final long seconds) {
 
-    long seconds = duration.getSeconds();
+    long remaining = seconds;
     int outputSize = 0;
 
     final StringBuilder output = new StringBuilder();
 
     for (final Unit unit : this.units) {
-      final long n = seconds / unit.duration;
+      final long n = remaining / unit.duration;
 
       if (n > 0) {
-        seconds -= unit.duration * n;
+        remaining -= unit.duration * n;
         output.append(' ').append(n).append(unit.toString(n));
         outputSize++;
       }
 
-      if (seconds <= 0 || outputSize >= this.accuracy) {
+      if (remaining <= 0 || outputSize >= this.accuracy) {
         break;
       }
     }
@@ -112,6 +112,17 @@ public enum DurationFormatter {
     }
 
     return output.substring(1);
+  }
+
+  /**
+   * Formats a {@link Duration} into human-friendly format.
+   *
+   * @param duration The duration
+   * @return The formatted string
+   */
+  @NotNull
+  public String format(final Duration duration) {
+    return format(duration.getSeconds());
   }
 
   protected String formatUnitPlural(final ChronoUnit unit) {
