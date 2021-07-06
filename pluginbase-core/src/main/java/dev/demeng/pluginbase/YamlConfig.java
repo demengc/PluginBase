@@ -100,12 +100,12 @@ public class YamlConfig {
   }
 
   /**
-   * Checks if the config version integer equals or is greater than the current version.
+   * Checks if the config version integer equals or is less than the current version.
    *
    * @param currentVersion The expected value of the config version
-   * @return true if the config is update to date, false otherwise
+   * @return true if the config is outdated, false otherwise
    */
-  public boolean configUpToDate(final int currentVersion) {
-    return config.getInt(VERSION_KEY, -1) >= currentVersion;
+  public boolean isOutdated(final int currentVersion) {
+    return config.getInt(VERSION_KEY, -1) < currentVersion;
   }
 }
