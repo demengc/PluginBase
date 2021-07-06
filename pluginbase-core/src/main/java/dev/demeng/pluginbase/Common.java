@@ -48,6 +48,13 @@ public class Common {
    */
   public static final boolean SPIGOT = Validate.checkClass("net.md_5.bungee.api.ChatColor") != null;
 
+  /**
+   * The error message for players when an internal error occurs..
+   */
+  public static final String PLAYERS_ERROR_MESSAGE = "&6An internal error has occurred in "
+      + Common.getName()
+      + ". Further details have been printed in console.";
+
   // ---------------------------------------------------------------------------------
   // PLUGIN INFORMATION
   // ---------------------------------------------------------------------------------
@@ -154,11 +161,7 @@ public class Common {
         "&4" + ChatUtils.CONSOLE_LINE);
 
     for (final Player p : players) {
-      ChatUtils.tellColored(
-          p,
-          "&6An internal error has occurred in "
-              + Common.getName()
-              + ". Further details have been printed in console.");
+      ChatUtils.tellColored(p, PLAYERS_ERROR_MESSAGE);
     }
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseLoader.getPlugin())) {
