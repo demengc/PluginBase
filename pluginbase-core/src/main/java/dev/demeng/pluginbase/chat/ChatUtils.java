@@ -112,11 +112,13 @@ public class ChatUtils {
 
     String message = String.join("\n", strings);
 
-    final ColorScheme scheme = BaseLoader.getPlugin().getBaseSettings().colorScheme();
-    if (scheme != null) {
-      message = message.replace("&p", scheme.getPrimary())
-          .replace("&s", scheme.getSecondary())
-          .replace("&t", scheme.getTertiary());
+    if (BaseLoader.getPlugin().getBaseSettings() != null) {
+      final ColorScheme scheme = BaseLoader.getPlugin().getBaseSettings().colorScheme();
+      if (scheme != null) {
+        message = message.replace("&p", scheme.getPrimary())
+            .replace("&s", scheme.getSecondary())
+            .replace("&t", scheme.getTertiary());
+      }
     }
 
     if (Common.SPIGOT && Common.isServerVersionAtLeast(16)) {
