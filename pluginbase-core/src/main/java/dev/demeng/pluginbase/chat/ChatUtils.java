@@ -288,6 +288,22 @@ public class ChatUtils {
     return strList.stream().map(ChatUtils::strip).collect(Collectors.toList());
   }
 
+  /**
+   * Capitalizes the first character of the given string.
+   *
+   * @param str The string
+   * @return The string with the first character capitalized
+   */
+  @NotNull
+  public static String capitalizeFirst(@NotNull final String str) {
+
+    if (str.isEmpty()) {
+      return str;
+    }
+
+    return ("" + str.charAt(0)).toUpperCase() + str.substring(1);
+  }
+
   // ---------------------------------------------------------------------------------
   // CONSOLE MESSAGES
   // ---------------------------------------------------------------------------------
