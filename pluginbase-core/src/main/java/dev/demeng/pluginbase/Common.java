@@ -154,7 +154,7 @@ public class Common {
         "&4" + ChatUtils.CONSOLE_LINE);
 
     for (final Player p : players) {
-      ChatUtils.tell(
+      ChatUtils.tellColored(
           p,
           "&6An internal error has occurred in "
               + Common.getName()
