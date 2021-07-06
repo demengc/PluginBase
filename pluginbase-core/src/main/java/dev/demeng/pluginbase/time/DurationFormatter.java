@@ -38,23 +38,23 @@ public enum DurationFormatter {
   LONG,
   CONCISE {
     @Override
-    protected String formatUnitPlural(ChronoUnit unit) {
+    protected String formatUnitPlural(final ChronoUnit unit) {
       return String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
     }
 
     @Override
-    protected String formatUnitSingular(ChronoUnit unit) {
+    protected String formatUnitSingular(final ChronoUnit unit) {
       return formatUnitPlural(unit);
     }
   },
   CONCISE_LOW_ACCURACY(3) {
     @Override
-    protected String formatUnitPlural(ChronoUnit unit) {
+    protected String formatUnitPlural(final ChronoUnit unit) {
       return String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
     }
 
     @Override
-    protected String formatUnitSingular(ChronoUnit unit) {
+    protected String formatUnitSingular(final ChronoUnit unit) {
       return formatUnitPlural(unit);
     }
   };
@@ -75,7 +75,7 @@ public enum DurationFormatter {
     this(Integer.MAX_VALUE);
   }
 
-  DurationFormatter(int accuracy) {
+  DurationFormatter(final int accuracy) {
     this.accuracy = accuracy;
   }
 
@@ -86,14 +86,14 @@ public enum DurationFormatter {
    * @return The formatted string
    */
   @NotNull
-  public String format(Duration duration) {
+  public String format(final Duration duration) {
 
     long seconds = duration.getSeconds();
     int outputSize = 0;
 
     final StringBuilder output = new StringBuilder();
 
-    for (Unit unit : this.units) {
+    for (final Unit unit : this.units) {
       final long n = seconds / unit.duration;
 
       if (n > 0) {
@@ -114,12 +114,12 @@ public enum DurationFormatter {
     return output.substring(1);
   }
 
-  protected String formatUnitPlural(ChronoUnit unit) {
+  protected String formatUnitPlural(final ChronoUnit unit) {
     return " " + unit.name().toLowerCase();
   }
 
-  protected String formatUnitSingular(ChronoUnit unit) {
-    String s = unit.name().toLowerCase();
+  protected String formatUnitSingular(final ChronoUnit unit) {
+    final String s = unit.name().toLowerCase();
     return " " + s.substring(0, s.length() - 1);
   }
 
@@ -129,13 +129,13 @@ public enum DurationFormatter {
     private final String stringPlural;
     private final String stringSingular;
 
-    Unit(ChronoUnit unit) {
+    Unit(final ChronoUnit unit) {
       this.duration = unit.getDuration().getSeconds();
       this.stringPlural = formatUnitPlural(unit);
       this.stringSingular = formatUnitSingular(unit);
     }
 
-    public String toString(long n) {
+    public String toString(final long n) {
       return n == 1 ? this.stringSingular : this.stringPlural;
     }
   }

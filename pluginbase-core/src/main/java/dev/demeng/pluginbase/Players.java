@@ -70,7 +70,7 @@ public final class Players {
    *
    * @param consumer The action to apply
    */
-  public static void forEach(@NotNull Consumer<Player> consumer) {
+  public static void forEach(@NotNull final Consumer<Player> consumer) {
     all().forEach(consumer);
   }
 
@@ -82,7 +82,7 @@ public final class Players {
    * @return A stream of players
    */
   @NotNull
-  public static Stream<Player> streamInRange(@NotNull Location center, double radius) {
+  public static Stream<Player> streamInRange(@NotNull final Location center, final double radius) {
     Objects.requireNonNull(center.getWorld(), "Provided location does not specify world");
     return center.getWorld().getNearbyEntities(center, radius, radius, radius).stream()
         .filter(e -> e.getType() == EntityType.PLAYER)
@@ -97,9 +97,9 @@ public final class Players {
    * @param consumer The action to apply
    */
   public static void forEachInRange(
-      @NotNull Location center,
-      double radius,
-      @NotNull Consumer<Player> consumer
+      @NotNull final Location center,
+      final double radius,
+      @NotNull final Consumer<Player> consumer
   ) {
     streamInRange(center, radius).forEach(consumer);
   }

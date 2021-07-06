@@ -70,7 +70,7 @@ public class DurationParser {
    * @throws IllegalArgumentException If parsing fails
    */
   @NotNull
-  public static Duration parse(String input) throws IllegalArgumentException {
+  public static Duration parse(final String input) throws IllegalArgumentException {
 
     final Matcher matcher = PATTERN.matcher(input);
 
@@ -82,8 +82,8 @@ public class DurationParser {
       Duration duration = Duration.ZERO;
 
       for (int i = 0; i < UNITS.length; i++) {
-        ChronoUnit unit = UNITS[i];
-        int g = i + 1;
+        final ChronoUnit unit = UNITS[i];
+        final int g = i + 1;
 
         if (matcher.group(g) != null && !matcher.group(g).isEmpty()) {
           final int n = Integer.parseInt(matcher.group(g));
@@ -107,10 +107,10 @@ public class DurationParser {
    * @return An optional duration
    */
   @NotNull
-  public static Optional<Duration> parseSafely(String input) {
+  public static Optional<Duration> parseSafely(final String input) {
     try {
       return Optional.of(parse(input));
-    } catch (IllegalArgumentException ignored) {
+    } catch (final IllegalArgumentException ignored) {
       return Optional.empty();
     }
   }
