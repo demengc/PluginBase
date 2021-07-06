@@ -25,6 +25,10 @@
 package dev.demeng.pluginbase;
 
 import dev.demeng.pluginbase.plugin.BasePlugin;
+import java.util.Objects;
+import lombok.Data;
+import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Settings for the plugin base. Most of these methods should be overriden to suite your needs.
@@ -39,6 +43,15 @@ public interface BaseSettings {
    */
   default String prefix() {
     return "&8[&b" + Common.getName() + "&8] &r";
+  }
+
+  /**
+   * The color scheme of the plugin.
+   *
+   * @return The color scheme
+   */
+  default ColorScheme colorScheme() {
+    return null;
   }
 
   // ---------------------------------------------------------------------------------
@@ -96,5 +109,41 @@ public interface BaseSettings {
    */
   default String notApplicable() {
     return "N/A";
+  }
+
+  /**
+   * A 3-color color scheme for messages or other text.
+   */
+  @Data
+  class ColorScheme {
+
+    /**
+     * The primarily color, used as &p.
+     */
+    @NotNull private final String primary;
+
+    /**
+     * The secondary color, used as &s.
+     */
+    @NotNull private final String secondary;
+
+    /**
+     * The tertiary color, used as &t.
+     */
+    @NotNull private final String tertiary;
+
+    /**
+     * Gets the color scheme from a configuration section.
+     *
+     * @param section The configuration section containing the color scheme
+     * @return The color scheme from the configuration section
+     */
+    @NotNull
+    public static ColorScheme fromConfig(@NotNull final ConfigurationSection section) {
+      return new ColorScheme(
+          Objects.requireNonNull(section.getString("primary"), "Primary color is null"),
+          Objects.requireNonNull(section.getString("secondary"), "Secondary color is null"),
+          Objects.requireNonNull(section.getString("tertiary"), "Tertiary color is null"));
+    }
   }
 }

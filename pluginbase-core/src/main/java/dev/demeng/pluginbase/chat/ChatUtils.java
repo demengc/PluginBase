@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.chat;
 
+import dev.demeng.pluginbase.BaseSettings.ColorScheme;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.util.Collections;
@@ -110,6 +111,13 @@ public class ChatUtils {
     }
 
     String message = String.join("\n", strings);
+
+    final ColorScheme scheme = BaseLoader.getPlugin().getBaseSettings().colorScheme();
+    if (scheme != null) {
+      message = message.replace("&p", scheme.getPrimary())
+          .replace("&s", scheme.getSecondary())
+          .replace("&t", scheme.getTertiary());
+    }
 
     if (Common.SPIGOT && Common.isServerVersionAtLeast(16)) {
 
