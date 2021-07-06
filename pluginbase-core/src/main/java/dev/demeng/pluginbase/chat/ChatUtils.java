@@ -457,7 +457,7 @@ public class ChatUtils {
         continue;
       }
 
-      line = ChatColor.translateAlternateColorCodes('&', line);
+      line = colorize(line);
 
       int messagePxSize = 0;
       boolean previousCode = false;
