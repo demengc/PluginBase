@@ -54,11 +54,11 @@ public interface DynamicPlaceholders {
    * @return The replaced list
    */
   @NotNull
-  default List<String> setPlaceholders(@NotNull List<String> list) {
+  default List<String> setPlaceholders(@NotNull final List<String> list) {
 
     final List<String> replaced = new ArrayList<>();
 
-    for (String str : list) {
+    for (final String str : list) {
       replaced.add(setPlaceholders(str));
     }
 
@@ -73,7 +73,7 @@ public interface DynamicPlaceholders {
    * @return The replaced item stack
    */
   @NotNull
-  default ItemStack setPlaceholders(@NotNull ItemStack stack) {
+  default ItemStack setPlaceholders(@NotNull final ItemStack stack) {
 
     final ItemStack replaced = new ItemStack(stack);
     final ItemMeta meta = replaced.getItemMeta();
