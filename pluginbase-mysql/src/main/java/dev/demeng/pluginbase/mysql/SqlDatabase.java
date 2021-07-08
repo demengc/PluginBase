@@ -243,7 +243,13 @@ public class SqlDatabase {
      * A standard MySQL database.
      */
     MYSQL(false, "com.mysql.jdbc.Driver",
-        "jdbc:mysql://{host}:{port}/{database}{additionalOptions}");
+        "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
+
+    /**
+     * A more efficient version of the {@link DriverType#MYSQL} driver.
+     */
+    MARIADB(false, "org.mariadb.jdbc.driver",
+        "jdbc:mariadb://{host}:{port}/{database}{additionalOptions}");
 
     @Getter private final boolean local;
     @NotNull @Getter private final String driverClass;
