@@ -181,27 +181,6 @@ public class SqlDatabase {
   }
 
   /**
-   * Executes a quick, less customizable query to a single column (for convenience sake).
-   * <b>WARNING: This does not work on H2 databases.</b>
-   *
-   * @param sql      The SQL statement
-   * @param preparer The preparer for the statement- this is where you should set your placeholders
-   * @param column   The index of the column to query
-   * @param type     The object type of the column
-   * @param <R>      The return value of the handler
-   * @return An optional containing the query result or null
-   * @throws SQLException If the statement could not be executed
-   * @see #query(String, SqlConsumer, SqlFunction)
-   */
-  public <R> Optional<R> queryColumn(
-      @NotNull @Language("SQL") final String sql,
-      @Nullable final SqlConsumer<PreparedStatement> preparer,
-      final int column,
-      @NotNull final Class<R> type) throws SQLException {
-    return query(sql, preparer, rs -> rs.next() ? rs.getObject(column, type) : null);
-  }
-
-  /**
    * Executes a batch statement (multiple statements in 1 connection).
    *
    * @param builder The batch builder
