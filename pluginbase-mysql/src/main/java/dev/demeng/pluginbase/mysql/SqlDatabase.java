@@ -182,6 +182,7 @@ public class SqlDatabase {
 
   /**
    * Executes a quick, less customizable query to a single column (for convenience sake).
+   * <b>WARNING: This does not work on H2 databases.</b>
    *
    * @param sql      The SQL statement
    * @param preparer The preparer for the statement- this is where you should set your placeholders
