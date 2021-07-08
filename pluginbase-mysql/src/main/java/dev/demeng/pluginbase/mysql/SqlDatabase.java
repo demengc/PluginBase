@@ -139,12 +139,15 @@ public class SqlDatabase {
    */
   public final void execute(
       final @NotNull @Language("SQL") String sql,
-      final @NotNull SqlConsumer<PreparedStatement> preparer) throws SQLException {
+      final @Nullable SqlConsumer<PreparedStatement> preparer) throws SQLException {
 
     try (final Connection connection = getConnection();
         final PreparedStatement statement = connection.prepareStatement(sql)) {
 
-      preparer.accept(statement);
+      if (preparer != null) {
+        preparer.accept(statement);
+      }
+
       statement.execute();
     }
   }
@@ -161,17 +164,40 @@ public class SqlDatabase {
    */
   public <R> Optional<R> query(
       @NotNull @Language("SQL") final String sql,
-      @NotNull final SqlConsumer<PreparedStatement> preparer,
+      @Nullable final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) throws SQLException {
 
     try (final Connection connection = getConnection();
         final PreparedStatement statement = connection.prepareStatement(sql)) {
-      preparer.accept(statement);
+
+      if (preparer != null) {
+        preparer.accept(statement);
+      }
 
       try (final ResultSet rs = statement.executeQuery()) {
         return Optional.ofNullable(handler.apply(rs));
       }
     }
+  }
+
+  /**
+   * Executes a quick, less customizable query to a single column (for convenience sake).
+   *
+   * @param sql      The SQL statement
+   * @param preparer The preparer for the statement- this is where you should set your placeholders
+   * @param column   The index of the column to query
+   * @param type     The object type of the column
+   * @param <R>      The return value of the handler
+   * @return An optional containing the query result or null
+   * @throws SQLException If the statement could not be executed
+   * @see #query(String, SqlConsumer, SqlFunction)
+   */
+  public <R> Optional<R> queryColumn(
+      @NotNull @Language("SQL") final String sql,
+      @Nullable final SqlConsumer<PreparedStatement> preparer,
+      final int column,
+      @NotNull final Class<R> type) throws SQLException {
+    return query(sql, preparer, rs -> rs.next() ? rs.getObject(column, type) : null);
   }
 
   /**
