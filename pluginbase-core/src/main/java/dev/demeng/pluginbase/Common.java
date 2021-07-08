@@ -121,6 +121,29 @@ public class Common {
   }
 
   /**
+   * Returns the nullable value if not null, or throws a runtime exception with error if it is
+   * null.
+   *
+   * @param nullable    The nullable value
+   * @param description The error description if the value is null
+   * @param disable     If the plugin should disable if the value is null
+   * @return The nullable if not null
+   */
+  @NotNull
+  public static <T> T getOrError(
+      @Nullable final T nullable,
+      @NotNull final String description,
+      final boolean disable) {
+
+    if (nullable == null) {
+      error(null, description, disable);
+      throw new RuntimeException(description);
+    }
+
+    return nullable;
+  }
+
+  /**
    * Checks if the specified command sender has the permission node. If the permission node is null,
    * empty, or equal to "none", the method will return true.
    *
