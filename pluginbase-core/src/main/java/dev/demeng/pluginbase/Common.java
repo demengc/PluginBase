@@ -26,7 +26,7 @@ package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
-import dev.demeng.pluginbase.exceptions.BaseException;
+import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseLoader;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -137,8 +137,7 @@ public class Common {
       final boolean disable) {
 
     if (nullable == null) {
-      error(null, description, disable);
-      throw new BaseException(description);
+      throw new PluginErrorException(description, disable);
     }
 
     return nullable;
