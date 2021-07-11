@@ -181,6 +181,25 @@ public class SqlDatabase {
   }
 
   /**
+   * Executes a quick query to the SQL database. This automatically checks if the result set is
+   * empty and will return null by default if the handler cannot return a proper value.
+   *
+   * @param sql      The SQL statement
+   * @param preparer The preparer for the statement- this is where you should set your placeholders
+   * @param handler  The handler for the result set- determines what should be done with the data
+   * @param <R>      The return value of the handler
+   * @return The return value of the handler
+   * @throws SQLException If the statement could not be executed
+   */
+  @Nullable
+  public <R> R quickQuery(
+      @NotNull @Language("SQL") final String sql,
+      @Nullable final SqlConsumer<PreparedStatement> preparer,
+      @NotNull final SqlFunction<ResultSet, R> handler) throws SQLException {
+    return query(sql, preparer, rs -> rs.next() ? handler.apply(rs) : null).orElse(null);
+  }
+
+  /**
    * Executes a batch statement (multiple statements in 1 connection).
    *
    * @param builder The batch builder
