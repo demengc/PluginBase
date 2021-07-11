@@ -35,11 +35,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PluginErrorException extends RuntimeException {
 
-  /**
-   * Creates a new exception that will report the plugin error.
-   *
-   * @see Common#error(Throwable, String, boolean, Player...)
-   */
   public PluginErrorException(
       @NotNull final String description,
       final boolean disable,
