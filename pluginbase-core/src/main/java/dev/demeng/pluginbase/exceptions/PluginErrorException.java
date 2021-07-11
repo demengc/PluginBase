@@ -25,6 +25,7 @@
 package dev.demeng.pluginbase.exceptions;
 
 import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.TaskUtils;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +45,6 @@ public class PluginErrorException extends RuntimeException {
       final boolean disable,
       final Player... players) {
     super();
-    Common.error(this, description, disable, players);
+    TaskUtils.delay(runnable -> Common.error(null, description, disable, players), 2L);
   }
 }
