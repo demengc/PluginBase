@@ -55,6 +55,28 @@ public interface BaseSettings {
   }
 
   // ---------------------------------------------------------------------------------
+  // TIME FORMATS
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * The format for dates and times combined.
+   *
+   * @return The date and time format
+   */
+  default String dateTimeFormat() {
+    return "MMMM dd yyyy HH:mm z";
+  }
+
+  /**
+   * The format for dates.
+   *
+   * @return The date format
+   */
+  default String dateFormat() {
+    return "MMMM dd yyyy";
+  }
+
+  // ---------------------------------------------------------------------------------
   // COMMAND MESSAGES
   // ---------------------------------------------------------------------------------
 
