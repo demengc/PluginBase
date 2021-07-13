@@ -351,7 +351,8 @@ public final class CommandHandler extends Command {
       subCmd.remove(DEFAULT_NAME);
 
       for (final Map.Entry<String, CommandData> entry : commands.entrySet()) {
-        if (!Common.hasPermission(sender, entry.getValue().getPermission())) {
+        if (entry.getValue().isAlias()
+            || !Common.hasPermission(sender, entry.getValue().getPermission())) {
           subCmd.remove(entry.getKey());
         }
       }
@@ -598,6 +599,7 @@ public final class CommandHandler extends Command {
 
       clone.setName(alias.toLowerCase());
       clone.setDef(false);
+      clone.setAlias(true);
       commands.put(alias.toLowerCase(), clone);
     }
   }

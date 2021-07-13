@@ -99,6 +99,11 @@ public final class CommandData {
   @Nullable @Getter @Setter private String description;
 
   /**
+   * If this command data belongs to an alias of another command.
+   */
+  @Getter @Setter private boolean alias;
+
+  /**
    * The usage of the command.
    */
   @Nullable @Getter @Setter private String usage;
@@ -132,6 +137,6 @@ public final class CommandData {
    */
   public CommandData copy() {
     return new CommandData(commandBase, arguments, argumentNames, completions, name, method, def,
-        completionMethod, senderClass, description, usage, permission, optionalArgument);
+        completionMethod, senderClass, description, alias, usage, permission, optionalArgument);
   }
 }
