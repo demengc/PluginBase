@@ -385,7 +385,7 @@ public final class CommandHandler extends Command {
       Collections.sort(commandNames);
 
       if (commandNames.isEmpty()) {
-        return Collections.singletonList("");
+        return Collections.emptyList();
       }
 
       return commandNames;
@@ -394,13 +394,13 @@ public final class CommandHandler extends Command {
     final String subCommandArg = args[0];
 
     if (!commands.containsKey(subCommandArg)) {
-      return Collections.singletonList("");
+      return Collections.emptyList();
     }
 
     final CommandData data = commands.get(subCommandArg);
 
     if (!Common.hasPermission(sender, data.getPermission())) {
-      return Collections.singletonList("");
+      return Collections.emptyList();
     }
 
     final Method completionMethod = data.getCompletionMethod();
@@ -415,7 +415,7 @@ public final class CommandHandler extends Command {
     }
 
     if (!data.getCompletions().containsKey(args.length - 1)) {
-      return Collections.singletonList("");
+      return Collections.emptyList();
     }
 
     String id = data.getCompletions().get(args.length - 1);
