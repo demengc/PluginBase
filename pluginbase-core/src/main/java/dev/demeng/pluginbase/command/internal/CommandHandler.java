@@ -351,8 +351,8 @@ public final class CommandHandler extends Command {
       subCmd.remove(DEFAULT_NAME);
 
       for (final Map.Entry<String, CommandData> entry : commands.entrySet()) {
-        if (entry.getValue().isAlias()
-            || !Common.hasPermission(sender, entry.getValue().getPermission())) {
+        final CommandData value = entry.getValue();
+        if (value.isAlias() || !Common.hasPermission(sender, value.getPermission())) {
           subCmd.remove(entry.getKey());
         }
       }
