@@ -612,6 +612,10 @@ public final class CommandHandler extends Command {
       sb.append(" ").append(data.getName());
     }
 
+    for (String arg : data.getArgumentNames()) {
+      sb.append(" {").append(arg).append("}");
+    }
+
     data.setUsage(sb.toString());
   }
 
