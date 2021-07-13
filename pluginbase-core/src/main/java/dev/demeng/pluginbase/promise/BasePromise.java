@@ -27,8 +27,8 @@
 package dev.demeng.pluginbase.promise;
 
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.delegate.Delegate;
 import dev.demeng.pluginbase.TaskUtils;
+import dev.demeng.pluginbase.delegate.Delegate;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

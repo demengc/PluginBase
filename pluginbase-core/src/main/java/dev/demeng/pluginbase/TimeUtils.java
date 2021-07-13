@@ -73,7 +73,7 @@ public class TimeUtils {
    * @param time The time to format
    * @return The formatted date and time
    */
-  public static String formatDateTime(long time) {
+  public static String formatDateTime(final long time) {
     return DATE_TIME_FORMAT.get().format(time);
   }
 
@@ -83,7 +83,7 @@ public class TimeUtils {
    * @param time The time to format
    * @return The formatted date
    */
-  public static String formatDate(long time) {
+  public static String formatDate(final long time) {
     return DATE_FORMAT.get().format(time);
   }
 
@@ -104,7 +104,7 @@ public class TimeUtils {
    * @throws IllegalArgumentException If the duration cannot be parsed
    * @author Matej Pacan (Mineacademy.org)
    */
-  public static long parseDuration(String strDuration) {
+  public static long parseDuration(final String strDuration) {
 
     final Matcher matcher = UNITS_PATTERN.matcher(strDuration);
 
@@ -185,7 +185,7 @@ public class TimeUtils {
    * @param duration  The duration to format
    * @return The formatted duration
    */
-  public static String formatDuration(DurationFormatter formatter, long duration) {
+  public static String formatDuration(final DurationFormatter formatter, final long duration) {
     return formatter.format(Duration.ofMillis(duration));
   }
 
@@ -195,7 +195,7 @@ public class TimeUtils {
    * @param timestamp The long timestamp
    * @return The equivalent timestamp, as one used by SQL
    */
-  public static String toSqlTimestamp(long timestamp) {
+  public static String toSqlTimestamp(final long timestamp) {
     return new Timestamp(new Date(timestamp).getTime()).toString();
   }
 
@@ -205,11 +205,11 @@ public class TimeUtils {
    * @param timestamp The SQL timestamp
    * @return The equivalent timestamp, as a long
    */
-  public static long fromSqlTimestamp(@NotNull String timestamp) {
+  public static long fromSqlTimestamp(@NotNull final String timestamp) {
     return Timestamp.valueOf(timestamp).getTime();
   }
 
-  private static void checkLimit(String unit, long value, int limit) {
+  private static void checkLimit(final String unit, final long value, final int limit) {
     if (value > limit) {
       throw new IllegalArgumentException(
           "Unit " + unit + " is out of bounds: " + value + " exceeds " + limit);
@@ -231,12 +231,12 @@ public class TimeUtils {
      */
     CONCISE {
       @Override
-      protected String formatUnitPlural(ChronoUnit unit) {
+      protected String formatUnitPlural(final ChronoUnit unit) {
         return String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
       }
 
       @Override
-      protected String formatUnitSingular(ChronoUnit unit) {
+      protected String formatUnitSingular(final ChronoUnit unit) {
         return formatUnitPlural(unit);
       }
     },
@@ -246,12 +246,12 @@ public class TimeUtils {
      */
     CONCISE_LOW_ACCURACY(3) {
       @Override
-      protected String formatUnitPlural(ChronoUnit unit) {
+      protected String formatUnitPlural(final ChronoUnit unit) {
         return String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
       }
 
       @Override
-      protected String formatUnitSingular(ChronoUnit unit) {
+      protected String formatUnitSingular(final ChronoUnit unit) {
         return formatUnitPlural(unit);
       }
     };
@@ -272,7 +272,7 @@ public class TimeUtils {
       this(Integer.MAX_VALUE);
     }
 
-    DurationFormatter(int accuracy) {
+    DurationFormatter(final int accuracy) {
       this.accuracy = accuracy;
     }
 
@@ -282,13 +282,13 @@ public class TimeUtils {
      * @param duration The duration
      * @return The formatted string
      */
-    public String format(Duration duration) {
+    public String format(final Duration duration) {
       long seconds = duration.getSeconds();
-      StringBuilder output = new StringBuilder();
+      final StringBuilder output = new StringBuilder();
       int outputSize = 0;
 
-      for (Unit unit : this.units) {
-        long n = seconds / unit.duration;
+      for (final Unit unit : this.units) {
+        final long n = seconds / unit.duration;
         if (n > 0) {
           seconds -= unit.duration * n;
           output.append(' ').append(n).append(unit.toString(n));
@@ -305,13 +305,13 @@ public class TimeUtils {
       return output.substring(1);
     }
 
-    protected String formatUnitPlural(ChronoUnit unit) {
+    protected String formatUnitPlural(final ChronoUnit unit) {
       return " " + unit.name().toLowerCase();
     }
 
-    protected String formatUnitSingular(ChronoUnit unit) {
-      String s = unit.name().toLowerCase();
-      return " " + s.substring(0, s.length() - 1);
+    protected String formatUnitSingular(final ChronoUnit unit) {
+      final String str = unit.name().toLowerCase();
+      return " " + str.substring(0, str.length() - 1);
     }
 
     private final class Unit {
@@ -320,13 +320,13 @@ public class TimeUtils {
       private final String stringPlural;
       private final String stringSingular;
 
-      Unit(ChronoUnit unit) {
+      Unit(final ChronoUnit unit) {
         this.duration = unit.getDuration().getSeconds();
         this.stringPlural = formatUnitPlural(unit);
         this.stringSingular = formatUnitSingular(unit);
       }
 
-      public String toString(long n) {
+      public String toString(final long n) {
         return n == 1 ? this.stringSingular : this.stringPlural;
       }
     }

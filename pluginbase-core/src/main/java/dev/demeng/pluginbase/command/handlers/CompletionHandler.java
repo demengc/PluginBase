@@ -102,21 +102,21 @@ public final class CompletionHandler {
     register(
         "#range",
         input -> {
-          final String s = String.valueOf(input);
+          final String str = String.valueOf(input);
 
-          if (s.contains("class")) {
+          if (str.contains("class")) {
             return IntStream.rangeClosed(1, 10)
                 .mapToObj(Integer::toString)
                 .collect(Collectors.toList());
           }
 
-          if (!s.contains("-")) {
-            return IntStream.rangeClosed(1, Integer.parseInt(s))
+          if (!str.contains("-")) {
+            return IntStream.rangeClosed(1, Integer.parseInt(str))
                 .mapToObj(Integer::toString)
                 .collect(Collectors.toList());
           }
 
-          final String[] minMax = s.split("-");
+          final String[] minMax = str.split("-");
           final int[] range =
               IntStream.rangeClosed(Integer.parseInt(minMax[0]), Integer.parseInt(minMax[1]))
                   .toArray();
