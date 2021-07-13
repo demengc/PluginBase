@@ -414,7 +414,7 @@ public class ChatUtils {
    * @param sender The command sender that will receive the message
    * @param lines  The lines to send
    */
-  public static void tellColored(@NotNull final CommandSender sender, final String... lines) {
+  public static void coloredTell(@NotNull final CommandSender sender, final String... lines) {
 
     if (lines == null) {
       return;

@@ -184,7 +184,7 @@ public class Common {
         "&4" + ChatUtils.CONSOLE_LINE);
 
     for (final Player p : players) {
-      ChatUtils.tellColored(p, PLAYERS_ERROR_MESSAGE);
+      ChatUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE);
     }
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseLoader.getPlugin())) {
