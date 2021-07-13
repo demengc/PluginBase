@@ -97,6 +97,8 @@ public final class CompletionHandler {
           return values;
         });
 
+    register("#list", input -> Arrays.asList(String.valueOf(input).split("\\|")));
+
     register(
         "#range",
         input -> {
