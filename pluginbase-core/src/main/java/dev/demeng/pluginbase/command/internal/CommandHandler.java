@@ -612,8 +612,8 @@ public final class CommandHandler extends Command {
       sb.append(" ").append(data.getName());
     }
 
-    for (String arg : data.getArgumentNames()) {
-      sb.append(" {").append(arg).append("}");
+    if (!data.getArguments().isEmpty()) {
+      sb.append(data.isOptionalArgument() ? " [...]" : " <...>");
     }
 
     data.setUsage(sb.toString());
