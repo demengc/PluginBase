@@ -137,7 +137,6 @@ public final class CommandHandler extends Command {
       checkParameters(method, data);
       checkDefaultAnnotation(method, data);
       checkDescriptionAnnotation(method, data);
-      checkUsageAnnotation(method, data);
       checkPermissionAnnotation(method, data);
       checkOptionalAnnotation(method, data);
       checkParametersCompletionAnnotation(method, data);
@@ -155,6 +154,7 @@ public final class CommandHandler extends Command {
 
       checkCompletionMethodAnnotation(command, data);
       checkAliasesAnnotation(method, data);
+      checkUsageAnnotation(method, data);
     }
   }
 
@@ -487,12 +487,6 @@ public final class CommandHandler extends Command {
     }
   }
 
-  private void checkUsageAnnotation(final Method method, final CommandData data) {
-    if (method.isAnnotationPresent(Usage.class)) {
-      data.setUsage(method.getAnnotation(Usage.class).value());
-    }
-  }
-
   private void checkPermissionAnnotation(final Method method, final CommandData data) {
     if (method.isAnnotationPresent(Permission.class)) {
       data.setPermission(method.getAnnotation(Permission.class).value());
@@ -602,6 +596,23 @@ public final class CommandHandler extends Command {
       clone.setAlias(true);
       commands.put(alias.toLowerCase(), clone);
     }
+  }
+
+  private void checkUsageAnnotation(final Method method, final CommandData data) {
+
+    if (method.isAnnotationPresent(Usage.class)) {
+      data.setUsage(method.getAnnotation(Usage.class).value());
+      return;
+    }
+
+    final StringBuilder sb = new StringBuilder("/");
+    sb.append(getName());
+
+    if (data.getName() != null && !data.getName().equals(DEFAULT_NAME)) {
+      sb.append(" ").append(data.getName());
+    }
+
+    data.setUsage(sb.toString());
   }
 
   private boolean checkSender(final CommandSender sender, final CommandData data) {
