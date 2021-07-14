@@ -30,6 +30,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a series of placeholders for a message.
@@ -77,7 +78,11 @@ public class Placeholders {
    * @return The replaced string
    */
   @NotNull
-  public String set(@NotNull String str) {
+  public String set(@Nullable String str) {
+
+    if (str == null) {
+      return "";
+    }
 
     String replaced = str;
 
