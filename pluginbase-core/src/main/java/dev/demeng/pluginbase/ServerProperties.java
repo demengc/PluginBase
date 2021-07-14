@@ -28,54 +28,53 @@ import dev.demeng.pluginbase.exceptions.BaseException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility for getting information from server.properties.
- *
- * <p>Work in progress: Currently, this is only used by the library to get the server's main world.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ServerProperties {
 
+  private static final Map<String, String> cache = new HashMap<>();
   private static File propertiesFile;
-  private static String mainWorld;
 
   /**
-   * Gets the name of the server's main world.
+   * Gets a property from server.properties.
    *
-   * @return The name of the server's main world from server.properties, or the "first" world if
-   * unable to read property
+   * @param key The property key
+   * @return The properly value, or null if failed to retrieve
    */
-  @NotNull
-  public static String getMainWorld() {
+  public static String getProperty(String key) {
 
-    if (mainWorld != null) {
-      return mainWorld;
+    if (cache.containsKey(key)) {
+      return cache.get(key);
     }
-
-    try {
-      mainWorld = getProperty("level-name");
-      return mainWorld;
-
-    } catch (IOException ex) {
-      Common.error(ex, "Failed to find main world.", false);
-      return Bukkit.getWorlds().get(0).getName();
-    }
-  }
-
-  private static String getProperty(String key) throws IOException {
 
     final Properties properties = new Properties();
 
     try (final FileInputStream in = new FileInputStream(getPropertiesFile())) {
       properties.load(in);
-      return properties.getProperty(key);
+
+      final String value = properties.getProperty(key);
+      cache.put(key, value);
+      return value;
+
+    } catch (IOException ex) {
+      Common.error(ex, "Failed to get server property: " + key, false);
+      return null;
     }
+  }
+
+  /**
+   * Clears the properties cache.
+   */
+  public static void clearCache() {
+    cache.clear();
   }
 
   private static File getPropertiesFile() {

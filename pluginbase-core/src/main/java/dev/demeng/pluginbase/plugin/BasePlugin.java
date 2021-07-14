@@ -27,6 +27,7 @@ package dev.demeng.pluginbase.plugin;
 import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Registerer;
+import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.menu.MenuManager;
@@ -94,6 +95,7 @@ public abstract class BasePlugin extends JavaPlugin {
     disable();
     commandManager.unregisterAll();
 
+    ServerProperties.clearCache();
     BaseLoader.setPlugin(null);
   }
 
