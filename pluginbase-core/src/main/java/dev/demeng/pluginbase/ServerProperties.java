@@ -43,7 +43,7 @@ public class ServerProperties {
   private static String mainWorld;
 
   /**
-   * Gets the name of the server's main world. You should cache this value since it
+   * Gets the name of the server's main world.
    *
    * @return The name of the server's main world from server.properties, or the "first" world if
    * unable to read property
