@@ -29,6 +29,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>Work in progress: Currently, this is only used by the library to get the server's main world.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ServerProperties {
 
   private static File propertiesFile;
