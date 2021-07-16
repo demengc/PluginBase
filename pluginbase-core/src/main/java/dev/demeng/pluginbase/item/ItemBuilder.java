@@ -213,7 +213,7 @@ public class ItemBuilder {
    * @param lore The lore line(s), colorized internally
    * @return this
    */
-  public ItemBuilder lore(final String... lore) {
+  public ItemBuilder lore(@NotNull final String... lore) {
     return lore(Arrays.asList(lore));
   }
 
@@ -223,7 +223,7 @@ public class ItemBuilder {
    * @param line The lore line to add, colorized internally
    * @return this
    */
-  public ItemBuilder addLore(final String line) {
+  public ItemBuilder addLore(@NotNull final String line) {
 
     updateMeta(meta -> {
       final List<String> lore = new ArrayList<>(
@@ -261,7 +261,7 @@ public class ItemBuilder {
    * @param flags The flags to set
    * @return this
    */
-  public ItemBuilder flags(final ItemFlag... flags) {
+  public ItemBuilder flags(@NotNull final ItemFlag... flags) {
     updateMeta(meta -> meta.addItemFlags(flags));
     return this;
   }
@@ -318,7 +318,7 @@ public class ItemBuilder {
    * @param value The value of the tag
    * @return this
    */
-  public ItemBuilder nbtTag(final String key, final Object value) {
+  public ItemBuilder nbtTag(@NotNull final String key, @Nullable final Object value) {
     NBTEditor.set(stack, value, key);
     return this;
   }
@@ -333,7 +333,7 @@ public class ItemBuilder {
    * @param owner The username of the skull owner
    * @return this
    */
-  public ItemBuilder skullOwner(final String owner) {
+  public ItemBuilder skullOwner(@NotNull final String owner) {
 
     try {
       final SkullMeta meta = (SkullMeta) stack.getItemMeta();
@@ -352,7 +352,7 @@ public class ItemBuilder {
    * @param owner The UUId of the skull owner
    * @return this
    */
-  public ItemBuilder skullOwner(final UUID owner) {
+  public ItemBuilder skullOwner(@NotNull final UUID owner) {
 
     try {
       final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
@@ -377,7 +377,7 @@ public class ItemBuilder {
    * @param color The color to change the armor to
    * @return this
    */
-  public ItemBuilder armorColor(final Color color) {
+  public ItemBuilder armorColor(@Nullable final Color color) {
 
     try {
       final LeatherArmorMeta meta = Objects.requireNonNull((LeatherArmorMeta) stack.getItemMeta());
