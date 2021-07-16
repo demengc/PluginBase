@@ -494,8 +494,10 @@ public class ItemBuilder {
    * @see #getMaterial(String)
    */
   @NotNull
-  public static ItemStack getMaterialOrDef(@NotNull final String strMaterial,
-      @NotNull final ItemStack def) {
+  public static ItemStack getMaterialOrDef(
+      @NotNull final String strMaterial,
+      @NotNull final ItemStack def
+  ) {
 
     final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
 
