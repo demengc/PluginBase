@@ -266,16 +266,16 @@ public final class CommandHandler extends Command {
 
     } catch (final Exception ex) {
 
-      if (ex instanceof GenericMessageException) {
-        ChatUtils.tell(sender, ((GenericMessageException) ex).getGenericMessage()
-            .replace(PERMISSION_PLACEHOLDER,
-                Common.getOrDefault(data.getPermission(), settings.notApplicable()))
-            .replace(USAGE_PLACEHOLDER,
-                Common.getOrDefault(data.getUsage(), settings.notApplicable())));
+      if (!(ex.getCause() instanceof GenericMessageException)) {
+        Common.error(ex, "Failed to execute command.", false, sender);
         return;
       }
 
-      Common.error(ex, "Failed to execute command.", false, sender);
+      ChatUtils.tell(sender, ((GenericMessageException) ex.getCause()).getGenericMessage()
+          .replace(PERMISSION_PLACEHOLDER,
+              Common.getOrDefault(data.getPermission(), settings.notApplicable()))
+          .replace(USAGE_PLACEHOLDER,
+              Common.getOrDefault(data.getUsage(), settings.notApplicable())));
     }
   }
 
