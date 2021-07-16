@@ -28,6 +28,7 @@ import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseLoader;
+import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
@@ -183,7 +184,7 @@ public class Common {
    */
   public static void error(
       @Nullable final Throwable throwable, @NotNull final String description, final boolean disable,
-      @NotNull final Player... players) {
+      @NotNull final CommandSender... players) {
 
     if (throwable != null) {
       throwable.printStackTrace();
@@ -196,9 +197,8 @@ public class Common {
         "&cDescription: &6" + description,
         "&4" + ChatUtils.CONSOLE_LINE);
 
-    for (final Player p : players) {
-      ChatUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE);
-    }
+    Arrays.stream(players).filter(Player.class::isInstance)
+        .forEach(p -> ChatUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE));
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseLoader.getPlugin())) {
       Bukkit.getPluginManager().disablePlugin(BaseLoader.getPlugin());
