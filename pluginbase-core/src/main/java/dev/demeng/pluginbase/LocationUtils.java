@@ -32,7 +32,7 @@ import org.bukkit.Location;
  * Utilities for {@link org.bukkit.Location}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class LocationUtils {
+public final class LocationUtils {
 
   /**
    * Rounds a location to the center of a block.

@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents a series of placeholders for a message.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Placeholders {
+public final class Placeholders {
 
   /**
    * A map of all the placeholders, with the key being the string to replace and the value being the

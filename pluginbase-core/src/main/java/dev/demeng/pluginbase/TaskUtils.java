@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
  * Utilities for quickly creating various Bukkit tasks inside your plugin.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TaskUtils {
+public final class TaskUtils {
 
   /**
    * Runs the task once on the primary thread, without delay nor repetition.

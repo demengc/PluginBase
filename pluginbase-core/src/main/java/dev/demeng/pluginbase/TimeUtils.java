@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
  * Utilities for time/duration parsing and formatting.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TimeUtils {
+public final class TimeUtils {
 
   /**
    * The date format used for dates and times combined.

@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Registerer {
+public final class Registerer {
 
   /**
    * Registers a listener.

@@ -38,7 +38,7 @@ import lombok.NoArgsConstructor;
  * Utility for getting information from server.properties.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ServerProperties {
+public final class ServerProperties {
 
   private static final Map<String, String> cache = new HashMap<>();
   private static File propertiesFile;

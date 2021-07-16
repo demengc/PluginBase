@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Common {
+public final class Common {
 
   /**
    * If the server software the plugin is running on is Spigot or a fork of Spigot. Used internally

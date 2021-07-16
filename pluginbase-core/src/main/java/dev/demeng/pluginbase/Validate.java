@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Validate {
+public final class Validate {
 
   // ---------------------------------------------------------------------------------
   // GENERAL

@@ -52,7 +52,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ChatUtils {
+public final class ChatUtils {
 
   /**
    * The prefix to look for in messages to determine if the advanced parser should be used. Any

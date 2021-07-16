@@ -38,7 +38,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SoundUtils {
+public final class SoundUtils {
 
   /**
    * The prefix that the util will search for, used to determine if the plugin should play a vanilla
