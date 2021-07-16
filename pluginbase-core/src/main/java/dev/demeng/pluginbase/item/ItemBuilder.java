@@ -284,15 +284,28 @@ public class ItemBuilder {
   }
 
   /**
-   * Gives the item a durability enchantment to make it appear glowing, then adds the hide
-   * enchantment item flag. Note that this will also hide all of your other enchantments in the
-   * lore! This option should only be used for GUI aesthetic purposes.
+   * Sets if the item should be given a durability enchantment to make it appear glowing and add a
+   * hide enchantment item flag. Setting this to true will also hide all of your other enchantments
+   * in the lore. This should only be enabled for GUI aesthetic purposes.
    *
+   * <p><b>Note:</b> When the glow is applied, it should be permanent. It is not recommended that
+   * you call this method again to remove the glow since it can effect enchantments and item flags
+   * from other sources.
+   *
+   * @param glow If the item should have a glowing effect applied
    * @return this
    */
-  public ItemBuilder glow() {
-    enchant(Enchantment.DURABILITY, 1);
-    flags(ItemFlag.HIDE_ENCHANTS);
+  public ItemBuilder glow(final boolean glow) {
+
+    if (glow) {
+      enchant(Enchantment.DURABILITY, 1);
+      flags(ItemFlag.HIDE_ENCHANTS);
+
+    } else {
+      stack.removeEnchantment(Enchantment.DURABILITY);
+      updateMeta(meta -> meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS));
+    }
+
     return this;
   }
 
@@ -509,7 +522,7 @@ public class ItemBuilder {
         .lore(section.getStringList("lore"));
 
     if (section.getBoolean("glow")) {
-      builder.glow();
+      builder.glow(true);
     }
 
     return builder.get();
