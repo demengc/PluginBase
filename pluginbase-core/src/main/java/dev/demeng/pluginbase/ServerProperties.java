@@ -49,7 +49,7 @@ public class ServerProperties {
    * @param key The property key
    * @return The properly value, or null if failed to retrieve
    */
-  public static String getProperty(String key) {
+  public static String getProperty(final String key) {
 
     if (cache.containsKey(key)) {
       return cache.get(key);
@@ -64,7 +64,7 @@ public class ServerProperties {
       cache.put(key, value);
       return value;
 
-    } catch (IOException ex) {
+    } catch (final IOException ex) {
       Common.error(ex, "Failed to get server property: " + key, false);
       return null;
     }

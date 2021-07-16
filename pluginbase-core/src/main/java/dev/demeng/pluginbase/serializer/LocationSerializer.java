@@ -41,8 +41,11 @@ import org.jetbrains.annotations.NotNull;
 public class LocationSerializer implements YamlSerializable<Location> {
 
   @Override
-  public void serialize(@NotNull Location obj, @NotNull YamlConfig configFile, @NotNull String path)
-      throws IOException {
+  public void serialize(
+      @NotNull final Location obj,
+      @NotNull final YamlConfig configFile,
+      @NotNull final String path
+  ) throws IOException {
 
     if (obj.getWorld() != null) {
       configFile.getConfig().set(path + ".world", obj.getWorld().getName());
@@ -56,9 +59,9 @@ public class LocationSerializer implements YamlSerializable<Location> {
    * default world from server.properties.
    */
   public void serializeNoWorld(
-      @NotNull Location obj,
-      @NotNull YamlConfig configFile,
-      @NotNull String path
+      @NotNull final Location obj,
+      @NotNull final YamlConfig configFile,
+      @NotNull final String path
   ) throws IOException {
 
     configFile.getConfig().set(path + ".x", obj.getX());
@@ -75,9 +78,9 @@ public class LocationSerializer implements YamlSerializable<Location> {
    * 0.
    */
   public void serializeNoRotation(
-      @NotNull Location obj,
-      @NotNull YamlConfig configFile,
-      @NotNull String path
+      @NotNull final Location obj,
+      @NotNull final YamlConfig configFile,
+      @NotNull final String path
   ) throws IOException {
 
     if (obj.getWorld() != null) {
@@ -92,7 +95,7 @@ public class LocationSerializer implements YamlSerializable<Location> {
   }
 
   @Override
-  public Location deserialize(@NotNull ConfigurationSection section) {
+  public Location deserialize(@NotNull final ConfigurationSection section) {
 
     String worldName = section.getString("world");
 

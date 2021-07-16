@@ -38,9 +38,9 @@ public class VectorSerializer implements YamlSerializable<Vector> {
 
   @Override
   public void serialize(
-      @NotNull Vector obj,
-      @NotNull YamlConfig configFile,
-      @NotNull String path
+      @NotNull final Vector obj,
+      @NotNull final YamlConfig configFile,
+      @NotNull final String path
   ) throws IOException {
 
     configFile.getConfig().set(path + ".x", obj.getX());
@@ -51,7 +51,7 @@ public class VectorSerializer implements YamlSerializable<Vector> {
   }
 
   @Override
-  public Vector deserialize(@NotNull ConfigurationSection section) {
+  public Vector deserialize(@NotNull final ConfigurationSection section) {
     return new Vector(
         section.getDouble("x"),
         section.getDouble("y"),

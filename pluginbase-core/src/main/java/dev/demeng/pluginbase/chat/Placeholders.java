@@ -52,7 +52,7 @@ public class Placeholders {
    * @return The placeholders object
    */
   @NotNull
-  public static Placeholders of(@NotNull String toReplace, @NotNull String replaceWith) {
+  public static Placeholders of(@NotNull final String toReplace, @NotNull final String replaceWith) {
     final Placeholders obj = new Placeholders();
     obj.getReplacements().put(toReplace, replaceWith);
     return obj;
@@ -66,7 +66,7 @@ public class Placeholders {
    * @return this
    */
   @NotNull
-  public Placeholders add(@NotNull String toReplace, @NotNull String replaceWith) {
+  public Placeholders add(@NotNull final String toReplace, @NotNull final String replaceWith) {
     replacements.put(toReplace, replaceWith);
     return this;
   }
@@ -78,7 +78,7 @@ public class Placeholders {
    * @return The replaced string
    */
   @NotNull
-  public String set(@Nullable String str) {
+  public String set(@Nullable final String str) {
 
     if (str == null) {
       return "";
@@ -86,7 +86,7 @@ public class Placeholders {
 
     String replaced = str;
 
-    for (Map.Entry<String, String> entry : replacements.entrySet()) {
+    for (final Map.Entry<String, String> entry : replacements.entrySet()) {
       replaced = replaced.replace(entry.getKey(), entry.getValue());
     }
 
