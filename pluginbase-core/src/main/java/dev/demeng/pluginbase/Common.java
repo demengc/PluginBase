@@ -148,7 +148,8 @@ public class Common {
   public static <T> T getOrError(
       @Nullable final T nullable,
       @NotNull final String description,
-      final boolean disable) {
+      final boolean disable
+  ) {
 
     if (nullable == null) {
       throw new PluginErrorException(description, disable);
@@ -166,8 +167,10 @@ public class Common {
    * @return True if the command sender has the permission, false otherwise
    */
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  public static boolean hasPermission(@NotNull final CommandSender sender,
-      @Nullable final String permission) {
+  public static boolean hasPermission(
+      @NotNull final CommandSender sender,
+      @Nullable final String permission
+  ) {
     return permission == null
         || permission.isEmpty()
         || permission.equalsIgnoreCase("none")
@@ -183,8 +186,11 @@ public class Common {
    * @param players     Any players associated with this error, a message will be sent to them
    */
   public static void error(
-      @Nullable final Throwable throwable, @NotNull final String description, final boolean disable,
-      @NotNull final CommandSender... players) {
+      @Nullable final Throwable throwable,
+      @NotNull final String description,
+      final boolean disable,
+      @NotNull final CommandSender... players
+  ) {
 
     if (throwable != null) {
       throwable.printStackTrace();
