@@ -302,7 +302,7 @@ public class ItemBuilder {
    * @param modelData The custom model data
    * @return this
    */
-  public ItemBuilder modelData(final int modelData) {
+  public ItemBuilder modelData(@Nullable final Integer modelData) {
 
     if (Common.isServerVersionAtLeast(14)) {
       updateMeta(meta -> meta.setCustomModelData(modelData));
