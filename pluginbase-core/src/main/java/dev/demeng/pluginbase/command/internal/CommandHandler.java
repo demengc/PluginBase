@@ -263,11 +263,7 @@ public final class CommandHandler extends Command {
       runCommandWithParameters(data, sender, argumentsList);
 
     } catch (final Exception ex) {
-      if (sender instanceof Player) {
-        Common.error(ex, "Failed to execute command.", false, (Player) sender);
-      } else {
-        Common.error(ex, "Failed to execute command.", false);
-      }
+      Common.error(ex, "Failed to execute command.", false, sender);
     }
   }
 
