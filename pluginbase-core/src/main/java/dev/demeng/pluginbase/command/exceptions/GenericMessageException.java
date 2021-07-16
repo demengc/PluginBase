@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  * A custom exception for wrapping a generic command response messages to the command sender. For
  * internal use.
  */
-public class GenericMessageException extends Exception {
+public class GenericMessageException extends RuntimeException {
 
   @NotNull @Getter private final String genericMessage;
 
