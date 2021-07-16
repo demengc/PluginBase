@@ -24,9 +24,7 @@
 
 package dev.demeng.pluginbase.serializer;
 
-import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.YamlConfig;
-import dev.demeng.pluginbase.serializer.interfaces.StringSerializable;
 import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
 import java.io.IOException;
 import java.util.Optional;
@@ -37,35 +35,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The serializer for {@link Vector}.
  */
-public class VectorSerializer implements StringSerializable<Vector>, YamlSerializable<Vector> {
+public class VectorSerializer implements YamlSerializable<Vector> {
 
   @Override
-  public @NotNull String serialize(@NotNull Vector obj) {
-    return obj.getX() + SEPARATOR + obj.getY() + SEPARATOR + obj.getZ();
-  }
-
-  @Override
-  public Optional<Vector> deserialize(@NotNull String str) {
-
-    final String[] split = str.split(SEPARATOR);
-
-    if (split.length != 3) {
-      return Optional.empty();
-    }
-
-    final Double x = Validate.checkDouble(split[0]);
-    final Double y = Validate.checkDouble(split[1]);
-    final Double z = Validate.checkDouble(split[2]);
-
-    if (x == null || y == null || z == null) {
-      return Optional.empty();
-    }
-
-    return Optional.of(new Vector(x, y, z));
-  }
-
-  @Override
-  public void serializeToConfig(
+  public void serialize(
       @NotNull Vector obj,
       @NotNull YamlConfig configFile,
       @NotNull String path
@@ -79,7 +52,7 @@ public class VectorSerializer implements StringSerializable<Vector>, YamlSeriali
   }
 
   @Override
-  public Optional<Vector> deserializeFromSection(@NotNull ConfigurationSection section) {
+  public Optional<Vector> deserialize(@NotNull ConfigurationSection section) {
     return Optional.of(new Vector(
         section.getDouble("x"),
         section.getDouble("y"),

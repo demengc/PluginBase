@@ -31,7 +31,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an object that can be serialized to a YAML configuration section.
+ * Represents an object that can be serialized to a YAML configuration section. This is completely
+ * different from Bukkit's {@link org.bukkit.configuration.serialization.ConfigurationSerializable}
+ * because it allows each object to have it's own method of serialization.
  *
  * @param <T> The serializable object
  */
@@ -40,11 +42,11 @@ public interface YamlSerializable<T> {
   /**
    * Serializes an object and saves it into a configuration file.
    *
-   * @param obj    The object to serialize
+   * @param obj        The object to serialize
    * @param configFile The configuration file to save
-   * @param path   The configuration path to save in
+   * @param path       The configuration path to save in
    */
-  void serializeToConfig(@NotNull T obj, @NotNull YamlConfig configFile, @NotNull String path)
+  void serialize(@NotNull T obj, @NotNull YamlConfig configFile, @NotNull String path)
       throws IOException;
 
   /**
@@ -53,5 +55,5 @@ public interface YamlSerializable<T> {
    * @param section The serialized object
    * @return The deserialized object or null if unable to deserialize, wrapped in an optional
    */
-  Optional<T> deserializeFromSection(@NotNull ConfigurationSection section);
+  Optional<T> deserialize(@NotNull ConfigurationSection section);
 }
