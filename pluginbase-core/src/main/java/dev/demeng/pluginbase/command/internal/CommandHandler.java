@@ -38,6 +38,7 @@ import dev.demeng.pluginbase.command.annotations.Permission;
 import dev.demeng.pluginbase.command.annotations.SubCommand;
 import dev.demeng.pluginbase.command.annotations.Usage;
 import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
+import dev.demeng.pluginbase.command.exceptions.GenericMessageException;
 import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
 import dev.demeng.pluginbase.command.handlers.CompletionHandler;
 import dev.demeng.pluginbase.command.models.CommandData;
@@ -65,9 +66,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class CommandHandler extends Command {
 
+  public static final String PERMISSION_PLACEHOLDER = "%permission%";
+  public static final String USAGE_PLACEHOLDER = "%usage%";
+
   private static final String DEFAULT_NAME = "pb-default";
-  private static final String PERMISSION_PLACEHOLDER = "%permission%";
-  private static final String USAGE_PLACEHOLDER = "%usage%";
 
   private final Map<String, CommandData> commands = new HashMap<>();
 
@@ -220,6 +222,8 @@ public final class CommandHandler extends Command {
   private void runCommand(
       final CommandData data, final CommandSender sender, final String[] arguments) {
 
+    final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
+
     try {
       final Method method = data.getMethod();
       final List<String> argumentsList = new LinkedList<>(Arrays.asList(arguments));
@@ -242,8 +246,6 @@ public final class CommandHandler extends Command {
       if (data.getArguments().size() != argumentsList.size() && !data
           .isOptionalArgument()) {
 
-        final BaseSettings settings = BaseLoader.getPlugin().getBaseSettings();
-
         if (!data.isDef() && data.getArguments().isEmpty()) {
           ChatUtils.tell(sender, settings.incorrectUsage()
               .replace(USAGE_PLACEHOLDER,
@@ -263,6 +265,16 @@ public final class CommandHandler extends Command {
       runCommandWithParameters(data, sender, argumentsList);
 
     } catch (final Exception ex) {
+
+      if (ex instanceof GenericMessageException) {
+        ChatUtils.tell(sender, ((GenericMessageException) ex).getGenericMessage()
+            .replace(PERMISSION_PLACEHOLDER,
+                Common.getOrDefault(data.getPermission(), settings.notApplicable()))
+            .replace(USAGE_PLACEHOLDER,
+                Common.getOrDefault(data.getUsage(), settings.notApplicable())));
+        return;
+      }
+
       Common.error(ex, "Failed to execute command.", false, sender);
     }
   }

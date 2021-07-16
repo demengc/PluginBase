@@ -26,11 +26,15 @@
 package dev.demeng.pluginbase.command;
 
 import dev.demeng.pluginbase.command.annotations.Command;
+import dev.demeng.pluginbase.command.exceptions.GenericMessageException;
+import dev.demeng.pluginbase.command.internal.CommandHandler;
+import dev.demeng.pluginbase.plugin.BaseLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -79,5 +83,52 @@ public abstract class CommandBase {
    */
   public void clearArguments() {
     arguments.clear();
+  }
+
+  // ---------------------------------------------------------------------------------
+  // GENERIC MESSAGES
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Sends a "no permission" message for the command that is currently being executed.
+   *
+   * <b>Note: </b> This method is for convenience and should only be called inside of a command or
+   * sub-command.
+   *
+   * @param permissionOverride The override for the permission placeholder- if null, the command's
+   *                           specified permission (using the {@link dev.demeng.pluginbase.command.annotations.Permission})
+   *                           annotation) will be used
+   */
+  @SneakyThrows
+  protected void tellInsufficientPermission(@Nullable String permissionOverride) {
+
+    String message = BaseLoader.getPlugin().getBaseSettings().insufficientPermission();
+
+    if (permissionOverride != null) {
+      message = message.replace(CommandHandler.PERMISSION_PLACEHOLDER, permissionOverride);
+    }
+
+    throw new GenericMessageException(message);
+  }
+
+  /**
+   * Sends an "incorrect usage" message for the command that is currently being executed.
+   *
+   * <b>Note: </b> This method is for convenience and should only be called inside of a command or
+   * sub-command.
+   *
+   * @param usageOverride The override for the usage placeholder- if null, the command's default or
+   *                      specified usage will be used
+   */
+  @SneakyThrows
+  protected void tellIncorrectUsage(@Nullable String usageOverride) {
+
+    String message = BaseLoader.getPlugin().getBaseSettings().incorrectUsage();
+
+    if (usageOverride != null) {
+      message = message.replace(CommandHandler.USAGE_PLACEHOLDER, usageOverride);
+    }
+
+    throw new GenericMessageException(message);
   }
 }
