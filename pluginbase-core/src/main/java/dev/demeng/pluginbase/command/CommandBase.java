@@ -92,8 +92,10 @@ public abstract class CommandBase {
   /**
    * Sends a "no permission" message for the command that is currently being executed.
    *
-   * <b>Note: </b> This method is for convenience and should only be called inside of a command or
-   * sub-command.
+   * <p><b>Note: </b> This method is for convenience and should only be called inside of a
+   * command or sub-command. This also interrupts the command execution and replace a "return"
+   * statement, though it is still advised that you have a return statement since it might confuse
+   * your IDE.
    *
    * @param permissionOverride The override for the permission placeholder- if null, the command's
    *                           specified permission (using the {@link dev.demeng.pluginbase.command.annotations.Permission})
@@ -114,8 +116,10 @@ public abstract class CommandBase {
   /**
    * Sends an "incorrect usage" message for the command that is currently being executed.
    *
-   * <b>Note: </b> This method is for convenience and should only be called inside of a command or
-   * sub-command.
+   * <p><b>Note: </b> This method is for convenience and should only be called inside of a
+   * command or sub-command. This also interrupts the command execution and replace a "return"
+   * statement, though it is still advised that you have a return statement since it might confuse
+   * your IDE.
    *
    * @param usageOverride The override for the usage placeholder- if null, the command's default or
    *                      specified usage will be used
