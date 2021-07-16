@@ -27,7 +27,6 @@ package dev.demeng.pluginbase.serializer;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
 import java.io.IOException;
-import java.util.Optional;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -52,10 +51,10 @@ public class VectorSerializer implements YamlSerializable<Vector> {
   }
 
   @Override
-  public Optional<Vector> deserialize(@NotNull ConfigurationSection section) {
-    return Optional.of(new Vector(
+  public Vector deserialize(@NotNull ConfigurationSection section) {
+    return new Vector(
         section.getDouble("x"),
         section.getDouble("y"),
-        section.getDouble("z")));
+        section.getDouble("z"));
   }
 }

@@ -26,7 +26,6 @@ package dev.demeng.pluginbase.serializer.interfaces;
 
 import dev.demeng.pluginbase.YamlConfig;
 import java.io.IOException;
-import java.util.Optional;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
@@ -53,7 +52,7 @@ public interface YamlSerializable<T> {
    * Deserializes an object from a configuration section.
    *
    * @param section The serialized object
-   * @return The deserialized object or null if unable to deserialize, wrapped in an optional
+   * @return The deserialized object
    */
-  Optional<T> deserialize(@NotNull ConfigurationSection section);
+  T deserialize(@NotNull ConfigurationSection section);
 }
