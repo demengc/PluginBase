@@ -246,12 +246,13 @@ public class ItemBuilder {
   }
 
   /**
-   * Makes the item unbreakable (have infinite durability).
+   * Sets if the item should be unbreakable.
    *
+   * @param unbreakable If the item should be unbreakable
    * @return this
    */
-  public ItemBuilder unbreakable() {
-    NBTEditor.set(stack, true, "Unbreakable");
+  public ItemBuilder unbreakable(final boolean unbreakable) {
+    NBTEditor.set(stack, unbreakable, "Unbreakable");
     return this;
   }
 
