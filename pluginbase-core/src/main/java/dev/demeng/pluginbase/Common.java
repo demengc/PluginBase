@@ -56,6 +56,8 @@ public class Common {
       + Common.getName()
       + ". Further details have been printed in console.";
 
+  private static final String STR_DECIMAL_FORMAT = "%.2f";
+
   // ---------------------------------------------------------------------------------
   // PLUGIN INFORMATION
   // ---------------------------------------------------------------------------------
@@ -108,6 +110,17 @@ public class Common {
   // ---------------------------------------------------------------------------------
   // MISC
   // ---------------------------------------------------------------------------------
+
+  /**
+   * Formats a decimal into a human-friendly string that rounds the double to 2 decimal places.
+   *
+   * @param d THe double to format
+   * @return The formatted double
+   */
+  @NotNull
+  public static String formatDecimal(final double d) {
+    return String.format(STR_DECIMAL_FORMAT, d);
+  }
 
   /**
    * Returns the nullable value if not null, or the default value if it is null.
