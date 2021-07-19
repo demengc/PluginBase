@@ -26,6 +26,8 @@ package dev.demeng.pluginbase.random;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -34,7 +36,8 @@ import org.jetbrains.annotations.NotNull;
  * <p><b>WARNING:</b> IDs generated with this utility are NOT guaranteed to be random, though the
  * chance of getting a duplicate ID becomes increasingly unlikely as you increase the length.
  */
-public class RandomString {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class RandomString {
 
   private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
       + "abcdefghijklmnopqrstuvwxyz"
@@ -52,7 +55,7 @@ public class RandomString {
    * @return The generated ID
    */
   @NotNull
-  public static String generateId(@NotNull Random random, int length) {
+  public static String generateId(@NotNull final Random random, final int length) {
 
     final StringBuilder sb = new StringBuilder(length);
 
@@ -71,7 +74,7 @@ public class RandomString {
    * @return The generated ID
    */
   @NotNull
-  public static String generateId(int length) {
+  public static String generateId(final int length) {
     return generateId(RANDOM, length);
   }
 
@@ -84,7 +87,7 @@ public class RandomString {
    * @return The generated ID
    */
   @NotNull
-  public static String generateIdSecure(int length) {
+  public static String generateIdSecure(final int length) {
     return generateId(SECURE_RANDOM, length);
   }
 }
