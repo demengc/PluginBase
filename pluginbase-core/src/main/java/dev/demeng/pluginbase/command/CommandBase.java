@@ -102,7 +102,7 @@ public abstract class CommandBase {
    *                           annotation) will be used
    */
   @SneakyThrows
-  protected void tellInsufficientPermission(@Nullable String permissionOverride) {
+  protected void tellInsufficientPermission(@Nullable final String permissionOverride) {
 
     String message = BaseLoader.getPlugin().getBaseSettings().insufficientPermission();
 
@@ -125,7 +125,7 @@ public abstract class CommandBase {
    *                      specified usage will be used
    */
   @SneakyThrows
-  protected void tellIncorrectUsage(@Nullable String usageOverride) {
+  protected void tellIncorrectUsage(@Nullable final String usageOverride) {
 
     String message = BaseLoader.getPlugin().getBaseSettings().incorrectUsage();
 

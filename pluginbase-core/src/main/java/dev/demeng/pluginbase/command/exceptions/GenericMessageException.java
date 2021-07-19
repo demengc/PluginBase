@@ -40,7 +40,7 @@ public class GenericMessageException extends RuntimeException {
    *
    * @param genericMessage The generic message
    */
-  public GenericMessageException(@NotNull String genericMessage) {
+  public GenericMessageException(@NotNull final String genericMessage) {
     super();
     this.genericMessage = genericMessage;
   }
