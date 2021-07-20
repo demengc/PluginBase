@@ -239,7 +239,7 @@ public final class CommandHandler extends Command {
 
       if (data.getArguments().size() == 1
           && String[].class.isAssignableFrom(data.getArguments().get(0))) {
-        method.invoke(data.getCommandBase(), sender, arguments);
+        method.invoke(data.getCommandBase(), sender, argumentsList.toArray(new String[0]));
         return;
       }
 
