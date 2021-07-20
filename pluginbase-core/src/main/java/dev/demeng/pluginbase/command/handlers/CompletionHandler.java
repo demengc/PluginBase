@@ -65,7 +65,7 @@ public final class CompletionHandler {
    */
   public CompletionHandler() {
 
-    register("#empty", input -> Collections.singletonList(""));
+    register("#empty", input -> Collections.emptyList());
 
     register("#boolean", input -> Arrays.asList("false", "true"));
 
