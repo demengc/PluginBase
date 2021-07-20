@@ -560,8 +560,8 @@ public final class CommandHandler extends Command {
   private void checkCompletionMethodAnnotation(final CommandBase command, final CommandData data) {
 
     for (final Method method : command.getClass().getDeclaredMethods()) {
-      if (!method.isAnnotationPresent(CompleteFor.class) || !(method
-          .getGenericReturnType() instanceof ParameterizedType)) {
+      if (!method.isAnnotationPresent(CompleteFor.class)
+          || !(method.getGenericReturnType() instanceof ParameterizedType)) {
         continue;
       }
 
@@ -571,7 +571,7 @@ public final class CommandHandler extends Command {
       if (method.getParameterTypes().length != 2) {
         throw new CustomCommandException(
             String.format(
-                "2 parameters, 'args, sender` required for method %s in class %s",
+                "2 parameters, 'sender, args` required for method %s in class %s",
                 method.getName(), method.getClass().getName()));
       }
 
@@ -586,7 +586,7 @@ public final class CommandHandler extends Command {
     return returnType.getRawType() == List.class
         && returnType.getActualTypeArguments().length == 1
         && returnType.getActualTypeArguments()[0] == String.class
-        && CommandSender.class.isAssignableFrom(method.getParameterTypes()[1])
+        && CommandSender.class.isAssignableFrom(method.getParameterTypes()[0])
         && method.getAnnotation(CompleteFor.class).value().equalsIgnoreCase(data.getName());
   }
 
@@ -663,9 +663,10 @@ public final class CommandHandler extends Command {
     try {
       final List<String> argsList = new LinkedList<>(Arrays.asList(args));
       argsList.remove(arg);
+      argsList.removeIf(String::isEmpty);
 
       //noinspection unchecked
-      return (List<String>) method.invoke(base, argsList, sender);
+      return (List<String>) method.invoke(base, sender, argsList.toArray(new String[0]));
 
     } catch (final IllegalAccessException | InvocationTargetException ex) {
       throw new CustomCommandException(String
