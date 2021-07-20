@@ -243,8 +243,8 @@ public final class CommandHandler extends Command {
         return;
       }
 
-      if (data.getArguments().size() != argumentsList.size() && !data
-          .isOptionalArgument()) {
+      if (data.getArguments().size() != argumentsList.size()
+          && !data.isOptionalArgument()) {
 
         if (!data.isDef() && data.getArguments().isEmpty()) {
           ChatUtils.tell(sender, settings.incorrectUsage()
