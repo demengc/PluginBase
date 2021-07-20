@@ -195,8 +195,8 @@ public final class CommandHandler extends Command {
     final String firstArg = arguments[0].toLowerCase();
 
     if (((data != null && data.getArguments().isEmpty())
-        && (!commands.containsKey(firstArg) || getName().equalsIgnoreCase(firstArg))) || (
-        data == null && !commands.containsKey(firstArg))) {
+        && (!commands.containsKey(firstArg) || getName().equalsIgnoreCase(firstArg)))
+        || (data == null && !commands.containsKey(firstArg))) {
       ChatUtils.tell(sender, settings.incorrectUsage()
           .replace(USAGE_PLACEHOLDER,
               data == null ? settings.notApplicable()
