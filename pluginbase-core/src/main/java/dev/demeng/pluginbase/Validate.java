@@ -49,7 +49,7 @@ public final class Validate {
   @Nullable
   public static Class<?> checkClass(@NotNull final String className) {
     try {
-      return Class.forName(className);
+      return Class.forName(className, false, Validate.class.getClassLoader());
     } catch (final ClassNotFoundException ex) {
       return null;
     }
