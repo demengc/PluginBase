@@ -1,7 +1,10 @@
 /*
  * MIT License
  *
+ * Copyright (c) 2021 Demeng Chen
  * Copyright (c) 2021 Justin Heflin
+ * Copyright (c) lucko (Luck) <luck@lucko.me>
+ * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,16 +41,12 @@ import dev.demeng.pluginbase.dependencyloader.relocation.RelocationInfo;
 import dev.demeng.pluginbase.dependencyloader.relocation.Relocator;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -258,11 +257,8 @@ public final class MavenDependencyLoader extends
   @Override
   public void loadDependencies(final @NotNull URLClassLoader classLoader) {
     try {
-      final Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-      AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-        method.setAccessible(true);
-        return null;
-      });
+
+      final URLClassLoaderAccess urlInjector = URLClassLoaderAccess.create(classLoader);
 
       super.getDependencies()
           .parallelStream()
@@ -278,15 +274,14 @@ public final class MavenDependencyLoader extends
                   .resolve(dependency.getRelocatedFileName());
 
               if (Files.exists(relocatedLocation)) {
-                method.invoke(classLoader, relocatedLocation.toUri().toURL());
+                urlInjector.addURL(relocatedLocation.toUri().toURL());
               } else {
-                method.invoke(classLoader, downloadLocation.toUri().toURL());
+                urlInjector.addURL(downloadLocation.toUri().toURL());
               }
 
               dependency.setLoaded(true);
-            } catch (final IllegalAccessException
-                | InvocationTargetException
-                | MalformedURLException ex) {
+
+            } catch (final MalformedURLException ex) {
               super.addError(new DependencyLoadException(dependency, ex));
             }
           });
