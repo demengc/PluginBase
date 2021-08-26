@@ -539,6 +539,7 @@ public final class ChatUtils {
   // INTERNAL
   // ---------------------------------------------------------------------------------
 
+  @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   private static boolean attemptTellAdvanced(final CommandSender sender, final String... lines) {
 
     if (!(sender instanceof Player)) {
