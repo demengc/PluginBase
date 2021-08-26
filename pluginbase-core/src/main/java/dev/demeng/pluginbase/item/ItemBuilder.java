@@ -352,8 +352,10 @@ public class ItemBuilder {
 
     try {
       final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
+      //noinspection deprecation
       meta.setOwner(owner);
       stack.setItemMeta(meta);
+
     } catch (final ClassCastException ignored) {
       // Ignore if not skull.
     }
