@@ -40,6 +40,7 @@ import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -350,7 +351,7 @@ public class ItemBuilder {
   public ItemBuilder skullOwner(@NotNull final String owner) {
 
     try {
-      final SkullMeta meta = (SkullMeta) stack.getItemMeta();
+      final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
       meta.setOwner(owner);
       stack.setItemMeta(meta);
     } catch (final ClassCastException ignored) {
@@ -370,14 +371,19 @@ public class ItemBuilder {
 
     try {
       final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
+      final OfflinePlayer p = Bukkit.getOfflinePlayer(owner);
 
       if (Common.isServerVersionAtLeast(12)) {
         meta.setOwningPlayer(Bukkit.getOfflinePlayer(owner));
+
       } else {
-        return skullOwner(Bukkit.getOfflinePlayer(owner).getName());
+        if (p.getName() != null) {
+          return skullOwner(p.getName());
+        }
       }
 
       stack.setItemMeta(meta);
+
     } catch (final ClassCastException ignored) {
       // Ignore if not skull.
     }
