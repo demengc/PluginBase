@@ -322,8 +322,8 @@ public abstract class PagedMenu implements IMenu {
         @Override
         public @NotNull MenuButton getDummyPreviousButton() {
           return MenuButton
-              .fromConfig(Objects
-                      .requireNonNull(section.getConfigurationSection("previous-page.no-more-pages")),
+              .fromConfig(Objects.requireNonNull(
+                      section.getConfigurationSection("previous-page.no-more-pages")),
                   null);
         }
 
@@ -337,8 +337,8 @@ public abstract class PagedMenu implements IMenu {
         @Override
         public @NotNull MenuButton getDummyNextButton() {
           return MenuButton
-              .fromConfig(Objects
-                      .requireNonNull(section.getConfigurationSection("next-page.no-more-pages")),
+              .fromConfig(Objects.requireNonNull(
+                      section.getConfigurationSection("next-page.no-more-pages")),
                   null);
         }
 
