@@ -52,7 +52,9 @@ public final class Placeholders {
    * @return The placeholders object
    */
   @NotNull
-  public static Placeholders of(@NotNull final String toReplace, @NotNull final String replaceWith) {
+  public static Placeholders of(
+      @NotNull final String toReplace,
+      @NotNull final String replaceWith) {
     final Placeholders obj = new Placeholders();
     obj.getReplacements().put(toReplace, replaceWith);
     return obj;
