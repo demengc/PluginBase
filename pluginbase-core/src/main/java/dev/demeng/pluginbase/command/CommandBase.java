@@ -98,7 +98,7 @@ public abstract class CommandBase {
    * your IDE.
    *
    * @param permissionOverride The override for the permission placeholder- if null, the command's
-   *                           specified permission (using the {@link dev.demeng.pluginbase.command.annotations.Permission})
+   *                           specified permission (using the {@link dev.demeng.pluginbase.command.annotations.Permission}
    *                           annotation) will be used
    */
   @SneakyThrows
