@@ -108,7 +108,7 @@ public final class MavenDependencyLoader extends
   }
 
   @Override
-  public void loadDependenciesFrom(final @NotNull Class<@NotNull ?> clazz) {
+  public void loadDependenciesFrom(final @NotNull Class<?> clazz) {
     if (clazz.isAnnotationPresent(MavenRepository.class)) {
       this.repos.add(MavenRepositoryInfo.of(clazz.getAnnotation(MavenRepository.class)));
     }
