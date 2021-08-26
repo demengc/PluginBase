@@ -26,12 +26,13 @@ package dev.demeng.pluginbase.exceptions;
 
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.TaskUtils;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An extension of RuntimeException that calls {@link dev.demeng.pluginbase.Common#error(Throwable,
- * String, boolean, Player...)}.
+ * An extension of RuntimeException that calls {@link Common#error(Throwable, String, boolean,
+ * CommandSender...)}.
  */
 public class PluginErrorException extends RuntimeException {
 
