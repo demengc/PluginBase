@@ -78,7 +78,7 @@ public abstract class URLClassLoaderAccess {
       try {
         addUrlMethod = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
         addUrlMethod.setAccessible(true);
-      } catch (final ReflectiveOperationException ex) {
+      } catch (final ReflectiveOperationException e) {
         addUrlMethod = null;
       }
       ADD_URL_METHOD = addUrlMethod;
@@ -96,8 +96,8 @@ public abstract class URLClassLoaderAccess {
     public void addURL(@NotNull final URL url) {
       try {
         ADD_URL_METHOD.invoke(super.classLoader, url);
-      } catch (final ReflectiveOperationException ex) {
-        throw new RuntimeException(ex);
+      } catch (final ReflectiveOperationException e) {
+        throw new RuntimeException(e);
       }
     }
   }
@@ -117,11 +117,9 @@ public abstract class URLClassLoaderAccess {
         final Field unsafeField = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
         unsafeField.setAccessible(true);
         unsafe = (sun.misc.Unsafe) unsafeField.get(null);
-
       } catch (final Throwable t) {
         unsafe = null;
       }
-
       UNSAFE = unsafe;
     }
 
@@ -136,21 +134,18 @@ public abstract class URLClassLoaderAccess {
     Unsafe(final URLClassLoader classLoader) {
       super(classLoader);
 
-      Collection<URL> unopened;
-      Collection<URL> path;
-
+      Collection<URL> unopenedURLs;
+      Collection<URL> pathURLs;
       try {
         final Object ucp = fetchField(URLClassLoader.class, classLoader, "ucp");
-        unopened = (Collection<URL>) fetchField(ucp.getClass(), ucp, "unopenedUrls");
-        path = (Collection<URL>) fetchField(ucp.getClass(), ucp, "path");
-
-      } catch (final Throwable t) {
-        unopened = null;
-        path = null;
+        unopenedURLs = (Collection<URL>) fetchField(ucp.getClass(), ucp, "unopenedUrls");
+        pathURLs = (Collection<URL>) fetchField(ucp.getClass(), ucp, "path");
+      } catch (final Throwable e) {
+        unopenedURLs = null;
+        pathURLs = null;
       }
-
-      this.unopenedURLs = unopened;
-      this.pathURLs = path;
+      this.unopenedURLs = unopenedURLs;
+      this.pathURLs = pathURLs;
     }
 
     private static Object fetchField(final Class<?> clazz, final Object object, final String name)
