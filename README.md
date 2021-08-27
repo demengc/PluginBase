@@ -4,7 +4,7 @@ Library for creating Spigot plugins.
 
 # Documentation
 
-Basic (and incomplete) documentation can be found at https://docs.demeng.dev/pluginbase/overview.
+Basic (and incomplete) documentation can be found at https://docs.demeng.dev/pluginbase.
 
 # Disclaimer
 
