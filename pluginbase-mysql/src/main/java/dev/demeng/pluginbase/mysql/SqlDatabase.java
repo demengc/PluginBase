@@ -71,7 +71,9 @@ public class SqlDatabase {
    * Creates a new SQL database with the most optimal settings. Initializes a new Hikari data source
    * and SQL stream.
    *
-   * @param credentials The database credentials POJO
+   * @param driverType        The driver to use
+   * @param credentials       The database credentials POJO
+   * @param additionalOptions Additional string to append to the JDBC URL
    */
   public SqlDatabase(final @NotNull DriverType driverType,
       final @NotNull DatabaseCredentials credentials,

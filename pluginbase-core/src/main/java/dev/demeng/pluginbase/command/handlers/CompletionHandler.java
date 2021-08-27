@@ -44,16 +44,16 @@ import org.jetbrains.annotations.NotNull;
  * Handles command tab-completion and maps provided arguments to an auto-completion list. A list of
  * default completion IDs/shortcuts can be found below.
  * <ul>
- *   #players - A list of online players.
- *   #boolean - True and false.
- *   #empty - Empty completion.
- *   #enum - All values of the enum inside your command method parameters.
- *   #range - A range of numbers.
+ *   <li>#players - A list of online players.</li>
+ *   <li>#boolean - True and false.</li>
+ *   <li>#empty - Empty completion.</li>
+ *   <li>#enum - All values of the enum inside your command method parameters.</li>
+ *   <li>#range - A range of numbers.
  *   <ul>
- *     #range:20 - Returns a list of numbers from 1 through 20 (inclusive).
- *     #range:0-5 - Returns a list of numbers from 0 through 5 (inclusive).
- *     #range - Return a list of numbers from 1 through 0 (inclusive).
- *   </ul>
+ *     <li>#range:20 - Returns a list of numbers from 1 through 20 (inclusive).</li>
+ *     <li>#range:0-5 - Returns a list of numbers from 0 through 5 (inclusive).</li>
+ *     <li>#range - Return a list of numbers from 1 through 0 (inclusive).</li>
+ *   </ul></li>
  * </ul>
  */
 public final class CompletionHandler {

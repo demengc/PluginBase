@@ -71,6 +71,8 @@ public class MenuManager implements Listener {
 
   /**
    * Handles button interaction within menus.
+   *
+   * @param event The event
    */
   @EventHandler(priority = EventPriority.HIGH)
   public void onInventoryClick(final InventoryClickEvent event) {
@@ -100,6 +102,8 @@ public class MenuManager implements Listener {
 
   /**
    * Handles cleanup when a menu is closed.
+   *
+   * @param event The event
    */
   @EventHandler(priority = EventPriority.MONITOR)
   public void onInventoryClose(final InventoryCloseEvent event) {
@@ -108,6 +112,8 @@ public class MenuManager implements Listener {
 
   /**
    * Handles cleanup when a player leaves.
+   *
+   * @param event The event
    */
   @EventHandler(priority = EventPriority.MONITOR)
   public void onPlayerQuit(final PlayerQuitEvent event) {

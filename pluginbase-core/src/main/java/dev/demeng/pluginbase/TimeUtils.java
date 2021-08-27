@@ -88,16 +88,8 @@ public final class TimeUtils {
   }
 
   /**
-   * Convert the given duration string into milliseconds. The following time units are supported and
-   * can be combined together.
-   * <ul>
-   *   Years (y)
-   *   Months (mo)
-   *   Weeks (w)
-   *   Hours (h)
-   *   Minutes (m)
-   *   Seconds (s)
-   * </ul>
+   * Convert the given duration string into milliseconds. Supported time units include years (y),
+   * months (mo), weeks (w), days (d), hours (h), minutes (m), and seconds (s).
    *
    * @param strDuration The duration string
    * @return The parsed duration, in milliseconds

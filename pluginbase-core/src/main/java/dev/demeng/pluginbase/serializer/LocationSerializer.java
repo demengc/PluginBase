@@ -57,6 +57,11 @@ public class LocationSerializer implements YamlSerializable<Location> {
   /**
    * Serializes a location without the world name. When deserialized, it will attempt to get the
    * default world from server.properties.
+   *
+   * @param obj        The object to serialize
+   * @param configFile The configuration file to save
+   * @param path       The configuration path to save in
+   * @throws IOException If the file fails to save
    */
   public void serializeNoWorld(
       @NotNull final Location obj,
@@ -76,6 +81,11 @@ public class LocationSerializer implements YamlSerializable<Location> {
   /**
    * Serializes a location without the yaw or pitch. When deserialized, the yaw and pitch will be
    * 0.
+   *
+   * @param obj        The object to serialize
+   * @param configFile The configuration file to save
+   * @param path       The configuration path to save in
+   * @throws IOException if the file fails to save
    */
   public void serializeNoRotation(
       @NotNull final Location obj,

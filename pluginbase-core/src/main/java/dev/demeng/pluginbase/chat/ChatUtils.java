@@ -143,6 +143,8 @@ public final class ChatUtils {
   /**
    * Colorizes a list of plain strings.
    *
+   * @param strList The plain strings
+   * @return Colorized strings, or an empty collection if the provided list is null
    * @see #colorize(String...)
    */
   @NotNull
@@ -285,6 +287,7 @@ public final class ChatUtils {
   /**
    * Fully strip all color from strings.
    *
+   * @param strList The list of string to strip
    * @return The stripped string list, or an empty list if the provided one is null
    * @see #strip(String)
    */
@@ -519,6 +522,9 @@ public final class ChatUtils {
   /**
    * Same thing as {@link #broadcast(String, String...)}, but without the prefix.
    *
+   * @param permission The permission players must have in order to see this broadcast, or null if
+   *                   the broadcast should be seen by everyone
+   * @param lines      The lines to send
    * @see #broadcast(String, String...)
    */
   public static void broadcastColored(@Nullable final String permission, final String... lines) {

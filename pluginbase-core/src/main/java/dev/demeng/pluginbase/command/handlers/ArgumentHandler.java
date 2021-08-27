@@ -45,19 +45,19 @@ import org.jetbrains.annotations.Nullable;
  * Handles and maps command arguments from string to the expected data type in method parameters. A
  * list of data types supported by default are as follows:
  * <ul>
- *   Short
- *   Integer
- *   Long
- *   Float
- *   Double
- *   String
- *   String[]
- *   Boolean
- *   boolean
- *   Player
- *   Material
- *   Sound
- *   World
+ *   <li>Short</li>
+ *   <li>Integer</li>
+ *   <li>Long</li>
+ *   <li>Float</li>
+ *   <li>Double</li>
+ *   <li>String</li>
+ *   <li>String[]</li>
+ *   <li>Boolean</li>
+ *   <li>boolean</li>
+ *   <li>Player</li>
+ *   <li>Material</li>
+ *   <li>Sound</li>
+ *   <li>World</li>
  * </ul>
  */
 public final class ArgumentHandler {

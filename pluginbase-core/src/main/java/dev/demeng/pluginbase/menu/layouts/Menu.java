@@ -68,7 +68,8 @@ public abstract class Menu implements IMenu {
   /**
    * Creates a new menu with the specified size and inventory title.
    *
-   * @param size  The size of the menu, in slots; must be >= 9 and <= 54, and a multiple of 9
+   * @param size  The size of the menu, in slots; must be greater than or equal to 9 and less than
+   *              or equal to 54, and a multiple of 9
    * @param title The menu title, colorized internally
    */
   protected Menu(final int size, @NotNull final String title) {

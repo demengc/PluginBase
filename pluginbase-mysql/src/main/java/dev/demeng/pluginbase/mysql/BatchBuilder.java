@@ -74,6 +74,8 @@ public class BatchBuilder {
 
   /**
    * Executes the statement for this batch, with the handlers used to prepare it.
+   *
+   * @throws SQLException If there is an SQL issue executing the batch
    */
   public void execute() throws SQLException {
     owner.executeBatch(this);

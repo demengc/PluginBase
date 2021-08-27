@@ -126,6 +126,7 @@ public final class Common {
   /**
    * Returns the nullable value if not null, or the default value if it is null.
    *
+   * @param <T>      The object type being checked and returned
    * @param nullable The nullable value
    * @param def      The default value
    * @return The nullable if not null, default otherwise
@@ -139,6 +140,7 @@ public final class Common {
    * Returns the nullable value if not null, or throws a runtime exception with error if it is
    * null.
    *
+   * @param <T>         The object type being checked and returned
    * @param nullable    The nullable value
    * @param description The error description if the value is null
    * @param disable     If the plugin should disable if the value is null

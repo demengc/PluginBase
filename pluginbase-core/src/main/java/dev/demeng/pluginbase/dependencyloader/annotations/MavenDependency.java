@@ -38,8 +38,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Used to declare a Maven dependency, it can be defined in two different ways.
  * <ul>
- *   ~Maven("com.google.guava:guava:30.1-jre")
- *   ~Maven(groupId = "com.google.guava", artifactId = "guava", version = "30.1-jre")
+ *   <li>~Maven("com.google.guava:guava:30.1-jre")</li>
+ *   <li>~Maven(groupId = "com.google.guava", artifactId = "guava", version = "30.1-jre")</li>
  * </ul>
  *
  * @see MavenDependencyInfo

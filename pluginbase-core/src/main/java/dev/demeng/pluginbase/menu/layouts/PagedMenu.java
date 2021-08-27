@@ -74,8 +74,10 @@ public abstract class PagedMenu implements IMenu {
   /**
    * Creates a new paged menu with the specified size per page and inventory title.
    *
-   * @param pageSize The size of each page, in slots; must be >= 9 and <= 54, and a multiple of 9
+   * @param pageSize The size of each page, in slots; must be greater than or equal to 9 and less
+   *                 than or equal to 54, and a multiple of 9
    * @param title    The menu title, colorized internally and permits page number placeholders
+   * @param settings The settings for the paged menu
    */
   protected PagedMenu(final int pageSize, @NotNull final String title, final Settings settings) {
     this.pageSize = pageSize;

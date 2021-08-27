@@ -44,6 +44,7 @@ public interface YamlSerializable<T> {
    * @param obj        The object to serialize
    * @param configFile The configuration file to save
    * @param path       The configuration path to save in
+   * @throws IOException If the file fails to save
    */
   void serialize(@NotNull T obj, @NotNull YamlConfig configFile, @NotNull String path)
       throws IOException;

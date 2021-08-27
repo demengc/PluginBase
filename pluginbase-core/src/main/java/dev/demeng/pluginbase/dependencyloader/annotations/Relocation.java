@@ -45,8 +45,8 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>Examples:</p>
  * <ul>
- *   ~Relocation(from = "com|google|guava", to = "my|package|guava")
- *   ~Relocation(from = "com{}google{}guava", to = "my{}package{}guava", separator = "{}"
+ *   <li>~Relocation(from = "com|google|guava", to = "my|package|guava")</li>
+ *   <li>~Relocation(from = "com{}google{}guava", to = "my{}package{}guava", separator = "{}"</li>
  * </ul>
  *
  * @see RelocationInfo
