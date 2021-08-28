@@ -1,6 +1,7 @@
 /*
  * MIT License
  *
+ * Copyright (c) 2021 Demeng Chen
  * Copyright (c) 2021 Justin Heflin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -27,11 +28,8 @@ package dev.demeng.pluginbase.dependencyloader.dependency;
 
 import dev.demeng.pluginbase.dependencyloader.dependency.builder.DependencyProvider;
 import dev.demeng.pluginbase.dependencyloader.generics.TypeDefinition;
-import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +40,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Abstract implementation of a dependency loader.
  *
- * @param <T> Type of dependency implementation.
+ * @param <T> Type of dependency implementation
  * @see MavenDependencyLoader
  */
 public abstract class DependencyLoader<T extends Dependency> implements TypeDefinition<T> {
@@ -76,7 +74,6 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
     this.basePath = basePath;
     this.dependencies = new ArrayList<>();
     this.errors = new HashSet<>();
-    this.openClassLoaderJava9();
   }
 
   /**
@@ -91,28 +88,6 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
       final @NotNull String storageDestination
   ) {
     this(basePath.resolve(storageDestination));
-  }
-
-  /**
-   * Gives this module access to the URLClassLoader.
-   */
-  private void openClassLoaderJava9() {
-    AccessController.doPrivileged((PrivilegedAction<Void>) () -> {
-      try {
-        final Class<?> moduleClass = Class.forName("java.lang.Module");
-        final Method getModuleMethod = Class.class.getMethod("getModule");
-        final Method addOpensMethod = moduleClass.getMethod("addOpens", String.class, moduleClass);
-
-        final Object urlClassLoaderModule = getModuleMethod.invoke(URLClassLoader.class);
-        final Object thisModule = getModuleMethod.invoke(DependencyLoader.class);
-
-        addOpensMethod
-            .invoke(urlClassLoaderModule, URLClassLoader.class.getPackage().getName(), thisModule);
-      } catch (final Exception ignored) {
-        // Will throw error on <Java9
-      }
-      return null;
-    });
   }
 
   /**
