@@ -60,7 +60,7 @@ public class MenuButton {
    * The consumer for the {@link InventoryClickEvent}, which will be accepted when this button is
    * clicked.
    */
-  @Getter @Setter private Consumer<InventoryClickEvent> consumer;
+  @Nullable @Getter @Setter private Consumer<InventoryClickEvent> consumer;
 
   /**
    * Creates a new menu button from a configuration section. The slot value must be an integer named
@@ -71,7 +71,9 @@ public class MenuButton {
    * @param consumer The consumer for the button
    * @return The button from config
    */
-  public static MenuButton fromConfig(final ConfigurationSection section,
+  @NotNull
+  public static MenuButton fromConfig(
+      @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
     return new MenuButton(section.getInt("slot", 0) - 1, ItemBuilder.fromConfig(section), consumer);
   }
