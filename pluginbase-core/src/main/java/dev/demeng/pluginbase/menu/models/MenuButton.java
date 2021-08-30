@@ -77,4 +77,23 @@ public class MenuButton {
       @Nullable final Consumer<InventoryClickEvent> consumer) {
     return new MenuButton(section.getInt("slot", 0) - 1, ItemBuilder.fromConfig(section), consumer);
   }
+
+  /**
+   * Creates a new menu button from a configuration section, but overrides any slot values the
+   * configuration section may have. Unlike {@link #fromConfig(ConfigurationSection, Consumer)}, the
+   * slot is not subtracted 1. See {@link ItemBuilder#fromConfig(ConfigurationSection)} for the
+   * format of item stacks.
+   *
+   * @param slot     The slot of the button
+   * @param section  The configuration section containing the button information
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton fromConfig(
+      final int slot,
+      @NotNull final ConfigurationSection section,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return new MenuButton(slot, ItemBuilder.fromConfig(section), consumer);
+  }
 }
