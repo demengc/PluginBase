@@ -49,18 +49,18 @@ public class MenuButton {
    * inventory slots start at 0. This button will be ignored and not be placed inside the menu if
    * the slot is negative.
    */
-  @Getter @Setter public int slot;
+  @Getter @Setter private int slot;
 
   /**
    * The item stack of the button.
    */
-  @NotNull @Getter @Setter public ItemStack stack;
+  @NotNull @Getter @Setter private ItemStack stack;
 
   /**
    * The consumer for the {@link InventoryClickEvent}, which will be accepted when this button is
    * clicked.
    */
-  @Getter @Setter public Consumer<InventoryClickEvent> consumer;
+  @Getter @Setter private Consumer<InventoryClickEvent> consumer;
 
   /**
    * Creates a new menu button from a configuration section. The slot value must be an integer named
