@@ -53,11 +53,6 @@ public abstract class PagedMenu implements IMenu {
   private static final String CURRENT_PAGE_PLACEHOLDER = "%current-page%";
 
   /**
-   * The placeholder that can be used in the inventory title for the total amount of pages.
-   */
-  private static final String TOTAL_PAGES_PLACEHOLDER = "%total-pages%";
-
-  /**
    * The unique ID of this menu.
    */
   @NotNull @Getter private final UUID uuid = UUID.randomUUID();
