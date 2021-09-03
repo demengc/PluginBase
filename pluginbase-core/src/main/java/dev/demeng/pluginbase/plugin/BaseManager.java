@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BaseManager {
 
-  private static BasePlugin plugin = null;
+  private static JavaPlugin plugin = null;
   private static Thread mainThread = null;
 
   /**
@@ -79,11 +79,11 @@ public final class BaseManager {
   }
 
   /**
-   * Sets the {@link BasePlugin} that the library is currently working with.
+   * Sets the {@link JavaPlugin} that the library is currently working with.
    *
-   * @param newPlugin The new instance of {@link BasePlugin}.
+   * @param newPlugin The new instance of {@link JavaPlugin}.
    */
-  public static void setPlugin(final BasePlugin newPlugin) {
+  public static void setPlugin(final JavaPlugin newPlugin) {
     plugin = newPlugin;
   }
 
