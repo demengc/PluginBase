@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -46,7 +46,7 @@ public final class TaskUtils {
   @NotNull
   public static BukkitRunnable runSync(final Consumer<BukkitRunnable> task) {
     final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTask(BaseLoader.getPlugin());
+    runnable.runTask(BaseManager.getPlugin());
     return runnable;
   }
 
@@ -59,7 +59,7 @@ public final class TaskUtils {
   @NotNull
   public static BukkitRunnable runAsync(final Consumer<BukkitRunnable> task) {
     final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskAsynchronously(BaseLoader.getPlugin());
+    runnable.runTaskAsynchronously(BaseManager.getPlugin());
     return runnable;
   }
 
@@ -73,7 +73,7 @@ public final class TaskUtils {
   @NotNull
   public static BukkitRunnable delay(final Consumer<BukkitRunnable> task, final long delay) {
     final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskLater(BaseLoader.getPlugin(), delay);
+    runnable.runTaskLater(BaseManager.getPlugin(), delay);
     return runnable;
   }
 
@@ -87,7 +87,7 @@ public final class TaskUtils {
   @NotNull
   public static BukkitRunnable delayAsync(final Consumer<BukkitRunnable> task, final long delay) {
     final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskLaterAsynchronously(BaseLoader.getPlugin(), delay);
+    runnable.runTaskLaterAsynchronously(BaseManager.getPlugin(), delay);
     return runnable;
   }
 
@@ -103,7 +103,7 @@ public final class TaskUtils {
   public static BukkitRunnable repeat(
       final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay) {
     final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskTimer(BaseLoader.getPlugin(), initialDelay, repeatDelay);
+    runnable.runTaskTimer(BaseManager.getPlugin(), initialDelay, repeatDelay);
     return runnable;
   }
 
@@ -138,7 +138,7 @@ public final class TaskUtils {
           }
         };
 
-    runnable.runTaskTimer(BaseLoader.getPlugin(), initialDelay, repeatDelay);
+    runnable.runTaskTimer(BaseManager.getPlugin(), initialDelay, repeatDelay);
     return runnable;
   }
 
@@ -154,7 +154,7 @@ public final class TaskUtils {
   public static BukkitRunnable repeatAsync(
       final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay) {
     final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskTimerAsynchronously(BaseLoader.getPlugin(), initialDelay, repeatDelay);
+    runnable.runTaskTimerAsynchronously(BaseManager.getPlugin(), initialDelay, repeatDelay);
     return runnable;
   }
 
@@ -189,7 +189,7 @@ public final class TaskUtils {
           }
         };
 
-    runnable.runTaskTimerAsynchronously(BaseLoader.getPlugin(), initialDelay, repeatDelay);
+    runnable.runTaskTimerAsynchronously(BaseManager.getPlugin(), initialDelay, repeatDelay);
     return runnable;
   }
 

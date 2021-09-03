@@ -30,7 +30,7 @@ import be.bendem.sqlstreams.util.SqlFunction;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -302,7 +302,7 @@ public class SqlDatabase {
 
       if (local) {
         final String path =
-            BaseLoader.getPlugin().getDataFolder().getAbsolutePath() + File.separator + credentials
+            BaseManager.getPlugin().getDataFolder().getAbsolutePath() + File.separator + credentials
                 .getDatabase();
 
         return jdbcUrl.replace("{path}", path)

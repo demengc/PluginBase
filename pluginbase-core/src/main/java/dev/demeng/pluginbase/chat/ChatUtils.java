@@ -26,7 +26,7 @@ package dev.demeng.pluginbase.chat;
 
 import dev.demeng.pluginbase.BaseSettings.ColorScheme;
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +92,7 @@ public final class ChatUtils {
    */
   @NotNull
   public static String getPrefix() {
-    return BaseLoader.getPlugin().getBaseSettings().prefix();
+    return BaseManager.getPlugin().getBaseSettings().prefix();
   }
 
   /**
@@ -112,8 +112,8 @@ public final class ChatUtils {
 
     String message = String.join("\n", strings);
 
-    if (BaseLoader.getPlugin().getBaseSettings() != null) {
-      final ColorScheme scheme = BaseLoader.getPlugin().getBaseSettings().colorScheme();
+    if (BaseManager.getPlugin().getBaseSettings() != null) {
+      final ColorScheme scheme = BaseManager.getPlugin().getBaseSettings().colorScheme();
       if (scheme != null) {
         message = message.replace("&p", scheme.getPrimary())
             .replace("&s", scheme.getSecondary())
@@ -369,7 +369,7 @@ public final class ChatUtils {
     }
 
     for (final String s : strings) {
-      BaseLoader.getPlugin().getLogger().info(s);
+      BaseManager.getPlugin().getLogger().info(s);
     }
   }
 
@@ -386,7 +386,7 @@ public final class ChatUtils {
     }
 
     for (final String s : strings) {
-      BaseLoader.getPlugin().getLogger().log(level, s);
+      BaseManager.getPlugin().getLogger().log(level, s);
     }
   }
 
@@ -437,7 +437,7 @@ public final class ChatUtils {
    */
   public static void tellAdvanced(@NotNull final Player player,
       @NotNull final Component component) {
-    BaseLoader.getPlugin().getAdventure().player(player).sendMessage(component);
+    BaseManager.getPlugin().getAdventure().player(player).sendMessage(component);
   }
 
   /**

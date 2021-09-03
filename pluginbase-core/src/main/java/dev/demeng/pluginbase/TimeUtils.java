@@ -26,7 +26,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -49,13 +49,13 @@ public final class TimeUtils {
    * The date format used for dates and times combined.
    */
   public static final ThreadLocal<DateFormat> DATE_TIME_FORMAT = ThreadLocal.withInitial(
-      () -> new SimpleDateFormat(BaseLoader.getPlugin().getBaseSettings().dateTimeFormat()));
+      () -> new SimpleDateFormat(BaseManager.getPlugin().getBaseSettings().dateTimeFormat()));
 
   /**
    * The date format used for dates.
    */
   public static final ThreadLocal<DateFormat> DATE_FORMAT = ThreadLocal.withInitial(
-      () -> new SimpleDateFormat(BaseLoader.getPlugin().getBaseSettings().dateFormat()));
+      () -> new SimpleDateFormat(BaseManager.getPlugin().getBaseSettings().dateFormat()));
 
   private static final Pattern UNITS_PATTERN = Pattern.compile(
       "(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"

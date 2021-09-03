@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
@@ -44,6 +44,6 @@ public final class Registerer {
    * @param listener The listener to register
    */
   public static void registerListener(@NotNull final Listener listener) {
-    Bukkit.getPluginManager().registerEvents(listener, BaseLoader.getPlugin());
+    Bukkit.getPluginManager().registerEvents(listener, BaseManager.getPlugin());
   }
 }

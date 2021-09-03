@@ -27,7 +27,7 @@ package dev.demeng.pluginbase;
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -70,7 +70,7 @@ public final class Common {
    */
   @NotNull
   public static String getName() {
-    return BaseLoader.getPlugin().getDescription().getName();
+    return BaseManager.getPlugin().getDescription().getName();
   }
 
   /**
@@ -80,7 +80,7 @@ public final class Common {
    */
   @NotNull
   public static String getVersion() {
-    return BaseLoader.getPlugin().getDescription().getVersion();
+    return BaseManager.getPlugin().getDescription().getVersion();
   }
 
   // ---------------------------------------------------------------------------------
@@ -208,8 +208,8 @@ public final class Common {
     Arrays.stream(players).filter(Player.class::isInstance)
         .forEach(p -> ChatUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE));
 
-    if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseLoader.getPlugin())) {
-      Bukkit.getPluginManager().disablePlugin(BaseLoader.getPlugin());
+    if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseManager.getPlugin())) {
+      Bukkit.getPluginManager().disablePlugin(BaseManager.getPlugin());
     }
   }
 }

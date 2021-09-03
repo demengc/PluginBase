@@ -2,8 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021 Demeng Chen
- * Copyright (c) lucko (Luck) <luck@lucko.me>
- * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +22,31 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.promise;
-
-import dev.demeng.pluginbase.plugin.BaseManager;
+package dev.demeng.pluginbase.plugin;
 
 /**
- * Represents the two main types of {@link Thread} on the server.
+ * A simple bootstrap plugin.
  */
-public enum ThreadContext {
-
-  SYNC, ASYNC;
+public interface BaseBootstrap {
 
   /**
-   * Gets the thread context of the current thread.
-   *
-   * @return The threat context of the current thread
+   * Executes at early plugin startup.
    */
-  public static ThreadContext forCurrentThread() {
-    return forThread(Thread.currentThread());
+  default void load() {
+    // Override if needed, otherwise nothing will be executed.
   }
 
   /**
-   * Gets the thread context of the specified thread.
-   *
-   * @param thread The thread to get the context of
-   * @return The thread context of the specified thread
+   * Executes on plugin enable.
    */
-  public static ThreadContext forThread(final Thread thread) {
-    return thread == BaseManager.getMainThread() ? SYNC : ASYNC;
+  default void enable() {
+    // Override if needed, otherwise nothing will be executed.
+  }
+
+  /**
+   * Executes on plugin disable.
+   */
+  default void disable() {
+    // Override if needed, otherwise nothing will be executed.
   }
 }

@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
  * Simple class containing a method to get the {@link BasePlugin} the library is working with.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class BaseLoader {
+public final class BaseManager {
 
   private static BasePlugin plugin = null;
   private static Thread mainThread = null;

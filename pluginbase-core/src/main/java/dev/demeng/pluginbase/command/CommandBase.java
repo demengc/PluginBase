@@ -28,7 +28,7 @@ package dev.demeng.pluginbase.command;
 import dev.demeng.pluginbase.command.annotations.Command;
 import dev.demeng.pluginbase.command.exceptions.GenericMessageException;
 import dev.demeng.pluginbase.command.internal.CommandHandler;
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +104,7 @@ public abstract class CommandBase {
   @SneakyThrows
   protected void tellInsufficientPermission(@Nullable final String permissionOverride) {
 
-    String message = BaseLoader.getPlugin().getBaseSettings().insufficientPermission();
+    String message = BaseManager.getPlugin().getBaseSettings().insufficientPermission();
 
     if (permissionOverride != null) {
       message = message.replace(CommandHandler.PERMISSION_PLACEHOLDER, permissionOverride);
@@ -127,7 +127,7 @@ public abstract class CommandBase {
   @SneakyThrows
   protected void tellIncorrectUsage(@Nullable final String usageOverride) {
 
-    String message = BaseLoader.getPlugin().getBaseSettings().incorrectUsage();
+    String message = BaseManager.getPlugin().getBaseSettings().incorrectUsage();
 
     if (usageOverride != null) {
       message = message.replace(CommandHandler.USAGE_PLACEHOLDER, usageOverride);

@@ -32,7 +32,7 @@ import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
 import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
 import dev.demeng.pluginbase.command.handlers.CompletionHandler;
 import dev.demeng.pluginbase.command.internal.CommandHandler;
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -101,7 +101,7 @@ public final class CommandManager implements Listener {
     final org.bukkit.command.Command oldCommand = commandMap.getCommand(commandName);
 
     if (oldCommand instanceof PluginIdentifiableCommand
-        && ((PluginIdentifiableCommand) oldCommand).getPlugin() == BaseLoader.getPlugin()) {
+        && ((PluginIdentifiableCommand) oldCommand).getPlugin() == BaseManager.getPlugin()) {
       bukkitCommands.remove(commandName);
       oldCommand.unregister(commandMap);
     }

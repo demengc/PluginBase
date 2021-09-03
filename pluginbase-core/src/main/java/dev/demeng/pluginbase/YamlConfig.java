@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.plugin.BaseLoader;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.io.File;
 import java.io.IOException;
 import lombok.Getter;
@@ -67,12 +67,12 @@ public class YamlConfig {
 
     final String completeName = name.endsWith(".yml") ? name : name + ".yml";
 
-    final File configFile = new File(BaseLoader.getPlugin().getDataFolder(), completeName);
+    final File configFile = new File(BaseManager.getPlugin().getDataFolder(), completeName);
 
     if (!configFile.exists()) {
       //noinspection ResultOfMethodCallIgnored
       configFile.getParentFile().mkdirs();
-      BaseLoader.getPlugin().saveResource(completeName, false);
+      BaseManager.getPlugin().saveResource(completeName, false);
     }
 
     this.file = configFile;

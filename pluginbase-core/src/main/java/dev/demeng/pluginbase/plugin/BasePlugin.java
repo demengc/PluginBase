@@ -60,7 +60,7 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onLoad() {
 
-    BaseLoader.setPlugin(this);
+    BaseManager.setPlugin(this);
 
     commandManager = new CommandManager();
     load();
@@ -96,7 +96,7 @@ public abstract class BasePlugin extends JavaPlugin {
     commandManager.unregisterAll();
 
     ServerProperties.clearCache();
-    BaseLoader.setPlugin(null);
+    BaseManager.setPlugin(null);
   }
 
   /**
