@@ -174,7 +174,7 @@ public final class CommandHandler extends Command {
   public boolean execute(@NotNull final CommandSender sender, @NotNull final String label,
       final String[] arguments) {
 
-    final BaseSettings settings = BaseManager.getPlugin().getBaseSettings();
+    final BaseSettings settings = BaseManager.getBaseSettings();
     CommandData data = getDefaultSubCommand();
 
     if (arguments.length == 0 || arguments[0].isEmpty()) {
@@ -222,7 +222,7 @@ public final class CommandHandler extends Command {
   private void runCommand(
       final CommandData data, final CommandSender sender, final String[] arguments) {
 
-    final BaseSettings settings = BaseManager.getPlugin().getBaseSettings();
+    final BaseSettings settings = BaseManager.getBaseSettings();
 
     try {
       final Method method = data.getMethod();
@@ -283,7 +283,7 @@ public final class CommandHandler extends Command {
       final List<String> argumentsList)
       throws InvocationTargetException, IllegalAccessException {
 
-    final BaseSettings settings = BaseManager.getPlugin().getBaseSettings();
+    final BaseSettings settings = BaseManager.getBaseSettings();
 
     final List<Object> invokeParams = new ArrayList<>();
     invokeParams.add(sender);
@@ -629,7 +629,7 @@ public final class CommandHandler extends Command {
 
   private boolean checkSender(final CommandSender sender, final CommandData data) {
 
-    final BaseSettings settings = BaseManager.getPlugin().getBaseSettings();
+    final BaseSettings settings = BaseManager.getBaseSettings();
 
     if (data.getSenderClass().equals(ConsoleCommandSender.class)
         && !(sender instanceof ConsoleCommandSender)) {

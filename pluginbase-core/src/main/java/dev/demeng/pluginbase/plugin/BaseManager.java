@@ -24,14 +24,21 @@
 
 package dev.demeng.pluginbase.plugin;
 
+import dev.demeng.pluginbase.BaseSettings;
+import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.exceptions.BaseException;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Simple class containing a method to get the {@link BasePlugin} the library is working with.
+ * A manager containing all other managers associated with the library, as well as the {@link
+ * JavaPlugin} the library is working with.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BaseManager {
@@ -40,17 +47,32 @@ public final class BaseManager {
   private static Thread mainThread = null;
 
   /**
-   * Gets a never-null instance of the {@link BasePlugin} the library is currently working with.
+   * The command manager for the plugin. Should be set when your plugin enables.
+   */
+  @NotNull @Getter @Setter private static CommandManager commandManager;
+
+  /**
+   * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.
+   */
+  @Getter @Setter private static BukkitAudiences adventure;
+
+  /**
+   * The settings the library should use.
+   */
+  @NotNull @Getter @Setter private static BaseSettings baseSettings = new BaseSettings() {
+  };
+
+  /**
+   * Gets a never-null instance of the {@link JavaPlugin} the library is currently working with.
    *
-   * @return A never-null instance of the {@link BasePlugin} the library is currently working with.
-   * @throws RuntimeException If the plugin is not set (main class does not extend {@link
-   *                          BasePlugin})
+   * @return The {@link JavaPlugin} the library is currently working with
+   * @throws RuntimeException If the plugin is not set
    */
   @NotNull
-  public static BasePlugin getPlugin() {
+  public static JavaPlugin getPlugin() {
 
     if (plugin == null) {
-      throw new BaseException("Main class does not extend BasePlugin");
+      throw new BaseException("Main class is not set");
     }
 
     return plugin;

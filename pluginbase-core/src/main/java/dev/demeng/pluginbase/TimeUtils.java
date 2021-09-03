@@ -49,13 +49,13 @@ public final class TimeUtils {
    * The date format used for dates and times combined.
    */
   public static final ThreadLocal<DateFormat> DATE_TIME_FORMAT = ThreadLocal.withInitial(
-      () -> new SimpleDateFormat(BaseManager.getPlugin().getBaseSettings().dateTimeFormat()));
+      () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateTimeFormat()));
 
   /**
    * The date format used for dates.
    */
   public static final ThreadLocal<DateFormat> DATE_FORMAT = ThreadLocal.withInitial(
-      () -> new SimpleDateFormat(BaseManager.getPlugin().getBaseSettings().dateFormat()));
+      () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateFormat()));
 
   private static final Pattern UNITS_PATTERN = Pattern.compile(
       "(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"

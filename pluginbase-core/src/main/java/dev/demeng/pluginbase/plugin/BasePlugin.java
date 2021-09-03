@@ -31,26 +31,18 @@ import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.command.CommandManager;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.menu.MenuManager;
-import lombok.Getter;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An extended version of JavaPlugin. Main class must extend this class in order to use PluginBase.
+ * An extended version of JavaPlugin. It is recommended that you extend this in your main class, but
+ * you can also manually set the values in {@link BaseManager} should you wish to use your own
+ * loading system.
  */
 @SuppressWarnings("unused")
 public abstract class BasePlugin extends JavaPlugin {
-
-  /**
-   * The command manager for this plugin.
-   */
-  @Getter private CommandManager commandManager;
-
-  /**
-   * An instance of the Adventure library, for internal use.
-   */
-  @Getter private BukkitAudiences adventure;
 
   /**
    * The dependency engine for this plugin.
@@ -62,14 +54,14 @@ public abstract class BasePlugin extends JavaPlugin {
 
     BaseManager.setPlugin(this);
 
-    commandManager = new CommandManager();
+    BaseManager.setCommandManager(new CommandManager());
     load();
   }
 
   @Override
   public final void onEnable() {
 
-    adventure = BukkitAudiences.create(this);
+    BaseManager.setAdventure(BukkitAudiences.create(this));
 
     if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
       return;
@@ -83,9 +75,9 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onDisable() {
 
-    if (adventure != null) {
-      adventure.close();
-      adventure = null;
+    if (getAdventure() != null) {
+      getAdventure().close();
+      BaseManager.setAdventure(null);
     }
 
     if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
@@ -93,18 +85,11 @@ public abstract class BasePlugin extends JavaPlugin {
     }
 
     disable();
-    commandManager.unregisterAll();
+    getCommandManager().unregisterAll();
 
     ServerProperties.clearCache();
     BaseManager.setPlugin(null);
   }
-
-  /**
-   * The settings the base should use.
-   *
-   * @return The base settings
-   */
-  public abstract BaseSettings getBaseSettings();
 
   /**
    * Executes at early plugin startup.
@@ -155,5 +140,44 @@ public abstract class BasePlugin extends JavaPlugin {
     }
 
     return true;
+  }
+
+  /**
+   * Gets the command manager for the plugin.
+   */
+  @NotNull
+  public CommandManager getCommandManager() {
+    return BaseManager.getCommandManager();
+  }
+
+  /**
+   * Gets the BukkitAudiences instance to use for Adventure.
+   */
+  public BukkitAudiences getAdventure() {
+    return BaseManager.getAdventure();
+  }
+
+  /**
+   * Gets the settings the library should use.
+   */
+  @NotNull
+  public BaseSettings getBaseSettings() {
+    return BaseManager.getBaseSettings();
+  }
+
+  /**
+   * Sets the settings the library should use. Default will be used if not set.
+   *
+   * @param baseSettings The new base settings
+   */
+  public void setBaseSettings(@Nullable final BaseSettings baseSettings) {
+
+    if (baseSettings == null) {
+      BaseManager.setBaseSettings(new BaseSettings() {
+      });
+      return;
+    }
+
+    BaseManager.setBaseSettings(baseSettings);
   }
 }

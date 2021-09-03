@@ -92,7 +92,7 @@ public final class ChatUtils {
    */
   @NotNull
   public static String getPrefix() {
-    return BaseManager.getPlugin().getBaseSettings().prefix();
+    return BaseManager.getBaseSettings().prefix();
   }
 
   /**
@@ -112,8 +112,8 @@ public final class ChatUtils {
 
     String message = String.join("\n", strings);
 
-    if (BaseManager.getPlugin().getBaseSettings() != null) {
-      final ColorScheme scheme = BaseManager.getPlugin().getBaseSettings().colorScheme();
+    if (BaseManager.getBaseSettings() != null) {
+      final ColorScheme scheme = BaseManager.getBaseSettings().colorScheme();
       if (scheme != null) {
         message = message.replace("&p", scheme.getPrimary())
             .replace("&s", scheme.getSecondary())
@@ -437,7 +437,7 @@ public final class ChatUtils {
    */
   public static void tellAdvanced(@NotNull final Player player,
       @NotNull final Component component) {
-    BaseManager.getPlugin().getAdventure().player(player).sendMessage(component);
+    BaseManager.getAdventure().player(player).sendMessage(component);
   }
 
   /**
