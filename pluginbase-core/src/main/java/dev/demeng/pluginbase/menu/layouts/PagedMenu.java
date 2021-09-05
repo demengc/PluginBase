@@ -38,6 +38,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -211,6 +212,11 @@ public abstract class PagedMenu implements IMenu {
                   PagedMenu.this.open(playerCurrentPage + 1, p);
                 }
               }));
+    }
+
+    @Override
+    public boolean onClose(@NotNull final InventoryCloseEvent event) {
+      return PagedMenu.this.onClose(event);
     }
   }
 

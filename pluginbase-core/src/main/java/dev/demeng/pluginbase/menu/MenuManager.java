@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.menu;
 
+import dev.demeng.pluginbase.TaskUtils;
 import dev.demeng.pluginbase.menu.layouts.Menu;
 import java.util.HashMap;
 import java.util.Map;
@@ -107,7 +108,20 @@ public class MenuManager implements Listener {
    */
   @EventHandler(priority = EventPriority.MONITOR)
   public void onInventoryClose(final InventoryCloseEvent event) {
-    cleanup((Player) event.getPlayer());
+
+    final Player p = (Player) event.getPlayer();
+    final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
+
+    if (inventoryUuid != null) {
+      final Menu menu = menus.get(inventoryUuid);
+
+      if (menu != null && menu.onClose(event)) {
+        TaskUtils.delay(task -> menu.open(p), 1L);
+        return;
+      }
+    }
+
+    cleanup(p);
   }
 
   /**

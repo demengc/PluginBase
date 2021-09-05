@@ -25,6 +25,8 @@
 package dev.demeng.pluginbase.menu;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An interface containing common methods between the different menu layouts.
@@ -38,4 +40,14 @@ public interface IMenu {
    * @param players The players the menu should be opened to
    */
   void open(final Player... players);
+
+  /**
+   * Called when the menu is closed. Does nothing by default.
+   *
+   * @param event The inventory close event
+   * @return True if menu should be re-opened, false if menu should be closed
+   */
+  default boolean onClose(@NotNull final InventoryCloseEvent event) {
+    return false;
+  }
 }
