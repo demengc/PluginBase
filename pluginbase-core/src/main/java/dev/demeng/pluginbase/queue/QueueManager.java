@@ -50,7 +50,7 @@ public abstract class QueueManager<T extends Queueable> {
    *
    * @param queueable The queueable object
    */
-  public void queue(T queueable) {
+  public void queue(final T queueable) {
 
     final boolean queued = !queueList.isEmpty();
     final int waitTime = calculateWaitTime();
@@ -82,7 +82,7 @@ public abstract class QueueManager<T extends Queueable> {
    */
   public void clear() {
 
-    for (BukkitRunnable task : tasks) {
+    for (final BukkitRunnable task : tasks) {
       if (!task.isCancelled()) {
         task.cancel();
       }

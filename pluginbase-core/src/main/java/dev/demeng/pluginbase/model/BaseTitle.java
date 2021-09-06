@@ -83,8 +83,8 @@ public class BaseTitle implements YamlSerializable<BaseTitle> {
    * @param stay     The stay duration, in ticks
    * @param fadeOut  The fade out duration, in ticks
    */
-  public BaseTitle(@Nullable String title, @Nullable String subtitle,
-      int fadeIn, int stay, int fadeOut) {
+  public BaseTitle(@Nullable final String title, @Nullable final String subtitle,
+      final int fadeIn, final int stay, final int fadeOut) {
     this.title = title == null ? null : ChatUtils.colorize(title);
     this.subtitle = subtitle == null ? null : ChatUtils.colorize(subtitle);
     this.fadeIn = fadeIn;
@@ -98,7 +98,7 @@ public class BaseTitle implements YamlSerializable<BaseTitle> {
    * @param title    The title
    * @param subtitle The subtitle
    */
-  public BaseTitle(@Nullable String title, @Nullable String subtitle) {
+  public BaseTitle(@Nullable final String title, @Nullable final String subtitle) {
     this.title = title == null ? null : ChatUtils.colorize(title);
     this.subtitle = subtitle == null ? null : ChatUtils.colorize(subtitle);
     this.fadeIn = DEFAULT_FADE_IN;
@@ -111,7 +111,7 @@ public class BaseTitle implements YamlSerializable<BaseTitle> {
    *
    * @param p The player to receive the title
    */
-  public void send(Player p) {
+  public void send(final Player p) {
     Titles.sendTitle(p, fadeIn, stay, fadeOut, title, subtitle);
   }
 
@@ -124,9 +124,9 @@ public class BaseTitle implements YamlSerializable<BaseTitle> {
 
   @Override
   public void serialize(
-      @NotNull BaseTitle obj,
-      @NotNull YamlConfig configFile,
-      @NotNull String path
+      @NotNull final BaseTitle obj,
+      @NotNull final YamlConfig configFile,
+      @NotNull final String path
   ) throws IOException {
 
     if (title != null) {
@@ -153,7 +153,7 @@ public class BaseTitle implements YamlSerializable<BaseTitle> {
   }
 
   @Override
-  public BaseTitle deserialize(@NotNull ConfigurationSection section) {
+  public BaseTitle deserialize(@NotNull final ConfigurationSection section) {
     return new BaseTitle(
         section.getString("title"),
         section.getString("subtitle"),
