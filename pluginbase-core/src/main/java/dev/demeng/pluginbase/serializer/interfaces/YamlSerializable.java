@@ -30,9 +30,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an object that can be serialized to a YAML configuration section. This is completely
- * different from Bukkit's {@link org.bukkit.configuration.serialization.ConfigurationSerializable}
- * because it allows each object to have it's own method of serialization.
+ * Represents an object that can be serialized to a YAML configuration section. This is primarily
+ * used (internally) for Bukkit objects and is completely different from Bukkit's {@link
+ * org.bukkit.configuration.serialization.ConfigurationSerializable} because it allows each object
+ * to have its own method of serialization.
  *
  * @param <T> The serializable object
  */
