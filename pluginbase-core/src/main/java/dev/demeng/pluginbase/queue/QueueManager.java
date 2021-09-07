@@ -38,6 +38,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class QueueManager<T extends Queueable> {
 
   /**
+   * The current object that is being processed.
+   */
+  @Getter private T current;
+
+  /**
    * The list of all currently queued objects. Queued objects will remain in this list until the
    * entirety of its {@link Queueable#getDuration()} is over.
    */
@@ -52,20 +57,24 @@ public abstract class QueueManager<T extends Queueable> {
    */
   public void queue(final T queueable) {
 
-    final boolean queued = !queueList.isEmpty();
+    final boolean shouldQueue = current != null;
     final int waitTime = calculateWaitTime();
 
-    if (!queued) {
+    if (!shouldQueue) {
+      current = queueable;
       queueable.run();
+
+    } else {
+      queueList.add(queueable);
+
+      tasks.add(TaskUtils.delay(task -> {
+        queueList.remove(queueable);
+        current = queueable;
+        queueable.run();
+      }, waitTime));
     }
 
-    queueList.add(queueable);
-
-    tasks.add(TaskUtils.delay(task -> {
-      if (queued) {
-        queueable.run();
-      }
-    }, queued ? waitTime : queueable.getDuration()));
+    tasks.add(TaskUtils.delay(task -> current = null, (long) waitTime + queueable.getDuration()));
   }
 
   /**
@@ -74,7 +83,18 @@ public abstract class QueueManager<T extends Queueable> {
    * @return The current wait time
    */
   public int calculateWaitTime() {
-    return queueList.stream().mapToInt(T::getDuration).sum();
+
+    int waitTime = 0;
+
+    for (T queueable : queueList) {
+      waitTime += queueable.getDuration();
+    }
+
+    if (current != null) {
+      waitTime += current.getDuration();
+    }
+
+    return waitTime;
   }
 
   /**
@@ -88,6 +108,7 @@ public abstract class QueueManager<T extends Queueable> {
       }
     }
 
+    current = null;
     queueList.clear();
     tasks.clear();
   }
