@@ -41,6 +41,7 @@ public abstract class QueueManager<T extends Queueable> {
    * The current object that is being processed.
    */
   @Getter private T current;
+  private long startTime;
 
   /**
    * The list of all currently queued objects. Queued objects will remain in this list until the
@@ -61,7 +62,7 @@ public abstract class QueueManager<T extends Queueable> {
     final int waitTime = calculateWaitTime();
 
     if (!shouldQueue) {
-      current = queueable;
+      setCurrent(queueable);
       queueable.run();
 
     } else {
@@ -69,7 +70,7 @@ public abstract class QueueManager<T extends Queueable> {
 
       tasks.add(TaskUtils.delay(task -> {
         queueList.remove(queueable);
-        current = queueable;
+        setCurrent(queueable);
         queueable.run();
       }, waitTime));
     }
@@ -91,7 +92,7 @@ public abstract class QueueManager<T extends Queueable> {
     }
 
     if (current != null) {
-      waitTime += current.getDuration();
+      waitTime += (startTime / 50) + current.getDuration() - (System.currentTimeMillis() / 50);
     }
 
     return waitTime;
@@ -109,7 +110,13 @@ public abstract class QueueManager<T extends Queueable> {
     }
 
     current = null;
+    startTime = 0;
     queueList.clear();
     tasks.clear();
+  }
+
+  private void setCurrent(T queueable) {
+    current = queueable;
+    startTime = System.currentTimeMillis();
   }
 }
