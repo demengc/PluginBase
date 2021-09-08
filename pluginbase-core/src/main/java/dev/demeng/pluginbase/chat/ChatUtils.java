@@ -183,7 +183,7 @@ public final class ChatUtils {
       }
     }
 
-    return builder.toString();
+    return colorize(builder.toString());
   }
 
   /**
