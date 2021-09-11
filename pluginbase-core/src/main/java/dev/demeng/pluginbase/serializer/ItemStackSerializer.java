@@ -28,7 +28,6 @@ import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.chat.Placeholders;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -60,8 +59,7 @@ public class ItemStackSerializer implements YamlSerializable<ItemStack> {
   public void serialize(
       @NotNull final ItemStack obj,
       @NotNull final YamlConfig configFile,
-      @NotNull final String path
-  ) throws IOException {
+      @NotNull final String path) {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
