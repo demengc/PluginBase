@@ -77,7 +77,7 @@ public class ItemStackSerializer implements YamlSerializable<ItemStack> {
    * @return The item stack deserialized from the configuration section
    */
   @NotNull
-  public static ItemStack deserialize(
+  public ItemStack deserialize(
       @NotNull final ConfigurationSection section,
       @Nullable final Placeholders placeholders) {
 
@@ -121,7 +121,7 @@ public class ItemStackSerializer implements YamlSerializable<ItemStack> {
     return builder.get();
   }
 
-  private static String replace(Placeholders placeholders, String str) {
+  private String replace(Placeholders placeholders, String str) {
 
     if (str == null) {
       return null;
