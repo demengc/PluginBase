@@ -41,7 +41,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -514,27 +513,5 @@ public class ItemBuilder {
     }
 
     return stack;
-  }
-
-  /**
-   * Gets an item stack from a configuration section.
-   *
-   * @param section The section to deserialize
-   * @return The item stack deserialized from the configuration section
-   */
-  @NotNull
-  public static ItemStack fromConfig(@NotNull final ConfigurationSection section) {
-
-    final ItemBuilder builder = new ItemBuilder(getMaterial(
-        Objects.requireNonNull(section.getString("material"))));
-
-    builder.name(Objects.requireNonNull(section.getString("display-name")))
-        .lore(section.getStringList("lore"));
-
-    if (section.getBoolean("glow")) {
-      builder.glow(true);
-    }
-
-    return builder.get();
   }
 }
