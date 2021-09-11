@@ -24,8 +24,8 @@
 
 package dev.demeng.pluginbase.menu.models;
 
-import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.layouts.Menu;
+import dev.demeng.pluginbase.serializer.ItemStackSerializer;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -64,8 +64,8 @@ public class MenuButton {
 
   /**
    * Creates a new menu button from a configuration section. The slot value must be an integer named
-   * {@code slot}. See {@link ItemBuilder#fromConfig(ConfigurationSection)} for the format of item
-   * stacks. The slot will always be subtracted by 1.
+   * {@code slot}. See {@link ItemStackSerializer} for the format of item stacks. The slot will
+   * always be subtracted by 1.
    *
    * @param section  The configuration section containing the button information
    * @param consumer The consumer for the button
@@ -75,14 +75,14 @@ public class MenuButton {
   public static MenuButton fromConfig(
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return new MenuButton(section.getInt("slot", 0) - 1, ItemBuilder.fromConfig(section), consumer);
+    return new MenuButton(section.getInt("slot", 0) - 1,
+        ItemStackSerializer.get().deserialize(section), consumer);
   }
 
   /**
    * Creates a new menu button from a configuration section, but overrides any slot values the
    * configuration section may have. Unlike {@link #fromConfig(ConfigurationSection, Consumer)}, the
-   * slot is not subtracted 1. See {@link ItemBuilder#fromConfig(ConfigurationSection)} for the
-   * format of item stacks.
+   * slot is not subtracted 1. See {@link ItemStackSerializer} for the format of item stacks.
    *
    * @param slot     The slot of the button
    * @param section  The configuration section containing the button information
@@ -94,6 +94,6 @@ public class MenuButton {
       final int slot,
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return new MenuButton(slot, ItemBuilder.fromConfig(section), consumer);
+    return new MenuButton(slot, ItemStackSerializer.get().deserialize(section), consumer);
   }
 }
