@@ -42,16 +42,16 @@ import org.jetbrains.annotations.Nullable;
  * The serializer for {@link org.bukkit.inventory.ItemStack}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ItemStackSerializer implements YamlSerializable<ItemStack> {
+public class ItemSerializer implements YamlSerializable<ItemStack> {
 
-  private static final ItemStackSerializer NOOP = new ItemStackSerializer();
+  private static final ItemSerializer NOOP = new ItemSerializer();
 
   /**
    * Gets the singular instance of this serializer.
    *
    * @return The serializer instance
    */
-  public static ItemStackSerializer get() {
+  public static ItemSerializer get() {
     return NOOP;
   }
 
