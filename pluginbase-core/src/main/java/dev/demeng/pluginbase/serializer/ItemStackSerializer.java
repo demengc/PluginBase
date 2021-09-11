@@ -106,6 +106,12 @@ public class ItemStackSerializer implements YamlSerializable<ItemStack> {
 
     builder.lore(lore);
 
+    final int configModelData = section.getInt("model-data", -1);
+
+    if (configModelData >= 0) {
+      builder.modelData(configModelData);
+    }
+
     final boolean configGlow = section.getBoolean("glow");
 
     if (configGlow) {
