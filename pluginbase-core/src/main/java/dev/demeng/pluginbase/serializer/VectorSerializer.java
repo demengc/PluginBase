@@ -27,6 +27,8 @@ package dev.demeng.pluginbase.serializer;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
 import java.io.IOException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +36,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The serializer for {@link Vector}.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VectorSerializer implements YamlSerializable<Vector> {
+
+  private static final VectorSerializer NOOP = new VectorSerializer();
+
+  /**
+   * Gets the singular instance of this serializer.
+   *
+   * @return The serializer instance
+   */
+  public static VectorSerializer get() {
+    return NOOP;
+  }
 
   @Override
   public void serialize(

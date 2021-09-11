@@ -29,6 +29,8 @@ import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
 import java.io.IOException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -38,7 +40,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The serializer for {@link Location}.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LocationSerializer implements YamlSerializable<Location> {
+
+  private static final LocationSerializer NOOP = new LocationSerializer();
+
+  /**
+   * Gets the singular instance of this serializer.
+   *
+   * @return The serializer instance
+   */
+  public static LocationSerializer get() {
+    return NOOP;
+  }
 
   @Override
   public void serialize(
