@@ -100,7 +100,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
 
     final List<String> lore = new ArrayList<>();
 
-    for (String line : section.getStringList("lore")) {
+    for (final String line : section.getStringList("lore")) {
       lore.add(replace(placeholders, line));
     }
 
@@ -121,7 +121,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
     return builder.get();
   }
 
-  private String replace(Placeholders placeholders, String str) {
+  private String replace(final Placeholders placeholders, final String str) {
 
     if (str == null) {
       return null;
