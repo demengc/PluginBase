@@ -87,7 +87,7 @@ public abstract class QueueManager<T extends Queueable> {
 
     int waitTime = 0;
 
-    for (T queueable : queueList) {
+    for (final T queueable : queueList) {
       waitTime += queueable.getDuration();
     }
 
@@ -115,7 +115,7 @@ public abstract class QueueManager<T extends Queueable> {
     tasks.clear();
   }
 
-  private void setCurrent(T queueable) {
+  private void setCurrent(final T queueable) {
     current = queueable;
     startTime = System.currentTimeMillis();
   }
