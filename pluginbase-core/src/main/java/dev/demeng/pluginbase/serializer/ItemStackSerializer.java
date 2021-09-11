@@ -92,6 +92,8 @@ public class ItemStackSerializer implements YamlSerializable<ItemStack> {
     final ItemBuilder builder = new ItemBuilder(
         ItemBuilder.getMaterial(replace(placeholders, configMaterial)));
 
+    builder.amount(section.getInt("amount", 1));
+
     final String configName = section.getString("display-name");
 
     if (configName != null) {

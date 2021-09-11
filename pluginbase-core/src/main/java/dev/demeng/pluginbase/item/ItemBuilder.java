@@ -110,6 +110,17 @@ public class ItemBuilder {
   // ---------------------------------------------------------------------------------
 
   /**
+   * Changes the amount of the item.
+   *
+   * @param amount The new amount
+   * @return this
+   */
+  public ItemBuilder amount(final int amount) {
+    stack.setAmount(amount);
+    return this;
+  }
+
+  /**
    * Changes the durability of the item.
    *
    * @param durability The new durability
