@@ -24,8 +24,12 @@
 
 package dev.demeng.pluginbase.chat;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -93,5 +97,27 @@ public final class Placeholders {
     }
 
     return replaced;
+  }
+
+  /**
+   * Sets the placeholders into the given string list.
+   *
+   * @param list The string list to have placeholders set
+   * @return The replaced string list
+   */
+  @NotNull
+  public List<String> set(@Nullable final List<String> list) {
+
+    if (list == null) {
+      return Collections.emptyList();
+    }
+
+    Stream<String> stream = list.stream();
+
+    for (final Map.Entry<String, String> entry : replacements.entrySet()) {
+      stream = stream.map(str -> str.replace(entry.getKey(), entry.getValue()));
+    }
+
+    return stream.collect(Collectors.toList());
   }
 }
