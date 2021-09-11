@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.menu.models;
 
+import dev.demeng.pluginbase.chat.Placeholders;
 import dev.demeng.pluginbase.menu.layouts.Menu;
 import dev.demeng.pluginbase.serializer.ItemSerializer;
 import java.util.function.Consumer;
@@ -64,8 +65,27 @@ public class MenuButton {
 
   /**
    * Creates a new menu button from a configuration section. The slot value must be an integer named
-   * {@code slot}. See {@link ItemSerializer} for the format of item stacks. The slot will
-   * always be subtracted by 1.
+   * {@code slot}. See {@link ItemSerializer} for the format of item stacks. The slot will always be
+   * subtracted by 1.
+   *
+   * @param section      The configuration section containing the button information
+   * @param placeholders The placeholders for the item builder
+   * @param consumer     The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton fromConfig(
+      @NotNull final ConfigurationSection section,
+      @Nullable final Placeholders placeholders,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return new MenuButton(section.getInt("slot", 0) - 1,
+        ItemSerializer.get().deserialize(section, placeholders), consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section. The slot value must be an integer named
+   * {@code slot}. See {@link ItemSerializer} for the format of item stacks. The slot will always be
+   * subtracted by 1.
    *
    * @param section  The configuration section containing the button information
    * @param consumer The consumer for the button
@@ -75,8 +95,27 @@ public class MenuButton {
   public static MenuButton fromConfig(
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return new MenuButton(section.getInt("slot", 0) - 1,
-        ItemSerializer.get().deserialize(section), consumer);
+    return fromConfig(section, null, consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section, but overrides any slot values the
+   * configuration section may have. Unlike {@link #fromConfig(ConfigurationSection, Consumer)}, the
+   * slot is not subtracted 1. See {@link ItemSerializer} for the format of item stacks.
+   *
+   * @param slot         The slot of the button
+   * @param section      The configuration section containing the button information
+   * @param placeholders The placeholders for the item builder
+   * @param consumer     The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton fromConfig(
+      final int slot,
+      @NotNull final ConfigurationSection section,
+      @Nullable final Placeholders placeholders,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return new MenuButton(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
   }
 
   /**
@@ -94,6 +133,6 @@ public class MenuButton {
       final int slot,
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return new MenuButton(slot, ItemSerializer.get().deserialize(section), consumer);
+    return fromConfig(slot, section, null, consumer);
   }
 }
