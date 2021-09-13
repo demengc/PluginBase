@@ -51,10 +51,6 @@
                   <shadedPattern>dev.demeng.pluginbase.lib</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>org.bstats</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.lib.bstats</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>net.kyori.adventure</pattern>
                   <shadedPattern>dev.demeng.pluginbase.internal.adventure</shadedPattern>
                 </relocation>
@@ -115,13 +111,6 @@
       <groupId>io.github.bananapuncher714</groupId>
       <artifactId>nbteditor</artifactId>
       <version>7.17.0</version>
-      <scope>compile</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>2.2.1</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
