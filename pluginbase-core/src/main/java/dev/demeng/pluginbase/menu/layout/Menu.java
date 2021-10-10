@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.menu.layouts;
+package dev.demeng.pluginbase.menu.layout;
 
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;

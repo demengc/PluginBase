@@ -25,7 +25,7 @@
 package dev.demeng.pluginbase.menu;
 
 import dev.demeng.pluginbase.TaskUtils;
-import dev.demeng.pluginbase.menu.layouts.Menu;
+import dev.demeng.pluginbase.menu.layout.Menu;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
