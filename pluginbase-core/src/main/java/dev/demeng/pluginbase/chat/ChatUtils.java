@@ -37,7 +37,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.markdown.DiscordFlavor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -74,10 +73,7 @@ public final class ChatUtils {
   public static final String CONSOLE_LINE =
       "*-----------------------------------------------------*";
 
-  public static final MiniMessage MINI_MESSAGE = MiniMessage.builder()
-      .markdown()
-      .markdownFlavor(DiscordFlavor.get())
-      .build();
+  public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().build();
 
   // ---------------------------------------------------------------------------------
   // FORMATTING
