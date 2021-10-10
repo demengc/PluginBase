@@ -78,7 +78,7 @@ public abstract class DependencyLoader<T extends Dependency> implements TypeDefi
 
   /**
    * Creates a new dependency loader with the specified base path. Storage destination is used as a
-   * relative sub directory for dependencies.
+   * relative sub-directory for dependencies.
    *
    * @param basePath           The base path for dependencies
    * @param storageDestination The relative path to dependencies in this dependency loader

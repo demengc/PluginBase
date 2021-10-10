@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Stores all of the relevant data for a command.
+ * Stores all relevant data for a command.
  */
 @Data
 @AllArgsConstructor
@@ -131,7 +131,7 @@ public final class CommandData {
   }
 
   /**
-   * Copies all of the current data into a new command data object.
+   * Copies all current data into a new command data object.
    *
    * @return The same command data as a different object
    */

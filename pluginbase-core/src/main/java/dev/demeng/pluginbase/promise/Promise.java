@@ -125,7 +125,7 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given supplier.
+   * Returns a new Promise, and schedules its population via the given supplier.
    *
    * @param context  the type of executor to use to supply the promise
    * @param supplier the value supplier
@@ -140,7 +140,7 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given supplier.
+   * Returns a new Promise, and schedules its population via the given supplier.
    *
    * @param supplier the value supplier
    * @param <U>      the result type
@@ -153,7 +153,7 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given supplier.
+   * Returns a new Promise, and schedules its population via the given supplier.
    *
    * @param supplier the value supplier
    * @param <U>      the result type
@@ -166,8 +166,8 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given supplier, after the delay
-   * has elapsed.
+   * Returns a new Promise, and schedules its population via the given supplier, after the delay has
+   * elapsed.
    *
    * @param context    the type of executor to use to supply the promise
    * @param supplier   the value supplier
@@ -183,8 +183,8 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given supplier, after the delay
-   * has elapsed.
+   * Returns a new Promise, and schedules its population via the given supplier, after the delay has
+   * elapsed.
    *
    * @param supplier   the value supplier
    * @param delayTicks the delay in ticks
@@ -199,8 +199,8 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given supplier, after the delay
-   * has elapsed.
+   * Returns a new Promise, and schedules its population via the given supplier, after the delay has
+   * elapsed.
    *
    * @param supplier   the value supplier
    * @param delayTicks the delay in ticks
@@ -215,7 +215,7 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given callable.
+   * Returns a new Promise, and schedules its population via the given callable.
    *
    * @param context  the type of executor to use to supply the promise
    * @param callable the value callable
@@ -230,7 +230,7 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given callable.
+   * Returns a new Promise, and schedules its population via the given callable.
    *
    * @param callable the value callable
    * @param <U>      the result type
@@ -243,7 +243,7 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given callable.
+   * Returns a new Promise, and schedules its population via the given callable.
    *
    * @param callable the value callable
    * @param <U>      the result type
@@ -256,8 +256,8 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given callable, after the delay
-   * has elapsed.
+   * Returns a new Promise, and schedules its population via the given callable, after the delay has
+   * elapsed.
    *
    * @param context    the type of executor to use to supply the promise
    * @param callable   the value callable
@@ -273,8 +273,8 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given callable, after the delay
-   * has elapsed.
+   * Returns a new Promise, and schedules its population via the given callable, after the delay has
+   * elapsed.
    *
    * @param callable   the value callable
    * @param delayTicks the delay in ticks
@@ -289,8 +289,8 @@ public interface Promise<V> extends Future<V>, Terminable {
   }
 
   /**
-   * Returns a new Promise, and schedules it's population via the given callable, after the delay
-   * has elapsed.
+   * Returns a new Promise, and schedules its population via the given callable, after the delay has
+   * elapsed.
    *
    * @param callable   the value callable
    * @param delayTicks the delay in ticks

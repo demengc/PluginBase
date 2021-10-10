@@ -44,7 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * This class is used for relocating the packages inside of a downloaded jar.
+ * This class is used for relocating the packages inside a downloaded jar.
  */
 public final class Relocator {
 

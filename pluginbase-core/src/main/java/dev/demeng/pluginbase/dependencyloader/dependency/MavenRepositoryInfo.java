@@ -70,7 +70,7 @@ public final class MavenRepositoryInfo {
   }
 
   /**
-   * Creates a new Maven repository from a string representing a url.
+   * Creates a new Maven repository from a string representing a URL.
    *
    * @param url the url
    * @return A new {@link MavenRepositoryInfo}.

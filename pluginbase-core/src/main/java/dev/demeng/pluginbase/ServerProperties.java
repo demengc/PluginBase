@@ -47,7 +47,7 @@ public final class ServerProperties {
    * Gets a property from server.properties.
    *
    * @param key The property key
-   * @return The properly value, or null if failed to retrieve
+   * @return The property value, or null if failed to retrieve
    */
   public static String getProperty(final String key) {
 

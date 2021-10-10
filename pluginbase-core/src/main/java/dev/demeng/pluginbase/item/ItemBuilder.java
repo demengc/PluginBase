@@ -144,7 +144,7 @@ public class ItemBuilder {
   }
 
   /**
-   * Adds an enchant with customizable safety.
+   * Adds an enchantment with customizable safety.
    *
    * @param enchant The enchantment to add
    * @param level   The level of the enchantment
@@ -427,7 +427,7 @@ public class ItemBuilder {
   // ---------------------------------------------------------------------------------
 
   /**
-   * Gets the current current item stack.
+   * Gets the current item stack.
    *
    * @return The current item stack
    */

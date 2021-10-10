@@ -64,12 +64,12 @@ public interface Dependency {
   /**
    * Set where or not this dependency has been loaded.
    *
-   * @param loaded Whether or not this dependency has been loaded
+   * @param loaded Whether this dependency has been loaded
    */
   void setLoaded(boolean loaded);
 
   /**
-   * Whether or not this dependency has been loaded into the class path.
+   * Whether this dependency has been loaded into the class path.
    *
    * @return True if it has been loaded already, false otherwise
    */

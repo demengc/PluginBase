@@ -78,7 +78,7 @@ public final class Validate {
    * Checks if the provided string is a long.
    *
    * @param str The string to check
-   * @return The actual long if the string is an long, null otherwise
+   * @return The actual long if the string is a long, null otherwise
    */
   @Nullable
   public static Long checkLong(@NotNull final String str) {
@@ -93,7 +93,7 @@ public final class Validate {
    * Checks if the provided string is a double.
    *
    * @param str The string to check
-   * @return The actual double if the string is an double, null otherwise
+   * @return The actual double if the string is a double, null otherwise
    */
   @Nullable
   public static Double checkDouble(@NotNull final String str) {
@@ -108,7 +108,7 @@ public final class Validate {
    * Checks if the provided string is a float.
    *
    * @param str The string to check
-   * @return The actual float if the string is an double, null otherwise
+   * @return The actual float if the string is a double, null otherwise
    */
   @Nullable
   public static Float checkFloat(@NotNull final String str) {

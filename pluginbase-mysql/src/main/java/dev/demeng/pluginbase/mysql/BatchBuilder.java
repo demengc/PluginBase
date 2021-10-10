@@ -62,7 +62,7 @@ public class BatchBuilder {
   }
 
   /**
-   * Adds an additional handler which will be used on the statement.
+   * Adds a handler which will be used on the statement.
    *
    * @param handler A new statement handler
    * @return this

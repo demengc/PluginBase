@@ -59,7 +59,7 @@ public abstract class Menu implements IMenu {
   @NotNull @Getter private final Inventory inventory;
 
   /**
-   * A map of all of the actions for the menu buttons, with the key being the slot number, and the
+   * A map of all the actions for the menu buttons, with the key being the slot number, and the
    * value being the consumer for the click event if the slot clicked matches the key.
    */
   @NotNull @Getter private final Map<Integer, Consumer<InventoryClickEvent>> actions
@@ -108,9 +108,9 @@ public abstract class Menu implements IMenu {
   }
 
   /**
-   * Sets the background material of the menu.
+   * Sets the background material of the menu. Usually colored glass panes.
    *
-   * @param stack The background material of the menu, usually stained glass panes
+   * @param stack The background material of the menu
    */
   public void setBackground(@Nullable final ItemStack stack) {
 

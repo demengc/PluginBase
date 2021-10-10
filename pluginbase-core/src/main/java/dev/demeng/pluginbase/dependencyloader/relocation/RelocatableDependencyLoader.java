@@ -48,10 +48,10 @@ public abstract class RelocatableDependencyLoader<T extends RelocatableDependenc
 
   /**
    * Creates a new dependency loader that supports relocations with the specified base path. The
-   * storage destination is a relative sub directory for dependencies specific to this loader.
+   * storage destination is a relative sub-directory for dependencies specific to this loader.
    *
    * @param basePath           The base path for this dependency loader
-   * @param storageDestination The relative sub directory for dependencies
+   * @param storageDestination The relative sub-directory for dependencies
    */
   protected RelocatableDependencyLoader(
       final @NotNull Path basePath,

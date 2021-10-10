@@ -51,7 +51,7 @@ public final class Common {
   public static final boolean SPIGOT = Validate.checkClass("net.md_5.bungee.api.ChatColor") != null;
 
   /**
-   * The error message for players when an internal error occurs..
+   * The error message for players when an internal error occurs.
    */
   public static final String PLAYERS_ERROR_MESSAGE = "&6An internal error has occurred in "
       + Common.getName()

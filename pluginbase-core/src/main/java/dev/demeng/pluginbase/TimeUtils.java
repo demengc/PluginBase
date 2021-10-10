@@ -182,7 +182,7 @@ public final class TimeUtils {
   }
 
   /**
-   * Convert the given long timestamp into an SQL timestamp.
+   * Converts the long timestamp into an SQL timestamp.
    *
    * @param timestamp The long timestamp
    * @return The equivalent timestamp, as one used by SQL
@@ -192,7 +192,7 @@ public final class TimeUtils {
   }
 
   /**
-   * Convert the given SQL timestamp into a long.
+   * Converts the SQL timestamp into a long.
    *
    * @param timestamp The SQL timestamp
    * @return The equivalent timestamp, as a long

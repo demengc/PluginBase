@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Essentially a pair of objects- a command argument's resolved/mapped value, and the argument
- * argument name.
+ * name.
  */
 public final class TypeResult {
 

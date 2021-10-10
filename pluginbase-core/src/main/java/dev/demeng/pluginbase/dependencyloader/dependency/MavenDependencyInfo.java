@@ -48,8 +48,8 @@ import org.jetbrains.annotations.Nullable;
 public final class MavenDependencyInfo implements RelocatableDependency {
 
   /**
-   * This is used to validate a single line dependency. A single line dependency should have a size
-   * of 3 always.
+   * This is used to validate a single line dependency. A single line dependency should always have
+   * a size of 3.
    */
   private static final int DEPENDENCY_SPLIT_SIZE = 3;
 
@@ -75,7 +75,7 @@ public final class MavenDependencyInfo implements RelocatableDependency {
   @Getter private @Nullable String version;
 
   /**
-   * Whether or not this dependency has been loaded.
+   * Whether this dependency has been loaded.
    */
   @Getter @Setter private boolean loaded;
 

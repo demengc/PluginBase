@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The POJO containing the credentials to a SQL database.
+ * The POJO containing the credentials to an SQL database.
  */
 @Data
 public final class DatabaseCredentials {

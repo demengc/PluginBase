@@ -91,7 +91,7 @@ public final class DependencyEngine {
    * Creates a new Dependency Engine with the specified base path.
    *
    * @param basePath         The base path for all dependencies to be downloaded
-   * @param addDefaultLoader Whether or not to include the default dependency loaders
+   * @param addDefaultLoader Whether to include the default dependency loaders
    * @return A new {@link DependencyEngine}
    */
   @Contract("_,_ -> new")
