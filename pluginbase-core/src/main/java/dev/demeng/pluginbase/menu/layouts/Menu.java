@@ -28,7 +28,7 @@ import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
-import dev.demeng.pluginbase.menu.models.MenuButton;
+import dev.demeng.pluginbase.menu.model.MenuButton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

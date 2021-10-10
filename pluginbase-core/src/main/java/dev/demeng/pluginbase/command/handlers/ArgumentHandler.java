@@ -26,8 +26,8 @@
 package dev.demeng.pluginbase.command.handlers;
 
 import dev.demeng.pluginbase.Validate;
-import dev.demeng.pluginbase.command.models.CommandData;
-import dev.demeng.pluginbase.command.models.TypeResult;
+import dev.demeng.pluginbase.command.model.CommandData;
+import dev.demeng.pluginbase.command.model.TypeResult;
 import dev.demeng.pluginbase.command.resolvers.ParameterResolver;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import java.util.Arrays;

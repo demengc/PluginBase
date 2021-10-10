@@ -27,7 +27,7 @@ package dev.demeng.pluginbase.serializer;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.chat.Placeholders;
 import dev.demeng.pluginbase.item.ItemBuilder;
-import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
+import dev.demeng.pluginbase.serializer.type.YamlSerializable;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;

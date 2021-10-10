@@ -28,7 +28,7 @@ import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.Players;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.chat.ChatUtils;
-import dev.demeng.pluginbase.serializer.interfaces.YamlSerializable;
+import dev.demeng.pluginbase.serializer.type.YamlSerializable;
 import java.io.IOException;
 import lombok.Data;
 import org.bukkit.configuration.ConfigurationSection;

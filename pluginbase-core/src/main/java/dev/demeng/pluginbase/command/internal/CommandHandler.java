@@ -41,7 +41,7 @@ import dev.demeng.pluginbase.command.exceptions.CustomCommandException;
 import dev.demeng.pluginbase.command.exceptions.GenericMessageException;
 import dev.demeng.pluginbase.command.handlers.ArgumentHandler;
 import dev.demeng.pluginbase.command.handlers.CompletionHandler;
-import dev.demeng.pluginbase.command.models.CommandData;
+import dev.demeng.pluginbase.command.model.CommandData;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

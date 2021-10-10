@@ -2,7 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021 Demeng Chen
- * Copyright (c) 2019 Matt
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,38 +22,39 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.command.models;
+package dev.demeng.pluginbase.serializer.type;
 
-import lombok.Getter;
+import dev.demeng.pluginbase.YamlConfig;
+import java.io.IOException;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Essentially a pair of objects- a command argument's resolved/mapped value, and the argument
- * argument name.
+ * Represents an object that can be serialized to a YAML configuration section. This is primarily
+ * used (internally) for Bukkit objects and is completely different from Bukkit's {@link
+ * org.bukkit.configuration.serialization.ConfigurationSerializable} because it allows each object
+ * to have its own method of serialization.
+ *
+ * @param <T> The serializable object
  */
-public final class TypeResult {
-
-  @Nullable @Getter private final Object resolvedValue;
-  @NotNull @Getter private final String argumentName;
+public interface YamlSerializable<T> {
 
   /**
-   * Creates a new type result that has already been resolved.
+   * Serializes an object and saves it into a configuration file.
    *
-   * @param resolvedValue The resolved value
-   * @param argumentName  The argument name
+   * @param obj        The object to serialize
+   * @param configFile The configuration file to save
+   * @param path       The configuration path to save in
+   * @throws IOException If the file fails to save
    */
-  public TypeResult(@Nullable final Object resolvedValue, @NotNull final Object argumentName) {
-    this.resolvedValue = resolvedValue;
-    this.argumentName = String.valueOf(argumentName);
-  }
+  void serialize(@NotNull T obj, @NotNull YamlConfig configFile, @NotNull String path)
+      throws IOException;
 
   /**
-   * Creates a new type result with a null resolve value.
+   * Deserializes an object from a configuration section.
    *
-   * @param argumentName The argument name
+   * @param section The serialized object
+   * @return The deserialized object
    */
-  public TypeResult(@NotNull final Object argumentName) {
-    this(null, argumentName);
-  }
+  T deserialize(@NotNull ConfigurationSection section);
 }

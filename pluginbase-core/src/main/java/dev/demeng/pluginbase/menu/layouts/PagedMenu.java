@@ -27,7 +27,7 @@ package dev.demeng.pluginbase.menu.layouts;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
-import dev.demeng.pluginbase.menu.models.MenuButton;
+import dev.demeng.pluginbase.menu.model.MenuButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

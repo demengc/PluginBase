@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.command.models;
+package dev.demeng.pluginbase.command.model;
 
 import dev.demeng.pluginbase.command.CommandBase;
 import java.lang.reflect.Method;
