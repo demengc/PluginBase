@@ -36,7 +36,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Various utilities for playing sound effects.
  */
-@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SoundUtils {
 

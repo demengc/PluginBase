@@ -31,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * An interface containing common methods between the different menu layouts.
  */
-@SuppressWarnings("unused")
 public interface IMenu {
 
   /**

@@ -32,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Utility class for checking and validating objects.
  */
-@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Validate {
 

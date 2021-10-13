@@ -40,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Commonly used methods and utilities.
  */
-@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Common {
 

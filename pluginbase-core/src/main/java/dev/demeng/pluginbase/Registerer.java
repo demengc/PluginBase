@@ -34,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Utility class for quickly registering commands, listeners, and more.
  */
-@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Registerer {
 

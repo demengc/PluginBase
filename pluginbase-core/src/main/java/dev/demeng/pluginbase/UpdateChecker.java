@@ -33,7 +33,6 @@ import lombok.Getter;
 /**
  * Simple utility for checking for resource updates on SpigotMC.
  */
-@SuppressWarnings("unused")
 public class UpdateChecker {
 
   @Getter private final int resourceId;

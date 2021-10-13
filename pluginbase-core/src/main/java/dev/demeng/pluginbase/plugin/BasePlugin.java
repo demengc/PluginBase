@@ -41,7 +41,6 @@ import org.jetbrains.annotations.Nullable;
  * you can also manually set the values in {@link BaseManager} should you wish to use your own
  * loading system.
  */
-@SuppressWarnings("unused")
 public abstract class BasePlugin extends JavaPlugin {
 
   /**

@@ -53,7 +53,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A utility for quickly creating {@link ItemStack}s.
  */
-@SuppressWarnings("unused")
 public class ItemBuilder {
 
   /**

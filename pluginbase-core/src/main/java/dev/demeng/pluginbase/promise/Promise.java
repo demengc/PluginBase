@@ -51,7 +51,6 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <V> the result type
  */
-@SuppressWarnings("unused")
 public interface Promise<V> extends Future<V>, Terminable {
 
   /**

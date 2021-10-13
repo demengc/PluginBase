@@ -47,7 +47,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Message-related utilities, including console and chat messages.
  */
-@SuppressWarnings("unused")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ChatUtils {
 
