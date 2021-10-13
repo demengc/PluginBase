@@ -27,10 +27,12 @@ package dev.demeng.pluginbase.menu.layout;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.Placeholders;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
+import dev.demeng.pluginbase.serializer.ItemSerializer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -214,7 +216,19 @@ public abstract class Menu implements IMenu {
    *
    * @param section The configuration containing the fillers to set
    */
-  public void applyFillersFromConfig(ConfigurationSection section) {
+  public void applyFillersFromConfig(@NotNull ConfigurationSection section) {
+    applyFillersFromConfig(section, null);
+  }
+
+  /**
+   * Applies all menu fillers that are declared in a configuration section.
+   *
+   * @param section      The configuration containing the fillers to set
+   * @param placeholders The placeholders to use for custom fillers
+   */
+  public void applyFillersFromConfig(
+      @NotNull ConfigurationSection section,
+      @Nullable Placeholders placeholders) {
 
     for (String fillerType : section.getKeys(false)) {
 
@@ -224,51 +238,86 @@ public abstract class Menu implements IMenu {
           break;
 
         case "row":
-          final ConfigurationSection rowSection = section.getConfigurationSection("row");
-
-          if (rowSection == null) {
-            break;
-          }
-
-          for (String strRow : rowSection.getKeys(false)) {
-
-            final Integer row = Validate.checkInt(strRow);
-
-            if (row == null) {
-              Common.error(null, "Row number must be an integer: " + strRow, false);
-            } else {
-              setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow)));
-            }
-          }
-
+          applyRowFillerFromConfig(section.getConfigurationSection("row"));
           break;
 
         case "column":
-          final ConfigurationSection columnSection = section.getConfigurationSection("column");
-
-          if (columnSection == null) {
-            break;
-          }
-
-          for (String strColumn : columnSection.getKeys(false)) {
-
-            final Integer column = Validate.checkInt(strColumn);
-
-            if (column == null) {
-              Common.error(null, "Column number must be an integer: " + strColumn, false);
-            } else {
-              setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn)));
-            }
-          }
-
+          applyColumnFillerFromConfig(section.getConfigurationSection("column"));
           break;
 
         case "border":
           setBorder(ItemBuilder.getMaterial(section.getString("border")));
           break;
 
+        case "custom":
+          applyCustomFillerFromConfig(section.getConfigurationSection("custom"), placeholders);
+          break;
+
         default:
           break;
+      }
+    }
+  }
+
+  private void applyRowFillerFromConfig(ConfigurationSection rowSection) {
+
+    if (rowSection == null) {
+      return;
+    }
+
+    for (String strRow : rowSection.getKeys(false)) {
+
+      final Integer row = Validate.checkInt(strRow);
+
+      if (row == null) {
+        Common.error(null, "Row number must be an integer: " + strRow, false);
+      } else {
+        setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow)));
+      }
+    }
+  }
+
+  private void applyColumnFillerFromConfig(ConfigurationSection columnSection) {
+
+    if (columnSection == null) {
+      return;
+    }
+
+    for (String strColumn : columnSection.getKeys(false)) {
+
+      final Integer column = Validate.checkInt(strColumn);
+
+      if (column == null) {
+        Common.error(null, "Column number must be an integer: " + strColumn, false);
+      } else {
+        setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn)));
+      }
+    }
+  }
+
+  private void applyCustomFillerFromConfig(
+      ConfigurationSection customSection,
+      Placeholders placeholders) {
+
+    if (customSection == null) {
+      return;
+    }
+
+    for (String strSlot : customSection.getKeys(false)) {
+
+      final Integer slot = Validate.checkInt(strSlot);
+
+      if (slot == null) {
+        Common.error(null, "Slot number must be an integer: " + strSlot, false);
+
+      } else {
+        final ConfigurationSection slotSection = customSection.getConfigurationSection(strSlot);
+
+        if (slotSection == null) {
+          continue;
+        }
+
+        addButton(slot, ItemSerializer.get().deserialize(slotSection, placeholders), null);
       }
     }
   }
