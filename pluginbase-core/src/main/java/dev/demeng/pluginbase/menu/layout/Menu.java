@@ -65,6 +65,8 @@ public abstract class Menu implements IMenu {
   @NotNull @Getter private final Map<Integer, Consumer<InventoryClickEvent>> actions
       = new HashMap<>();
 
+  private static final String EMPTY_NAME = "&0";
+
   /**
    * Creates a new menu with the specified size and inventory title.
    *
@@ -108,9 +110,9 @@ public abstract class Menu implements IMenu {
   }
 
   /**
-   * Sets the background material of the menu. Usually colored glass panes.
+   * Applies a background filler, which sets all empty slots in the menu with the dummy button.
    *
-   * @param stack The background material of the menu
+   * @param stack The background material
    */
   public void setBackground(@Nullable final ItemStack stack) {
 
@@ -121,7 +123,85 @@ public abstract class Menu implements IMenu {
     for (int slot = 0; slot < inventory.getSize(); slot++) {
       final ItemStack current = inventory.getItem(slot);
       if (current == null || current.getType() == Material.AIR) {
-        addButton(new MenuButton(slot, new ItemBuilder(stack).name("&0").get(), null));
+        addButton(new MenuButton(slot,
+            new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+      }
+    }
+  }
+
+  /**
+   * Applies a row filler, which sets all empty slots in a row with the dummy button.
+   *
+   * @param row   The row to fill (top to bottom)
+   * @param stack The fill material
+   */
+  public void setRow(final int row, @Nullable final ItemStack stack) {
+
+    if (stack == null || stack.getType() == Material.AIR
+        || row <= 0 || row > inventory.getSize() / 9) {
+      return;
+    }
+
+    for (int i = 0; i < 9; i++) {
+
+      final int slot = ((row - 1) * 9) + i;
+      final ItemStack current = inventory.getItem(slot);
+
+      if (current == null || current.getType() == Material.AIR) {
+        addButton(
+            new MenuButton(slot,
+                new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+      }
+    }
+  }
+
+  /**
+   * Applies a column filler, which sets all empty slots in a column with the dummy button.
+   *
+   * @param column The column to fill (left to right)
+   * @param stack  The fill material
+   */
+  public void setColumn(final int column, @Nullable final ItemStack stack) {
+
+    if (stack == null || stack.getType() == Material.AIR || column <= 0 || column > 9) {
+      return;
+    }
+
+    for (int i = 0; i < (inventory.getSize() / 9); i++) {
+
+      final int slot = (i * 9) + (column - 1);
+      final ItemStack current = inventory.getItem(slot);
+
+      if (current == null || current.getType() == Material.AIR) {
+        addButton(
+            new MenuButton(slot,
+                new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+      }
+    }
+  }
+
+  /**
+   * Applies a border filler, which sets all empty slots on the edges of the menu with a dummy
+   * button.
+   *
+   * @param stack The fill material
+   */
+  public void setBorder(@Nullable final ItemStack stack) {
+
+    if (stack == null || stack.getType() == Material.AIR) {
+      return;
+    }
+
+    for (int i = 0; i < inventory.getSize(); i++) {
+      if (i < 9 || i >= inventory.getSize() - 9 || i % 9 == 0 || i % 9 == 8) {
+
+        final ItemStack current = inventory.getItem(i);
+
+        if (current == null || current.getType() == Material.AIR) {
+          addButton(
+              new MenuButton(i,
+                  new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+        }
       }
     }
   }

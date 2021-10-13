@@ -24,7 +24,6 @@
 
 package dev.demeng.pluginbase.menu.layout;
 
-import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
@@ -34,7 +33,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import lombok.Getter;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -113,10 +111,6 @@ public abstract class PagedMenu implements IMenu {
 
     pages.get(0).addButton(settings.getDummyPreviousButton());
     pages.get(pages.size() - 1).addButton(settings.getDummyNextButton());
-
-    for (final Menu menu : pages) {
-      menu.setBackground(settings.getBackground());
-    }
   }
 
   /**
@@ -174,20 +168,6 @@ public abstract class PagedMenu implements IMenu {
     public Page(final int pageSize, final String title, final Settings settings) {
       super(pageSize, title);
 
-      if (settings.getSeparator() != null && settings.getSeparatorRow() > 0) {
-        for (int i = 0; i < 9; i++) {
-
-          final int slot = ((settings.getSeparatorRow() - 1) * 9) + i;
-          final ItemStack stack = getInventory().getItem(slot);
-
-          if (stack == null || stack.getType() == Material.AIR) {
-            super.addButton(
-                new MenuButton(slot, new ItemBuilder(settings.getSeparator()).name("&0").get(),
-                    null));
-          }
-        }
-      }
-
       super.addButton(
           new MenuButton(
               settings.getPreviousButton().getSlot(),
@@ -224,27 +204,6 @@ public abstract class PagedMenu implements IMenu {
    * Settings for the paged menu.
    */
   public interface Settings {
-
-    /**
-     * The background material each page will be filled with.
-     *
-     * @return The background material
-     */
-    @Nullable ItemStack getBackground();
-
-    /**
-     * The separator material each page will have. No separator will be added if this is null.
-     *
-     * @return The separator material, or null for no separator
-     */
-    @Nullable ItemStack getSeparator();
-
-    /**
-     * The row the separator will be on. No separator will be added if this is less than 1.
-     *
-     * @return The separator row, or -1 for no separator
-     */
-    int getSeparatorRow();
 
     /**
      * The previous page button. The provided consumer will be ignored.
@@ -299,22 +258,6 @@ public abstract class PagedMenu implements IMenu {
     @NotNull
     static Settings fromConfig(@NotNull final ConfigurationSection section) {
       return new Settings() {
-        @Override
-        public ItemStack getBackground() {
-          return ItemBuilder.getMaterial(Objects.requireNonNull(section.getString("background")));
-        }
-
-        @Override
-        public ItemStack getSeparator() {
-          return ItemBuilder.getMaterial(
-              Objects.requireNonNull(section.getString("separator.material")));
-        }
-
-        @Override
-        public int getSeparatorRow() {
-          return section.getInt("separator.row");
-        }
-
         @Override
         public @NotNull MenuButton getPreviousButton() {
           return MenuButton
