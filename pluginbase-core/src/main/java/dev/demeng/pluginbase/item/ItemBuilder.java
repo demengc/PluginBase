@@ -463,7 +463,11 @@ public class ItemBuilder {
    * @return A standard item stack with no meta, or null if the material is invalid or unsupported
    */
   @NotNull
-  public static Optional<ItemStack> getMaterialSafe(@NotNull final String strMaterial) {
+  public static Optional<ItemStack> getMaterialSafe(@Nullable final String strMaterial) {
+
+    if (strMaterial == null) {
+      return Optional.empty();
+    }
 
     final Optional<XMaterial> matchOptional = XMaterial.matchXMaterial(strMaterial);
     if (!matchOptional.isPresent()) {
@@ -488,7 +492,12 @@ public class ItemBuilder {
    * @see #getMaterialSafe(String)
    */
   @NotNull
-  public static ItemStack getMaterial(@NotNull final String strMaterial) {
+  public static ItemStack getMaterial(@Nullable final String strMaterial) {
+
+    if (strMaterial == null) {
+      Common.error(null, "Invalid material: null", false);
+      return new ItemStack(Material.STONE);
+    }
 
     final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
 
