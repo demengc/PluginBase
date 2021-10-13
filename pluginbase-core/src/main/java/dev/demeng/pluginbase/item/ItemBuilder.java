@@ -512,9 +512,12 @@ public class ItemBuilder {
    */
   @NotNull
   public static ItemStack getMaterialOrDef(
-      @NotNull final String strMaterial,
-      @NotNull final ItemStack def
-  ) {
+      @Nullable final String strMaterial,
+      @NotNull final ItemStack def) {
+
+    if (strMaterial == null) {
+      return def;
+    }
 
     final ItemStack stack = getMaterialSafe(strMaterial).orElse(null);
 
