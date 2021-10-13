@@ -24,6 +24,8 @@
 
 package dev.demeng.pluginbase.menu.layout;
 
+import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
@@ -36,6 +38,7 @@ import java.util.function.Consumer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -202,6 +205,70 @@ public abstract class Menu implements IMenu {
               new MenuButton(i,
                   new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
         }
+      }
+    }
+  }
+
+  /**
+   * Applies all menu fillers that are declared in a configuration section.
+   *
+   * @param section The configuration containing the fillers to set
+   */
+  public void applyFillersFromConfig(ConfigurationSection section) {
+
+    for (String fillerType : section.getKeys(false)) {
+
+      switch (fillerType) {
+        case "background":
+          setBackground(ItemBuilder.getMaterial(section.getString("background")));
+          break;
+
+        case "row":
+          final ConfigurationSection rowSection = section.getConfigurationSection("row");
+
+          if (rowSection == null) {
+            break;
+          }
+
+          for (String strRow : rowSection.getKeys(false)) {
+
+            final Integer row = Validate.checkInt(strRow);
+
+            if (row == null) {
+              Common.error(null, "Row number must be an integer: " + strRow, false);
+            } else {
+              setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow)));
+            }
+          }
+
+          break;
+
+        case "column":
+          final ConfigurationSection columnSection = section.getConfigurationSection("column");
+
+          if (columnSection == null) {
+            break;
+          }
+
+          for (String strColumn : columnSection.getKeys(false)) {
+
+            final Integer column = Validate.checkInt(strColumn);
+
+            if (column == null) {
+              Common.error(null, "Column number must be an integer: " + strColumn, false);
+            } else {
+              setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn)));
+            }
+          }
+
+          break;
+
+        case "border":
+          setBorder(ItemBuilder.getMaterial(section.getString("border")));
+          break;
+
+        default:
+          break;
       }
     }
   }
