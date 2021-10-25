@@ -28,11 +28,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,5 +123,33 @@ public final class Placeholders {
     }
 
     return stream.collect(Collectors.toList());
+  }
+
+  /**
+   * Sets the placeholders into the given item stack.
+   *
+   * @param stack The item stack to have placeholders set
+   * @return The replaced item stack
+   */
+  @NotNull
+  public ItemStack set(@Nullable final ItemStack stack) {
+
+    if (stack == null || stack.getType() == Material.AIR) {
+      return new ItemStack(Material.AIR);
+    }
+
+    final ItemStack replaced = new ItemStack(stack);
+    final ItemMeta meta = replaced.getItemMeta();
+    Objects.requireNonNull(meta, "Item meta is null");
+
+    meta.setDisplayName(ChatUtils.colorize(set(meta.getDisplayName())));
+
+    if (meta.getLore() != null && !meta.getLore().isEmpty()) {
+      meta.setLore(ChatUtils.colorize(set(meta.getLore())));
+    }
+
+    replaced.setItemMeta(meta);
+
+    return replaced;
   }
 }
