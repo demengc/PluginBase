@@ -216,7 +216,7 @@ public abstract class Menu implements IMenu {
    *
    * @param section The configuration containing the fillers to set
    */
-  public void applyFillersFromConfig(@NotNull ConfigurationSection section) {
+  public void applyFillersFromConfig(@NotNull final ConfigurationSection section) {
     applyFillersFromConfig(section, null);
   }
 
@@ -227,10 +227,10 @@ public abstract class Menu implements IMenu {
    * @param placeholders The placeholders to use for custom fillers
    */
   public void applyFillersFromConfig(
-      @NotNull ConfigurationSection section,
-      @Nullable Placeholders placeholders) {
+      @NotNull final ConfigurationSection section,
+      @Nullable final Placeholders placeholders) {
 
-    for (String fillerType : section.getKeys(false)) {
+    for (final String fillerType : section.getKeys(false)) {
 
       switch (fillerType) {
         case "background":
@@ -259,13 +259,13 @@ public abstract class Menu implements IMenu {
     }
   }
 
-  private void applyRowFillerFromConfig(ConfigurationSection rowSection) {
+  private void applyRowFillerFromConfig(final ConfigurationSection rowSection) {
 
     if (rowSection == null) {
       return;
     }
 
-    for (String strRow : rowSection.getKeys(false)) {
+    for (final String strRow : rowSection.getKeys(false)) {
 
       final Integer row = Validate.checkInt(strRow);
 
@@ -277,13 +277,13 @@ public abstract class Menu implements IMenu {
     }
   }
 
-  private void applyColumnFillerFromConfig(ConfigurationSection columnSection) {
+  private void applyColumnFillerFromConfig(final ConfigurationSection columnSection) {
 
     if (columnSection == null) {
       return;
     }
 
-    for (String strColumn : columnSection.getKeys(false)) {
+    for (final String strColumn : columnSection.getKeys(false)) {
 
       final Integer column = Validate.checkInt(strColumn);
 
@@ -296,14 +296,14 @@ public abstract class Menu implements IMenu {
   }
 
   private void applyCustomFillerFromConfig(
-      ConfigurationSection customSection,
-      Placeholders placeholders) {
+      final ConfigurationSection customSection,
+      final Placeholders placeholders) {
 
     if (customSection == null) {
       return;
     }
 
-    for (String strSlot : customSection.getKeys(false)) {
+    for (final String strSlot : customSection.getKeys(false)) {
 
       final Integer slot = Validate.checkInt(strSlot);
 
