@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase.menu.model;
 
-import dev.demeng.pluginbase.chat.Placeholders;
+import dev.demeng.pluginbase.DynamicPlaceholders;
 import dev.demeng.pluginbase.menu.layout.Menu;
 import dev.demeng.pluginbase.serializer.ItemSerializer;
 import java.util.function.Consumer;
@@ -76,7 +76,7 @@ public class MenuButton {
   @NotNull
   public static MenuButton fromConfig(
       @NotNull final ConfigurationSection section,
-      @Nullable final Placeholders placeholders,
+      @Nullable final DynamicPlaceholders placeholders,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
     return new MenuButton(section.getInt("slot", 0) - 1,
         ItemSerializer.get().deserialize(section, placeholders), consumer);
@@ -113,7 +113,7 @@ public class MenuButton {
   public static MenuButton fromConfig(
       final int slot,
       @NotNull final ConfigurationSection section,
-      @Nullable final Placeholders placeholders,
+      @Nullable final DynamicPlaceholders placeholders,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
     return new MenuButton(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
   }

@@ -25,9 +25,9 @@
 package dev.demeng.pluginbase.menu.layout;
 
 import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.DynamicPlaceholders;
 import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.chat.ChatUtils;
-import dev.demeng.pluginbase.chat.Placeholders;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
@@ -228,7 +228,7 @@ public abstract class Menu implements IMenu {
    */
   public void applyFillersFromConfig(
       @NotNull final ConfigurationSection section,
-      @Nullable final Placeholders placeholders) {
+      @Nullable final DynamicPlaceholders placeholders) {
 
     for (final String fillerType : section.getKeys(false)) {
 
@@ -297,7 +297,7 @@ public abstract class Menu implements IMenu {
 
   private void applyCustomFillerFromConfig(
       final ConfigurationSection customSection,
-      final Placeholders placeholders) {
+      final DynamicPlaceholders placeholders) {
 
     if (customSection == null) {
       return;

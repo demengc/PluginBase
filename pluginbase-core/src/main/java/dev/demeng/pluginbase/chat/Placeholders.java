@@ -24,27 +24,26 @@
 
 package dev.demeng.pluginbase.chat;
 
+import dev.demeng.pluginbase.DynamicPlaceholders;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents a series of placeholders for a message.
+ * Implementation of {@link DynamicPlaceholders}, allowing you to quickly add and set placeholders
+ * as an object. Also permits setting placeholders into nullable objects (which returns a default,
+ * non-null object).
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Placeholders {
+public final class Placeholders implements DynamicPlaceholders {
 
   /**
    * A map of all the placeholders, with the key being the string to replace and the value being the
@@ -94,13 +93,7 @@ public final class Placeholders {
       return "";
     }
 
-    String replaced = str;
-
-    for (final Map.Entry<String, String> entry : replacements.entrySet()) {
-      replaced = replaced.replace(entry.getKey(), entry.getValue());
-    }
-
-    return replaced;
+    return setPlaceholders(str);
   }
 
   /**
@@ -116,13 +109,7 @@ public final class Placeholders {
       return Collections.emptyList();
     }
 
-    Stream<String> stream = list.stream();
-
-    for (final Map.Entry<String, String> entry : replacements.entrySet()) {
-      stream = stream.map(str -> str.replace(entry.getKey(), entry.getValue()));
-    }
-
-    return stream.collect(Collectors.toList());
+    return setPlaceholders(list);
   }
 
   /**
@@ -138,17 +125,17 @@ public final class Placeholders {
       return new ItemStack(Material.AIR);
     }
 
-    final ItemStack replaced = new ItemStack(stack);
-    final ItemMeta meta = replaced.getItemMeta();
-    Objects.requireNonNull(meta, "Item meta is null");
+    return setPlaceholders(stack);
+  }
 
-    meta.setDisplayName(ChatUtils.colorize(set(meta.getDisplayName())));
+  @Override
+  public @NotNull String setPlaceholders(@NotNull String str) {
 
-    if (meta.getLore() != null && !meta.getLore().isEmpty()) {
-      meta.setLore(ChatUtils.colorize(set(meta.getLore())));
+    String replaced = str;
+
+    for (final Map.Entry<String, String> entry : replacements.entrySet()) {
+      replaced = replaced.replace(entry.getKey(), entry.getValue());
     }
-
-    replaced.setItemMeta(meta);
 
     return replaced;
   }

@@ -24,8 +24,8 @@
 
 package dev.demeng.pluginbase.serializer;
 
+import dev.demeng.pluginbase.DynamicPlaceholders;
 import dev.demeng.pluginbase.YamlConfig;
-import dev.demeng.pluginbase.chat.Placeholders;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.serializer.type.YamlSerializable;
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
   @NotNull
   public ItemStack deserialize(
       @NotNull final ConfigurationSection section,
-      @Nullable final Placeholders placeholders) {
+      @Nullable final DynamicPlaceholders placeholders) {
 
     final String configMaterial = section.getString("material");
 
@@ -121,12 +121,12 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
     return builder.get();
   }
 
-  private String replace(final Placeholders placeholders, final String str) {
+  private String replace(final DynamicPlaceholders placeholders, final String str) {
 
     if (str == null) {
       return null;
     }
 
-    return placeholders == null ? str : placeholders.set(str);
+    return placeholders == null ? str : placeholders.setPlaceholders(str);
   }
 }
