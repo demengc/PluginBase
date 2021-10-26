@@ -52,6 +52,18 @@ public final class Placeholders implements DynamicPlaceholders {
   @NotNull @Getter private final Map<String, String> replacements = new HashMap<>();
 
   /**
+   * Creates a new placeholders object from an existing replacements map.
+   *
+   * @param replacements The map of all placeholders
+   */
+  @NotNull
+  public static Placeholders of(@NotNull Map<String, String> replacements) {
+    final Placeholders obj = new Placeholders();
+    obj.getReplacements().putAll(replacements);
+    return obj;
+  }
+
+  /**
    * Creates a new placeholders object with the given placeholder.
    *
    * @param toReplace   The string to replace
@@ -126,6 +138,16 @@ public final class Placeholders implements DynamicPlaceholders {
     }
 
     return setPlaceholders(stack);
+  }
+
+  /**
+   * Creates a copy of the current placeholders object.
+   *
+   * @return A copy of the current placeholders object
+   */
+  @NotNull
+  public Placeholders copy() {
+    return Placeholders.of(replacements);
   }
 
   @Override
