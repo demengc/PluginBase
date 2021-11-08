@@ -187,8 +187,8 @@ public final class TimeUtils {
    * @param timestamp The long timestamp
    * @return The equivalent timestamp, as one used by SQL
    */
-  public static String toSqlTimestamp(final long timestamp) {
-    return new Timestamp(new Date(timestamp).getTime()).toString();
+  public static Timestamp toSqlTimestamp(final long timestamp) {
+    return new Timestamp(new Date(timestamp).getTime());
   }
 
   /**
