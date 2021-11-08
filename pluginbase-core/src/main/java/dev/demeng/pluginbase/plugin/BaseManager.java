@@ -49,7 +49,7 @@ public final class BaseManager {
   /**
    * The command manager for the plugin. Should be set when your plugin enables.
    */
-  @NotNull @Getter @Setter private static CommandManager commandManager;
+  @Getter @Setter private static CommandManager commandManager;
 
   /**
    * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.
