@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.16.1-SNAPSHOT</version>
+    <version>1.16.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-mysql</artifactId>
@@ -42,16 +42,6 @@
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <minimizeJar>false</minimizeJar>
-              <relocations>
-                <relocation>
-                  <pattern>com.zaxxer.hikari</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.internal.hikari</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>be.bendem.sqlstreams</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.internal.sqlstreams</shadedPattern>
-                </relocation>
-              </relocations>
             </configuration>
           </execution>
         </executions>
@@ -76,7 +66,7 @@
     <dependency>
       <groupId>dev.demeng</groupId>
       <artifactId>pluginbase-core</artifactId>
-      <version>1.16.1-SNAPSHOT</version>
+      <version>1.16.2-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -84,7 +74,6 @@
       <artifactId>HikariCP</artifactId>
       <version>4.0.3</version>
       <scope>compile</scope>
-      <optional>true</optional>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
@@ -97,7 +86,6 @@
       <artifactId>sql-streams</artifactId>
       <version>1.0.0</version>
       <scope>compile</scope>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>me.carleslc.Simple-YAML</groupId>
