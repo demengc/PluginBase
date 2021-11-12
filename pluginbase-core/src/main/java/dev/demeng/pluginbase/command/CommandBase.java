@@ -90,6 +90,18 @@ public abstract class CommandBase {
   // ---------------------------------------------------------------------------------
 
   /**
+   * Sends a "not player" message for the command that is currently being executed.
+   *
+   * <p><b>Note:</b> This method is for convenience and should only be called inside a command or
+   * sub-command. This also interrupts the command execution and replace a "return" statement,
+   * though it is still advised that you have a return statement since it might confuse your IDE.
+   */
+  @SneakyThrows
+  protected void tellNotPlayer() {
+    throw new GenericMessageException(BaseManager.getBaseSettings().notPlayer());
+  }
+
+  /**
    * Sends a "no permission" message for the command that is currently being executed.
    *
    * <p><b>Note:</b> This method is for convenience and should only be called inside a command or
