@@ -93,6 +93,17 @@ public abstract class PagedMenu implements IMenu {
 
     for (final MenuButton button : buttons) {
 
+      // Slot must be -1 for proper pagination.
+      if (button.getSlot() != -1) {
+
+        // Set in the specified slot on first page if slot is higher than -1.
+        if (button.getSlot() > -1) {
+          pages.get(0).addButton(button);
+        }
+
+        continue;
+      }
+
       if (currentSlot > settings.getEndingSlot()
           || page.getInventory().firstEmpty() > settings.getEndingSlot()
           || page.getInventory().firstEmpty() == -1) {
