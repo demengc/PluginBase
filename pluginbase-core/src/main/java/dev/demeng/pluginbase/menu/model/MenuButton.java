@@ -47,8 +47,10 @@ public class MenuButton {
 
   /**
    * The slot the button should show up in. Must be less than the inventory size minus 1. Note that
-   * inventory slots start at 0. This button will be ignored and not be placed inside the menu if
-   * the slot is negative.
+   * inventory slots start at 0. In single-page menus, this button will be ignored and not be placed
+   * inside the menu if the slot is negative. In paged menus, this slot must be set to -1. If it is
+   * higher, the button will be placed in the specified slot on the first page. If it is lower, the
+   * button will not be placed.
    */
   @Getter @Setter private int slot;
 
@@ -78,8 +80,14 @@ public class MenuButton {
       @NotNull final ConfigurationSection section,
       @Nullable final DynamicPlaceholders placeholders,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return new MenuButton(section.getInt("slot", 0) - 1,
-        ItemSerializer.get().deserialize(section, placeholders), consumer);
+
+    int slot = section.getInt("slot", 0);
+
+    if (slot > 0) {
+      slot--;
+    }
+
+    return new MenuButton(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
   }
 
   /**
