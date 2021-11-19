@@ -150,16 +150,6 @@ public final class Placeholders implements DynamicPlaceholders {
     return Placeholders.of(replacements);
   }
 
-  /**
-   * Creates an empty placeholders object.
-   *
-   * @return An empty placeholders object
-   */
-  @NotNull
-  public Placeholders empty() {
-    return new Placeholders();
-  }
-
   @Override
   public @NotNull String setPlaceholders(@NotNull String str) {
 
@@ -170,5 +160,15 @@ public final class Placeholders implements DynamicPlaceholders {
     }
 
     return replaced;
+  }
+
+  /**
+   * Creates an empty placeholders object.
+   *
+   * @return An empty placeholders object
+   */
+  @NotNull
+  public static Placeholders empty() {
+    return new Placeholders();
   }
 }
