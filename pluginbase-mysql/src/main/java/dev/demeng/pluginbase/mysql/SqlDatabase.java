@@ -62,7 +62,6 @@ public class SqlDatabase {
 
   private static final long MAX_LIFETIME = TimeUnit.MINUTES.toMillis(30);
   private static final long CONNECTION_TIMEOUT = TimeUnit.SECONDS.toMillis(10);
-  private static final long LEAK_DETECTION_THRESHOLD = TimeUnit.SECONDS.toMillis(10);
 
   @NotNull @Getter private final HikariDataSource source;
   @NotNull @Getter private final SqlStream stream;
@@ -94,7 +93,6 @@ public class SqlDatabase {
 
     hikari.setMaxLifetime(MAX_LIFETIME);
     hikari.setConnectionTimeout(CONNECTION_TIMEOUT);
-    hikari.setLeakDetectionThreshold(LEAK_DETECTION_THRESHOLD);
 
     final Map<String, String> properties = new HashMap<>();
     properties.put("useUnicode", "true");
