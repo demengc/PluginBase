@@ -261,7 +261,7 @@ public class SqlDatabase {
     /**
      * A standard MySQL database.
      */
-    MYSQL(false, "com.mysql.jdbc.Driver",
+    MYSQL(false, "com.mysql.cj.jdbc.Driver",
         "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
 
     /**
