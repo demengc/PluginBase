@@ -27,7 +27,6 @@ package dev.demeng.pluginbase.item;
 import com.cryptomorin.xseries.XMaterial;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.chat.ChatUtils;
-import io.github.bananapuncher714.nbteditor.NBTEditor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -262,7 +261,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder unbreakable(final boolean unbreakable) {
-    NBTEditor.set(stack, unbreakable, "Unbreakable");
+    updateMeta(meta -> meta.setUnbreakable(unbreakable));
     return this;
   }
 
@@ -332,18 +331,6 @@ public class ItemBuilder {
       updateMeta(meta -> meta.setCustomModelData(modelData));
     }
 
-    return this;
-  }
-
-  /**
-   * Adds an NBT tag to the item stack.
-   *
-   * @param key   The key of the tag
-   * @param value The value of the tag
-   * @return this
-   */
-  public ItemBuilder nbtTag(@NotNull final String key, @Nullable final Object value) {
-    NBTEditor.set(stack, value, key);
     return this;
   }
 
