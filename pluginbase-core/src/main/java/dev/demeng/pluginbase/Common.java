@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Arrays;
+import java.util.function.IntConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
@@ -210,5 +211,56 @@ public final class Common {
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseManager.getPlugin())) {
       Bukkit.getPluginManager().disablePlugin(BaseManager.getPlugin());
     }
+  }
+
+  /**
+   * Parses a string sequence of integers and accepts a consumer for each integer. The sequence can
+   * either be a single integer (1), a range of integers (1-10), or a list of integers (1,2,3).
+   *
+   * @param str      The integer sequence to parse
+   * @param consumer The consumer to accept for each integer
+   */
+  public static void forEachInt(String str, IntConsumer consumer) {
+
+    final Integer singleNum = Validate.checkInt(str);
+
+    // Single integer.
+    if (singleNum != null) {
+      consumer.accept(singleNum);
+      return;
+    }
+
+    // Range of integers.
+    final String[] rangeArr = str.split("-");
+
+    if (rangeArr.length == 2) {
+      final Integer start = Validate.checkInt(rangeArr[0]);
+      final Integer end = Validate.checkInt(rangeArr[1]);
+
+      if (start != null && end != null) {
+        for (int i = start; i <= end; i++) {
+          consumer.accept(i);
+        }
+
+        return;
+      }
+    }
+
+    // List of integers.
+    final String[] listArr = str.split(",");
+
+    if (listArr.length > 1) {
+      for (String s : listArr) {
+        final Integer num = Validate.checkInt(s);
+
+        if (num != null) {
+          consumer.accept(num);
+        }
+      }
+
+      return;
+    }
+
+    throw new IllegalArgumentException("Invalid integer sequence: " + str);
   }
 }
