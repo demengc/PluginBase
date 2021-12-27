@@ -57,7 +57,7 @@ public final class Placeholders implements DynamicPlaceholders {
    * @param replacements The map of all placeholders
    */
   @NotNull
-  public static Placeholders of(@NotNull Map<String, String> replacements) {
+  public static Placeholders of(@NotNull final Map<String, String> replacements) {
     final Placeholders obj = new Placeholders();
     obj.getReplacements().putAll(replacements);
     return obj;
@@ -151,7 +151,7 @@ public final class Placeholders implements DynamicPlaceholders {
   }
 
   @Override
-  public @NotNull String setPlaceholders(@NotNull String str) {
+  public @NotNull String setPlaceholders(@NotNull final String str) {
 
     String replaced = str;
 
