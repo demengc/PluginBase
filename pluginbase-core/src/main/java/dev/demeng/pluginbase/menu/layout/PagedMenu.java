@@ -320,7 +320,8 @@ public abstract class PagedMenu implements IMenu {
           final List<Integer> available = new ArrayList<>();
 
           try {
-            Common.forEachInt(section.getString("listing-range"), slot -> available.add(slot - 1));
+            Common.forEachInt(section.getString("available-slots"),
+                slot -> available.add(slot - 1));
           } catch (IllegalArgumentException ex) {
             Common.error(ex, "Failed to parse listing range.", false);
           }
