@@ -253,11 +253,7 @@ public final class Common {
 
     if (listArr.length > 1) {
       for (final String s : listArr) {
-        final Integer num = Validate.checkInt(s);
-
-        if (num != null) {
-          consumer.accept(num);
-        }
+        forEachInt(s, consumer);
       }
 
       return;
