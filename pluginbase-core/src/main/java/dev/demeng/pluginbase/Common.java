@@ -219,8 +219,10 @@ public final class Common {
    *
    * @param str      The integer sequence to parse
    * @param consumer The consumer to accept for each integer
+   * @throws IllegalArgumentException If the sequenece is invalid
    */
-  public static void forEachInt(String str, IntConsumer consumer) {
+  public static void forEachInt(final String str, final IntConsumer consumer)
+      throws IllegalArgumentException {
 
     final Integer singleNum = Validate.checkInt(str);
 
@@ -250,7 +252,7 @@ public final class Common {
     final String[] listArr = str.split(",");
 
     if (listArr.length > 1) {
-      for (String s : listArr) {
+      for (final String s : listArr) {
         final Integer num = Validate.checkInt(s);
 
         if (num != null) {
