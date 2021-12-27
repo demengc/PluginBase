@@ -310,7 +310,7 @@ public abstract class Menu implements IMenu {
             return;
           }
 
-          addButton(slot, ItemSerializer.get().deserialize(slotSection, placeholders), null);
+          addButton(slot - 1, ItemSerializer.get().deserialize(slotSection, placeholders), null);
         });
 
       } catch (final IllegalArgumentException ex) {
