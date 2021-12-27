@@ -310,7 +310,11 @@ public abstract class Menu implements IMenu {
             return;
           }
 
-          addButton(slot - 1, ItemSerializer.get().deserialize(slotSection, placeholders), null);
+          final ItemStack current = inventory.getItem(slot - 1);
+
+          if (current == null || current.getType() == Material.AIR) {
+            addButton(slot - 1, ItemSerializer.get().deserialize(slotSection, placeholders), null);
+          }
         });
 
       } catch (final IllegalArgumentException ex) {
