@@ -24,14 +24,20 @@
 
 package dev.demeng.pluginbase.menu.layout;
 
+import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.exceptions.BaseException;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -86,9 +92,7 @@ public abstract class PagedMenu implements IMenu {
    */
   public void fill(final List<MenuButton> buttons) {
 
-    int currentSlot = settings.getStartingSlot();
-
-    Menu page = new Page(pageSize, title.replace(CURRENT_PAGE_PLACEHOLDER, "" + 1), settings);
+    Page page = new Page(pageSize, title.replace(CURRENT_PAGE_PLACEHOLDER, "" + 1), settings);
     pages.add(page);
 
     for (final MenuButton button : buttons) {
@@ -104,20 +108,21 @@ public abstract class PagedMenu implements IMenu {
         continue;
       }
 
-      if (currentSlot > settings.getEndingSlot()
-          || page.getInventory().firstEmpty() > settings.getEndingSlot()
-          || page.getInventory().firstEmpty() == -1) {
+      if (page.availableSlots.isEmpty()
+          || page.availableSlots.peek() >= page.getInventory().getSize()) {
 
         page = new Page(pageSize,
             title.replace(CURRENT_PAGE_PLACEHOLDER, String.valueOf(pages.size() + 1)), settings);
         pages.add(page);
-
-        currentSlot = settings.getStartingSlot();
       }
 
-      button.setSlot(currentSlot);
+      final Integer slot = page.availableSlots.poll();
+
+      if (slot != null) {
+        button.setSlot(slot);
+      }
+
       page.addButton(button);
-      currentSlot++;
     }
 
     pages.get(0).addButton(settings.getDummyPreviousButton());
@@ -176,6 +181,8 @@ public abstract class PagedMenu implements IMenu {
 
   private class Page extends Menu {
 
+    private final Queue<Integer> availableSlots;
+
     public Page(final int pageSize, final String title, final Settings settings) {
       super(pageSize, title);
 
@@ -203,6 +210,15 @@ public abstract class PagedMenu implements IMenu {
                   PagedMenu.this.open(playerCurrentPage + 1, p);
                 }
               }));
+
+      this.availableSlots = settings.getAvailableSlots().stream()
+          .filter(Objects::nonNull)
+          .sorted()
+          .collect(Collectors.toCollection(LinkedList::new));
+
+      if (availableSlots.isEmpty()) {
+        throw new BaseException("Available slots cannot be empty");
+      }
     }
 
     @Override
@@ -247,18 +263,13 @@ public abstract class PagedMenu implements IMenu {
     @NotNull MenuButton getDummyNextButton();
 
     /**
-     * The slot of which the contents will start being listed.
+     * The list of slots that buttons can use. If none of the slots in this list are empty, a new
+     * page will be created. Otherwise, the first available slot will be used. For a simple range of
+     * integers, use {@link IntStream#range(int, int)}.
      *
-     * @return The starting slot for the buttons
+     * @return The list of slots that buttons can use
      */
-    int getStartingSlot();
-
-    /**
-     * The slot of which the contents will stop being listed.
-     *
-     * @return The ending slot for the buttons
-     */
-    int getEndingSlot();
+    @NotNull List<Integer> getAvailableSlots();
 
     /**
      * Gets the paged menu settings from a configuration section.
@@ -296,13 +307,25 @@ public abstract class PagedMenu implements IMenu {
         }
 
         @Override
-        public int getStartingSlot() {
-          return section.getInt("listing-range.start") - 1;
-        }
+        public @NotNull List<Integer> getAvailableSlots() {
 
-        @Override
-        public int getEndingSlot() {
-          return section.getInt("listing-range.end") - 1;
+          if (section.isConfigurationSection("listing-range")) {
+            // Old config format support.
+            return IntStream.range(
+                    section.getInt("listing-range.start") - 1,
+                    section.getInt("listing-range.end") - 1)
+                .boxed().collect(Collectors.toList());
+          }
+
+          final List<Integer> available = new ArrayList<>();
+
+          try {
+            Common.forEachInt(section.getString("listing-range"), slot -> available.add(slot - 1));
+          } catch (IllegalArgumentException ex) {
+            Common.error(ex, "Failed to parse listing range.", false);
+          }
+
+          return available;
         }
       };
     }
