@@ -26,7 +26,6 @@ package dev.demeng.pluginbase.menu.layout;
 
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.DynamicPlaceholders;
-import dev.demeng.pluginbase.Validate;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
@@ -266,13 +265,12 @@ public abstract class Menu implements IMenu {
     }
 
     for (final String strRow : rowSection.getKeys(false)) {
-
-      final Integer row = Validate.checkInt(strRow);
-
-      if (row == null) {
-        Common.error(null, "Row number must be an integer: " + strRow, false);
-      } else {
-        setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow)));
+      try {
+        Common.forEachInt(strRow, row ->
+            setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow))));
+      } catch (final IllegalArgumentException ex) {
+        Common.error(ex, "Failed to apply row filler.", false);
+        return;
       }
     }
   }
@@ -284,13 +282,12 @@ public abstract class Menu implements IMenu {
     }
 
     for (final String strColumn : columnSection.getKeys(false)) {
-
-      final Integer column = Validate.checkInt(strColumn);
-
-      if (column == null) {
-        Common.error(null, "Column number must be an integer: " + strColumn, false);
-      } else {
-        setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn)));
+      try {
+        Common.forEachInt(strColumn, column ->
+            setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn))));
+      } catch (final IllegalArgumentException ex) {
+        Common.error(ex, "Failed to apply column filler.", false);
+        return;
       }
     }
   }
@@ -305,19 +302,20 @@ public abstract class Menu implements IMenu {
 
     for (final String strSlot : customSection.getKeys(false)) {
 
-      final Integer slot = Validate.checkInt(strSlot);
+      try {
+        Common.forEachInt(strSlot, slot -> {
+          final ConfigurationSection slotSection = customSection.getConfigurationSection(strSlot);
 
-      if (slot == null) {
-        Common.error(null, "Slot number must be an integer: " + strSlot, false);
+          if (slotSection == null) {
+            return;
+          }
 
-      } else {
-        final ConfigurationSection slotSection = customSection.getConfigurationSection(strSlot);
+          addButton(slot, ItemSerializer.get().deserialize(slotSection, placeholders), null);
+        });
 
-        if (slotSection == null) {
-          continue;
-        }
-
-        addButton(slot, ItemSerializer.get().deserialize(slotSection, placeholders), null);
+      } catch (final IllegalArgumentException ex) {
+        Common.error(ex, "Failed to apply custom filler.", false);
+        return;
       }
     }
   }
