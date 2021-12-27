@@ -118,7 +118,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
       builder.glow(true);
     }
 
-    return builder.get();
+    return builder.build();
   }
 
   private String replace(final DynamicPlaceholders placeholders, final String str) {
