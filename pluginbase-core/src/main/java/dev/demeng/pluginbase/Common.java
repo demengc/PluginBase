@@ -232,6 +232,17 @@ public final class Common {
       return;
     }
 
+    // List of integers.
+    final String[] listArr = str.split(",");
+
+    if (listArr.length > 1) {
+      for (final String s : listArr) {
+        forEachInt(s, consumer);
+      }
+
+      return;
+    }
+
     // Range of integers.
     final String[] rangeArr = str.split("-");
 
@@ -246,17 +257,6 @@ public final class Common {
 
         return;
       }
-    }
-
-    // List of integers.
-    final String[] listArr = str.split(",");
-
-    if (listArr.length > 1) {
-      for (final String s : listArr) {
-        forEachInt(s, consumer);
-      }
-
-      return;
     }
 
     throw new IllegalArgumentException("Invalid integer sequence: " + str);
