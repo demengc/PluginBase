@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -54,14 +55,9 @@ import org.jetbrains.annotations.Nullable;
 public class ItemBuilder {
 
   /**
-   * The item stack that is being built.
+   * The item stack that is being built- can be retrieved at any time.
    */
   @NotNull private final ItemStack stack;
-
-  /**
-   * The item meta that is being modified.
-   */
-  @NotNull private final ItemMeta meta;
 
   // ---------------------------------------------------------------------------------
   // CONSTRUCTORS
@@ -77,7 +73,6 @@ public class ItemBuilder {
   public ItemBuilder(@Nullable final Material material, final int amount, final byte durability) {
     //noinspection deprecation
     this.stack = new ItemStack(Common.getOrDefault(material, Material.STONE), amount, durability);
-    this.meta = Objects.requireNonNull(stack.getItemMeta());
   }
 
   /**
@@ -88,7 +83,6 @@ public class ItemBuilder {
    */
   public ItemBuilder(@Nullable final Material material, final int amount) {
     this.stack = new ItemStack(Common.getOrDefault(material, Material.STONE), amount);
-    this.meta = Objects.requireNonNull(stack.getItemMeta());
   }
 
   /**
@@ -107,7 +101,6 @@ public class ItemBuilder {
    */
   public ItemBuilder(@Nullable final ItemStack stack) {
     this.stack = Common.getOrDefault(stack, new ItemStack(Material.STONE)).clone();
-    this.meta = Objects.requireNonNull(stack.getItemMeta());
   }
 
   // ---------------------------------------------------------------------------------
@@ -144,7 +137,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder name(@NotNull final String name) {
-    meta.setDisplayName(ChatUtils.colorize(name));
+    updateMeta(meta -> meta.setDisplayName(ChatUtils.colorize(name)));
     return this;
   }
 
@@ -158,7 +151,7 @@ public class ItemBuilder {
    */
   public ItemBuilder enchant(@NotNull final Enchantment enchant, final int level,
       final boolean safe) {
-    meta.addEnchant(enchant, level, !safe);
+    updateMeta(meta -> meta.addEnchant(enchant, level, !safe));
     return this;
   }
 
@@ -192,7 +185,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder unenchant(@NotNull final Enchantment enchant) {
-    meta.removeEnchant(enchant);
+    updateMeta(meta -> meta.removeEnchant(enchant));
     return this;
   }
 
@@ -203,9 +196,11 @@ public class ItemBuilder {
    */
   public ItemBuilder clearEnchants() {
 
-    for (final Enchantment enchant : meta.getEnchants().keySet()) {
-      meta.removeEnchant(enchant);
-    }
+    updateMeta(meta -> {
+      for (final Enchantment enchant : meta.getEnchants().keySet()) {
+        meta.removeEnchant(enchant);
+      }
+    });
 
     return this;
   }
@@ -217,7 +212,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder lore(final List<String> lore) {
-    meta.setLore(ChatUtils.colorize(lore));
+    updateMeta(meta -> meta.setLore(ChatUtils.colorize(lore)));
     return this;
   }
 
@@ -239,10 +234,12 @@ public class ItemBuilder {
    */
   public ItemBuilder addLore(@NotNull final String line) {
 
-    final List<String> lore = new ArrayList<>(
-        Common.getOrDefault(meta.getLore(), Collections.emptyList()));
-    lore.add(ChatUtils.colorize(line));
-    meta.setLore(lore);
+    updateMeta(meta -> {
+      final List<String> lore = new ArrayList<>(
+          Common.getOrDefault(meta.getLore(), Collections.emptyList()));
+      lore.add(ChatUtils.colorize(line));
+      meta.setLore(lore);
+    });
 
     return this;
   }
@@ -253,7 +250,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder clearLore() {
-    meta.setLore(Collections.emptyList());
+    updateMeta(meta -> meta.setLore(Collections.emptyList()));
     return this;
   }
 
@@ -264,7 +261,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder unbreakable(final boolean unbreakable) {
-    meta.setUnbreakable(unbreakable);
+    updateMeta(meta -> meta.setUnbreakable(unbreakable));
     return this;
   }
 
@@ -275,7 +272,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder flags(@NotNull final ItemFlag... flags) {
-    meta.addItemFlags(flags);
+    updateMeta(meta -> meta.addItemFlags(flags));
     return this;
   }
 
@@ -286,9 +283,11 @@ public class ItemBuilder {
    */
   public ItemBuilder clearFlags() {
 
-    for (final ItemFlag flag : meta.getItemFlags()) {
-      meta.removeItemFlags(flag);
-    }
+    updateMeta(meta -> {
+      for (final ItemFlag flag : meta.getItemFlags()) {
+        meta.removeItemFlags(flag);
+      }
+    });
 
     return this;
   }
@@ -313,7 +312,7 @@ public class ItemBuilder {
 
     } else {
       stack.removeEnchantment(Enchantment.DURABILITY);
-      meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+      updateMeta(meta -> meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS));
     }
 
     return this;
@@ -329,7 +328,7 @@ public class ItemBuilder {
   public ItemBuilder modelData(@Nullable final Integer modelData) {
 
     if (Common.isServerVersionAtLeast(14)) {
-      meta.setCustomModelData(modelData);
+      updateMeta(meta -> meta.setCustomModelData(modelData));
     }
 
     return this;
@@ -369,11 +368,11 @@ public class ItemBuilder {
   public ItemBuilder skullOwner(@NotNull final UUID owner) {
 
     try {
-      final SkullMeta skullMeta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
+      final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
       final OfflinePlayer p = Bukkit.getOfflinePlayer(owner);
 
       if (Common.isServerVersionAtLeast(12)) {
-        skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(owner));
+        meta.setOwningPlayer(Bukkit.getOfflinePlayer(owner));
 
       } else {
         if (p.getName() != null) {
@@ -381,7 +380,7 @@ public class ItemBuilder {
         }
       }
 
-      stack.setItemMeta(skullMeta);
+      stack.setItemMeta(meta);
 
     } catch (final ClassCastException ignored) {
       // Ignore if not skull.
@@ -399,10 +398,9 @@ public class ItemBuilder {
   public ItemBuilder armorColor(@Nullable final Color color) {
 
     try {
-      final LeatherArmorMeta leatherArmorMeta = Objects.requireNonNull(
-          (LeatherArmorMeta) stack.getItemMeta());
-      leatherArmorMeta.setColor(color);
-      stack.setItemMeta(leatherArmorMeta);
+      final LeatherArmorMeta meta = Objects.requireNonNull((LeatherArmorMeta) stack.getItemMeta());
+      meta.setColor(color);
+      stack.setItemMeta(meta);
     } catch (final ClassCastException ignored) {
       // Ignore if not leather armor.
     }
@@ -415,13 +413,12 @@ public class ItemBuilder {
   // ---------------------------------------------------------------------------------
 
   /**
-   * Builds the item stack with the modified item meta.
+   * Gets the current item stack.
    *
-   * @return The item stack with the modified item meta
+   * @return The current item stack
    */
   @NotNull
-  public ItemStack build() {
-    stack.setItemMeta(meta);
+  public ItemStack get() {
     return stack;
   }
 
@@ -432,7 +429,13 @@ public class ItemBuilder {
    */
   @NotNull
   public ItemBuilder copy() {
-    return new ItemBuilder(build());
+    return new ItemBuilder(stack);
+  }
+
+  private void updateMeta(final Consumer<ItemMeta> consumer) {
+    final ItemMeta meta = stack.getItemMeta();
+    consumer.accept(meta);
+    stack.setItemMeta(meta);
   }
 
   // ---------------------------------------------------------------------------------
