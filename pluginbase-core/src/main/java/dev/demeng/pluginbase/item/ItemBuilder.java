@@ -410,7 +410,7 @@ public class ItemBuilder {
         final Field profileField = skullMeta.getClass().getDeclaredField("profile");
         profileField.setAccessible(true);
         profileField.set(skullMeta, profile);
-      } catch (NoSuchFieldException | IllegalAccessException ex) {
+      } catch (final NoSuchFieldException | IllegalAccessException ex) {
         ex.printStackTrace();
       }
 

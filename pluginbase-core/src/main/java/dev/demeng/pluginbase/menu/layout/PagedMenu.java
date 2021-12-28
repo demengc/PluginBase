@@ -322,7 +322,7 @@ public abstract class PagedMenu implements IMenu {
           try {
             Common.forEachInt(section.getString("available-slots"),
                 slot -> available.add(slot - 1));
-          } catch (IllegalArgumentException ex) {
+          } catch (final IllegalArgumentException ex) {
             Common.error(ex, "Failed to parse listing range.", false);
           }
 
