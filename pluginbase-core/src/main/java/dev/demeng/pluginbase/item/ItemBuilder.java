@@ -25,8 +25,11 @@
 package dev.demeng.pluginbase.item;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.chat.ChatUtils;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -381,6 +384,37 @@ public class ItemBuilder {
       }
 
       stack.setItemMeta(meta);
+
+    } catch (final ClassCastException ignored) {
+      // Ignore if not skull.
+    }
+
+    return this;
+  }
+
+  /**
+   * Sets the skull texture to the provided base64 encoded string. Ignored if the item type is not a
+   * player skull.
+   *
+   * @param texture The base64 encoded texture
+   * @return this
+   */
+  public ItemBuilder skullTexture(@NotNull final String texture) {
+
+    try {
+      final SkullMeta skullMeta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
+      final GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+      profile.getProperties().put("textures", new Property("textures", texture));
+
+      try {
+        final Field profileField = skullMeta.getClass().getDeclaredField("profile");
+        profileField.setAccessible(true);
+        profileField.set(skullMeta, profile);
+      } catch (NoSuchFieldException | IllegalAccessException ex) {
+        ex.printStackTrace();
+      }
+
+      stack.setItemMeta(skullMeta);
 
     } catch (final ClassCastException ignored) {
       // Ignore if not skull.

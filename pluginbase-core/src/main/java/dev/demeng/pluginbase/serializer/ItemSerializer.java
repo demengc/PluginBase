@@ -90,6 +90,12 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
     final ItemBuilder builder = new ItemBuilder(
         ItemBuilder.getMaterial(replace(placeholders, configMaterial)));
 
+    final String texture = section.getString("skull-texture");
+
+    if (texture != null) {
+      builder.skullTexture(texture);
+    }
+
     builder.amount(section.getInt("amount", 1));
 
     final String configName = section.getString("display-name");
@@ -118,7 +124,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
       builder.glow(true);
     }
 
-    return builder.build();
+    return builder.get();
   }
 
   private String replace(final DynamicPlaceholders placeholders, final String str) {
