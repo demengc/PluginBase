@@ -265,6 +265,12 @@ public class SqlDatabase {
         "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
 
     /**
+     * A standard MySQL database (legacy driver).
+     */
+    MYSQL_LEGACY(false, "com.mysql.jdbc.Driver",
+        "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
+
+    /**
      * A more efficient version of the {@link DriverType#MYSQL} driver.
      */
     MARIADB(false, "org.mariadb.jdbc.driver",
