@@ -30,13 +30,10 @@ import be.bendem.sqlstreams.util.SqlFunction;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.plugin.BaseManager;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -44,7 +41,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -54,6 +50,9 @@ import org.jetbrains.annotations.Nullable;
  * executing (prepared) statements as well as initializing the database with optimal settings.
  */
 public class SqlDatabase {
+
+  private static final String DEFAULT_JDBC_URL = "jdbc:mysql://{host}:{port}/{database}"
+      + "?autoReconnect=true&useSSL=false";
 
   private static final AtomicInteger POOL_COUNTER = new AtomicInteger(0);
 
@@ -67,23 +66,27 @@ public class SqlDatabase {
   @NotNull @Getter private final SqlStream stream;
 
   /**
-   * Creates a new SQL database with the most optimal settings. Initializes a new Hikari data source
-   * and SQL stream.
+   * Creates a new SQL database manager instance with the optimized settings. Initializes a new
+   * Hikari data source and SQL stream.
    *
-   * @param driverType        The driver to use
-   * @param credentials       The database credentials POJO
-   * @param additionalOptions Additional string to append to the JDBC URL
+   * @param driverClass The driver class name (ex. com.mysql.cj.jdbc.Driver)
+   * @param jdbcUrl     The JDBC URL, or null for the default URL
+   * @param credentials The database credentials
    */
-  public SqlDatabase(final @NotNull DriverType driverType,
-      final @NotNull DatabaseCredentials credentials,
-      final @NotNull String additionalOptions) {
+  public SqlDatabase(
+      final @NotNull String driverClass,
+      final @Nullable String jdbcUrl,
+      final @NotNull DatabaseCredentials credentials) {
 
     final HikariConfig hikari = new HikariConfig();
 
     hikari.setPoolName(Common.getName() + "-" + POOL_COUNTER.getAndIncrement());
 
-    hikari.setDriverClassName(driverType.getDriverClass());
-    hikari.setJdbcUrl(driverType.getJdbcUrl(credentials, additionalOptions));
+    hikari.setDriverClassName(driverClass);
+    hikari.setJdbcUrl(Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL)
+        .replace("{host}", credentials.getHost())
+        .replace("{port}", "" + credentials.getPort())
+        .replace("{database}", credentials.getDatabase()));
 
     hikari.setUsername(credentials.getUser());
     hikari.setPassword(credentials.getPassword());
@@ -243,83 +246,5 @@ public class SqlDatabase {
    */
   public void close() {
     source.close();
-  }
-
-  /**
-   * An enum containing the available driver types to choose from.
-   */
-  @RequiredArgsConstructor
-  public enum DriverType {
-
-    /**
-     * A local embedded database.
-     *
-     * @see <a href="https://www.h2database.com/html/main.html">https://h2database.com</a>
-     */
-    H2(true, "org.h2.Driver", "jdbc:h2:{path};mode=MySQL"),
-
-    /**
-     * A standard MySQL database.
-     */
-    MYSQL(false, "com.mysql.cj.jdbc.Driver",
-        "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
-
-    /**
-     * A standard MySQL database (legacy driver).
-     */
-    MYSQL_LEGACY(false, "com.mysql.jdbc.Driver",
-        "jdbc:mysql://{host}:{port}/{database}{additionalOptions}"),
-
-    /**
-     * A more efficient version of the {@link DriverType#MYSQL} driver.
-     */
-    MARIADB(false, "org.mariadb.jdbc.driver",
-        "jdbc:mariadb://{host}:{port}/{database}{additionalOptions}");
-
-    @Getter private final boolean local;
-    @NotNull @Getter private final String driverClass;
-    @NotNull private final String jdbcUrl;
-
-    /**
-     * Gets a driver type from a string. Not case-sensitive.
-     *
-     * @param strDriver The name of the driver type
-     * @return The driver type with the given name
-     */
-    @Nullable
-    public static DriverType fromString(final String strDriver) {
-      return Arrays.stream(DriverType.values())
-          .filter(driverType -> strDriver.equalsIgnoreCase(driverType.name())).findFirst()
-          .orElse(null);
-    }
-
-    /**
-     * Gets the JDBC URL for the specified driver type, with its placeholders filled based on the
-     * database credentials and additional options provided.
-     *
-     * @param credentials       The database credentials
-     * @param additionalOptions The additional options to append to the JDBC URL
-     * @return The JDBC URL with its placeholders replaced
-     */
-    public final String getJdbcUrl(final DatabaseCredentials credentials,
-        final String additionalOptions) {
-
-      if (local) {
-        final String path =
-            BaseManager.getPlugin().getDataFolder().getAbsolutePath() + File.separator + credentials
-                .getDatabase();
-
-        return jdbcUrl.replace("{path}", path)
-            .replace("{additionalOptions}", additionalOptions);
-      }
-
-      final String host = Objects.requireNonNull(credentials.getHost(), "Database host is null");
-
-      return jdbcUrl
-          .replace("{host}", host)
-          .replace("{port}", "" + credentials.getPort())
-          .replace("{database}", credentials.getDatabase())
-          .replace("{additionalOptions}", additionalOptions);
-    }
   }
 }
