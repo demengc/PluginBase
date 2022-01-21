@@ -26,6 +26,7 @@ package dev.demeng.pluginbase.chat;
 
 import dev.demeng.pluginbase.BaseSettings.ColorScheme;
 import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.model.BaseTitle;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Collections;
 import java.util.List;
@@ -477,6 +478,42 @@ public final class ChatUtils {
     }
 
     Bukkit.broadcast(colorize(lines), permission);
+  }
+
+  // ---------------------------------------------------------------------------------
+  // TITLES
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Sends the title to the player.
+   *
+   * @param p        The player who should receive the title
+   * @param title    The title to send, or null for none
+   * @param subtitle The subtitle to send, or null for none
+   */
+  public static void sendTitle(
+      @NotNull Player p,
+      @Nullable String title,
+      @Nullable String subtitle) {
+    new BaseTitle(title, subtitle).send(p);
+  }
+
+  /**
+   * Sends the title to the player.
+   *
+   * @param p        The player who should receive the title
+   * @param title    The title to send, or null for none
+   * @param subtitle The subtitle to send, or null for none
+   * @param fadeIn   The fade in duration, in ticks
+   * @param stay     The stay duration, in ticks
+   * @param fadeOut  The fade out duration, in ticks
+   */
+  public static void sendTitle(
+      @NotNull Player p,
+      @Nullable String title,
+      @Nullable String subtitle,
+      int fadeIn, int stay, int fadeOut) {
+    new BaseTitle(title, subtitle, fadeIn, stay, fadeOut).send(p);
   }
 
   // ---------------------------------------------------------------------------------
