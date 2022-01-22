@@ -153,7 +153,7 @@ public interface BaseSettings {
    * @return The default input request title
    */
   default String inputRequestDefaultTitle() {
-    return "&6Awaiting Input...";
+    return "&6Awaiting Input";
   }
 
   /**
@@ -163,7 +163,7 @@ public interface BaseSettings {
    * @return The default input request subtitle
    */
   default String inputRequestDefaultSubtitle() {
-    return "&7See chat for details.";
+    return "&fSee chat for details.";
   }
 
   /**
