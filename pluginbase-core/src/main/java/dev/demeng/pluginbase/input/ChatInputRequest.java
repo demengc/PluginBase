@@ -172,7 +172,9 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   @Override
-  protected boolean isInputValid(@NotNull final ConversationContext context, @NotNull final String str) {
+  protected boolean isInputValid(
+      @NotNull final ConversationContext context,
+      @NotNull final String str) {
 
     currentResponse = parser.apply(str);
 
@@ -186,7 +188,9 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
   @Nullable
   @Override
-  protected Prompt acceptValidatedInput(@NotNull final ConversationContext context, @NotNull final String str) {
+  protected Prompt acceptValidatedInput(
+      @NotNull final ConversationContext context,
+      @NotNull final String str) {
 
     final Player p = (Player) context.getForWhom();
 
