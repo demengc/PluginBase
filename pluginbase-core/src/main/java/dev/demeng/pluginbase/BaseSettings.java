@@ -167,6 +167,24 @@ public interface BaseSettings {
   }
 
   /**
+   * The default message sent to player if the player enteres an invalid input in an input request.
+   *
+   * @return The default input request retry message
+   */
+  default String inputRequestDefaultRetryMessage() {
+    return "&cInvalid input! Please try again.";
+  }
+
+  /**
+   * The default message sent to player if the input request times out after 5 miuntes.
+   *
+   * @return The default input request timeout message
+   */
+  default String inputRequestDefaultTimeoutMessage() {
+    return "&cYou did not respond in time!";
+  }
+
+  /**
    * A 3-color color scheme for messages or other text.
    */
   @Data

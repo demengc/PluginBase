@@ -29,10 +29,10 @@ import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.conversations.InactivityConversationCanceller;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.ValidatingPrompt;
 import org.bukkit.entity.Player;
@@ -52,12 +52,17 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   /**
    * The input parser that returns the {@link T} object, or null if the string input is invalid.
    */
-  @NonNull private final Function<@NotNull String, @Nullable T> parser;
+  @NotNull private final Function<@NotNull String, @Nullable T> parser;
 
-  @Nullable private String title = BaseManager.getBaseSettings().inputRequestDefaultTitle();
-  @Nullable private String subtitle = BaseManager.getBaseSettings().inputRequestDefaultSubtitle();
+  @Nullable private String title =
+      BaseManager.getBaseSettings().inputRequestDefaultTitle();
+  @Nullable private String subtitle =
+      BaseManager.getBaseSettings().inputRequestDefaultSubtitle();
   @Nullable private String initialMessage;
-  @Nullable private String retryMessage;
+  @Nullable private String retryMessage =
+      BaseManager.getBaseSettings().inputRequestDefaultRetryMessage();
+  @Nullable private String timeoutMessage =
+      BaseManager.getBaseSettings().inputRequestDefaultTimeoutMessage();
   @Nullable private Consumer<T> consumer;
   @Nullable private Runnable exitRunnable;
 
@@ -104,7 +109,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * The message that is sent after an invalid input. If not set, an empty message will be used.
+   * The message that is sent after an invalid input. If not set, {@link
+   * BaseSettings#inputRequestDefaultRetryMessage()} will be used.
    *
    * @param retryMessage The message sent on invalid input
    * @return this
@@ -112,6 +118,19 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   @NotNull
   public ChatInputRequest<T> withRetryMessage(@Nullable final String retryMessage) {
     this.retryMessage = retryMessage;
+    return this;
+  }
+
+  /**
+   * The message that is sent after the request timeout of 5 minutes. If not set, {@link
+   * BaseSettings#inputRequestDefaultTimeoutMessage()} will be used.
+   *
+   * @param timeoutMessage The message sent on timeout
+   * @return this
+   */
+  @NotNull
+  public ChatInputRequest<T> setTimeoutMessage(@Nullable final String timeoutMessage) {
+    this.timeoutMessage = timeoutMessage;
     return this;
   }
 
@@ -158,6 +177,11 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
         .withFirstPrompt(this)
         .withEscapeSequence(BaseManager.getBaseSettings().inputRequestEscapeSequence())
         .addConversationAbandonedListener(e -> {
+
+          if (e.getCanceller() instanceof InactivityConversationCanceller
+              && timeoutMessage != null) {
+            ChatUtils.tell(p, timeoutMessage);
+          }
 
           if (title != null || subtitle != null) {
             ChatUtils.clearTitle(p);
