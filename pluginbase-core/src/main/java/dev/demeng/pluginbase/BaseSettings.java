@@ -133,6 +133,39 @@ public interface BaseSettings {
     return "N/A";
   }
 
+  // ---------------------------------------------------------------------------------
+  // CHAT INPUT REQUESTS
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * The string used to cancel a chat input request.
+   *
+   * @return The input request cancel string
+   */
+  default String inputRequestEscapeSequence() {
+    return "cancel";
+  }
+
+  /**
+   * The default title sent to players when an input request is started and a custom title has not
+   * been explicity set.
+   *
+   * @return The default input request title
+   */
+  default String inputRequestDefaultTitle() {
+    return "&eAwaiting Input";
+  }
+
+  /**
+   * The default subtitle sent to players when an input request is started and a custom subtitle has
+   * not been explicity set.
+   *
+   * @return The default input request subtitle
+   */
+  default String inputRequestDefaultSubtitle() {
+    return "&7See chat for details.";
+  }
+
   /**
    * A 3-color color scheme for messages or other text.
    */
