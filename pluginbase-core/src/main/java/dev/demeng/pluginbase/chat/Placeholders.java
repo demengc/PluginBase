@@ -55,6 +55,7 @@ public final class Placeholders implements DynamicPlaceholders {
    * Creates a new placeholders object from an existing replacements map.
    *
    * @param replacements The map of all placeholders
+   * @return The placeholders object
    */
   @NotNull
   public static Placeholders of(@NotNull final Map<String, String> replacements) {

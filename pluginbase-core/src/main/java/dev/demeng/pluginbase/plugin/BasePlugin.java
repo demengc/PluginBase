@@ -143,6 +143,8 @@ public abstract class BasePlugin extends JavaPlugin {
 
   /**
    * Gets the command manager for the plugin.
+   *
+   * @return The command manager for the plugin
    */
   @NotNull
   public CommandManager getCommandManager() {
@@ -151,6 +153,8 @@ public abstract class BasePlugin extends JavaPlugin {
 
   /**
    * Gets the BukkitAudiences instance to use for Adventure.
+   *
+   * @return The BukkitAudiences instance to use for Adventure
    */
   public BukkitAudiences getAdventure() {
     return BaseManager.getAdventure();
@@ -158,6 +162,8 @@ public abstract class BasePlugin extends JavaPlugin {
 
   /**
    * Gets the settings the library should use.
+   *
+   * @return The settings the library should use
    */
   @NotNull
   public BaseSettings getBaseSettings() {
