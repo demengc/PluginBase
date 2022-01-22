@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
@@ -88,15 +89,17 @@ public final class TimeUtils {
   }
 
   /**
-   * Convert the given duration string into milliseconds. Supported time units include years (y),
-   * months (mo), weeks (w), days (d), hours (h), minutes (m), and seconds (s).
+   * Converts the given duration string into milliseconds and wraps it inside an Optional. Supported
+   * time units include years (y), months (mo), weeks (w), days (d), hours (h), minutes (m), and
+   * seconds (s). If the provided string duration is invalid or cannot be parsed, an empty Optional
+   * will be returned.
    *
    * @param strDuration The duration string
-   * @return The parsed duration, in milliseconds
-   * @throws IllegalArgumentException If the duration cannot be parsed
-   * @author Matej Pacan (Mineacademy.org)
+   * @return The parsed duration, in milliseconds, or empty if invalid
+   * @author Matej Pacan (Mineacademy.org), Demeng Chen
    */
-  public static long parseDuration(final String strDuration) {
+  @NotNull
+  public static Optional<Long> parseDuration(@NotNull final String strDuration) {
 
     final Matcher matcher = UNITS_PATTERN.matcher(strDuration);
 
@@ -163,11 +166,11 @@ public final class TimeUtils {
     }
 
     if (!found) {
-      throw new NumberFormatException("Could not parse duration: " + strDuration);
+      return Optional.empty();
     }
 
-    return (seconds + (minutes * 60) + (hours * 3600) + (days * 86400)
-        + (weeks * 7 * 86400) + (months * 30 * 86400) + (years * 365 * 86400)) * 1000;
+    return Optional.of((seconds + (minutes * 60) + (hours * 3600) + (days * 86400)
+        + (weeks * 7 * 86400) + (months * 30 * 86400) + (years * 365 * 86400)) * 1000);
   }
 
   /**
