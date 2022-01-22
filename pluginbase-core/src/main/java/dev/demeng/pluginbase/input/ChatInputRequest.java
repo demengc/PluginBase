@@ -174,6 +174,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
     }
 
     new ConversationFactory(BaseManager.getPlugin())
+        .withModality(false)
         .withFirstPrompt(this)
         .withEscapeSequence(BaseManager.getBaseSettings().inputRequestEscapeSequence())
         .addConversationAbandonedListener(e -> {
