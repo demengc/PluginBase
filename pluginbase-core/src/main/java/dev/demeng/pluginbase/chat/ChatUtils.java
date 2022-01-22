@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.chat;
 
+import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.BaseSettings.ColorScheme;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.model.BaseTitle;
@@ -492,9 +493,9 @@ public final class ChatUtils {
    * @param subtitle The subtitle to send, or null for none
    */
   public static void sendTitle(
-      @NotNull Player p,
-      @Nullable String title,
-      @Nullable String subtitle) {
+      @NotNull final Player p,
+      @Nullable final String title,
+      @Nullable final String subtitle) {
     new BaseTitle(title, subtitle).send(p);
   }
 
@@ -509,11 +510,20 @@ public final class ChatUtils {
    * @param fadeOut  The fade out duration, in ticks
    */
   public static void sendTitle(
-      @NotNull Player p,
-      @Nullable String title,
-      @Nullable String subtitle,
-      int fadeIn, int stay, int fadeOut) {
+      @NotNull final Player p,
+      @Nullable final String title,
+      @Nullable final String subtitle,
+      final int fadeIn, final int stay, final int fadeOut) {
     new BaseTitle(title, subtitle, fadeIn, stay, fadeOut).send(p);
+  }
+
+  /**
+   * Clears the current title and subtitle of the player.
+   *
+   * @param p The player who should have thier title and subtitle cleared
+   */
+  public static void clearTitle(@NotNull final Player p) {
+    Titles.clearTitle(p);
   }
 
   // ---------------------------------------------------------------------------------
