@@ -24,7 +24,6 @@
 
 package dev.demeng.pluginbase.input;
 
-import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseManager;
@@ -161,7 +160,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
         .addConversationAbandonedListener(e -> {
 
           if (title != null || subtitle != null) {
-            Titles.clearTitle(p);
+            ChatUtils.clearTitle(p);
           }
 
           if (exitRunnable != null) {
@@ -192,7 +191,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
     final Player p = (Player) context.getForWhom();
 
     if (title != null || subtitle != null) {
-      Titles.clearTitle(p);
+      ChatUtils.clearTitle(p);
     }
 
     if (consumer != null) {
