@@ -153,7 +153,7 @@ public interface BaseSettings {
    * @return The default input request title
    */
   default String inputRequestDefaultTitle() {
-    return "&eAwaiting Input";
+    return "&6Awaiting Input...";
   }
 
   /**
