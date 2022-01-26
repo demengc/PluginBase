@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.menu;
 
+import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.TaskUtils;
 import dev.demeng.pluginbase.menu.layout.Menu;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -122,6 +124,16 @@ public class MenuManager implements Listener {
     }
 
     cleanup(p);
+  }
+
+  /**
+   * Handles title clearing when a player joins.
+   *
+   * @param event The event
+   */
+  @EventHandler(priority = EventPriority.MONITOR)
+  public void onPlayerJoin(final PlayerJoinEvent event) {
+    Titles.clearTitle(event.getPlayer());
   }
 
   /**
