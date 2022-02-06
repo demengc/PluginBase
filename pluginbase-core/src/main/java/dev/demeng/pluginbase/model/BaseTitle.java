@@ -26,14 +26,9 @@ package dev.demeng.pluginbase.model;
 
 import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.Players;
-import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.chat.ChatUtils;
-import dev.demeng.pluginbase.serializer.type.YamlSerializable;
-import java.io.IOException;
 import lombok.Data;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -43,11 +38,11 @@ import org.jetbrains.annotations.Nullable;
  * @see org.bukkit.entity.Player#sendTitle(String, String, int, int, int)
  */
 @Data
-public class BaseTitle implements YamlSerializable<BaseTitle> {
+public class BaseTitle {
 
-  private static final int DEFAULT_FADE_IN = 10;
-  private static final int DEFAULT_STAY = 60;
-  private static final int DEFAULT_FADE_OUT = 15;
+  public static final int DEFAULT_FADE_IN = 10;
+  public static final int DEFAULT_STAY = 60;
+  public static final int DEFAULT_FADE_OUT = 15;
 
   /**
    * The actual title to be sent. Ignored if null.
@@ -120,45 +115,5 @@ public class BaseTitle implements YamlSerializable<BaseTitle> {
    */
   public void sendAll() {
     Players.forEach(this::send);
-  }
-
-  @Override
-  public void serialize(
-      @NotNull final BaseTitle obj,
-      @NotNull final YamlConfig configFile,
-      @NotNull final String path
-  ) throws IOException {
-
-    if (title != null) {
-      configFile.getConfig().set(path + ".title", obj.getTitle());
-    }
-
-    if (subtitle != null) {
-      configFile.getConfig().set(path + ".subtitle", obj.getSubtitle());
-    }
-
-    if (fadeIn != DEFAULT_FADE_IN) {
-      configFile.getConfig().set(path + ".fade-in", obj.getFadeIn());
-    }
-
-    if (stay != DEFAULT_STAY) {
-      configFile.getConfig().set(path + ".stay", obj.getStay());
-    }
-
-    if (fadeOut != DEFAULT_FADE_OUT) {
-      configFile.getConfig().set(path + ".fade-out", obj.getFadeOut());
-    }
-
-    configFile.save();
-  }
-
-  @Override
-  public BaseTitle deserialize(@NotNull final ConfigurationSection section) {
-    return new BaseTitle(
-        section.getString("title"),
-        section.getString("subtitle"),
-        section.getInt("fade-in", DEFAULT_FADE_IN),
-        section.getInt("stay", DEFAULT_STAY),
-        section.getInt("fade-out", DEFAULT_FADE_OUT));
   }
 }
