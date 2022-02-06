@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -206,6 +207,32 @@ public final class ChatUtils {
     }
 
     return component;
+  }
+
+  /**
+   * Parses the string using the advanced Adventure and MiniMessage library, and then uses the
+   * legacy Bukkit Component Serializer to return a String rather than a Compnent. Format:
+   * https://docs.adventure.kyori.net/minimessage.html#format
+   *
+   * @param strings The raw string(s)
+   * @return The serialized component for the strings, or empty if the provided strings are null
+   */
+  @NotNull
+  public static String legacyParseAdvanced(final String... strings) {
+    return legacySerialize(parseAdvanced(strings));
+  }
+
+  /**
+   * Serializes an Adventure {@link Component} using the legacy Bukkit Component Serializer, which
+   * can be useful for displaying components in areas other than the chat (ex. item names).
+   *
+   * @param component The component to serialize
+   * @return The serialized component
+   * @see #legacyParseAdvanced(String...)
+   */
+  @NotNull
+  public static String legacySerialize(@NotNull Component component) {
+    return BukkitComponentSerializer.legacy().serialize(component);
   }
 
   /**
