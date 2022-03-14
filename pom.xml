@@ -6,7 +6,7 @@
 
   <groupId>dev.demeng</groupId>
   <artifactId>pluginbase</artifactId>
-  <version>1.19.1-SNAPSHOT</version>
+  <version>1.19.2-SNAPSHOT</version>
 
   <name>PluginBase</name>
 

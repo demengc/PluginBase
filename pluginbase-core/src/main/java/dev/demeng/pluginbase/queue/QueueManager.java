@@ -28,7 +28,7 @@ import dev.demeng.pluginbase.TaskUtils;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * An abstract manager for {@link Queueable} objects.
@@ -49,7 +49,7 @@ public abstract class QueueManager<T extends Queueable> {
    */
   @Getter private final List<T> queueList = new ArrayList<>();
 
-  private final List<BukkitRunnable> tasks = new ArrayList<>();
+  private final List<BukkitTask> tasks = new ArrayList<>();
 
   /**
    * Queues a new queueable object.
@@ -103,7 +103,7 @@ public abstract class QueueManager<T extends Queueable> {
    */
   public void clear() {
 
-    for (final BukkitRunnable task : tasks) {
+    for (final BukkitTask task : tasks) {
       if (!task.isCancelled()) {
         task.cancel();
       }

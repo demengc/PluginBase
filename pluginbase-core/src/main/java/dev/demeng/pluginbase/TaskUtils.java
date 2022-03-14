@@ -29,6 +29,7 @@ import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -41,26 +42,22 @@ public final class TaskUtils {
    * Runs the task once on the primary thread, without delay nor repetition.
    *
    * @param task The task to run
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable runSync(final Consumer<BukkitRunnable> task) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTask(BaseManager.getPlugin());
-    return runnable;
+  public static BukkitTask runSync(@NotNull final Consumer<BukkitRunnable> task) {
+    return createRunnable(task).runTask(BaseManager.getPlugin());
   }
 
   /**
    * Runs the task once, asynchronously, without delay nor repetition.
    *
    * @param task The task to run
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable runAsync(final Consumer<BukkitRunnable> task) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskAsynchronously(BaseManager.getPlugin());
-    return runnable;
+  public static BukkitTask runAsync(@NotNull final Consumer<BukkitRunnable> task) {
+    return createRunnable(task).runTaskAsynchronously(BaseManager.getPlugin());
   }
 
   /**
@@ -71,10 +68,8 @@ public final class TaskUtils {
    * @return The BukkitRunnable that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable delay(final Consumer<BukkitRunnable> task, final long delay) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskLater(BaseManager.getPlugin(), delay);
-    return runnable;
+  public static BukkitTask delay(@NotNull final Consumer<BukkitRunnable> task, final long delay) {
+    return createRunnable(task).runTaskLater(BaseManager.getPlugin(), delay);
   }
 
   /**
@@ -82,13 +77,13 @@ public final class TaskUtils {
    *
    * @param task  The task to run
    * @param delay The number of ticks to delay
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable delayAsync(final Consumer<BukkitRunnable> task, final long delay) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskLaterAsynchronously(BaseManager.getPlugin(), delay);
-    return runnable;
+  public static BukkitTask delayAsync(
+      @NotNull final Consumer<BukkitRunnable> task,
+      final long delay) {
+    return createRunnable(task).runTaskLaterAsynchronously(BaseManager.getPlugin(), delay);
   }
 
   /**
@@ -97,14 +92,14 @@ public final class TaskUtils {
    * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
    * @param repeatDelay  The number of ticks between each run
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable repeat(
-      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskTimer(BaseManager.getPlugin(), initialDelay, repeatDelay);
-    return runnable;
+  public static BukkitTask repeat(
+      @NotNull final Consumer<BukkitRunnable> task,
+      final long initialDelay,
+      final long repeatDelay) {
+    return createRunnable(task).runTaskTimer(BaseManager.getPlugin(), initialDelay, repeatDelay);
   }
 
   /**
@@ -115,11 +110,13 @@ public final class TaskUtils {
    * @param initialDelay The number of ticks to delay before the task starts repeating
    * @param repeatDelay  The number of ticks between each run
    * @param limit        The maximum number of times the task will be repeated
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable repeat(
-      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay,
+  public static BukkitTask repeat(
+      @NotNull final Consumer<BukkitRunnable> task,
+      final long initialDelay,
+      final long repeatDelay,
       final int limit) {
 
     final BukkitRunnable runnable =
@@ -130,6 +127,7 @@ public final class TaskUtils {
           public void run() {
 
             if (repeats > limit) {
+              cancel();
               return;
             }
 
@@ -138,8 +136,7 @@ public final class TaskUtils {
           }
         };
 
-    runnable.runTaskTimer(BaseManager.getPlugin(), initialDelay, repeatDelay);
-    return runnable;
+    return runnable.runTaskTimer(BaseManager.getPlugin(), initialDelay, repeatDelay);
   }
 
   /**
@@ -148,14 +145,15 @@ public final class TaskUtils {
    * @param task         The task to run
    * @param initialDelay The number of ticks to delay before the task starts repeating
    * @param repeatDelay  The number of ticks between each run
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable repeatAsync(
-      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay) {
-    final BukkitRunnable runnable = createSimpleTask(task);
-    runnable.runTaskTimerAsynchronously(BaseManager.getPlugin(), initialDelay, repeatDelay);
-    return runnable;
+  public static BukkitTask repeatAsync(
+      @NotNull final Consumer<BukkitRunnable> task,
+      final long initialDelay,
+      final long repeatDelay) {
+    return createRunnable(task)
+        .runTaskTimerAsynchronously(BaseManager.getPlugin(), initialDelay, repeatDelay);
   }
 
   /**
@@ -166,11 +164,13 @@ public final class TaskUtils {
    * @param initialDelay The number of ticks to delay before the task starts repeating
    * @param repeatDelay  The number of ticks between each run
    * @param limit        The maximum number of times the task will be repeated
-   * @return The BukkitRunnable that was initialized for this task
+   * @return The BukkitTask that was initialized for this task
    */
   @NotNull
-  public static BukkitRunnable repeatAsync(
-      final Consumer<BukkitRunnable> task, final long initialDelay, final long repeatDelay,
+  public static BukkitTask repeatAsync(
+      @NotNull final Consumer<BukkitRunnable> task,
+      final long initialDelay,
+      final long repeatDelay,
       final int limit) {
 
     final BukkitRunnable runnable =
@@ -181,6 +181,7 @@ public final class TaskUtils {
           public void run() {
 
             if (repeats > limit) {
+              cancel();
               return;
             }
 
@@ -189,11 +190,10 @@ public final class TaskUtils {
           }
         };
 
-    runnable.runTaskTimerAsynchronously(BaseManager.getPlugin(), initialDelay, repeatDelay);
-    return runnable;
+    return runnable.runTaskTimerAsynchronously(BaseManager.getPlugin(), initialDelay, repeatDelay);
   }
 
-  private static BukkitRunnable createSimpleTask(final Consumer<BukkitRunnable> task) {
+  private static BukkitRunnable createRunnable(final Consumer<BukkitRunnable> task) {
     return new BukkitRunnable() {
       @Override
       public void run() {
