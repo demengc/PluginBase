@@ -197,13 +197,13 @@ public final class ChatUtils {
     }
 
     if (strings.length == 1) {
-      return MINI_MESSAGE.parse(strings[0]);
+      return MINI_MESSAGE.deserialize(strings[0]);
     }
 
-    Component component = MINI_MESSAGE.parse(strings[0]);
+    Component component = MINI_MESSAGE.deserialize(strings[0]);
 
     for (int i = 1; i < strings.length; i++) {
-      component = component.append(MINI_MESSAGE.parse("\n" + strings[i]));
+      component = component.append(MINI_MESSAGE.deserialize("\n" + strings[i]));
     }
 
     return component;
