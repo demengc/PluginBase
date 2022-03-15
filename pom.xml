@@ -13,6 +13,7 @@
   <modules>
     <module>pluginbase-core</module>
     <module>pluginbase-mysql</module>
+    <module>pluginbase-games</module>
   </modules>
 
   <packaging>pom</packaging>
