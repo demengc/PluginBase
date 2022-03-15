@@ -81,7 +81,7 @@ public class TitleSerializer implements YamlSerializable<BaseTitle> {
   }
 
   @Override
-  public BaseTitle deserialize(@NotNull ConfigurationSection section) {
+  public BaseTitle deserialize(@NotNull final ConfigurationSection section) {
     return new BaseTitle(
         section.getString("title"),
         section.getString("subtitle"),

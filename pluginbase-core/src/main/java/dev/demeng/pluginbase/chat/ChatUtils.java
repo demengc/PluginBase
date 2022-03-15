@@ -231,7 +231,7 @@ public final class ChatUtils {
    * @see #legacyParseAdvanced(String...)
    */
   @NotNull
-  public static String legacySerialize(@NotNull Component component) {
+  public static String legacySerialize(@NotNull final Component component) {
     return BukkitComponentSerializer.legacy().serialize(component);
   }
 
