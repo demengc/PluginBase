@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.20.0-SNAPSHOT</version>
+    <version>1.21.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
@@ -142,6 +142,12 @@
       <version>4.10.1</version>
       <scope>compile</scope>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>net.jodah</groupId>
+      <artifactId>expiringmap</artifactId>
+      <version>0.5.9</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>
