@@ -111,7 +111,7 @@ public abstract class GameState implements Listener {
       registerListener(this);
       onStart();
     } catch (final Exception ex) {
-      throw new PluginErrorException("Exception during state start.", false);
+      throw new PluginErrorException(ex, "Exception during state start.", false);
     }
   }
 
@@ -133,7 +133,7 @@ public abstract class GameState implements Listener {
     try {
       onUpdate();
     } catch (final Exception ex) {
-      throw new PluginErrorException("Exception during state update.", false);
+      throw new PluginErrorException(ex, "Exception during state update.", false);
     }
   }
 
@@ -158,7 +158,7 @@ public abstract class GameState implements Listener {
 
       onEnd();
     } catch (final Exception ex) {
-      throw new PluginErrorException("Exception during state end.", false);
+      throw new PluginErrorException(ex, "Exception during state end.", false);
     }
   }
 

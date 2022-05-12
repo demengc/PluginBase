@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.TaskUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An extension of RuntimeException that calls {@link Common#error(Throwable, String, boolean,
@@ -41,6 +42,15 @@ public class PluginErrorException extends RuntimeException {
       final boolean disable,
       final Player... players) {
     super();
+    TaskUtils.delay(runnable -> Common.error(null, description, disable, players), 2L);
+  }
+
+  public PluginErrorException(
+      @Nullable final Exception ex,
+      @NotNull final String description,
+      final boolean disable,
+      final Player... players) {
+    super(ex);
     TaskUtils.delay(runnable -> Common.error(null, description, disable, players), 2L);
   }
 }
