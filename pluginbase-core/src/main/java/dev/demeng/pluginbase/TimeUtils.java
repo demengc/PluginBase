@@ -26,6 +26,7 @@
 
 package dev.demeng.pluginbase;
 
+import com.google.common.collect.ImmutableMap;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -33,9 +34,11 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -58,15 +61,23 @@ public final class TimeUtils {
   public static final ThreadLocal<DateFormat> DATE_FORMAT = ThreadLocal.withInitial(
       () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateFormat()));
 
-  private static final Pattern UNITS_PATTERN = Pattern.compile(
-      "(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"
-          + "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?"
-          + "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?"
-          + "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?"
-          + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?"
-          + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?"
-          + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?",
-      Pattern.CASE_INSENSITIVE);
+  private static final Map<ChronoUnit, String> UNITS_PATTERNS = ImmutableMap.<ChronoUnit, String>builder()
+      .put(ChronoUnit.YEARS, "y(?:ear)?s?")
+      .put(ChronoUnit.MONTHS, "mo(?:nth)?s?")
+      .put(ChronoUnit.WEEKS, "w(?:eek)?s?")
+      .put(ChronoUnit.DAYS, "d(?:ay)?s?")
+      .put(ChronoUnit.HOURS, "h(?:our|r)?s?")
+      .put(ChronoUnit.MINUTES, "m(?:inute|in)?s?")
+      .put(ChronoUnit.SECONDS, "(?:s(?:econd|ec)?s?)?")
+      .build();
+
+  private static final ChronoUnit[] UNITS = UNITS_PATTERNS.keySet().toArray(new ChronoUnit[0]);
+
+  private static final String PATTERN_STRING = UNITS_PATTERNS.values().stream()
+      .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
+      .collect(Collectors.joining());
+
+  private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 
   /**
    * Formats the date and time using {@link #DATE_TIME_FORMAT}.
@@ -91,86 +102,58 @@ public final class TimeUtils {
   /**
    * Converts the given duration string into milliseconds and wraps it inside an Optional. Supported
    * time units include years (y), months (mo), weeks (w), days (d), hours (h), minutes (m), and
-   * seconds (s). If the provided string duration is invalid or cannot be parsed, an empty Optional
-   * will be returned.
+   * seconds (s).
    *
-   * @param strDuration The duration string
-   * @return The parsed duration, in milliseconds, or empty if invalid
-   * @author Matej Pacan (Mineacademy.org), Demeng Chen
+   * @param input The duration string
+   * @return The parsed duration
+   * @throws IllegalArgumentException If the input could not be parsed
    */
   @NotNull
-  public static Optional<Long> parseDuration(@NotNull final String strDuration) {
+  public static Duration parse(@NotNull final String input) throws IllegalArgumentException {
 
-    final Matcher matcher = UNITS_PATTERN.matcher(strDuration);
-
-    long years = 0;
-    long months = 0;
-    long weeks = 0;
-    long days = 0;
-    long hours = 0;
-    long minutes = 0;
-    long seconds = 0;
-    boolean found = false;
+    final Matcher matcher = PATTERN.matcher(input);
 
     while (matcher.find()) {
-
       if (matcher.group() == null || matcher.group().isEmpty()) {
         continue;
       }
 
-      for (int i = 0; i < matcher.groupCount(); i++) {
-        if (matcher.group(i) != null && !matcher.group(i).isEmpty()) {
-          found = true;
-          break;
-        }
-      }
+      Duration duration = Duration.ZERO;
 
-      if (found) {
-        for (int i = 1; i < 8; i++) {
-          if (matcher.group(i) != null && !matcher.group(i).isEmpty()) {
-            final long output = Long.parseLong(matcher.group(i));
+      for (int i = 0; i < UNITS.length; i++) {
+        final ChronoUnit unit = UNITS[i];
+        final int g = i + 1;
 
-            if (i == 1) {
-              checkLimit("years", output, 10);
-              years = output;
+        if (matcher.group(g) != null && !matcher.group(g).isEmpty()) {
+          final int n = Integer.parseInt(matcher.group(g));
 
-            } else if (i == 2) {
-              checkLimit("months", output, 12 * 100);
-              months = output;
-
-            } else if (i == 3) {
-              checkLimit("weeks", output, 4 * 100);
-              weeks = output;
-
-            } else if (i == 4) {
-              checkLimit("days", output, 31 * 100);
-              days = output;
-
-            } else if (i == 5) {
-              checkLimit("hours", output, 24 * 100);
-              hours = output;
-
-            } else if (i == 6) {
-              checkLimit("minutes", output, 60 * 100);
-              minutes = output;
-
-            } else {
-              checkLimit("seconds", output, 60 * 100);
-              seconds = output;
-            }
+          if (n > 0) {
+            duration = duration.plus(unit.getDuration().multipliedBy(n));
           }
         }
-
-        break;
       }
+
+      return duration;
     }
 
-    if (!found) {
+    throw new IllegalArgumentException("Unable to parse duration: " + input);
+  }
+
+  /**
+   * Attempts to parse a {@link Duration} and returns the result as an {@link Optional}-wrapped
+   * object.
+   *
+   * @param input The input string
+   * @return An Optional Duration
+   * @see #parse(String)
+   */
+  @NotNull
+  public static Optional<Duration> parseSafely(@NotNull final String input) {
+    try {
+      return Optional.of(parse(input));
+    } catch (final IllegalArgumentException ignored) {
       return Optional.empty();
     }
-
-    return Optional.of((seconds + (minutes * 60) + (hours * 3600) + (days * 86400)
-        + (weeks * 7 * 86400) + (months * 30 * 86400) + (years * 365 * 86400)) * 1000);
   }
 
   /**
@@ -219,39 +202,17 @@ public final class TimeUtils {
     /**
      * The long format: 3 weeks 2 days 1 hour.
      */
-    LONG,
-
+    LONG(false, Integer.MAX_VALUE),
     /**
      * The concise format: 3w 2d 1h.
      */
-    CONCISE {
-      @Override
-      protected String formatUnitPlural(final ChronoUnit unit) {
-        return String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
-      }
-
-      @Override
-      protected String formatUnitSingular(final ChronoUnit unit) {
-        return formatUnitPlural(unit);
-      }
-    },
-
+    CONCISE(true, Integer.MAX_VALUE),
     /**
      * The concise, but low accuracy (maximum 3 time units) format.
      */
-    CONCISE_LOW_ACCURACY(3) {
-      @Override
-      protected String formatUnitPlural(final ChronoUnit unit) {
-        return String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
-      }
+    CONCISE_LOW_ACCURACY(true, 3);
 
-      @Override
-      protected String formatUnitSingular(final ChronoUnit unit) {
-        return formatUnitPlural(unit);
-      }
-    };
-
-    private final Unit[] units = new Unit[]{
+    private static final Unit[] UNITS = new Unit[]{
         new Unit(ChronoUnit.YEARS),
         new Unit(ChronoUnit.MONTHS),
         new Unit(ChronoUnit.WEEKS),
@@ -262,67 +223,89 @@ public final class TimeUtils {
     };
 
     private final int accuracy;
+    private final boolean concise;
 
-    DurationFormatter() {
-      this(Integer.MAX_VALUE);
-    }
-
-    DurationFormatter(final int accuracy) {
+    DurationFormatter(final boolean concise, final int accuracy) {
+      this.concise = concise;
       this.accuracy = accuracy;
     }
 
     /**
-     * Formats {@code duration} as a string.
+     * Convenience method for accessing {@link #format(Duration, boolean, int)} through existing
+     * enumeration implementations.
      *
-     * @param duration The duration
-     * @return The formatted string
+     * @param duration the duration
+     * @return the formatted string
      */
     public String format(final Duration duration) {
+      return format(duration, concise, accuracy);
+    }
+
+    /**
+     * Formats {@code duration} as a string, either in a {@code concise} (1 letter) or full length
+     * format, displaying up to the specified number of {@code elements}.
+     *
+     * @param duration The duration
+     * @param concise  If the output should be concisely formatted
+     * @param elements The maximum number of elements to display
+     * @return the formatted string
+     */
+    public static String format(final Duration duration, final boolean concise,
+        final int elements) {
       long seconds = duration.getSeconds();
       final StringBuilder output = new StringBuilder();
       int outputSize = 0;
 
-      for (final Unit unit : this.units) {
+      for (final Unit unit : UNITS) {
         final long n = seconds / unit.duration;
         if (n > 0) {
           seconds -= unit.duration * n;
-          output.append(' ').append(n).append(unit.toString(n));
+          output.append(' ').append(n).append(unit.toString(concise, n));
           outputSize++;
         }
-        if (seconds <= 0 || outputSize >= this.accuracy) {
+        if (seconds <= 0 || outputSize >= elements) {
           break;
         }
       }
 
       if (output.length() == 0) {
-        return "0" + this.units[this.units.length - 1].stringPlural;
+        return "0" + (UNITS[UNITS.length - 1].toString(concise, 0));
       }
       return output.substring(1);
     }
 
-    protected String formatUnitPlural(final ChronoUnit unit) {
-      return " " + unit.name().toLowerCase();
+    /**
+     * Formats {@code duration} as a string, either in a {@code concise} (1 letter) or full length
+     * format, displaying all possible elements.
+     *
+     * @param duration The duration
+     * @param concise  If the output should be concisely formatted
+     * @return The formatted string
+     */
+    public static String format(final Duration duration, final boolean concise) {
+      return format(duration, concise, Integer.MAX_VALUE);
     }
 
-    protected String formatUnitSingular(final ChronoUnit unit) {
-      final String str = unit.name().toLowerCase();
-      return " " + str.substring(0, str.length() - 1);
-    }
-
-    private final class Unit {
+    private static final class Unit {
 
       private final long duration;
-      private final String stringPlural;
-      private final String stringSingular;
+      private final String formalStringPlural;
+      private final String formalStringSingular;
+      private final String conciseString;
 
       Unit(final ChronoUnit unit) {
         this.duration = unit.getDuration().getSeconds();
-        this.stringPlural = formatUnitPlural(unit);
-        this.stringSingular = formatUnitSingular(unit);
+        this.formalStringPlural = " " + unit.name().toLowerCase();
+        this.formalStringSingular =
+            " " + unit.name().substring(0, unit.name().length() - 1).toLowerCase();
+        this.conciseString = String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
       }
 
-      public String toString(final long n) {
-        return n == 1 ? this.stringSingular : this.stringPlural;
+      public String toString(final boolean concise, final long n) {
+        if (concise) {
+          return this.conciseString;
+        }
+        return n == 1 ? this.formalStringSingular : this.formalStringPlural;
       }
     }
   }
