@@ -44,7 +44,7 @@ public class CooldownMap<T> {
   @Getter private final Cooldown base;
   private final ExpiringMap<T, Cooldown> cache;
 
-  private CooldownMap(Cooldown base) {
+  private CooldownMap(final Cooldown base) {
     this.base = base;
     this.cache = ExpiringMap.builder()
         .expiration(base.getDuration() + 10000L, TimeUnit.MILLISECONDS)
@@ -59,7 +59,7 @@ public class CooldownMap<T> {
    * @return A new collection
    */
   @NotNull
-  public static <T> CooldownMap<T> create(@NotNull Cooldown base) {
+  public static <T> CooldownMap<T> create(@NotNull final Cooldown base) {
     return new CooldownMap<>(base);
   }
 
@@ -74,11 +74,11 @@ public class CooldownMap<T> {
    * @return A cooldown instance
    */
   @NotNull
-  public Cooldown get(@NotNull T key) {
+  public Cooldown get(@NotNull final T key) {
     return this.cache.get(key);
   }
 
-  public void put(@NotNull T key, @NotNull Cooldown cooldown) {
+  public void put(@NotNull final T key, @NotNull final Cooldown cooldown) {
 
     if (cooldown.getDuration() != base.getDuration()) {
       throw new IllegalArgumentException(
@@ -98,36 +98,36 @@ public class CooldownMap<T> {
     return cache;
   }
 
-  public boolean test(@NotNull T key) {
+  public boolean test(@NotNull final T key) {
     return get(key).test();
   }
 
-  public boolean testSilently(@NotNull T key) {
+  public boolean testSilently(@NotNull final T key) {
     return get(key).testSilently();
   }
 
-  public long elapsed(@NotNull T key) {
+  public long elapsed(@NotNull final T key) {
     return get(key).elapsed();
   }
 
-  public void reset(@NotNull T key) {
+  public void reset(@NotNull final T key) {
     get(key).reset();
   }
 
-  public long remainingMillis(@NotNull T key) {
+  public long remainingMillis(@NotNull final T key) {
     return get(key).remainingMillis();
   }
 
-  public long remainingTime(@NotNull T key, @NotNull TimeUnit unit) {
+  public long remainingTime(@NotNull final T key, @NotNull final TimeUnit unit) {
     return get(key).remainingTime(unit);
   }
 
   @NotNull
-  public OptionalLong getLastTested(@NotNull T key) {
+  public OptionalLong getLastTested(@NotNull final T key) {
     return get(key).getLastTested();
   }
 
-  public void setLastTested(@NotNull T key, long time) {
+  public void setLastTested(@NotNull final T key, final long time) {
     get(key).setLastTested(time);
   }
 }

@@ -41,7 +41,7 @@ public class Cooldown {
   // The cooldown duration, in milliseconds.
   @Getter private final long duration;
 
-  private Cooldown(long amount, TimeUnit unit) {
+  private Cooldown(final long amount, final TimeUnit unit) {
     this.duration = unit.toMillis(amount);
   }
 
@@ -52,7 +52,7 @@ public class Cooldown {
    * @return The new Cooldown
    */
   @NotNull
-  public static Cooldown ofTicks(long ticks) {
+  public static Cooldown ofTicks(final long ticks) {
     return new Cooldown(ticks * 50, TimeUnit.MILLISECONDS);
   }
 
@@ -64,7 +64,7 @@ public class Cooldown {
    * @return The new Cooldown
    */
   @NotNull
-  public static Cooldown of(long amount, @NotNull TimeUnit unit) {
+  public static Cooldown of(final long amount, @NotNull final TimeUnit unit) {
     return new Cooldown(amount, unit);
   }
 
@@ -118,7 +118,7 @@ public class Cooldown {
    * @return The time in millis until the cooldown will expire
    */
   public long remainingMillis() {
-    long diff = elapsed();
+    final long diff = elapsed();
     return diff > getDuration() ? 0L : getDuration() - diff;
   }
 
@@ -130,7 +130,7 @@ public class Cooldown {
    * @param unit The unit to return in
    * @return The time until the cooldown will expire
    */
-  public long remainingTime(TimeUnit unit) {
+  public long remainingTime(final TimeUnit unit) {
     return Math.max(0L, unit.convert(remainingMillis(), TimeUnit.MILLISECONDS));
   }
 
@@ -152,7 +152,7 @@ public class Cooldown {
    *
    * @param time The time
    */
-  public void setLastTested(long time) {
+  public void setLastTested(final long time) {
     if (time <= 0) {
       this.lastTested = 0;
     } else {
