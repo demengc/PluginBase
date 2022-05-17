@@ -81,6 +81,41 @@ public interface BaseSettings {
   // ---------------------------------------------------------------------------------
 
   /**
+   * The message to send if the command executor provides an invalid command.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid command message
+   */
+  default String invalidCommand() {
+    return "&cUnknown command: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid subcommand.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid subcommand message
+   */
+  default String invalidSubcommand() {
+    return "&cUnknown subcommand: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor does not provide a subcommand.
+   *
+   * @return The no subcommand specified message
+   */
+  default String noSubcommandSpecified() {
+    return "&cYou must specify a subcommand.";
+  }
+
+  /**
    * The message to send if the console attempts to execute a players-only command.
    *
    * @return The not player message
@@ -101,23 +136,195 @@ public interface BaseSettings {
   /**
    * The message to send if the command executor does not have the required permission.
    *
-   * <p>Use %permission% for the required permission.
-   *
    * @return The insufficient permission message
    */
   default String insufficientPermission() {
-    return "&cYou need the &f%permission% &cpermission to do this.";
+    return "&cYou do not have permission to do this.";
   }
 
   /**
-   * The message to send if a player uses a command incorrectly.
+   * The message to send if the command executor does not provide all required arguments.
    *
-   * <p>Use %usage% for the actual usage of the command.
+   * <ul>
+   *   <li>%usage% - Command usage</li>
+   *   <li>%parameter% - Missing parameter</li>
+   * </ul>
    *
    * @return The incorrect usage message
    */
-  default String incorrectUsage() {
-    return "&cIncorrect usage. Did you mean: &f%usage%";
+  default String missingArgument() {
+    return "&cMissing arguments! Did you mean: &f%usage%";
+  }
+
+  /**
+   * The message to send if the command executor provides too many arguments.
+   *
+   * <ul>
+   *   <li>%usage% - Command usage</li>
+   * </ul>
+   *
+   * @return The too many arguments message
+   */
+  default String tooManyArguments() {
+    return "&cToo many arguments! Did you mean: &f%usage%";
+  }
+
+  /**
+   * The message to send if the command executor is on cooldown.
+   *
+   * @return The on cooldown message
+   */
+  default String cooldown() {
+    return "&cYou must wait &f%remaining% &cbefore using this command again.";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid number.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid number message
+   */
+  default String invalidNumber() {
+    return "&cInvalid number: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid player.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid player message
+   */
+  default String invalidPlayer() {
+    return "&cInvalid player: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid UUID.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid UUID message
+   */
+  default String invalidUuid() {
+    return "&cInvalid UUID: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid boolean.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid boolean message
+   */
+  default String invalidBoolean() {
+    return "&cInvalid boolean. Expected &ftrue &cor &ffalse&c, but found &f'%input%'&c.";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid enum.
+   *
+   * <ul>
+   *   <li>%parameter% - Invalid parameter</li>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid enum message
+   */
+  default String invalidEnum() {
+    return "&cInvalid %parameter%: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid URL.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid number message
+   */
+  default String invalidUrl() {
+    return "&cInvalid URL: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid world.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid world message
+   */
+  default String invalidWorld() {
+    return "&cInvalid world: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid selector.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   * </ul>
+   *
+   * @return The invalid selector message
+   */
+  default String invalidSelector() {
+    return "&cInvalid selector: &f%input%";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid quoted string.
+   *
+   * <ul>
+   *   <li>%source-string% - Source string arguments are being parsed from</li>
+   *   <li>%annotated-position% - String pointing to the position where the error occurs</li>
+   * </ul>
+   *
+   * @return The invalid quoted string message
+   */
+  default String invalidQuotedString() {
+    return "&cInvalid quoted string.\n&c%source-string%\n&c%annotated-position%";
+  }
+
+  /**
+   * The message to send if the command executor provides a number outside a range.
+   *
+   * <ul>
+   *   <li>%parameter% - Invalid parameter</li>
+   *   <li>%input% - Invalid input</li>
+   *   <li>%min% - Minimum</li>
+   *   <li>%max% - Maximum</li>
+   * </ul>
+   *
+   * @return The number not in range message
+   */
+  default String numberNotInRange() {
+    return "&c%parameter% must be between %min% and %max% (found &f%input%&c).";
+  }
+
+  /**
+   * The message to send if the command executor provides an invalid help page.
+   *
+   * <ul>
+   *   <li>%input% - Invalid input</li>
+   *   <li>%max% - Maximum</li>
+   * </ul>
+   *
+   * @return The invalid help page message
+   */
+  default String invalidHelpPage() {
+    return "&cPage must be between 1 and %max% (found &f%input%&c).";
   }
 
   // ---------------------------------------------------------------------------------

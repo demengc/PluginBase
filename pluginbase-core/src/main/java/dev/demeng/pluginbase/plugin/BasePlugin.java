@@ -28,7 +28,7 @@ import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Registerer;
 import dev.demeng.pluginbase.ServerProperties;
-import dev.demeng.pluginbase.command.CommandManager;
+import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.menu.MenuManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -50,10 +50,8 @@ public abstract class BasePlugin extends JavaPlugin {
 
   @Override
   public final void onLoad() {
-
     BaseManager.setPlugin(this);
-
-    BaseManager.setCommandManager(new CommandManager());
+    BaseManager.setCommandHandler(CommandHandler.create(this));
     load();
   }
 
@@ -84,7 +82,7 @@ public abstract class BasePlugin extends JavaPlugin {
     }
 
     disable();
-    getCommandManager().unregisterAll();
+    getCommandHandler().unregisterAllCommands();
 
     ServerProperties.clearCache();
     BaseManager.setPlugin(null);
@@ -142,13 +140,13 @@ public abstract class BasePlugin extends JavaPlugin {
   }
 
   /**
-   * Gets the command manager for the plugin.
+   * Gets the command handler for the plugin.
    *
-   * @return The command manager for the plugin
+   * @return The command handler for the plugin
    */
   @NotNull
-  public CommandManager getCommandManager() {
-    return BaseManager.getCommandManager();
+  public CommandHandler getCommandHandler() {
+    return BaseManager.getCommandHandler();
   }
 
   /**

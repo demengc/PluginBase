@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.21.1-SNAPSHOT</version>
+    <version>1.22.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
@@ -93,6 +93,28 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>com.mojang</groupId>
+      <artifactId>brigadier</artifactId>
+      <version>1.0.18</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>me.lucko</groupId>
+      <artifactId>commodore</artifactId>
+      <version>1.13</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>me.lucko</groupId>
+          <artifactId>commodore-file</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.mojang</groupId>
+          <artifactId>brigadier</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>com.mojang</groupId>
       <artifactId>authlib</artifactId>

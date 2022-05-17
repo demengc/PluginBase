@@ -25,7 +25,7 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
-import dev.demeng.pluginbase.command.CommandManager;
+import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.exceptions.BaseException;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,9 +47,9 @@ public final class BaseManager {
   private static Thread mainThread = null;
 
   /**
-   * The command manager for the plugin. Should be set when your plugin enables.
+   * The command handler for the plugin. Should be set when your plugin enables.
    */
-  @Getter @Setter private static CommandManager commandManager;
+  @Getter @Setter private static CommandHandler commandHandler;
 
   /**
    * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.
