@@ -51,7 +51,6 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onLoad() {
     BaseManager.setPlugin(this);
-    BaseManager.setCommandHandler(CommandHandler.create(this));
     load();
   }
 
@@ -63,6 +62,8 @@ public abstract class BasePlugin extends JavaPlugin {
     if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
       return;
     }
+
+    BaseManager.setCommandHandler(CommandHandler.create(this));
 
     Registerer.registerListener(new MenuManager());
 
@@ -82,7 +83,10 @@ public abstract class BasePlugin extends JavaPlugin {
     }
 
     disable();
-    getCommandHandler().unregisterAllCommands();
+
+    if (getCommandHandler() != null) {
+      getCommandHandler().unregisterAllCommands();
+    }
 
     ServerProperties.clearCache();
     BaseManager.setPlugin(null);
