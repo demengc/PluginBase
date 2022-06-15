@@ -40,9 +40,9 @@ import org.jetbrains.annotations.NotNull;
  * Represents a phase of a minigame (ex. pre-game, the main phase, post-game).
  *
  * <p>All event listeners in the child class will be registered on start and unregistered on end.
- * All additional listeners for this specific state should be registered using {@link
- * #registerListener(Listener)}. Tasks added to {@link #tasks} will be cancelled when the state
- * ends.
+ * All additional listeners for this specific state should be registered using
+ * {@link #registerListener(Listener)}. Tasks added to {@link #tasks} will be cancelled when the
+ * state ends.
  */
 @RequiredArgsConstructor
 public abstract class GameState implements Listener {
@@ -179,7 +179,7 @@ public abstract class GameState implements Listener {
    * @return The remaining duration, minimum 0
    */
   public long getRemainingDuration() {
-    return Math.max(0L, System.currentTimeMillis() - (startTime + getDuration()));
+    return Math.max(0L, (startTime + getDuration()) - System.currentTimeMillis());
   }
 
   /**
