@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.serializer;
 
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.DynamicPlaceholders;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.item.ItemBuilder;
@@ -33,7 +34,9 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -124,7 +127,36 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
       builder.glow(true);
     }
 
+    final ConfigurationSection enchantmentsSection = section
+        .getConfigurationSection("enchantments");
+
+    if (enchantmentsSection != null) {
+      for (String strEnchantment : enchantmentsSection.getKeys(false)) {
+        final Enchantment enchantment = parseEnchantment(strEnchantment);
+
+        if (enchantment == null) {
+          Common.error(null, "Invalid enchantment: " + strEnchantment, false);
+          continue;
+        }
+
+        builder.enchant(enchantment, enchantmentsSection.getInt(strEnchantment, 1), false);
+      }
+    }
+
     return builder.get();
+  }
+
+  private Enchantment parseEnchantment(String str) {
+
+    final Enchantment enchantment;
+
+    try {
+      enchantment = Enchantment.getByKey(NamespacedKey.minecraft(str.toLowerCase()));
+    } catch (IllegalArgumentException ex) {
+      return null;
+    }
+
+    return enchantment;
   }
 
   private String replace(final DynamicPlaceholders placeholders, final String str) {
