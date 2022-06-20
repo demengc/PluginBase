@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package dev.demeng.pluginbase.commands.bukkit.brigadier;
 
-package dev.demeng.pluginbase.commands.core;
-
-import dev.demeng.pluginbase.commands.command.CommandActor;
-import dev.demeng.pluginbase.commands.command.CommandPermission;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
-import org.bukkit.permissions.Permission;
+import com.mojang.brigadier.arguments.ArgumentType;
+import dev.demeng.pluginbase.commands.bukkit.BukkitBrigadier;
+import dev.demeng.pluginbase.commands.command.CommandParameter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * A Bukkit-adapted wrapper for {@link CommandPermission}
+ * A resolver that creates dedicated {@link ArgumentType}s for parameters. This can read annotations
+ * and other information to construct a suitable argument type.
+ * <p>
+ * Register with {@link BukkitBrigadier#bind(Class, ArgumentTypeResolver)}.
  */
-@Getter
-@ToString
-@AllArgsConstructor
-public final class BaseCommandPermission implements CommandPermission {
+@FunctionalInterface
+public interface ArgumentTypeResolver {
 
   /**
-   * The permission node
-   */
-  private final @NotNull Permission permission;
-
-  /**
-   * Returns whether the sender has permission to use this command or not.
+   * Returns the argument type for the given parameter. If this resolver cannot deal with the
+   * parameter, it may return null.
    *
-   * @param actor Actor to test against
-   * @return {@code true} if they can use it, false if otherwise.
+   * @param parameter Parameter to create for
+   * @return The argument type
    */
-  @Override
-  public boolean canExecute(@NotNull CommandActor actor) {
-    return actor.getSender().hasPermission(permission);
-  }
+  @Nullable ArgumentType<?> getArgumentType(@NotNull CommandParameter parameter);
+
 }

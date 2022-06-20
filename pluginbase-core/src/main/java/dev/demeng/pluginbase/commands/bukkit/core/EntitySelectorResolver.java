@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.demeng.pluginbase.commands.core;
+package dev.demeng.pluginbase.commands.bukkit.core;
 
 import com.google.common.collect.ForwardingList;
 import dev.demeng.pluginbase.commands.autocomplete.SuggestionProvider;
 import dev.demeng.pluginbase.commands.autocomplete.SuggestionProviderFactory;
-import dev.demeng.pluginbase.commands.command.CommandActor;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
+import dev.demeng.pluginbase.commands.bukkit.EntitySelector;
+import dev.demeng.pluginbase.commands.bukkit.exception.InvalidPlayerException;
+import dev.demeng.pluginbase.commands.bukkit.exception.MalformedEntitySelectorException;
 import dev.demeng.pluginbase.commands.command.CommandParameter;
 import dev.demeng.pluginbase.commands.exception.CommandErrorException;
-import dev.demeng.pluginbase.commands.exception.InvalidPlayerException;
-import dev.demeng.pluginbase.commands.exception.MalformedEntitySelectorException;
 import dev.demeng.pluginbase.commands.process.ValueResolver;
 import dev.demeng.pluginbase.commands.process.ValueResolver.ValueResolverContext;
 import dev.demeng.pluginbase.commands.process.ValueResolverFactory;
@@ -71,7 +72,7 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
       return context -> {
         String selector = context.pop();
         try {
-          CommandActor actor = context.actor();
+          BukkitCommandActor actor = context.actor();
           List<Entity> c = new ArrayList<>(
               Bukkit.getServer().selectEntities(actor.getSender(), selector));
           c.removeIf(obj -> !entityType.isInstance(obj));
@@ -91,7 +92,7 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
   private EntitySelector<Player> resolvePlayerSelector(ValueResolverContext context) {
     String selector = context.pop().toLowerCase();
     try {
-      CommandActor bActor = context.actor();
+      BukkitCommandActor bActor = context.actor();
 
       List<Player> coll;
       if (supportComplexSelectors) {
@@ -163,7 +164,7 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
     public @Nullable SuggestionProvider createSuggestionProvider(
         @NotNull CommandParameter parameter) {
       if (parameter.getType().isAssignableFrom(EntitySelector.class)) {
-        Class<? extends Entity> type = BaseHandler.getSelectedEntity(parameter.getFullType());
+        Class<? extends Entity> type = BukkitHandler.getSelectedEntity(parameter.getFullType());
         if (Player.class.isAssignableFrom(type) && !supportComplexSelectors) {
           return SuggestionProvider.of("@a", "@p", "@r", "@s").compose(
               parameter.getCommandHandler().getAutoCompleter().getSuggestionProvider("players")

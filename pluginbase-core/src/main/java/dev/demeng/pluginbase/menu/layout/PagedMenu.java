@@ -130,8 +130,8 @@ public abstract class PagedMenu implements IMenu {
   }
 
   /**
-   * Adds a static item that will be displayed on all pages. Must be done AFTER the {@link
-   * #fill(List)} method.
+   * Adds a static item that will be displayed on all pages. Must be done AFTER the
+   * {@link #fill(List)} method.
    *
    * @param button The button to set on all pages
    */

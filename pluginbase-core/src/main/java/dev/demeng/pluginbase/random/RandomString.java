@@ -79,9 +79,9 @@ public final class RandomString {
   }
 
   /**
-   * Generates a new "unique" string identifier with the specified length securely using {@link
-   * SecureRandom}. Note that although this makes the ID more secure, it is slower than {@link
-   * #generateId(int)}.
+   * Generates a new "unique" string identifier with the specified length securely using
+   * {@link SecureRandom}. Note that although this makes the ID more secure, it is slower than
+   * {@link #generateId(int)}.
    *
    * @param length The length of the ID
    * @return The generated ID

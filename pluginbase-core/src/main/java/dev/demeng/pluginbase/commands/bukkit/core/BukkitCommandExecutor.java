@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.commands.core;
+package dev.demeng.pluginbase.commands.bukkit.core;
 
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
 import dev.demeng.pluginbase.commands.command.ArgumentStack;
-import dev.demeng.pluginbase.commands.command.CommandActor;
 import dev.demeng.pluginbase.commands.exception.ArgumentParseException;
 import java.util.Collections;
 import java.util.List;
@@ -35,26 +35,26 @@ import org.bukkit.command.TabExecutor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class BaseTabExecutor implements TabExecutor {
+final class BukkitCommandExecutor implements TabExecutor {
 
-  private final BaseHandler handler;
+  private final BukkitHandler handler;
 
-  public BaseTabExecutor(final BaseHandler handler) {
+  public BukkitCommandExecutor(BukkitHandler handler) {
     this.handler = handler;
   }
 
   @Override
-  public boolean onCommand(@NotNull final CommandSender sender,
-      @NotNull final Command command,
-      @NotNull final String label,
-      @NotNull final String[] args) {
-    final CommandActor actor = new BaseActor(sender, handler);
+  public boolean onCommand(@NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String label,
+      @NotNull String[] args) {
+    BukkitCommandActor actor = new BukkitActor(sender, handler);
     try {
-      final ArgumentStack arguments = handler.parseArguments(args);
+      ArgumentStack arguments = handler.parseArguments(args);
       arguments.addFirst(command.getName());
 
       handler.dispatch(actor, arguments);
-    } catch (final Throwable t) {
+    } catch (Throwable t) {
       handler.getExceptionHandler().handleException(t, actor);
     }
     return true;
@@ -62,17 +62,17 @@ public final class BaseTabExecutor implements TabExecutor {
 
   @Nullable
   @Override
-  public List<String> onTabComplete(@NotNull final CommandSender sender,
-      @NotNull final Command command,
-      @NotNull final String alias,
-      @NotNull final String[] args) {
+  public List<String> onTabComplete(@NotNull CommandSender sender,
+      @NotNull Command command,
+      @NotNull String alias,
+      @NotNull String[] args) {
     try {
-      final CommandActor actor = new BaseActor(sender, handler);
-      final ArgumentStack arguments = handler.parseArgumentsForCompletion(args);
+      BukkitCommandActor actor = new BukkitActor(sender, handler);
+      ArgumentStack arguments = handler.parseArgumentsForCompletion(args);
 
       arguments.addFirst(command.getName());
       return handler.getAutoCompleter().complete(actor, arguments);
-    } catch (final ArgumentParseException e) {
+    } catch (ArgumentParseException e) {
       return Collections.emptyList();
     }
   }

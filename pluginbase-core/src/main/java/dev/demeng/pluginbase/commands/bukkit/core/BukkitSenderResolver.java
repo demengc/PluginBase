@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.commands.core;
+package dev.demeng.pluginbase.commands.bukkit.core;
 
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
 import dev.demeng.pluginbase.commands.command.CommandActor;
 import dev.demeng.pluginbase.commands.command.ExecutableCommand;
 import dev.demeng.pluginbase.commands.process.SenderResolver;
@@ -32,20 +33,19 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public enum BaseSenderResolver implements SenderResolver {
+enum BukkitSenderResolver implements SenderResolver {
 
   INSTANCE;
 
   @Override
-  public boolean isCustomType(final Class<?> type) {
+  public boolean isCustomType(Class<?> type) {
     return CommandSender.class.isAssignableFrom(type);
   }
 
   @Override
-  public @NotNull Object getSender(@NotNull final Class<?> customSenderType,
-      @NotNull final CommandActor actor,
-      @NotNull final ExecutableCommand command) {
-    final CommandActor bActor = actor;
+  public @NotNull Object getSender(@NotNull Class<?> customSenderType, @NotNull CommandActor actor,
+      @NotNull ExecutableCommand command) {
+    BukkitCommandActor bActor = (BukkitCommandActor) actor;
     if (Player.class.isAssignableFrom(customSenderType)) {
       return bActor.requirePlayer();
     }

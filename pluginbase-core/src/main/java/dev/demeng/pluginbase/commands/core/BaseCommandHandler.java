@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core;
 
 import static dev.demeng.pluginbase.commands.util.Preconditions.coerceIn;
@@ -32,6 +33,7 @@ import static dev.demeng.pluginbase.commands.util.Strings.splitBySpace;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.CommandHandlerVisitor;
 import dev.demeng.pluginbase.commands.annotation.Dependency;
+import dev.demeng.pluginbase.commands.annotation.Description;
 import dev.demeng.pluginbase.commands.annotation.Range;
 import dev.demeng.pluginbase.commands.annotation.dynamic.AnnotationReplacer;
 import dev.demeng.pluginbase.commands.autocomplete.AutoCompleter;
@@ -47,8 +49,8 @@ import dev.demeng.pluginbase.commands.exception.ArgumentParseException;
 import dev.demeng.pluginbase.commands.exception.CommandExceptionHandler;
 import dev.demeng.pluginbase.commands.exception.DefaultExceptionHandler;
 import dev.demeng.pluginbase.commands.exception.InvalidBooleanException;
-import dev.demeng.pluginbase.commands.exception.InvalidUrlException;
-import dev.demeng.pluginbase.commands.exception.InvalidUuidException;
+import dev.demeng.pluginbase.commands.exception.InvalidURLException;
+import dev.demeng.pluginbase.commands.exception.InvalidUUIDException;
 import dev.demeng.pluginbase.commands.exception.NumberNotInRangeException;
 import dev.demeng.pluginbase.commands.exception.ThrowableFromCommand;
 import dev.demeng.pluginbase.commands.help.CommandHelp;
@@ -71,6 +73,7 @@ import dev.demeng.pluginbase.commands.process.ValueResolverFactory;
 import dev.demeng.pluginbase.commands.util.ClassMap;
 import dev.demeng.pluginbase.commands.util.Primitives;
 import dev.demeng.pluginbase.commands.util.StackTraceSanitizer;
+import dev.demeng.pluginbase.locale.Translator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -86,6 +89,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -97,7 +101,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-public abstract class BaseCommandHandler implements CommandHandler {
+public class BaseCommandHandler implements CommandHandler {
 
   protected final Map<CommandPath, CommandExecutable> executables = new HashMap<>();
   protected final Map<CommandPath, BaseCommandCategory> categories = new HashMap<>();
@@ -121,6 +125,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   CommandHelpWriter<?> helpWriter;
   boolean failOnExtra = false;
   final List<CommandCondition> conditions = new ArrayList<>();
+  private final Translator translator = Translator.create();
 
   public BaseCommandHandler() {
     registerContextResolverFactory(new SenderContextResolverFactory(senderResolvers));
@@ -134,27 +139,27 @@ public abstract class BaseCommandHandler implements CommandHandler {
     registerValueResolver(boolean.class, bool());
     registerValueResolver(String.class, ValueResolverContext::popForParameter);
     registerValueResolver(UUID.class, context -> {
-      final String value = context.pop();
+      String value = context.pop();
       try {
         return UUID.fromString(value);
-      } catch (final Throwable t) {
-        throw new InvalidUuidException(context.parameter(), value);
+      } catch (Throwable t) {
+        throw new InvalidUUIDException(context.parameter(), value);
       }
     });
     registerValueResolver(URL.class, context -> {
-      final String value = context.pop();
+      String value = context.pop();
       try {
         return new URL(value);
-      } catch (final MalformedURLException e) {
-        throw new InvalidUrlException(context.parameter(), value);
+      } catch (MalformedURLException e) {
+        throw new InvalidURLException(context.parameter(), value);
       }
     });
     registerValueResolver(URI.class, context -> {
-      final String value = context.pop();
+      String value = context.pop();
       try {
         return new URI(value);
-      } catch (final URISyntaxException e) {
-        throw new InvalidUrlException(context.parameter(), value);
+      } catch (URISyntaxException e) {
+        throw new InvalidURLException(context.parameter(), value);
       }
     });
     registerContextResolver(CommandHandler.class, context -> this);
@@ -165,7 +170,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
     setExceptionHandler(DefaultExceptionHandler.INSTANCE);
     registerCondition(CooldownCondition.INSTANCE);
     registerParameterValidator(Number.class, (value, parameter, actor) -> {
-      final Range range = parameter.getAnnotation(Range.class);
+      Range range = parameter.getAnnotation(Range.class);
       if (range != null) {
         if (value.doubleValue() > range.max() || value.doubleValue() < range.min()) {
           throw new NumberNotInRangeException(actor, parameter, value, range.min(),
@@ -174,11 +179,13 @@ public abstract class BaseCommandHandler implements CommandHandler {
       }
     });
     registerCondition((actor, command, arguments) -> command.checkPermission(actor));
+    registerAnnotationReplacer(Description.class, new LocalesAnnotationReplacer(this));
+    registerResponseHandler(String.class, (response, actor, command) -> actor.reply(response));
   }
 
   @Override
-  public @NotNull CommandHandler register(@NotNull final Object... commands) {
-    for (final Object command : commands) {
+  public @NotNull CommandHandler register(@NotNull Object... commands) {
+    for (Object command : commands) {
       notNull(command, "Command");
       if (command instanceof OrphanCommand) {
         throw new IllegalArgumentException("You cannot register an OrphanCommand directly! " +
@@ -196,24 +203,39 @@ public abstract class BaseCommandHandler implements CommandHandler {
         CommandParser.parse(this, command);
       }
     }
-    for (final BaseCommandCategory category : categories.values()) {
-      final CommandPath categoryPath = category.getPath().getCategoryPath();
+    for (BaseCommandCategory category : categories.values()) {
+      CommandPath categoryPath = category.getPath().getCategoryPath();
       category.parent(categoryPath == null ? null : categories.get(categoryPath));
       findPermission(category.defaultAction);
     }
-    for (final CommandExecutable executable : executables.values()) {
+    for (CommandExecutable executable : executables.values()) {
       findPermission(executable);
     }
     return this;
   }
 
-  private void findPermission(@Nullable final CommandExecutable executable) {
+  @Override
+  public @NotNull Locale getLocale() {
+    return translator.getLocale();
+  }
+
+  @Override
+  public void setLocale(@NotNull Locale locale) {
+    translator.setLocale(locale);
+  }
+
+  @Override
+  public @NotNull Translator getTranslator() {
+    return translator;
+  }
+
+  private void findPermission(@Nullable CommandExecutable executable) {
     if (executable == null) {
       return;
     }
     if (!executable.permissionSet) {
-      for (final PermissionReader reader : permissionReaders) {
-        final CommandPermission p = reader.getPermission(executable);
+      for (PermissionReader reader : permissionReaders) {
+        CommandPermission p = reader.getPermission(executable);
         if (p != null) {
           executable.permissionSet = true;
           executable.setPermission(p);
@@ -228,8 +250,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull CommandHandler setMethodCallerFactory(
-      @NotNull final MethodCallerFactory factory) {
+  public @NotNull CommandHandler setMethodCallerFactory(@NotNull MethodCallerFactory factory) {
     notNull(factory, "method caller factory");
     methodCallerFactory = factory;
     return this;
@@ -241,9 +262,9 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public ArgumentStack parseArgumentsForCompletion(final String... arguments)
+  public ArgumentStack parseArgumentsForCompletion(String... arguments)
       throws ArgumentParseException {
-    final String args = String.join(" ", arguments);
+    String args = String.join(" ", arguments);
     if (args.isEmpty()) {
       return ArgumentStack.copy(EMPTY_TEXT);
     }
@@ -251,8 +272,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public ArgumentStack parseArguments(final String... arguments) throws ArgumentParseException {
-    final String args = String.join(" ", arguments);
+  public ArgumentStack parseArguments(String... arguments) throws ArgumentParseException {
+    String args = String.join(" ", arguments);
     if (args.isEmpty()) {
       return ArgumentStack.empty();
     }
@@ -265,15 +286,14 @@ public abstract class BaseCommandHandler implements CommandHandler {
   private static final Collection<String> EMPTY_TEXT = Collections.singletonList("");
 
   @Override
-  public BaseCommandHandler setArgumentParser(@NotNull final ArgumentParser argumentParser) {
+  public BaseCommandHandler setArgumentParser(@NotNull ArgumentParser argumentParser) {
     notNull(argumentParser, "argument parser");
     this.argumentParser = argumentParser;
     return this;
   }
 
   @Override
-  public @NotNull CommandHandler setExceptionHandler(
-      @NotNull final CommandExceptionHandler handler) {
+  public @NotNull CommandHandler setExceptionHandler(@NotNull CommandExceptionHandler handler) {
     notNull(handler, "command exception handler");
     exceptionHandler.handler = handler;
     return this;
@@ -281,8 +301,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
   @Override
   public @NotNull <T extends Throwable> CommandHandler registerExceptionHandler(
-      @NotNull final Class<T> exceptionType,
-      @NotNull final BiConsumer<CommandActor, T> handler) {
+      @NotNull Class<T> exceptionType,
+      @NotNull BiConsumer<CommandActor, T> handler) {
     notNull(exceptionType, "exception type");
     notNull(handler, "exception handler");
     exceptionHandler.exceptionsHandlers.add(exceptionType,
@@ -291,7 +311,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull CommandHandler setSwitchPrefix(@NotNull final String prefix) {
+  public @NotNull CommandHandler setSwitchPrefix(@NotNull String prefix) {
     notNull(prefix, "prefix");
     notEmpty(prefix, "prefix cannot be empty!");
     switchPrefix = prefix;
@@ -299,7 +319,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull CommandHandler setFlagPrefix(@NotNull final String prefix) {
+  public @NotNull CommandHandler setFlagPrefix(@NotNull String prefix) {
     notNull(prefix, "prefix");
     notEmpty(prefix, "prefix cannot be empty!");
     flagPrefix = prefix;
@@ -307,7 +327,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull <T> CommandHandler setHelpWriter(@NotNull final CommandHelpWriter<T> helpWriter) {
+  public @NotNull <T> CommandHandler setHelpWriter(@NotNull CommandHelpWriter<T> helpWriter) {
     notNull(helpWriter, "command help writer");
     this.helpWriter = helpWriter;
     return this;
@@ -326,22 +346,22 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull CommandHandler registerSenderResolver(@NotNull final SenderResolver resolver) {
+  public @NotNull CommandHandler registerSenderResolver(@NotNull SenderResolver resolver) {
     notNull(resolver, "resolver");
     senderResolvers.add(resolver);
     return this;
   }
 
   @Override
-  public @NotNull CommandHandler registerPermissionReader(@NotNull final PermissionReader reader) {
+  public @NotNull CommandHandler registerPermissionReader(@NotNull PermissionReader reader) {
     notNull(reader, "permission reader");
     permissionReaders.add(reader);
     return this;
   }
 
   @Override
-  public <T> @NotNull CommandHandler registerValueResolver(@NotNull final Class<T> type,
-      @NotNull final ValueResolver<T> resolver) {
+  public <T> @NotNull CommandHandler registerValueResolver(@NotNull Class<T> type,
+      @NotNull ValueResolver<T> resolver) {
     notNull(type, "type");
     notNull(resolver, "resolver");
     if (type.isPrimitive()) {
@@ -352,9 +372,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerValueResolver(final int priority,
-      @NotNull final Class<T> type,
-      @NotNull final ValueResolver<T> resolver) {
+  public @NotNull <T> CommandHandler registerValueResolver(int priority, @NotNull Class<T> type,
+      @NotNull ValueResolver<T> resolver) {
     notNull(type, "type");
     notNull(resolver, "resolver");
     if (type.isPrimitive()) {
@@ -366,8 +385,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public <T> @NotNull CommandHandler registerContextResolver(@NotNull final Class<T> type,
-      @NotNull final ContextResolver<T> resolver) {
+  public <T> @NotNull CommandHandler registerContextResolver(@NotNull Class<T> type,
+      @NotNull ContextResolver<T> resolver) {
     notNull(type, "type");
     notNull(resolver, "resolver");
     if (type.isPrimitive()) {
@@ -378,9 +397,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerContextResolver(final int priority,
-      @NotNull final Class<T> type,
-      @NotNull final ContextResolver<T> resolver) {
+  public @NotNull <T> CommandHandler registerContextResolver(int priority, @NotNull Class<T> type,
+      @NotNull ContextResolver<T> resolver) {
     notNull(type, "type");
     notNull(resolver, "resolver");
     if (type.isPrimitive()) {
@@ -392,29 +410,27 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerContextValue(@NotNull final Class<T> type,
-      final T value) {
+  public @NotNull <T> CommandHandler registerContextValue(@NotNull Class<T> type, T value) {
     return registerContextResolver(type, ContextResolver.of(value));
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerContextValue(final int priority,
-      @NotNull final Class<T> type,
-      @NotNull final T value) {
+  public @NotNull <T> CommandHandler registerContextValue(int priority, @NotNull Class<T> type,
+      @NotNull T value) {
     return registerContextResolver(priority, type, ContextResolver.of(value));
   }
 
   @Override
   public @NotNull CommandHandler registerValueResolverFactory(
-      @NotNull final ValueResolverFactory factory) {
+      @NotNull ValueResolverFactory factory) {
     notNull(factory, "value resolver factory");
     factories.add(new ResolverFactory(factory));
     return this;
   }
 
   @Override
-  public @NotNull CommandHandler registerValueResolverFactory(final int priority,
-      @NotNull final ValueResolverFactory factory) {
+  public @NotNull CommandHandler registerValueResolverFactory(int priority,
+      @NotNull ValueResolverFactory factory) {
     notNull(factory, "value resolver factory");
     factories.add(coerceIn(priority, 0, factories.size()), new ResolverFactory(factory));
     return this;
@@ -422,30 +438,30 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
   @Override
   public @NotNull CommandHandler registerContextResolverFactory(
-      @NotNull final ContextResolverFactory factory) {
+      @NotNull ContextResolverFactory factory) {
     notNull(factory, "context resolver factory");
     factories.add(new ResolverFactory(factory));
     return this;
   }
 
   @Override
-  public @NotNull CommandHandler registerContextResolverFactory(final int priority,
-      @NotNull final ContextResolverFactory factory) {
+  public @NotNull CommandHandler registerContextResolverFactory(int priority,
+      @NotNull ContextResolverFactory factory) {
     notNull(factory, "context resolver factory");
     factories.add(coerceIn(priority, 0, factories.size()), new ResolverFactory(factory));
     return this;
   }
 
   @Override
-  public @NotNull CommandHandler registerCondition(@NotNull final CommandCondition condition) {
+  public @NotNull CommandHandler registerCondition(@NotNull CommandCondition condition) {
     notNull(condition, "condition");
     conditions.add(condition);
     return this;
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerDependency(@NotNull final Class<T> type,
-      @NotNull final Supplier<T> supplier) {
+  public @NotNull <T> CommandHandler registerDependency(@NotNull Class<T> type,
+      @NotNull Supplier<T> supplier) {
     notNull(type, "type");
     notNull(supplier, "supplier");
     dependencies.add(type, supplier);
@@ -453,16 +469,15 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerDependency(@NotNull final Class<T> type,
-      final T value) {
+  public @NotNull <T> CommandHandler registerDependency(@NotNull Class<T> type, T value) {
     notNull(type, "type");
     dependencies.add(type, () -> value);
     return this;
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerParameterValidator(@NotNull final Class<T> type,
-      @NotNull final ParameterValidator<T> validator) {
+  public @NotNull <T> CommandHandler registerParameterValidator(@NotNull Class<T> type,
+      @NotNull ParameterValidator<T> validator) {
     notNull(type, "type");
     notNull(validator, "validator");
     validators.computeIfAbsent(Primitives.wrap(type), t -> new ArrayList<>())
@@ -471,8 +486,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull <T> CommandHandler registerResponseHandler(@NotNull final Class<T> responseType,
-      @NotNull final ResponseHandler<T> handler) {
+  public @NotNull <T> CommandHandler registerResponseHandler(@NotNull Class<T> responseType,
+      @NotNull ResponseHandler<T> handler) {
     notNull(responseType, "response type");
     notNull(handler, "response handler");
     responseHandlers.add(responseType, handler);
@@ -481,7 +496,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
   @Override
   public @NotNull <T extends Annotation> CommandHandler registerAnnotationReplacer(
-      @NotNull final Class<T> annotationType, @NotNull final AnnotationReplacer<T> replacer) {
+      @NotNull Class<T> annotationType, @NotNull AnnotationReplacer<T> replacer) {
     notNull(annotationType, "annotation type");
     notNull(replacer, "annotation replacer");
     annotationReplacers.computeIfAbsent(annotationType, e -> new HashSet<>()).add(replacer);
@@ -489,7 +504,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public @NotNull CommandHandler accept(@NotNull final CommandHandlerVisitor visitor) {
+  public @NotNull CommandHandler accept(@NotNull CommandHandlerVisitor visitor) {
     notNull(visitor, "command handler visitor cannot be null!");
     visitor.visit(this);
     return this;
@@ -497,14 +512,14 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
   @SuppressWarnings("rawtypes")
   public @Nullable <T extends Annotation> List<Annotation> replaceAnnotation(
-      final AnnotatedElement element, final T ann) {
-    final Set<AnnotationReplacer<?>> replacers = annotationReplacers.get(ann.annotationType());
+      AnnotatedElement element, T ann) {
+    Set<AnnotationReplacer<?>> replacers = annotationReplacers.get(ann.annotationType());
     if (replacers == null || replacers.isEmpty()) {
       return null;
     }
-    final List<Annotation> annotations = new ArrayList<>();
-    for (final AnnotationReplacer replacer : replacers) {
-      final Collection<Annotation> replaced = replacer.replaceAnnotations(element, ann);
+    List<Annotation> annotations = new ArrayList<>();
+    for (AnnotationReplacer replacer : replacers) {
+      Collection<Annotation> replaced = replacer.replaceAnnotations(element, ann);
       if (replaced == null || replaced.isEmpty()) {
         continue;
       }
@@ -522,12 +537,12 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public ExecutableCommand getCommand(@NotNull final CommandPath path) {
+  public ExecutableCommand getCommand(@NotNull CommandPath path) {
     return executables.get(path);
   }
 
   @Override
-  public CommandCategory getCategory(@NotNull final CommandPath path) {
+  public CommandCategory getCategory(@NotNull CommandPath path) {
     return categories.get(path);
   }
 
@@ -541,11 +556,11 @@ public abstract class BaseCommandHandler implements CommandHandler {
     return Collections.unmodifiableMap(categories);
   }
 
-  public <T> ParameterResolver<T> getResolver(final CommandParameter parameter) {
-    final ParameterResolver<T> cached = null;
+  public <T> ParameterResolver<T> getResolver(CommandParameter parameter) {
+    ParameterResolver<T> cached = null;
 
-    for (final ResolverFactory factory : factories) {
-      final Resolver resolver = factory.create(parameter);
+    for (ResolverFactory factory : factories) {
+      Resolver resolver = factory.create(parameter);
       if (resolver == null) {
         continue;
       }
@@ -573,8 +588,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
     return (CommandHelpWriter<T>) helpWriter;
   }
 
-  private void unregister(final CommandPath path, final CommandExecutable command) {
-    final BaseCommandCategory parent = command.parent;
+  private void unregister(CommandPath path, CommandExecutable command) {
+    BaseCommandCategory parent = command.parent;
     if (parent != null) {
       parent.commands.remove(path);
       if (parent.isEmpty()) {
@@ -583,8 +598,8 @@ public abstract class BaseCommandHandler implements CommandHandler {
     }
   }
 
-  private void unregister(final CommandPath path, final BaseCommandCategory category) {
-    final BaseCommandCategory parent = category.parent;
+  private void unregister(CommandPath path, BaseCommandCategory category) {
+    BaseCommandCategory parent = category.parent;
     if (parent != null) {
       parent.commands.remove(path);
       if (parent.isEmpty()) {
@@ -594,20 +609,20 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public boolean unregister(@NotNull final CommandPath path) {
+  public boolean unregister(@NotNull CommandPath path) {
     boolean modified = false;
-    for (final Iterator<Entry<CommandPath, CommandExecutable>> iterator = executables.entrySet()
+    for (Iterator<Entry<CommandPath, CommandExecutable>> iterator = executables.entrySet()
         .iterator(); iterator.hasNext(); ) {
-      final Entry<CommandPath, CommandExecutable> entry = iterator.next();
+      Entry<CommandPath, CommandExecutable> entry = iterator.next();
       if (entry.getKey().isChildOf(path)) {
         modified = true;
         iterator.remove();
         unregister(path, entry.getValue());
       }
     }
-    for (final Iterator<Entry<CommandPath, BaseCommandCategory>> iterator = categories.entrySet()
+    for (Iterator<Entry<CommandPath, BaseCommandCategory>> iterator = categories.entrySet()
         .iterator(); iterator.hasNext(); ) {
-      final Entry<CommandPath, BaseCommandCategory> entry = iterator.next();
+      Entry<CommandPath, BaseCommandCategory> entry = iterator.next();
       if (entry.getKey().isChildOf(path)) {
         modified = true;
         iterator.remove();
@@ -618,7 +633,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public boolean unregister(@NotNull final String commandPath) {
+  public boolean unregister(@NotNull String commandPath) {
     return unregister(CommandPath.get(splitBySpace(commandPath)));
   }
 
@@ -632,13 +647,13 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
   @Override
   public @NotNull Set<CommandPath> getRootPaths() {
-    final Set<CommandPath> paths = new HashSet<>();
-    for (final CommandPath path : categories.keySet()) {
+    Set<CommandPath> paths = new HashSet<>();
+    for (CommandPath path : categories.keySet()) {
       if (path.isRoot()) {
         paths.add(path);
       }
     }
-    for (final CommandPath path : executables.keySet()) {
+    for (CommandPath path : executables.keySet()) {
       if (path.isRoot()) {
         paths.add(path);
       }
@@ -657,49 +672,48 @@ public abstract class BaseCommandHandler implements CommandHandler {
   }
 
   @Override
-  public <T> @NotNull Optional<@Nullable T> dispatch(@NotNull final CommandActor actor,
-      @NotNull final ArgumentStack arguments) {
+  public <T> @NotNull Optional<@Nullable T> dispatch(@NotNull CommandActor actor,
+      @NotNull ArgumentStack arguments) {
     return (Optional<T>) Optional.ofNullable(dispatcher.eval(actor, arguments));
   }
 
   @Override
-  public <T> @NotNull Optional<@Nullable T> dispatch(@NotNull final CommandActor actor,
-      @NotNull final String commandInput) {
+  public <T> @NotNull Optional<@Nullable T> dispatch(@NotNull CommandActor actor,
+      @NotNull String commandInput) {
     try {
       return dispatch(actor, parseArguments(commandInput));
-    } catch (final Throwable t) {
+    } catch (Throwable t) {
       getExceptionHandler().handleException(t, actor);
       return Optional.empty();
     }
   }
 
   @Override
-  public <T> Supplier<T> getDependency(@NotNull final Class<T> dependencyType) {
+  public <T> Supplier<T> getDependency(@NotNull Class<T> dependencyType) {
     return (Supplier<T>) dependencies.getFlexible(dependencyType);
   }
 
   @Override
-  public <T> Supplier<T> getDependency(@NotNull final Class<T> dependencyType,
-      final Supplier<T> def) {
+  public <T> Supplier<T> getDependency(@NotNull Class<T> dependencyType, Supplier<T> def) {
     return (Supplier<T>) dependencies.getFlexibleOrDefault(dependencyType, def);
   }
 
-  protected void setDependencies(final Object ob) {
-    for (final Field field : getType(ob).getDeclaredFields()) {
+  protected void setDependencies(Object ob) {
+    for (Field field : getType(ob).getDeclaredFields()) {
       if (!field.isAnnotationPresent(Dependency.class)) {
         continue;
       }
       if (!field.isAccessible()) {
         field.setAccessible(true);
       }
-      final Supplier<?> dependency = dependencies.getFlexible(field.getType());
+      Supplier<?> dependency = dependencies.getFlexible(field.getType());
       if (dependency == null) {
         throw new IllegalStateException(
             "Unable to find correct dependency for type " + field.getType());
       }
       try {
         field.set(ob, dependency.get());
-      } catch (final IllegalAccessException e) {
+      } catch (IllegalAccessException e) {
         throw new IllegalStateException(
             "Unable to inject dependency value into field " + field.getName(), e);
       }
@@ -708,7 +722,7 @@ public abstract class BaseCommandHandler implements CommandHandler {
 
   private ValueResolver<Boolean> bool() {
     return context -> {
-      final String v = context.pop();
+      String v = context.pop();
       switch (v.toLowerCase()) {
         case "true":
         case "yes":
@@ -733,19 +747,19 @@ public abstract class BaseCommandHandler implements CommandHandler {
     private final ClassMap<BiConsumer<CommandActor, Throwable>> exceptionsHandlers = new ClassMap<>();
     private @NotNull CommandExceptionHandler handler;
 
-    public WrappedExceptionHandler(@NotNull final CommandExceptionHandler handler) {
+    public WrappedExceptionHandler(@NotNull CommandExceptionHandler handler) {
       this.handler = handler;
     }
 
     @Override
-    public void handleException(@NotNull Throwable throwable, @NotNull final CommandActor actor) {
-      final Throwable cause = throwable.getCause();
+    public void handleException(@NotNull Throwable throwable, @NotNull CommandActor actor) {
+      Throwable cause = throwable.getCause();
       if (cause != null && (cause.getClass().isAnnotationPresent(ThrowableFromCommand.class) ||
           exceptionsHandlers.getFlexible(cause.getClass()) != null)
       ) {
         throwable = cause;
       }
-      @Nullable final BiConsumer<CommandActor, Throwable> registered = exceptionsHandlers.getFlexible(
+      @Nullable BiConsumer<CommandActor, Throwable> registered = exceptionsHandlers.getFlexible(
           throwable.getClass());
       sanitizer.sanitize(throwable);
       if (registered != null) {

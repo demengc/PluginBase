@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package dev.demeng.pluginbase.commands.bukkit.core;
 
-package dev.demeng.pluginbase.commands.exception;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
 
-import dev.demeng.pluginbase.commands.command.CommandParameter;
-import org.jetbrains.annotations.NotNull;
+final class BukkitCommandListeners implements Listener {
 
-/**
- * Thrown when an invalid value for a {@link org.bukkit.World} parameter is inputted in the command
- */
-public class InvalidWorldException extends InvalidValueException {
+  private final BukkitCommandHandler handler;
 
-  public InvalidWorldException(@NotNull CommandParameter parameter, @NotNull String input) {
-    super(parameter, input);
+  public BukkitCommandListeners(BukkitCommandHandler handler) {
+    this.handler = handler;
+  }
+
+  @EventHandler(ignoreCancelled = true)
+  public void onPluginDisable(PluginDisableEvent event) {
+    if (!event.getPlugin().equals(handler.getPlugin())) {
+      return;
+    }
+    handler.unregisterAllCommands();
   }
 }

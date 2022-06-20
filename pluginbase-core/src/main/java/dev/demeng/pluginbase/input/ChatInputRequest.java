@@ -41,8 +41,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Requests a chat input from players, with the ability to map the string input into the object you
- * require and a retry system for invalid inputs. Created using the Bukkit {@link
- * org.bukkit.conversations.Conversation} API.
+ * require and a retry system for invalid inputs. Created using the Bukkit
+ * {@link org.bukkit.conversations.Conversation} API.
  *
  * @param <T> The expected return type for the input request
  */
@@ -70,8 +70,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   private boolean firstAttempt = true;
 
   /**
-   * Sets the title that is sent when input is requested. If not set, {@link
-   * BaseSettings#inputRequestDefaultTitle()} will be used.
+   * Sets the title that is sent when input is requested. If not set,
+   * {@link BaseSettings#inputRequestDefaultTitle()} will be used.
    *
    * @param title The title sent on input request
    * @return this
@@ -83,8 +83,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * Sets the subttile that is sent when input is requested. If not set, {@link
-   * BaseSettings#inputRequestDefaultSubtitle()} will be used.
+   * Sets the subttile that is sent when input is requested. If not set,
+   * {@link BaseSettings#inputRequestDefaultSubtitle()} will be used.
    *
    * @param subtitle The subtitle sent on input request
    * @return this
@@ -109,8 +109,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * The message that is sent after an invalid input. If not set, {@link
-   * BaseSettings#inputRequestDefaultRetryMessage()} will be used.
+   * The message that is sent after an invalid input. If not set,
+   * {@link BaseSettings#inputRequestDefaultRetryMessage()} will be used.
    *
    * @param retryMessage The message sent on invalid input
    * @return this
@@ -122,8 +122,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * The message that is sent after the request timeout of 5 minutes. If not set, {@link
-   * BaseSettings#inputRequestDefaultTimeoutMessage()} will be used.
+   * The message that is sent after the request timeout of 5 minutes. If not set,
+   * {@link BaseSettings#inputRequestDefaultTimeoutMessage()} will be used.
    *
    * @param timeoutMessage The message sent on timeout
    * @return this
@@ -136,8 +136,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
   /**
    * The consumer that is accepted with the parsed input when a valid input has been provided. This
-   * utility will automatically clear the title and subtitle (if applicable) and end the {@link
-   * org.bukkit.conversations.Conversation}.
+   * utility will automatically clear the title and subtitle (if applicable) and end the
+   * {@link org.bukkit.conversations.Conversation}.
    *
    * @param consumer The consumer to be accepted with the input
    * @return this
@@ -150,8 +150,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
   /**
    * The runnable ran on exit (conversation abandon). This is called both when an input is accepted
-   * and when the input request is cancelled using the escape sequence ({@link
-   * BaseSettings#inputRequestEscapeSequence()}).
+   * and when the input request is cancelled using the escape sequence
+   * ({@link BaseSettings#inputRequestEscapeSequence()}).
    *
    * @param exitRunnable The runnable to run on exit
    * @return this

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,42 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.commands.core;
+package dev.demeng.pluginbase.commands.bukkit.core;
 
-import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
-
-import com.google.common.base.Suppliers;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.autocomplete.SuggestionProvider;
-import dev.demeng.pluginbase.commands.brigadier.BaseBrigadier;
-import dev.demeng.pluginbase.commands.brigadier.BrigadierTreeParser;
+import dev.demeng.pluginbase.commands.bukkit.BukkitBrigadier;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
+import dev.demeng.pluginbase.commands.bukkit.adventure.AudienceSenderResolver;
+import dev.demeng.pluginbase.commands.bukkit.adventure.ComponentResponseHandler;
+import dev.demeng.pluginbase.commands.bukkit.brigadier.CommodoreBukkitBrigadier;
+import dev.demeng.pluginbase.commands.bukkit.core.EntitySelectorResolver.SelectorSuggestionFactory;
+import dev.demeng.pluginbase.commands.bukkit.exception.BukkitExceptionAdapter;
+import dev.demeng.pluginbase.commands.bukkit.exception.InvalidPlayerException;
+import dev.demeng.pluginbase.commands.bukkit.exception.InvalidWorldException;
+import dev.demeng.pluginbase.commands.bukkit.exception.MalformedEntitySelectorException;
+import dev.demeng.pluginbase.commands.bukkit.exception.MoreThanOnePlayerException;
+import dev.demeng.pluginbase.commands.bukkit.exception.NonPlayerEntitiesException;
 import dev.demeng.pluginbase.commands.command.CommandCategory;
 import dev.demeng.pluginbase.commands.command.ExecutableCommand;
-import dev.demeng.pluginbase.commands.core.EntitySelectorResolver.SelectorSuggestionFactory;
-import dev.demeng.pluginbase.commands.exception.DefaultExceptionHandler;
+import dev.demeng.pluginbase.commands.core.BaseCommandHandler;
+import dev.demeng.pluginbase.commands.core.CommandPath;
 import dev.demeng.pluginbase.commands.exception.EnumNotFoundException;
-import dev.demeng.pluginbase.commands.exception.InvalidPlayerException;
-import dev.demeng.pluginbase.commands.exception.InvalidWorldException;
-import dev.demeng.pluginbase.commands.process.PermissionReader;
+import dev.demeng.pluginbase.commands.util.Preconditions;
 import dev.demeng.pluginbase.commands.util.Primitives;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
-import me.lucko.commodore.CommodoreProvider;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -67,53 +75,72 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class BaseHandler extends BaseCommandHandler implements CommandHandler {
+public final class BukkitHandler extends BaseCommandHandler implements BukkitCommandHandler {
+
+  public static final SuggestionProvider playerSuggestionProvider = (args, sender, command) -> Bukkit.getOnlinePlayers()
+      .stream()
+      .filter(player -> !((BukkitCommandActor) sender).isPlayer()
+          || ((BukkitCommandActor) sender).requirePlayer().canSee(player))
+      .map(HumanEntity::getName)
+      .collect(Collectors.toList());
 
   private final Plugin plugin;
-
-  @SuppressWarnings("Guava")
-  // old guava versions would throw an error as they do not implement Java's Supplier.
-  private final com.google.common.base.Supplier<Optional<BaseBrigadier>> brigadier = Suppliers.memoize(
-      () -> {
-        if (!CommodoreProvider.isSupported()) {
-          return Optional.empty();
-        }
-        return Optional.of(new BaseBrigadier(CommodoreProvider.getCommodore(getPlugin()), this));
-      });
+  private Optional<BukkitBrigadier> brigadier;
 
   @SuppressWarnings("rawtypes")
-  public BaseHandler(@NotNull final Plugin plugin) {
+  public BukkitHandler(@NotNull Plugin plugin) {
     super();
-    this.plugin = notNull(plugin, "plugin");
-    registerSenderResolver(BaseSenderResolver.INSTANCE);
+    this.plugin = Preconditions.notNull(plugin, "plugin");
+    try {
+      brigadier = Optional.of(new CommodoreBukkitBrigadier(this));
+    } catch (NoClassDefFoundError e) {
+      brigadier = Optional.empty();
+    }
+    registerSenderResolver(BukkitSenderResolver.INSTANCE);
     registerValueResolver(Player.class, context -> {
-      final String value = context.pop();
+      String value = context.pop();
       if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) {
-        return context.actor().requirePlayer();
+        return ((BukkitCommandActor) context.actor()).requirePlayer();
       }
-      final Player player = Bukkit.getPlayerExact(value);
+      if (EntitySelectorResolver.INSTANCE.supportsComplexSelectors()) {
+        try {
+          List<Entity> entityList = Bukkit.selectEntities(
+              ((BukkitActor) context.actor()).getSender(), value);
+          if (entityList.stream().anyMatch(c -> !(c instanceof Player))) {
+            throw new NonPlayerEntitiesException(value);
+          }
+          if (entityList.size() != 1) {
+            throw new MoreThanOnePlayerException(value);
+          }
+          return (Player) entityList.get(0);
+        } catch (IllegalArgumentException e) {
+          throw new MalformedEntitySelectorException(context.actor(), value,
+              e.getCause().getMessage());
+        }
+      }
+      Player player = Bukkit.getPlayerExact(value);
       if (player == null) {
         throw new InvalidPlayerException(context.parameter(), value);
       }
       return player;
     });
     registerValueResolver(OfflinePlayer.class, context -> {
-      final String value = context.pop();
+      String value = context.pop();
       if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) {
-        return context.actor().requirePlayer();
+        return ((BukkitCommandActor) context.actor()).requirePlayer();
       }
-      final OfflinePlayer player = Bukkit.getOfflinePlayer(value);
+      OfflinePlayer player = Bukkit.getOfflinePlayer(value);
       if (!player.hasPlayedBefore()) {
         throw new InvalidPlayerException(context.parameter(), value);
       }
       return player;
     });
     registerValueResolver(World.class, context -> {
-      final String value = context.pop();
+      String value = context.pop();
       if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) {
-        return context.actor().requirePlayer().getWorld();
+        return ((BukkitCommandActor) context.actor()).requirePlayer().getWorld();
       }
-      final World world = Bukkit.getWorld(value);
+      World world = Bukkit.getWorld(value);
       if (world == null) {
         throw new InvalidWorldException(context.parameter(), value);
       }
@@ -124,25 +151,20 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
       if (value.startsWith("minecraft:")) {
         value = value.substring("minecraft:".length());
       }
-      final EntityType type = EntityType.fromName(value);
+      EntityType type = EntityType.fromName(value);
       if (type == null) {
         throw new EnumNotFoundException(context.parameter(), value);
       }
       return type;
     });
-    if (EntitySelectorResolver.INSTANCE.supportsComplexSelectors() && brigadier.get()
-        .isPresent()) {
-      getAutoCompleter().registerParameterSuggestions(EntityType.class,
-          SuggestionProvider.EMPTY);
+    if (EntitySelectorResolver.INSTANCE.supportsComplexSelectors() && isBrigadierSupported()) {
+      getAutoCompleter().registerParameterSuggestions(EntityType.class, SuggestionProvider.EMPTY);
     }
     registerValueResolverFactory(EntitySelectorResolver.INSTANCE);
-    getAutoCompleter().registerSuggestion("players",
-        (args, sender, command) -> Bukkit.getOnlinePlayers()
-            .stream()
-            .filter(player -> !sender.isPlayer()
-                || sender.requirePlayer().canSee(player))
-            .map(HumanEntity::getName)
-            .collect(Collectors.toList()));
+    if (!isBrigadierSupported()) {
+      getAutoCompleter().registerParameterSuggestions(Player.class, playerSuggestionProvider);
+    }
+    getAutoCompleter().registerSuggestion("players", playerSuggestionProvider);
     getAutoCompleter()
         .registerSuggestion("worlds", SuggestionProvider.map(Bukkit::getWorlds, World::getName))
         .registerParameterSuggestions(Player.class, "players")
@@ -151,21 +173,25 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
     registerContextValue((Class) plugin.getClass(), plugin);
     registerDependency((Class) plugin.getClass(), plugin);
     registerDependency(FileConfiguration.class, (Supplier<FileConfiguration>) plugin::getConfig);
-    registerDependency(Logger.class, plugin.getLogger());
-    registerPermissionReader(PermissionReader.INSTANCE);
-    setExceptionHandler(DefaultExceptionHandler.INSTANCE);
+    registerDependency(Logger.class, (Supplier<Logger>) plugin::getLogger);
+    registerPermissionReader(BukkitPermissionReader.INSTANCE);
+    setExceptionHandler(BukkitExceptionAdapter.INSTANCE);
+    Bukkit.getServer().getPluginManager().registerEvents(new BukkitCommandListeners(this), plugin);
+    registerSenderResolver(new AudienceSenderResolver(BaseManager.getAdventure()));
+    registerResponseHandler(ComponentLike.class,
+        new ComponentResponseHandler(BaseManager.getAdventure()));
   }
 
   @Override
-  public @NotNull CommandHandler register(@NotNull final Object... commands) {
+  public @NotNull CommandHandler register(@NotNull Object... commands) {
     super.register(commands);
-    for (final ExecutableCommand command : executables.values()) {
+    for (ExecutableCommand command : executables.values()) {
       if (command.getParent() != null) {
         continue;
       }
       createPluginCommand(command.getName(), command.getDescription(), command.getUsage());
     }
-    for (final CommandCategory category : categories.values()) {
+    for (CommandCategory category : categories.values()) {
       if (category.getParent() != null) {
         continue;
       }
@@ -175,10 +201,18 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
   }
 
   @Override
-  public CommandHandler registerBrigadier() {
-    brigadier.get().ifPresent(brigadier -> BrigadierTreeParser
-        .parse(brigadier, this)
-        .forEach(brigadier::register));
+  public @NotNull Optional<BukkitBrigadier> getBrigadier() {
+    return brigadier;
+  }
+
+  @Override
+  public boolean isBrigadierSupported() {
+    return brigadier.isPresent();
+  }
+
+  @Override
+  public BukkitCommandHandler registerBrigadier() {
+    brigadier.ifPresent(BukkitBrigadier::register);
     return this;
   }
 
@@ -187,12 +221,11 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
     return plugin;
   }
 
-  private @SneakyThrows
-  void createPluginCommand(final String name, @Nullable final String description,
-      @Nullable final String usage) {
-    final PluginCommand cmd = COMMAND_CONSTRUCTOR.newInstance(name, plugin);
+  private @SneakyThrows void createPluginCommand(String name, @Nullable String description,
+      @Nullable String usage) {
+    PluginCommand cmd = COMMAND_CONSTRUCTOR.newInstance(name, plugin);
     COMMAND_MAP.register(plugin.getName(), cmd);
-    final BaseTabExecutor executor = new BaseTabExecutor(this);
+    BukkitCommandExecutor executor = new BukkitCommandExecutor(this);
     cmd.setExecutor(executor);
     cmd.setTabCompleter(executor);
     cmd.setDescription(description == null ? "" : description);
@@ -202,22 +235,21 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
   }
 
   @Override
-  public boolean unregister(@NotNull final CommandPath path) {
+  public boolean unregister(@NotNull CommandPath path) {
     if (path.isRoot()) {
-      final PluginCommand command = ((JavaPlugin) plugin).getCommand(path.getFirst());
+      PluginCommand command = ((JavaPlugin) plugin).getCommand(path.getFirst());
       unregisterCommand(command);
     }
     return super.unregister(path);
   }
 
-  private void unregisterCommand(final PluginCommand command) {
+  private void unregisterCommand(PluginCommand command) {
     if (command != null) {
       command.unregister(COMMAND_MAP);
-      final Map<String, Command> knownCommands = getKnownCommands();
+      Map<String, Command> knownCommands = getKnownCommands();
       if (knownCommands != null) {
-        final Command rawAlias = knownCommands.get(command.getName());
-        if (rawAlias instanceof PluginCommand
-            && ((PluginCommand) rawAlias).getPlugin() == plugin) {
+        Command rawAlias = knownCommands.get(command.getName());
+        if (rawAlias instanceof PluginCommand && ((PluginCommand) rawAlias).getPlugin() == plugin) {
           knownCommands.remove(command.getName());
         }
         knownCommands.remove(plugin.getDescription().getName() + ":" + command.getName());
@@ -230,22 +262,22 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
   private static final CommandMap COMMAND_MAP;
 
   static {
-    final Constructor<PluginCommand> ctr;
+    Constructor<PluginCommand> ctr;
     Field knownCommands = null;
-    final CommandMap commandMap;
+    CommandMap commandMap;
     try {
       ctr = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
       ctr.setAccessible(true);
-      final Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+      Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
       commandMapField.setAccessible(true);
       commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
       if (commandMap instanceof SimpleCommandMap) {
         knownCommands = SimpleCommandMap.class.getDeclaredField("knownCommands");
         knownCommands.setAccessible(true);
       }
-    } catch (final NoSuchMethodException e) {
+    } catch (NoSuchMethodException e) {
       throw new IllegalStateException("Unable to access PluginCommand(String, Plugin) construtor!");
-    } catch (final NoSuchFieldException | IllegalAccessException e) {
+    } catch (NoSuchFieldException | IllegalAccessException e) {
       e.printStackTrace();
       throw new IllegalStateException("Unable to access Bukkit.getServer()#commandMap!");
     }
@@ -254,7 +286,7 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
     KNOWN_COMMANDS = knownCommands;
   }
 
-  public static Class<? extends Entity> getSelectedEntity(@NotNull final Type selectorType) {
+  public static Class<? extends Entity> getSelectedEntity(@NotNull Type selectorType) {
     return (Class<? extends Entity>) Primitives.getInsideGeneric(selectorType, Entity.class);
   }
 
@@ -266,4 +298,5 @@ public final class BaseHandler extends BaseCommandHandler implements CommandHand
     return null;
 
   }
+
 }

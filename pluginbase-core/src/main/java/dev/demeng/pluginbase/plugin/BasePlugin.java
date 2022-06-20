@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Registerer;
 import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.commands.CommandHandler;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.menu.MenuManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -63,7 +64,7 @@ public abstract class BasePlugin extends JavaPlugin {
       return;
     }
 
-    BaseManager.setCommandHandler(CommandHandler.create(this));
+    BaseManager.setCommandHandler(BukkitCommandHandler.create(this));
 
     Registerer.registerListener(new MenuManager());
 

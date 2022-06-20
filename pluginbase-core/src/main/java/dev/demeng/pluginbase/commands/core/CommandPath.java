@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core;
 
 import static dev.demeng.pluginbase.commands.util.Collections.linkedListOf;
@@ -47,7 +48,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param path Path to wrap
    * @return The command path
    */
-  public static @NotNull CommandPath get(@NotNull final String... path) {
+  public static @NotNull CommandPath get(@NotNull String... path) {
     Preconditions.notEmpty(path, "Path cannot be empty!");
     return new CommandPath(path.clone());
   }
@@ -58,7 +59,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param path Path to wrap
    * @return The command path
    */
-  public static @NotNull CommandPath get(@NotNull final Collection<String> path) {
+  public static @NotNull CommandPath get(@NotNull Collection<String> path) {
     Preconditions.notEmpty(path, "Path cannot be empty!");
     return new CommandPath(path.toArray(new String[0]));
   }
@@ -73,9 +74,9 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    *
    * @param path Path to use.
    */
-  CommandPath(final String[] path) {
+  CommandPath(String[] path) {
     for (int i = 0; i < path.length; i++) {
-      final String s = path[i];
+      String s = path[i];
       path[i] = s.toLowerCase();
     }
     this.path = linkedListOf(path);
@@ -100,8 +101,8 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
   }
 
   /**
-   * Returns the root parent of this command path. This is equivilent to calling {@link
-   * #getFirst()}.
+   * Returns the root parent of this command path. This is equivilent to calling
+   * {@link #getFirst()}.
    *
    * @return The parent
    */
@@ -110,8 +111,8 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
   }
 
   /**
-   * Returns the name (tail) of this command path. This is equivilent to calling {@link
-   * #getLast()}.
+   * Returns the name (tail) of this command path. This is equivilent to calling
+   * {@link #getLast()}.
    *
    * @return The name
    */
@@ -144,7 +145,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @return The string at the given index
    * @throws IndexOutOfBoundsException -
    */
-  public @NotNull String get(final int index) {
+  public @NotNull String get(int index) {
     return path.get(index);
   }
 
@@ -176,7 +177,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
     if (path.size() <= 1) {
       return null;
     }
-    final LinkedList<String> list = toList();
+    LinkedList<String> list = toList();
     list.removeLast();
     return CommandPath.get(list);
   }
@@ -217,7 +218,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param other Path to test against
    * @return True if this is a child of it, false if otherwise.
    */
-  public boolean isChildOf(final CommandPath other) {
+  public boolean isChildOf(CommandPath other) {
     return toRealString().startsWith(other.toRealString());
   }
 
@@ -227,19 +228,19 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param other Path to test against
    * @return True if this is a child of it, false if otherwise.
    */
-  public boolean isParentOf(final CommandPath other) {
+  public boolean isParentOf(CommandPath other) {
     return other.toRealString().startsWith(toRealString());
   }
 
   @Override
-  public boolean equals(final Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
     if (!(o instanceof CommandPath)) {
       return false;
     }
-    final CommandPath that = (CommandPath) o;
+    CommandPath that = (CommandPath) o;
     return Objects.equals(path, that.path);
   }
 
@@ -260,8 +261,8 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
   }
 
   /**
-   * An implementation of {@link Iterator} that ensures the path cannot be mutated by {@link
-   * Iterator#remove()}.
+   * An implementation of {@link Iterator} that ensures the path cannot be mutated by
+   * {@link Iterator#remove()}.
    */
   private static class PathIterator<E> implements Iterator<E> {
 
@@ -289,7 +290,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
   }
 
   @Override
-  public int compareTo(@NotNull final CommandPath o) {
+  public int compareTo(@NotNull CommandPath o) {
     if (isParentOf(o)) {
       return -1;
     } else if (isChildOf(o)) {

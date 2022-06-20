@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core;
 
 import dev.demeng.pluginbase.commands.annotation.Cooldown;
@@ -45,22 +46,22 @@ enum CooldownCondition implements CommandCondition {
   private final Map<UUID, Map<Integer, Long>> cooldowns = new ConcurrentHashMap<>();
 
   @Override
-  public void test(@NotNull final CommandActor actor, @NotNull final ExecutableCommand command,
-      @NotNull @Unmodifiable final List<String> arguments) {
-    final Cooldown cooldown = command.getAnnotation(Cooldown.class);
+  public void test(@NotNull CommandActor actor, @NotNull ExecutableCommand command,
+      @NotNull @Unmodifiable List<String> arguments) {
+    Cooldown cooldown = command.getAnnotation(Cooldown.class);
     if (cooldown == null || cooldown.value() == 0) {
       return;
     }
-    final UUID uuid = actor.getUniqueId();
-    final Map<Integer, Long> spans = get(uuid);
-    final Long created = spans.get(command.getId());
+    UUID uuid = actor.getUniqueId();
+    Map<Integer, Long> spans = get(uuid);
+    Long created = spans.get(command.getId());
     if (created == null) {
       spans.put(command.getId(), System.currentTimeMillis());
       COOLDOWN_POOL.schedule(() -> spans.remove(command.getId()), cooldown.value(),
           cooldown.unit());
       return;
     }
-    final long passed = System.currentTimeMillis() - created;
+    long passed = System.currentTimeMillis() - created;
     long left = cooldown.unit().toMillis(cooldown.value()) - passed;
     if (left > 0 && left < 1000) {
       left = 1000L; // for formatting
@@ -68,7 +69,7 @@ enum CooldownCondition implements CommandCondition {
     throw new CooldownException(left);
   }
 
-  private Map<Integer, Long> get(@NotNull final UUID uuid) {
+  private Map<Integer, Long> get(@NotNull UUID uuid) {
     return cooldowns.computeIfAbsent(uuid, u -> new ConcurrentHashMap<>());
   }
 }

@@ -1,25 +1,25 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package dev.demeng.pluginbase.commands.brigadier;
 
@@ -74,7 +74,7 @@ public final class BrigadierTreeParser {
    * @return All root nodes
    */
   public static <T> List<LiteralArgumentBuilder<T>> parse(
-      @NotNull BaseBrigadier brigadier,
+      @NotNull LampBrigadier brigadier,
       @NotNull CommandHandler handler
   ) {
     List<LiteralArgumentBuilder<T>> nodes = new ArrayList<>();
@@ -99,7 +99,7 @@ public final class BrigadierTreeParser {
    * @param category  Category to parse
    * @return The parsed command node
    */
-  public static <T> LiteralArgumentBuilder<T> parse(BaseBrigadier brigadier,
+  public static <T> LiteralArgumentBuilder<T> parse(LampBrigadier brigadier,
       LiteralArgumentBuilder<?> into, CommandCategory category) {
     for (CommandCategory child : category.getCategories().values()) {
       LiteralArgumentBuilder childLiteral = parse(brigadier, literal(child.getName()), child);
@@ -124,7 +124,7 @@ public final class BrigadierTreeParser {
    * @param command   Command to parse
    * @return The parsed command node
    */
-  public static <T> LiteralArgumentBuilder<T> parse(BaseBrigadier brigadier,
+  public static <T> LiteralArgumentBuilder<T> parse(LampBrigadier brigadier,
       LiteralArgumentBuilder<?> into,
       ExecutableCommand command) {
     CommandNode lastParameter = null;
@@ -171,7 +171,7 @@ public final class BrigadierTreeParser {
     return (LiteralArgumentBuilder<T>) into;
   }
 
-  private static ArgumentBuilder getBuilder(BaseBrigadier brigadier,
+  private static ArgumentBuilder getBuilder(LampBrigadier brigadier,
       ExecutableCommand command,
       CommandParameter parameter) {
     if (parameter.isSwitch()) {
@@ -184,7 +184,7 @@ public final class BrigadierTreeParser {
         .suggests(createSuggestionProvider(brigadier, command, parameter));
   }
 
-  private static ArgumentType<?> getArgumentType(BaseBrigadier brigadier,
+  private static ArgumentType<?> getArgumentType(LampBrigadier brigadier,
       @NotNull CommandParameter parameter) {
     ArgumentType<?> registeredType = brigadier.getArgumentType(parameter);
     if (registeredType != null) {
@@ -228,7 +228,7 @@ public final class BrigadierTreeParser {
   }
 
   private static SuggestionProvider<Object> createSuggestionProvider(
-      BaseBrigadier brigadier,
+      LampBrigadier brigadier,
       ExecutableCommand command,
       CommandParameter parameter
   ) {

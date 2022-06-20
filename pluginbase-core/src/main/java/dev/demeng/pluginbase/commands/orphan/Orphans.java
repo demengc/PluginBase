@@ -1,33 +1,32 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package dev.demeng.pluginbase.commands.orphan;
-
-import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
 
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.annotation.Command;
 import dev.demeng.pluginbase.commands.core.CommandPath;
+import dev.demeng.pluginbase.commands.util.Preconditions;
 import dev.demeng.pluginbase.commands.util.Strings;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,8 +38,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents the entrypoint to creation of {@link OrphanCommand}s.
  * <p>
- * Methods {@link #path(String)}, {@link #path(String...)} have the same exact behavior as {@link
- * Command} annotations.
+ * Methods {@link #path(String)}, {@link #path(String...)} have the same exact behavior as
+ * {@link Command} annotations.
  *
  * <pre>
  * {@code
@@ -72,7 +71,7 @@ public final class Orphans {
    * @return A builder {@link Orphans}. You must call {@link #handler(OrphanCommand)} after.
    */
   public static Orphans path(@NotNull String path) {
-    notNull(path, "path");
+    Preconditions.notNull(path, "path");
     return new Orphans(
         Collections.singletonList(CommandPath.get(Strings.splitBySpace(path.trim()))));
   }
@@ -87,7 +86,7 @@ public final class Orphans {
    * @return A builder {@link Orphans}. You must call {@link #handler(OrphanCommand)} after.
    */
   public static Orphans path(@NotNull String... paths) {
-    notNull(paths, "paths");
+    Preconditions.notNull(paths, "paths");
     return new Orphans(Arrays.stream(paths)
         .map(text -> Strings.splitBySpace(text.trim()))
         .map(CommandPath::get)
@@ -101,7 +100,7 @@ public final class Orphans {
    * @return A builder {@link Orphans}. You must call {@link #handler(OrphanCommand)} after.
    */
   public static Orphans path(@NotNull CommandPath path) {
-    notNull(path, "path");
+    Preconditions.notNull(path, "path");
     return new Orphans(Collections.singletonList(path));
   }
 
@@ -110,11 +109,11 @@ public final class Orphans {
    * {@link OrphanCommand}.
    *
    * @param handler The command class logic.
-   * @return An {@link OrphanRegistry} that can be passed to {@link CommandHandler#register(Object...)}
-   * to be registered.
+   * @return An {@link OrphanRegistry} that can be passed to
+   * {@link CommandHandler#register(Object...)} to be registered.
    */
   public OrphanRegistry handler(OrphanCommand handler) {
-    notNull(handler, "orphan command");
+    Preconditions.notNull(handler, "orphan command");
     return new OrphanRegistry(path, handler);
   }
 

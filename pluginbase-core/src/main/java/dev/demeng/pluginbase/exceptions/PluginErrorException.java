@@ -32,8 +32,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An extension of RuntimeException that calls {@link Common#error(Throwable, String, boolean,
- * CommandSender...)}.
+ * An extension of RuntimeException that calls
+ * {@link Common#error(Throwable, String, boolean, CommandSender...)}.
  */
 public class PluginErrorException extends RuntimeException {
 

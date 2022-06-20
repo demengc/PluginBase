@@ -37,8 +37,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A manager containing all other managers associated with the library, as well as the {@link
- * JavaPlugin} the library is working with.
+ * A manager containing all other managers associated with the library, as well as the
+ * {@link JavaPlugin} the library is working with.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BaseManager {

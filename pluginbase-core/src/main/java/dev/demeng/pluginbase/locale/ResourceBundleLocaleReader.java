@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.demeng.pluginbase.commands.exception;
+package dev.demeng.pluginbase.locale;
 
-import dev.demeng.pluginbase.commands.command.CommandActor;
-import dev.demeng.pluginbase.commands.core.EntitySelector;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
- * Thrown when a malformed {@link EntitySelector} is inputted for a command.
+ * Represents a {@link LocaleReader} that fetches its values from a {@link ResourceBundle}.
  */
-@Getter
-@AllArgsConstructor
-@ThrowableFromCommand
-public class MalformedEntitySelectorException extends RuntimeException {
+final class ResourceBundleLocaleReader implements LocaleReader {
 
-  /**
-   * The command actor
-   */
-  private final CommandActor actor;
+  private final ResourceBundle resourceBundle;
 
-  /**
-   * The inputted value for the selector
-   */
-  private final String input;
+  public ResourceBundleLocaleReader(ResourceBundle resourceBundle) {
+    this.resourceBundle = notNull(resourceBundle, "resource bundle");
+  }
 
-  /**
-   * The syntax error message
-   */
-  private final String errorMessage;
+  @Override
+  public boolean containsKey(String key) {
+    return resourceBundle.containsKey(key);
+  }
 
+  @Override
+  public String get(String key) {
+    return resourceBundle.getString(key);
+  }
+
+  @Override
+  public Locale getLocale() {
+    return resourceBundle.getLocale();
+  }
 }

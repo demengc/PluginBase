@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core.reflect;
 
 import static java.util.Collections.addAll;
@@ -43,19 +44,19 @@ final class MethodHandlesCallerFactory implements MethodCallerFactory {
   public static final MethodHandlesCallerFactory INSTANCE = new MethodHandlesCallerFactory();
 
   @Override
-  public @NotNull MethodCaller createFor(@NotNull final Method method) throws Throwable {
+  public @NotNull MethodCaller createFor(@NotNull Method method) throws Throwable {
     if (!method.isAccessible()) {
       method.setAccessible(true);
     }
-    final MethodHandle handle = MethodHandles.lookup().unreflect(method);
-    final String methodString = method.toString();
-    final boolean isStatic = Modifier.isStatic(method.getModifiers());
+    MethodHandle handle = MethodHandles.lookup().unreflect(method);
+    String methodString = method.toString();
+    boolean isStatic = Modifier.isStatic(method.getModifiers());
     return new MethodCaller() {
       @SneakyThrows
       @Override
-      public Object call(@Nullable final Object instance, final Object... arguments) {
+      public Object call(@Nullable Object instance, Object... arguments) {
         if (!isStatic) {
-          final List<Object> args = new ArrayList<>();
+          List<Object> args = new ArrayList<>();
           args.add(instance);
           addAll(args, arguments);
           return handle.invokeWithArguments(args);

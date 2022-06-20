@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package dev.demeng.pluginbase.commands.core;
 
-import java.util.List;
-import org.bukkit.entity.Entity;
+package dev.demeng.pluginbase.commands.bukkit.core;
 
-/**
- * A parameter that allows entity selectors, such as '@a', '@p', '@s', '@r', '@e[name=Foo]' or
- * player names individually.
- * <p>
- * Note that this selector ONLY works on 1.13+. Unfortunately, Bukkit provides no other ways for
- * parsing selectors on older versions.
- */
-public interface EntitySelector<E extends Entity> extends List<E> {
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandPermission;
+import dev.demeng.pluginbase.commands.command.CommandPermission;
+import dev.demeng.pluginbase.commands.command.trait.CommandAnnotationHolder;
+import dev.demeng.pluginbase.commands.process.PermissionReader;
+import org.bukkit.permissions.Permission;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+enum BukkitPermissionReader implements PermissionReader {
+  INSTANCE;
+
+  @Override
+  public @Nullable CommandPermission getPermission(@NotNull CommandAnnotationHolder command) {
+    dev.demeng.pluginbase.commands.bukkit.annotation.CommandPermission permissionAnn = command.getAnnotation(
+        dev.demeng.pluginbase.commands.bukkit.annotation.CommandPermission.class);
+    if (permissionAnn == null) {
+      return null;
+    }
+    return new BukkitCommandPermission(
+        new Permission(permissionAnn.value(), permissionAnn.defaultAccess()));
+  }
 }

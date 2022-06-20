@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core;
 
 import dev.demeng.pluginbase.commands.CommandHandler;
@@ -80,13 +81,13 @@ final class BaseCommandCategory implements CommandCategory {
 
   @Override
   public boolean isSecret() {
-    for (final ExecutableCommand command : commands.values()) {
+    for (ExecutableCommand command : commands.values()) {
       if (command.isSecret()) {
         continue;
       }
       return false;
     }
-    for (final CommandCategory category : categories.values()) {
+    for (CommandCategory category : categories.values()) {
       if (category.isSecret()) {
         continue;
       }
@@ -121,7 +122,7 @@ final class BaseCommandCategory implements CommandCategory {
     return "CommandCategory{path=" + path + ", name='" + name + "'}";
   }
 
-  public void parent(final BaseCommandCategory cat) {
+  public void parent(BaseCommandCategory cat) {
     parent = cat;
     if (cat != null) {
       cat.categories.put(path, this);
@@ -131,13 +132,13 @@ final class BaseCommandCategory implements CommandCategory {
   private class CategoryPermission implements CommandPermission {
 
     @Override
-    public boolean canExecute(@NotNull final CommandActor actor) {
-      for (final ExecutableCommand command : commands.values()) {
+    public boolean canExecute(@NotNull CommandActor actor) {
+      for (ExecutableCommand command : commands.values()) {
         if (command.getPermission().canExecute(actor)) {
           return true;
         }
       }
-      for (final CommandCategory category : categories.values()) {
+      for (CommandCategory category : categories.values()) {
         if (category.getPermission().canExecute(actor)) {
           return true;
         }
@@ -147,7 +148,7 @@ final class BaseCommandCategory implements CommandCategory {
   }
 
   @Override
-  public int compareTo(@NotNull final CommandCategory o) {
+  public int compareTo(@NotNull CommandCategory o) {
     return path.compareTo(o.getPath());
   }
 }

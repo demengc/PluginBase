@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core;
 
 import static dev.demeng.pluginbase.commands.util.Collections.listOf;
@@ -34,11 +35,13 @@ import dev.demeng.pluginbase.commands.annotation.Command;
 import dev.demeng.pluginbase.commands.annotation.Default;
 import dev.demeng.pluginbase.commands.annotation.Description;
 import dev.demeng.pluginbase.commands.annotation.Flag;
+import dev.demeng.pluginbase.commands.annotation.Optional;
 import dev.demeng.pluginbase.commands.annotation.SecretCommand;
 import dev.demeng.pluginbase.commands.annotation.Single;
 import dev.demeng.pluginbase.commands.annotation.Subcommand;
 import dev.demeng.pluginbase.commands.annotation.Switch;
 import dev.demeng.pluginbase.commands.annotation.Usage;
+import dev.demeng.pluginbase.commands.command.ArgumentStack;
 import dev.demeng.pluginbase.commands.command.CommandParameter;
 import dev.demeng.pluginbase.commands.command.CommandPermission;
 import dev.demeng.pluginbase.commands.command.ExecutableCommand;
@@ -57,12 +60,12 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.CompletionStage;
@@ -80,30 +83,26 @@ final class CommandParser {
   private CommandParser() {
   }
 
-  public static void parse(@NotNull final BaseCommandHandler handler,
-      @NotNull final OrphanRegistry orphan) {
-    final OrphanCommand instance = orphan.getHandler();
-    final Class<?> type = instance.getClass();
+  public static void parse(@NotNull BaseCommandHandler handler, @NotNull OrphanRegistry orphan) {
+    OrphanCommand instance = orphan.getHandler();
+    Class<?> type = instance.getClass();
 
     // we pass the type of the orphan handler, but pass the object as the orphan registry
     parse(handler, type, orphan);
   }
 
-  public static void parse(@NotNull final BaseCommandHandler handler,
-      @NotNull final Object boundTarget) {
-    final Class<?> type =
-        boundTarget instanceof Class ? (Class<?>) boundTarget : boundTarget.getClass();
+  public static void parse(@NotNull BaseCommandHandler handler, @NotNull Object boundTarget) {
+    Class<?> type = boundTarget instanceof Class ? (Class<?>) boundTarget : boundTarget.getClass();
     parse(handler, type, boundTarget);
   }
 
   @SneakyThrows
-  public static void parse(@NotNull final BaseCommandHandler handler,
-      @NotNull final Class<?> container,
-      @NotNull final Object boundTarget) {
-    final Map<CommandPath, BaseCommandCategory> categories = handler.categories;
-    final Map<CommandPath, CommandExecutable> subactions = new HashMap<>();
-    for (final Method method : getAllMethods(container)) {
-      final AnnotationReader reader = AnnotationReader.create(handler, method);
+  public static void parse(@NotNull BaseCommandHandler handler, @NotNull Class<?> container,
+      @NotNull Object boundTarget) {
+    Map<CommandPath, BaseCommandCategory> categories = handler.categories;
+    Map<CommandPath, CommandExecutable> subactions = new HashMap<>();
+    for (Method method : getAllMethods(container)) {
+      AnnotationReader reader = AnnotationReader.create(handler, method);
       Object invokeTarget = boundTarget;
       if (reader.shouldDismiss()) {
         continue;
@@ -114,16 +113,16 @@ final class CommandParser {
       }
       reader.distributeAnnotations();
       reader.replaceAnnotations(handler);
-      final List<CommandPath> paths = getCommandPath(container, method, reader);
-      final BoundMethodCaller caller = handler.getMethodCallerFactory().createFor(method)
+      List<CommandPath> paths = getCommandPath(container, method, reader);
+      BoundMethodCaller caller = handler.getMethodCallerFactory().createFor(method)
           .bindTo(invokeTarget);
-      final int id = COMMAND_ID.getAndIncrement();
-      final boolean isDefault = reader.contains(Default.class);
+      int id = COMMAND_ID.getAndIncrement();
+      boolean isDefault = reader.contains(Default.class);
       paths.forEach(path -> {
-        for (final BaseCommandCategory category : getCategories(handler, isDefault, path)) {
+        for (BaseCommandCategory category : getCategories(handler, isDefault, path)) {
           categories.putIfAbsent(category.path, category);
         }
-        final CommandExecutable executable = new CommandExecutable();
+        CommandExecutable executable = new CommandExecutable();
         if (!isDefault) {
           categories.remove(path); // prevent duplication.
         }
@@ -157,18 +156,16 @@ final class CommandParser {
     }
 
     subactions.forEach((path, subaction) -> {
-      final BaseCommandCategory cat = categories.get(path);
+      BaseCommandCategory cat = categories.get(path);
       if (cat != null) { // should never be null but let's just do that
         cat.defaultAction = subaction;
       }
     });
   }
 
-  private static void insertCommandPath(final OrphanRegistry boundTarget,
-      final AnnotationReader reader) {
-    final List<CommandPath> paths = boundTarget.getParentPaths();
-    final String[] pathsArray = paths.stream().map(CommandPath::toRealString)
-        .toArray(String[]::new);
+  private static void insertCommandPath(OrphanRegistry boundTarget, AnnotationReader reader) {
+    List<CommandPath> paths = boundTarget.getParentPaths();
+    String[] pathsArray = paths.stream().map(CommandPath::toRealString).toArray(String[]::new);
     reader.add(new Command() {
       @Override
       public Class<? extends Annotation> annotationType() {
@@ -182,8 +179,8 @@ final class CommandParser {
     });
   }
 
-  private static Set<Method> getAllMethods(final Class<?> c) {
-    final Set<Method> methods = new HashSet<>();
+  private static Set<Method> getAllMethods(Class<?> c) {
+    Set<Method> methods = new HashSet<>();
     Class<?> current = c;
     while (current != null && current != Object.class) {
       addAll(methods, current.getDeclaredMethods());
@@ -192,10 +189,10 @@ final class CommandParser {
     return methods;
   }
 
-  private static String generateUsage(@NotNull final ExecutableCommand command) {
-    final StringJoiner joiner = new StringJoiner(" ");
-    final CommandHandler handler = command.getCommandHandler();
-    for (final CommandParameter parameter : command.getValueParameters().values()) {
+  private static String generateUsage(@NotNull ExecutableCommand command) {
+    StringJoiner joiner = new StringJoiner(" ");
+    CommandHandler handler = command.getCommandHandler();
+    for (CommandParameter parameter : command.getValueParameters().values()) {
       if (!parameter.getResolver().mutatesArguments()) {
         continue;
       }
@@ -215,55 +212,52 @@ final class CommandParser {
   }
 
   @SuppressWarnings("rawtypes")
-  private static ResponseHandler<?> getResponseHandler(final BaseCommandHandler handler,
-      final Type genericType) {
-    final Class<?> rawType = Primitives.getRawType(genericType);
+  private static ResponseHandler<?> getResponseHandler(BaseCommandHandler handler,
+      Type genericType) {
+    Class<?> rawType = Primitives.getRawType(genericType);
     if (CompletionStage.class.isAssignableFrom(rawType)) {
-      final ResponseHandler delegateHandler = getResponseHandler(handler,
-          getInsideGeneric(genericType));
+      ResponseHandler delegateHandler = getResponseHandler(handler, getInsideGeneric(genericType));
       return new CompletionStageResponseHandler(handler, delegateHandler);
     }
-    if (Optional.class.isAssignableFrom(rawType)) {
-      final ResponseHandler delegateHandler = getResponseHandler(handler,
-          getInsideGeneric(genericType));
+    if (java.util.Optional.class.isAssignableFrom(rawType)) {
+      ResponseHandler delegateHandler = getResponseHandler(handler, getInsideGeneric(genericType));
       return new OptionalResponseHandler(delegateHandler);
     }
     if (Supplier.class.isAssignableFrom(rawType)) {
-      final ResponseHandler delegateHandler = getResponseHandler(handler,
-          getInsideGeneric(genericType));
+      ResponseHandler delegateHandler = getResponseHandler(handler, getInsideGeneric(genericType));
       return new SupplierResponseHandler(delegateHandler);
     }
     return handler.responseHandlers.getFlexibleOrDefault(rawType, VOID_HANDLER);
   }
 
-  private static Type getInsideGeneric(final Type genericType) {
+  private static Type getInsideGeneric(Type genericType) {
     try {
       return ((ParameterizedType) genericType).getActualTypeArguments()[0];
-    } catch (final ClassCastException e) {
+    } catch (ClassCastException e) {
       return Object.class;
     }
   }
 
-  private static Set<BaseCommandCategory> getCategories(final CommandHandler handler,
-      final boolean respectDefault, @NotNull final CommandPath path) {
+  private static Set<BaseCommandCategory> getCategories(CommandHandler handler,
+      boolean respectDefault, @NotNull CommandPath path) {
     if (path.size() == 1 && !respectDefault) {
       return Collections.emptySet();
     }
-    final String parent = path.getParent();
-    final Set<BaseCommandCategory> categories = new HashSet<>();
+    String parent = path.getParent();
+    Set<BaseCommandCategory> categories = new HashSet<>();
 
-    final BaseCommandCategory root = new BaseCommandCategory();
+    BaseCommandCategory root = new BaseCommandCategory();
     root.handler = handler;
     root.path = CommandPath.get(parent);
     root.name = parent;
     categories.add(root);
 
-    final List<String> pathList = new ArrayList<>();
+    List<String> pathList = new ArrayList<>();
     pathList.add(parent);
 
-    for (final String subcommand : path.getSubcommandPath()) {
+    for (String subcommand : path.getSubcommandPath()) {
       pathList.add(subcommand);
-      final BaseCommandCategory cat = new BaseCommandCategory();
+      BaseCommandCategory cat = new BaseCommandCategory();
       cat.handler = handler;
       cat.path = CommandPath.get(pathList);
       cat.name = cat.path.getName();
@@ -273,27 +267,27 @@ final class CommandParser {
     return categories;
   }
 
-  private static List<CommandParameter> getParameters(@NotNull final BaseCommandHandler handler,
-      @NotNull final Method method,
-      @NotNull final CommandExecutable parent) {
-    final List<CommandParameter> parameters = new ArrayList<>();
-    final Parameter[] methodParameters = method.getParameters();
+  private static List<CommandParameter> getParameters(@NotNull BaseCommandHandler handler,
+      @NotNull Method method,
+      @NotNull CommandExecutable parent) {
+    List<CommandParameter> parameters = new ArrayList<>();
+    Parameter[] methodParameters = method.getParameters();
     int cIndex = 0;
     for (int i = 0; i < methodParameters.length; i++) {
-      final Parameter parameter = methodParameters[i];
-      final AnnotationReader paramAnns = AnnotationReader.create(handler, parameter);
-      final List<ParameterValidator<Object>> validators = new ArrayList<>(
+      Parameter parameter = methodParameters[i];
+      AnnotationReader paramAnns = AnnotationReader.create(handler, parameter);
+      List<ParameterValidator<Object>> validators = new ArrayList<>(
           handler.validators.getFlexibleOrDefault(parameter.getType(), Collections.emptyList())
       );
-
-      final BaseCommandParameter param = new BaseCommandParameter(
+      String[] defaultValue = paramAnns.get(Default.class, Default::value);
+      BaseCommandParameter param = new BaseCommandParameter(
           getName(parameter),
           paramAnns.get(Description.class, Description::value),
           i,
-          paramAnns.get(Default.class, Default::value),
+          defaultValue == null ? Collections.emptyList()
+              : Collections.unmodifiableList(Arrays.asList(defaultValue)),
           i == methodParameters.length - 1 && !paramAnns.contains(Single.class),
-          paramAnns.contains(dev.demeng.pluginbase.commands.annotation.Optional.class)
-              || paramAnns.contains(Default.class),
+          paramAnns.contains(Optional.class) || paramAnns.contains(Default.class),
           parent,
           parameter,
           paramAnns.get(Switch.class),
@@ -301,15 +295,15 @@ final class CommandParser {
           Collections.unmodifiableList(validators)
       );
 
-      for (final PermissionReader reader : handler.getPermissionReaders()) {
-        final CommandPermission permission = reader.getPermission(param);
+      for (PermissionReader reader : handler.getPermissionReaders()) {
+        CommandPermission permission = reader.getPermission(param);
         if (permission != null) {
           param.permission = permission;
           break;
         }
       }
 
-      if (param.getType().isPrimitive() && param.isOptional() && param.getDefaultValue() == null
+      if (param.getType().isPrimitive() && param.isOptional() && param.getDefaultValue().isEmpty()
           && !param.isSwitch()) {
         throw new IllegalStateException(
             "Optional parameter " + parameter + " at " + method + " cannot be a prmitive!");
@@ -320,8 +314,12 @@ final class CommandParser {
               "Switch parameter " + parameter + " at " + method + " must be of boolean type!");
         }
       }
-
-      final ParameterResolver<?> resolver = handler.getResolver(param);
+      ParameterResolver<?> resolver;
+      if (param.getType() == ArgumentStack.class) {
+        resolver = new Resolver(context -> ArgumentStack.copy(context.input()), null);
+      } else {
+        resolver = handler.getResolver(param);
+      }
 
       if (resolver == null) {
         throw new IllegalStateException(
@@ -337,38 +335,38 @@ final class CommandParser {
     return Collections.unmodifiableList(parameters);
   }
 
-  private static List<CommandPath> getCommandPath(@NotNull final Class<?> container,
-      @NotNull final Method method,
-      @NotNull final AnnotationReader reader) {
-    final List<CommandPath> paths = new ArrayList<>();
+  private static List<CommandPath> getCommandPath(@NotNull Class<?> container,
+      @NotNull Method method,
+      @NotNull AnnotationReader reader) {
+    List<CommandPath> paths = new ArrayList<>();
 
-    final List<String> commands = new ArrayList<>();
-    final List<String> subcommands = new ArrayList<>();
-    final Command commandAnnotation = reader.get(Command.class, "Method " + method.getName()
+    List<String> commands = new ArrayList<>();
+    List<String> subcommands = new ArrayList<>();
+    Command commandAnnotation = reader.get(Command.class, "Method " + method.getName()
         + " does not have a parent command! You might have forgotten one of the following:\n" +
         "- @Command on the method or class\n" +
         "- implement OrphanCommand");
     Preconditions.notEmpty(commandAnnotation.value(), "@Command#value() cannot be an empty array!");
     addAll(commands, commandAnnotation.value());
 
-    final List<String> parentSubcommandAliases = new ArrayList<>();
+    List<String> parentSubcommandAliases = new ArrayList<>();
 
-    for (final Class<?> topClass : getTopClasses(container)) {
-      final Subcommand ps = topClass.getAnnotation(Subcommand.class);
+    for (Class<?> topClass : getTopClasses(container)) {
+      Subcommand ps = topClass.getAnnotation(Subcommand.class);
       if (ps != null) {
         addAll(parentSubcommandAliases, ps.value());
       }
     }
 
-    final Subcommand subcommandAnnotation = reader.get(Subcommand.class);
+    Subcommand subcommandAnnotation = reader.get(Subcommand.class);
     if (subcommandAnnotation != null) {
       addAll(subcommands, subcommandAnnotation.value());
     }
 
-    for (final String command : commands) {
+    for (String command : commands) {
       if (!subcommands.isEmpty()) {
-        for (final String subcommand : subcommands) {
-          final List<String> path = new ArrayList<>(splitBySpace(command));
+        for (String subcommand : subcommands) {
+          List<String> path = new ArrayList<>(splitBySpace(command));
           parentSubcommandAliases.forEach(
               subcommandAlias -> path.addAll(splitBySpace(subcommandAlias)));
           path.addAll(splitBySpace(subcommand));
@@ -382,8 +380,8 @@ final class CommandParser {
   }
 
   private static List<Class<?>> getTopClasses(Class<?> c) {
-    final List<Class<?>> classes = listOf(c);
-    final Class<?> enclosingClass = c.getEnclosingClass();
+    List<Class<?>> classes = listOf(c);
+    Class<?> enclosingClass = c.getEnclosingClass();
     while (c.getEnclosingClass() != null) {
       classes.add(c = enclosingClass);
     }
@@ -391,8 +389,7 @@ final class CommandParser {
     return classes;
   }
 
-  private static <K, V> void putOrError(final Map<K, V> map, final K key, final V value,
-      final String err) {
+  private static <K, V> void putOrError(Map<K, V> map, K key, V value, String err) {
     if (map.containsKey(key)) {
       throw new IllegalStateException(err);
     }

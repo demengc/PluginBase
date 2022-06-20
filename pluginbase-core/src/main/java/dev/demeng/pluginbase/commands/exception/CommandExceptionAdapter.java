@@ -1,25 +1,25 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package dev.demeng.pluginbase.commands.exception;
 
@@ -86,14 +86,14 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
       @NotNull EnumNotFoundException exception) {
   }
 
-  public void invalidUuid(@NotNull CommandActor actor, @NotNull InvalidUuidException exception) {
+  public void invalidUUID(@NotNull CommandActor actor, @NotNull InvalidUUIDException exception) {
   }
 
   public void invalidNumber(@NotNull CommandActor actor,
       @NotNull InvalidNumberException exception) {
   }
 
-  public void invalidUrl(@NotNull CommandActor actor, @NotNull InvalidUrlException exception) {
+  public void invalidURL(@NotNull CommandActor actor, @NotNull InvalidURLException exception) {
   }
 
   public void invalidBoolean(@NotNull CommandActor actor,
@@ -159,7 +159,11 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
   public void handleException(@NotNull Throwable throwable, @NotNull CommandActor actor) {
     MethodExceptionHandler handler = handlers.getFlexibleOrDefault(throwable.getClass(),
         unknownHandler);
-    handler.handle(actor, throwable);
+    if (handler == unknownHandler && throwable instanceof SelfHandledException) {
+      ((SelfHandledException) throwable).handle(actor);
+    } else {
+      handler.handle(actor, throwable);
+    }
   }
 
   public CommandExceptionAdapter() {

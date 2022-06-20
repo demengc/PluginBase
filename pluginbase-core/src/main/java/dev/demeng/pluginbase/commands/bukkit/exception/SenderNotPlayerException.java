@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,18 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.commands.exception;
+package dev.demeng.pluginbase.commands.bukkit.exception;
 
+import dev.demeng.pluginbase.commands.exception.ThrowableFromCommand;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Thrown when a console-only command is executed by a non-console
+ * Thrown when a player-only command is executed by a non-player
  */
 @Getter
 @AllArgsConstructor
 @ThrowableFromCommand
-public class SenderNotConsoleException extends RuntimeException {
+public class SenderNotPlayerException extends RuntimeException {
 
 }

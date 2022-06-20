@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package dev.demeng.pluginbase.commands.bukkit.adventure;
 
-package dev.demeng.pluginbase.commands.exception;
-
-import dev.demeng.pluginbase.commands.command.CommandParameter;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
+import dev.demeng.pluginbase.commands.command.CommandActor;
+import dev.demeng.pluginbase.commands.command.ExecutableCommand;
+import dev.demeng.pluginbase.commands.process.ResponseHandler;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Thrown when an invalid value for a {@link org.bukkit.entity.Player} or a {@link
- * org.bukkit.OfflinePlayer} parameter is inputted in the command
+ * Adds support for returning {@link ComponentLike} from methods to respond directly to actors.
+ * <p>
  */
-public class InvalidPlayerException extends InvalidValueException {
+public final class ComponentResponseHandler implements ResponseHandler<ComponentLike> {
 
-  public InvalidPlayerException(@NotNull CommandParameter parameter, @NotNull String input) {
-    super(parameter, input);
+  private final BukkitAudiences audiences;
+
+  public ComponentResponseHandler(BukkitAudiences audiences) {
+    this.audiences = audiences;
+  }
+
+  @Override
+  public void handleResponse(ComponentLike response, @NotNull CommandActor actor,
+      @NotNull ExecutableCommand command) {
+    BukkitCommandActor bActor = (BukkitCommandActor) actor;
+    if (response != null) {
+      audiences.sender(bActor.getSender()).sendMessage(response);
+    }
   }
 }

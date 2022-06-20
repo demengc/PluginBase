@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.core;
 
 import dev.demeng.pluginbase.commands.CommandHandler;
@@ -136,8 +137,11 @@ public final class BaseCommandDispatcher {
       }
     }
     for (CommandParameter parameter : executable.parameters) {
-      if (!parameter.isSwitch() && !parameter.isFlag() && !ArgumentStack.class.isAssignableFrom(
-          parameter.getType())) {
+      if (ArgumentStack.class.isAssignableFrom(parameter.getType())) {
+        values[parameter.getMethodIndex()] = args;
+        continue;
+      }
+      if (!parameter.isSwitch() && !parameter.isFlag()) {
         ParameterResolver<?> resolver = parameter.getResolver();
         if (!resolver.mutatesArguments()) {
           parameter.checkPermission(actor);
@@ -168,12 +172,12 @@ public final class BaseCommandDispatcher {
       CommandActor actor,
       Object[] values) {
     if (args.isEmpty()) {
-      if (parameter.getDefaultValue() == null && parameter.isOptional()) {
+      if (parameter.getDefaultValue().isEmpty() && parameter.isOptional()) {
         values[parameter.getMethodIndex()] = null;
         return true;
       } else {
-        if (parameter.getDefaultValue() != null) {
-          args.add(parameter.getDefaultValue());
+        if (!parameter.getDefaultValue().isEmpty()) {
+          args.addAll(parameter.getDefaultValue());
           return false;
         } else {
           throw new MissingArgumentException(parameter);
@@ -197,18 +201,18 @@ public final class BaseCommandDispatcher {
       Object[] values, CommandParameter parameter) {
     String lookup = handler.getFlagPrefix() + parameter.getFlagName();
     int index = args.indexOf(lookup);
-    final ArgumentStack flagArguments;
+    ArgumentStack flagArguments;
     if (index == -1) { // flag isn't specified, use default value or throw an MPE.
       if (parameter.isOptional()) {
-        if (parameter.getDefaultValue() != null) {
+        if (!parameter.getDefaultValue().isEmpty()) {
           args.add(lookup);
-          args.add(parameter.getDefaultValue());
+          args.addAll(parameter.getDefaultValue());
           index = args.indexOf(lookup);
           args.remove(index); // remove the flag prefix + flag name
           flagArguments = handler.parseArguments(
               args.remove(index)); // put the actual value in a separate argument stack
         } else {
-          for (final ParameterValidator<Object> v : parameter.getValidators()) {
+          for (ParameterValidator<Object> v : parameter.getValidators()) {
             v.validate(null, parameter, actor);
           }
           values[parameter.getMethodIndex()] = null;
@@ -225,10 +229,9 @@ public final class BaseCommandDispatcher {
       flagArguments = handler.parseArguments(
           args.remove(index)); // put the actual value in a separate argument stack
     }
-    final ValueContextR contextR = new ValueContextR(input, actor, parameter, values,
-        flagArguments);
-    final Object value = parameter.getResolver().resolve(contextR);
-    for (final ParameterValidator<Object> v : parameter.getValidators()) {
+    ValueContextR contextR = new ValueContextR(input, actor, parameter, values, flagArguments);
+    Object value = parameter.getResolver().resolve(contextR);
+    for (ParameterValidator<Object> v : parameter.getValidators()) {
       v.validate(value, parameter, actor);
     }
     values[parameter.getMethodIndex()] = value;
@@ -269,17 +272,17 @@ public final class BaseCommandDispatcher {
     }
 
     @Override
-    public <T> @NotNull T getResolvedParameter(@NotNull final CommandParameter parameter) {
+    public <T> @NotNull T getResolvedParameter(@NotNull CommandParameter parameter) {
       try {
         return (T) resolved[parameter.getMethodIndex()];
-      } catch (final Throwable throwable) {
+      } catch (Throwable throwable) {
         throw new IllegalArgumentException("This parameter has not been resolved yet!");
       }
     }
 
     @Override
-    public <T> @NotNull T getResolvedArgument(@NotNull final Class<T> type) {
-      for (final Object o : resolved) {
+    public <T> @NotNull T getResolvedArgument(@NotNull Class<T> type) {
+      for (Object o : resolved) {
         if (type.isInstance(o)) {
           return (T) o;
         }
@@ -291,8 +294,8 @@ public final class BaseCommandDispatcher {
   private static final class ContextResolverContext extends ParamResolverContext implements
       ContextResolver.ContextResolverContext {
 
-    public ContextResolverContext(final List<String> input, final CommandActor actor,
-        final CommandParameter parameter, final Object[] resolved) {
+    public ContextResolverContext(List<String> input, CommandActor actor,
+        CommandParameter parameter, Object[] resolved) {
       super(input, actor, parameter, resolved);
     }
   }
@@ -302,11 +305,11 @@ public final class BaseCommandDispatcher {
 
     private final ArgumentStack argumentStack;
 
-    public ValueContextR(final List<String> input,
-        final CommandActor actor,
-        final CommandParameter parameter,
-        final Object[] resolved,
-        final ArgumentStack argumentStack) {
+    public ValueContextR(List<String> input,
+        CommandActor actor,
+        CommandParameter parameter,
+        Object[] resolved,
+        ArgumentStack argumentStack) {
       super(input, actor, parameter, resolved);
       this.argumentStack = argumentStack;
     }
@@ -326,14 +329,14 @@ public final class BaseCommandDispatcher {
       return argumentStack.pop();
     }
 
-    private <T> T num(final Function<String, T> f) {
-      final String input = pop();
+    private <T> T num(Function<String, T> f) {
+      String input = pop();
       try {
         if (input.startsWith("0x")) {
           return (T) Integer.valueOf(input.substring(2), 16);
         }
         return f.apply(input);
-      } catch (final NumberFormatException e) {
+      } catch (NumberFormatException e) {
         throw new InvalidNumberException(parameter(), input);
       }
     }

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,15 +25,11 @@
 package dev.demeng.pluginbase.commands.command;
 
 import dev.demeng.pluginbase.commands.CommandHandler;
-import dev.demeng.pluginbase.commands.core.BaseActor;
-import dev.demeng.pluginbase.commands.exception.SenderNotConsoleException;
-import dev.demeng.pluginbase.commands.exception.SenderNotPlayerException;
+import dev.demeng.pluginbase.locale.Translator;
+import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.UUID;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a command sender, responsible for performing a command-related action.
@@ -59,10 +55,25 @@ public interface CommandActor {
 
   /**
    * Replies to the sender with the specified message.
+   * <p>
+   * Varies depending on the platform.
    *
    * @param message Message to reply with.
    */
   void reply(@NotNull String message);
+
+  /**
+   * Replies to the sender with the specified message, and marks it as an error depending on the
+   * platform.
+   * <p>
+   * Note that, in certain platforms where no "error" mode is available, this may effectively be
+   * equivilent to calling {@link #reply(String)}.
+   * <p>
+   * This method should not throw any exceptions.
+   *
+   * @param message Message to reply with
+   */
+  void error(@NotNull String message);
 
   /**
    * Returns the command handler that constructed this actor
@@ -70,6 +81,50 @@ public interface CommandActor {
    * @return The command handler
    */
   CommandHandler getCommandHandler();
+
+  /**
+   * Shortcut to {@link CommandHandler#getTranslator()}
+   *
+   * @return The command handler translator
+   */
+  default Translator getTranslator() {
+    return getCommandHandler().getTranslator();
+  }
+
+  /**
+   * Returns the locale of this command actor. This can be used by translation tools to provide
+   * specialized messages.
+   * <p>
+   * Note that platforms that do not support per-actor locales will return a default locale, mostly
+   * {@link Locale#ENGLISH}.
+   *
+   * @return The actor's locale
+   */
+  default @NotNull Locale getLocale() {
+    return getTranslator().getLocale();
+  }
+
+  /**
+   * Replies with the given message
+   *
+   * @param key  Key of the message
+   * @param args The arguments to format with
+   */
+  default void replyLocalized(@NotNull String key, Object... args) {
+    String message = MessageFormat.format(getTranslator().get(key, getLocale()), args);
+    reply(message);
+  }
+
+  /**
+   * Replies with the given message
+   *
+   * @param key  Key of the message
+   * @param args The arguments to format with
+   */
+  default void errorLocalized(@NotNull String key, Object... args) {
+    String message = MessageFormat.format(getTranslator().get(key, getLocale()), args);
+    error(message);
+  }
 
   /**
    * Returns this actor as the specified type. This is effectively casting this actor to the given
@@ -83,60 +138,4 @@ public interface CommandActor {
     return type.cast(this);
   }
 
-  /**
-   * Returns the underlying {@link CommandSender} of this actor
-   *
-   * @return The sender
-   */
-  CommandSender getSender();
-
-  /**
-   * Tests whether is this actor a player or not
-   *
-   * @return Is this a player or not
-   */
-  boolean isPlayer();
-
-  /**
-   * Tests whether is this actor the console or not
-   *
-   * @return Is this the console or not
-   */
-  boolean isConsole();
-
-  /**
-   * Returns this actor as a {@link Player} if it is a player, otherwise returns {@code null}.
-   *
-   * @return The sender as a player, or null.
-   */
-  @Nullable Player getAsPlayer();
-
-  /**
-   * Returns this actor as a {@link Player} if it is a player, otherwise throws a {@link
-   * SenderNotPlayerException}.
-   *
-   * @return The actor as a player
-   * @throws SenderNotPlayerException if not a player
-   */
-  @NotNull Player requirePlayer() throws SenderNotPlayerException;
-
-  /**
-   * Returns this actor as a {@link ConsoleCommandSender} if it is a player, otherwise throws a
-   * {@link SenderNotConsoleException}.
-   *
-   * @return The actor as console
-   * @throws SenderNotConsoleException if not a player
-   */
-  @NotNull ConsoleCommandSender requireConsole() throws SenderNotConsoleException;
-
-  /**
-   * Creates a new {@link CommandActor} that wraps the given {@link CommandSender}.
-   *
-   * @param sender Command sender to wrap
-   * @return The wrapping {@link CommandActor}.
-   */
-  static @NotNull CommandActor wrap(@NotNull CommandSender sender,
-      @NotNull CommandHandler handler) {
-    return new BaseActor(sender, handler);
-  }
 }

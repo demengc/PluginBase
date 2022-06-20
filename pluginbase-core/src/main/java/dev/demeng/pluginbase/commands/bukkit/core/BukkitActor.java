@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) 2021 Revxrsal
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,38 +22,45 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.commands.core;
-
-import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
+package dev.demeng.pluginbase.commands.bukkit.core;
 
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.commands.CommandHandler;
-import dev.demeng.pluginbase.commands.command.CommandActor;
-import dev.demeng.pluginbase.commands.exception.SenderNotConsoleException;
-import dev.demeng.pluginbase.commands.exception.SenderNotPlayerException;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
+import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
+import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotConsoleException;
+import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotPlayerException;
+import dev.demeng.pluginbase.commands.util.Preconditions;
+import dev.demeng.pluginbase.locale.Locales;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.UUID;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class BaseActor implements CommandActor {
+@Internal
+public final class BukkitActor implements BukkitCommandActor {
 
   private static final UUID CONSOLE_UUID = UUID.nameUUIDFromBytes(
       "CONSOLE".getBytes(StandardCharsets.UTF_8));
 
   private final CommandSender sender;
-  private final CommandHandler handler;
+  private final BukkitHandler handler;
 
-  public BaseActor(final CommandSender sender, final CommandHandler handler) {
-    this.sender = notNull(sender, "sender");
-    this.handler = notNull(handler, "handler");
+  public BukkitActor(CommandSender sender, CommandHandler handler) {
+    this.sender = Preconditions.notNull(sender, "sender");
+    this.handler = (BukkitHandler) Preconditions.notNull(handler, "handler");
   }
 
   @Override
-  public CommandSender getSender() {
+  public @NotNull CommandSender getSender() {
     return sender;
   }
 
@@ -89,6 +96,16 @@ public final class BaseActor implements CommandActor {
   }
 
   @Override
+  public @NotNull Audience audience() {
+    return BaseManager.getAdventure().sender(getSender());
+  }
+
+  @Override
+  public void reply(@NotNull ComponentLike component) {
+    audience().sendMessage(component);
+  }
+
+  @Override
   public @NotNull String getName() {
     return sender.getName();
   }
@@ -105,13 +122,40 @@ public final class BaseActor implements CommandActor {
   }
 
   @Override
-  public void reply(@NotNull final String message) {
-    notNull(message, "message");
+  public void reply(@NotNull String message) {
+    Preconditions.notNull(message, "message");
     ChatUtils.tell(sender, message);
   }
 
   @Override
-  public CommandHandler getCommandHandler() {
+  public void error(@NotNull String message) {
+    Preconditions.notNull(message, "message");
+    ChatUtils.tell(sender, "&c" + message);
+  }
+
+  @Override
+  public BukkitCommandHandler getCommandHandler() {
     return handler;
+  }
+
+  @Override
+  public @NotNull Locale getLocale() {
+    if (isPlayer()) {
+      String playerLocale;
+      try {
+        playerLocale = requirePlayer().getLocale();
+      } catch (NoSuchMethodError e) {
+        try {
+          Player.Spigot spigotPlayer = requirePlayer().spigot();
+          playerLocale = (String) spigotPlayer.getClass().getDeclaredMethod("getLocale")
+              .invoke(spigotPlayer);
+        } catch (Exception e2) {
+          return BukkitCommandActor.super.getLocale();
+        }
+      }
+      Locale locale = Locales.get(playerLocale);
+      return locale == null ? BukkitCommandActor.super.getLocale() : locale;
+    }
+    return BukkitCommandActor.super.getLocale();
   }
 }

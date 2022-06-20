@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands;
 
 import dev.demeng.pluginbase.commands.annotation.Dependency;
@@ -35,7 +36,6 @@ import dev.demeng.pluginbase.commands.command.CommandActor;
 import dev.demeng.pluginbase.commands.command.CommandCategory;
 import dev.demeng.pluginbase.commands.command.CommandPermission;
 import dev.demeng.pluginbase.commands.command.ExecutableCommand;
-import dev.demeng.pluginbase.commands.core.BaseHandler;
 import dev.demeng.pluginbase.commands.core.CommandPath;
 import dev.demeng.pluginbase.commands.core.reflect.MethodCallerFactory;
 import dev.demeng.pluginbase.commands.exception.ArgumentParseException;
@@ -52,13 +52,14 @@ import dev.demeng.pluginbase.commands.process.ResponseHandler;
 import dev.demeng.pluginbase.commands.process.SenderResolver;
 import dev.demeng.pluginbase.commands.process.ValueResolver;
 import dev.demeng.pluginbase.commands.process.ValueResolverFactory;
+import dev.demeng.pluginbase.locale.Translator;
 import java.lang.annotation.Annotation;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -70,30 +71,34 @@ import org.jetbrains.annotations.UnmodifiableView;
 public interface CommandHandler {
 
   /**
-   * Returns the plugin this command handler was registered for.
-   *
-   * @return The owning plugin
-   */
-  @NotNull Plugin getPlugin();
-
-  /**
-   * Registers commands automatically on Minecraft's 1.13+ command system (so that you would get the
-   * colorful command completions!)
-   * <p>
-   * Note that you should call this method after you've registered all your commands.
-   *
-   * @return This command handler
-   */
-  CommandHandler registerBrigadier();
-
-  /**
-   * Registers the specified command from an instance. This will automatically set all {@link
-   * Dependency}-annotated fields with their values.
+   * Registers the specified command from an instance. This will automatically set all
+   * {@link Dependency}-annotated fields with their values.
    *
    * @param commands The commands object instances. Can be a class if methods are static.
    * @return This command handler
    */
   @NotNull CommandHandler register(@NotNull Object... commands);
+
+  /**
+   * Gets the current, default locale used by this handler
+   *
+   * @return The default locale
+   */
+  @NotNull Locale getLocale();
+
+  /**
+   * Sets the locale of this handler.
+   *
+   * @param locale The locale of this handler
+   */
+  void setLocale(@NotNull Locale locale);
+
+  /**
+   * Returns the translator of this command handler
+   *
+   * @return The message translator
+   */
+  @NotNull Translator getTranslator();
 
   /**
    * Sets the {@link MethodCallerFactory} responsible for generating access to reflection methods.
@@ -152,8 +157,8 @@ public interface CommandHandler {
   @NotNull CommandHandler setExceptionHandler(@NotNull CommandExceptionHandler handler);
 
   /**
-   * Convenient method to register exception handlers. These will have higher priority over {@link
-   * CommandExceptionHandler}.
+   * Convenient method to register exception handlers. These will have higher priority over
+   * {@link CommandExceptionHandler}.
    *
    * @param exceptionType The exception class
    * @param handler       The exception handler
@@ -227,8 +232,8 @@ public interface CommandHandler {
   @NotNull CommandHandler registerSenderResolver(@NotNull SenderResolver resolver);
 
   /**
-   * Registers the given permission reader, which allows registering custom {@link
-   * CommandPermission} implementations with annotations.
+   * Registers the given permission reader, which allows registering custom
+   * {@link CommandPermission} implementations with annotations.
    *
    * @param reader Permission reader to register
    * @return This command handler
@@ -309,8 +314,8 @@ public interface CommandHandler {
    * Registers a parameter type to always be a static value. This is useful for registering
    * singletons as parameters.
    * <p>
-   * This is equivalent to calling {@code registerContextResolver(priority, type,
-   * ContextResolver.of(value))}
+   * This is equivalent to calling
+   * {@code registerContextResolver(priority, type, ContextResolver.of(value))}
    * <p>
    * See {@link ContextResolver} for more information
    *
@@ -598,13 +603,4 @@ public interface CommandHandler {
   <T> @NotNull Optional<@Nullable T> dispatch(@NotNull CommandActor actor,
       @NotNull String commandInput);
 
-  /**
-   * Creates a new {@link CommandHandler} for the specified plugin
-   *
-   * @param plugin Plugin to create for
-   * @return The newly created command handler
-   */
-  static @NotNull CommandHandler create(@NotNull Plugin plugin) {
-    return new BaseHandler(plugin);
-  }
 }

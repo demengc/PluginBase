@@ -75,8 +75,8 @@ public final class RelocationInfo {
   }
 
   /**
-   * Creates a new relocation based off of the passed in information. Uses the {@link
-   * DependencyLoader#DEFAULT_SEPARATOR} as the separator.
+   * Creates a new relocation based off of the passed in information. Uses the
+   * {@link DependencyLoader#DEFAULT_SEPARATOR} as the separator.
    *
    * @param from The package to find
    * @param to   The package to replace with

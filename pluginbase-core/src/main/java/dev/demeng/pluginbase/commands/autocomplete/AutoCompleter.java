@@ -1,26 +1,27 @@
 /*
- * This file is part of lamp, licensed under the MIT License.
+ * MIT License
  *
- *  Copyright (c) Revxrsal <reflxction.github@gmail.com>
+ * Copyright (c) 2021 Revxrsal
  *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- *  The above copyright notice and this permission notice shall be included in all
- *  copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
  *
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *  SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
+
 package dev.demeng.pluginbase.commands.autocomplete;
 
 import dev.demeng.pluginbase.commands.CommandHandler;
@@ -48,8 +49,8 @@ public interface AutoCompleter {
       @NotNull SuggestionProvider provider);
 
   /**
-   * Registers static completions for the specified ID, for use in commands through the {@link
-   * AutoComplete} annotation.
+   * Registers static completions for the specified ID, for use in commands through the
+   * {@link AutoComplete} annotation.
    *
    * @param providerID  The tab suggestion id
    * @param completions The static list of suggestion. These will be copied and will no longer be
@@ -60,8 +61,8 @@ public interface AutoCompleter {
       @NotNull Collection<String> completions);
 
   /**
-   * Registers static completions for the specified ID, for use in commands through the {@link
-   * AutoComplete} annotation.
+   * Registers static completions for the specified ID, for use in commands through the
+   * {@link AutoComplete} annotation.
    *
    * @param providerID  The tab suggestion id
    * @param completions The static list of suggestion. These will be copied and will no longer be
@@ -88,9 +89,9 @@ public interface AutoCompleter {
    * be explicitly defined by an {@link AutoComplete}.
    *
    * @param parameterType The parameter type to complete
-   * @param providerID    The tab suggestion provider id. Must be registered with either {@link
-   *                      #registerSuggestion(String, SuggestionProvider)} or {@link
-   *                      #registerSuggestion(String, String...)}.
+   * @param providerID    The tab suggestion provider id. Must be registered with either
+   *                      {@link #registerSuggestion(String, SuggestionProvider)} or
+   *                      {@link #registerSuggestion(String, String...)}.
    * @return This auto-completer
    */
   AutoCompleter registerParameterSuggestions(@NotNull Class<?> parameterType,
