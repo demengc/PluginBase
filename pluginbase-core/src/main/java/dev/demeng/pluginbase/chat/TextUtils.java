@@ -30,6 +30,7 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.locale.Locales;
 import dev.demeng.pluginbase.model.BaseTitle;
 import dev.demeng.pluginbase.plugin.BaseManager;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -256,6 +257,22 @@ public final class TextUtils {
   }
 
   /**
+   * Appends the prefix, a red chat color, and the message, and then colorizes.
+   *
+   * @param str The plain string
+   * @return Formatted string with red message
+   */
+  @NotNull
+  public static String error(@Nullable final String str) {
+
+    if (str == null) {
+      return "";
+    }
+
+    return colorize(getPrefix() + "&c" + str);
+  }
+
+  /**
    * Parses the string using the advanced Adventure and MiniMessage library. Format:
    * https://docs.adventure.kyori.net/minimessage.html#format
    *
@@ -433,6 +450,36 @@ public final class TextUtils {
   }
 
   /**
+   * Sends a {@link #localized(String, CommandSender)}, colored, and prefixed message to the command
+   * sender. Any key equaling null or any message equaling to {@link #IGNORE_MESSAGE_VALUE} (ignore
+   * case) will be ignored.
+   *
+   * @param sender The command sender that will receive the message
+   * @param key    The key of the localized string
+   * @param args   Arguments to replace in the localized string
+   * @see #tell(CommandSender, String)
+   */
+  public static void tellLocalized(
+      @NotNull final CommandSender sender,
+      @Nullable final String key,
+      Object... args) {
+
+    if (key == null) {
+      return;
+    }
+
+    final String message = MessageFormat.format(localized(key, sender), args);
+
+    if (message.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
+      return;
+    }
+
+    if (!attemptTellAdvanced(sender, message)) {
+      sender.sendMessage(format(message));
+    }
+  }
+
+  /**
    * Does the same thing as {@link #tell(CommandSender, String)}, but without the prefix. Any
    * message equaling null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
@@ -451,13 +498,44 @@ public final class TextUtils {
   }
 
   /**
+   * Does the same thing as {@link #tellLocalized(CommandSender, String, Object...)}, but without
+   * the prefix. Any key equaling null or any message equaling to {@link #IGNORE_MESSAGE_VALUE}
+   * (ignore case) will be ignored.
+   *
+   * @param sender The command sender that will receive the message
+   * @param key    The key of the localized string
+   * @param args   Arguments to replace in the localized string
+   * @see #tellLocalized(CommandSender, String, Object...)
+   */
+  public static void coloredTellLocalized(
+      @NotNull final CommandSender sender,
+      @Nullable final String key,
+      Object... args) {
+
+    if (key == null) {
+      return;
+    }
+
+    final String message = MessageFormat.format(localized(key, sender), args);
+
+    if (message.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
+      return;
+    }
+
+    if (!attemptTellAdvanced(sender, message)) {
+      sender.sendMessage(colorize(message));
+    }
+  }
+
+  /**
    * Sends the {@link Component} to the player as a chat message.
    *
    * @param player    The player who should receive the component
    * @param component The component to send
    * @see #parseAdvanced(String)
    */
-  public static void tellAdvanced(@NotNull final Player player,
+  public static void tellAdvanced(
+      @NotNull final Player player,
       @NotNull final Component component) {
     BaseManager.getAdventure().player(player).sendMessage(component);
   }
