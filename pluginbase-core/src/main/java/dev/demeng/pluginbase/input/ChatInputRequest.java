@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase.input;
 
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Locale;
 import java.util.function.Consumer;
@@ -164,37 +164,37 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
    */
   public void start(@NotNull final Player p) {
 
-    final Locale locale = ChatUtils.getLocale(p);
+    final Locale locale = TextUtils.getLocale(p);
 
     if (title == null) {
-      title = ChatUtils.localized("input-requests.default-title", locale);
+      title = TextUtils.localized("input-requests.default-title", locale);
     }
 
     if (subtitle == null) {
-      subtitle = ChatUtils.localized("input-requests.default-subtitle", locale);
+      subtitle = TextUtils.localized("input-requests.default-subtitle", locale);
     }
 
     if (retryMessage == null) {
-      retryMessage = ChatUtils.localized("input-requests.default-retry-message", locale);
+      retryMessage = TextUtils.localized("input-requests.default-retry-message", locale);
     }
 
     if (timeoutMessage == null) {
-      timeoutMessage = ChatUtils.localized("input-requests.default-timeout-message", locale);
+      timeoutMessage = TextUtils.localized("input-requests.default-timeout-message", locale);
     }
 
-    ChatUtils.sendTitle(p, title, subtitle, 20, 12000, 20);
+    TextUtils.sendTitle(p, title, subtitle, 20, 12000, 20);
 
     new ConversationFactory(BaseManager.getPlugin())
         .withModality(false)
         .withFirstPrompt(this)
-        .withEscapeSequence(ChatUtils.localized("input-requests.exit-value", locale))
+        .withEscapeSequence(TextUtils.localized("input-requests.exit-value", locale))
         .addConversationAbandonedListener(e -> {
 
           if (e.getCanceller() instanceof InactivityConversationCanceller) {
-            ChatUtils.tell(p, timeoutMessage);
+            TextUtils.tell(p, timeoutMessage);
           }
 
-          ChatUtils.clearTitle(p);
+          TextUtils.clearTitle(p);
 
           if (exitRunnable != null) {
             exitRunnable.run();
@@ -228,7 +228,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
     final Player p = (Player) context.getForWhom();
 
     if (title != null || subtitle != null) {
-      ChatUtils.clearTitle(p);
+      TextUtils.clearTitle(p);
     }
 
     if (consumer != null) {
@@ -244,11 +244,11 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
     if (firstAttempt) {
       if (initialMessage != null) {
-        return ChatUtils.colorize(ChatUtils.getPrefix() + initialMessage);
+        return TextUtils.colorize(TextUtils.getPrefix() + initialMessage);
       }
 
     } else if (retryMessage != null) {
-      return ChatUtils.colorize(ChatUtils.getPrefix() + retryMessage);
+      return TextUtils.colorize(TextUtils.getPrefix() + retryMessage);
     }
 
     return "";

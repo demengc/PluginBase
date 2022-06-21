@@ -26,7 +26,7 @@ package dev.demeng.pluginbase.model;
 
 import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.Players;
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import lombok.Data;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
@@ -80,8 +80,8 @@ public class BaseTitle {
    */
   public BaseTitle(@Nullable final String title, @Nullable final String subtitle,
       final int fadeIn, final int stay, final int fadeOut) {
-    this.title = title == null ? null : ChatUtils.colorize(title);
-    this.subtitle = subtitle == null ? null : ChatUtils.colorize(subtitle);
+    this.title = title == null ? null : TextUtils.colorize(title);
+    this.subtitle = subtitle == null ? null : TextUtils.colorize(subtitle);
     this.fadeIn = fadeIn;
     this.stay = stay;
     this.fadeOut = fadeOut;
@@ -94,8 +94,8 @@ public class BaseTitle {
    * @param subtitle The subtitle
    */
   public BaseTitle(@Nullable final String title, @Nullable final String subtitle) {
-    this.title = title == null ? null : ChatUtils.colorize(title);
-    this.subtitle = subtitle == null ? null : ChatUtils.colorize(subtitle);
+    this.title = title == null ? null : TextUtils.colorize(title);
+    this.subtitle = subtitle == null ? null : TextUtils.colorize(subtitle);
     this.fadeIn = DEFAULT_FADE_IN;
     this.stay = DEFAULT_STAY;
     this.fadeOut = DEFAULT_FADE_OUT;

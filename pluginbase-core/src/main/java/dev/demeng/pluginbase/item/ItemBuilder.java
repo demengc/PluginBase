@@ -28,7 +28,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -140,7 +140,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder name(@NotNull final String name) {
-    updateMeta(meta -> meta.setDisplayName(ChatUtils.colorize(name)));
+    updateMeta(meta -> meta.setDisplayName(TextUtils.colorize(name)));
     return this;
   }
 
@@ -215,7 +215,7 @@ public class ItemBuilder {
    * @return this
    */
   public ItemBuilder lore(final List<String> lore) {
-    updateMeta(meta -> meta.setLore(ChatUtils.colorize(lore)));
+    updateMeta(meta -> meta.setLore(TextUtils.colorize(lore)));
     return this;
   }
 
@@ -240,7 +240,7 @@ public class ItemBuilder {
     updateMeta(meta -> {
       final List<String> lore = new ArrayList<>(
           Common.getOrDefault(meta.getLore(), Collections.emptyList()));
-      lore.add(ChatUtils.colorize(line));
+      lore.add(TextUtils.colorize(line));
       meta.setLore(lore);
     });
 

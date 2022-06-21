@@ -53,7 +53,7 @@ import org.jetbrains.annotations.Nullable;
  * Message-related utilities, including console and chat messages.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ChatUtils {
+public final class TextUtils {
 
   /**
    * The message value that will cause the message to not be sent. Ignores case.
@@ -236,7 +236,7 @@ public final class ChatUtils {
       return Collections.emptyList();
     }
 
-    return strList.stream().map(ChatUtils::colorize).collect(Collectors.toList());
+    return strList.stream().map(TextUtils::colorize).collect(Collectors.toList());
   }
 
   /**
@@ -328,7 +328,7 @@ public final class ChatUtils {
       return Collections.emptyList();
     }
 
-    return strList.stream().map(ChatUtils::strip).collect(Collectors.toList());
+    return strList.stream().map(TextUtils::strip).collect(Collectors.toList());
   }
 
   /**

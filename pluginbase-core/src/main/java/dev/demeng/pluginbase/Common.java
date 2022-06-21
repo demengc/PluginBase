@@ -25,7 +25,7 @@
 package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Arrays;
@@ -198,14 +198,14 @@ public final class Common {
       throwable.printStackTrace();
     }
 
-    ChatUtils.coloredConsole("&4" + ChatUtils.CONSOLE_LINE);
-    ChatUtils.coloredConsole("&cAn internal error has occurred in " + Common.getName() + "!");
-    ChatUtils.coloredConsole("&cContact the plugin author if you cannot fix this error.");
-    ChatUtils.coloredConsole("&cDescription: &6" + description);
-    ChatUtils.coloredConsole("&4" + ChatUtils.CONSOLE_LINE);
+    TextUtils.coloredConsole("&4" + TextUtils.CONSOLE_LINE);
+    TextUtils.coloredConsole("&cAn internal error has occurred in " + Common.getName() + "!");
+    TextUtils.coloredConsole("&cContact the plugin author if you cannot fix this error.");
+    TextUtils.coloredConsole("&cDescription: &6" + description);
+    TextUtils.coloredConsole("&4" + TextUtils.CONSOLE_LINE);
 
     Arrays.stream(players).filter(Player.class::isInstance)
-        .forEach(p -> ChatUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE));
+        .forEach(p -> TextUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE));
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseManager.getPlugin())) {
       Bukkit.getPluginManager().disablePlugin(BaseManager.getPlugin());

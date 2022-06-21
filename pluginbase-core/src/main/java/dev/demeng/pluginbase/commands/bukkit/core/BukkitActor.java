@@ -24,14 +24,13 @@
 
 package dev.demeng.pluginbase.commands.bukkit.core;
 
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
 import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
 import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotConsoleException;
 import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotPlayerException;
 import dev.demeng.pluginbase.commands.util.Preconditions;
-import dev.demeng.pluginbase.locale.Locales;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -124,13 +123,13 @@ public final class BukkitActor implements BukkitCommandActor {
   @Override
   public void reply(@NotNull String message) {
     Preconditions.notNull(message, "message");
-    ChatUtils.tell(sender, message);
+    TextUtils.tell(sender, message);
   }
 
   @Override
   public void error(@NotNull String message) {
     Preconditions.notNull(message, "message");
-    ChatUtils.tell(sender, "&c" + message);
+    TextUtils.tell(sender, "&c" + message);
   }
 
   @Override
@@ -140,22 +139,6 @@ public final class BukkitActor implements BukkitCommandActor {
 
   @Override
   public @NotNull Locale getLocale() {
-    if (isPlayer()) {
-      String playerLocale;
-      try {
-        playerLocale = requirePlayer().getLocale();
-      } catch (NoSuchMethodError e) {
-        try {
-          Player.Spigot spigotPlayer = requirePlayer().spigot();
-          playerLocale = (String) spigotPlayer.getClass().getDeclaredMethod("getLocale")
-              .invoke(spigotPlayer);
-        } catch (Exception e2) {
-          return BukkitCommandActor.super.getLocale();
-        }
-      }
-      Locale locale = Locales.get(playerLocale);
-      return locale == null ? BukkitCommandActor.super.getLocale() : locale;
-    }
-    return BukkitCommandActor.super.getLocale();
+    return TextUtils.getLocale(sender);
   }
 }

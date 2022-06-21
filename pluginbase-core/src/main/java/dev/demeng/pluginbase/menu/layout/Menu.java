@@ -26,7 +26,7 @@ package dev.demeng.pluginbase.menu.layout;
 
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.DynamicPlaceholders;
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
@@ -79,7 +79,7 @@ public abstract class Menu implements IMenu {
    * @param title The menu title, colorized internally
    */
   protected Menu(final int size, @NotNull final String title) {
-    this.inventory = Bukkit.createInventory(null, size, ChatUtils.colorize(title));
+    this.inventory = Bukkit.createInventory(null, size, TextUtils.colorize(title));
     MenuManager.getMenus().put(getUuid(), this);
   }
 

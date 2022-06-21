@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -78,14 +78,14 @@ public class UpdateChecker {
 
     final CommandSender cs = Common.getOrDefault(sender, Bukkit.getConsoleSender());
     final String line = cs instanceof ConsoleCommandSender
-        ? ChatUtils.CONSOLE_LINE : ChatUtils.CHAT_LINE;
+        ? TextUtils.CONSOLE_LINE : TextUtils.CHAT_LINE;
 
-    ChatUtils.coloredTell(cs, "&2" + line);
-    ChatUtils.coloredTell(cs, "&aA new update for " + Common.getName() + " is available!");
-    ChatUtils.coloredTell(cs, "&aYour version: &f" + Common.getVersion());
-    ChatUtils.coloredTell(cs, "&aLatest version: &f" + latestVersion);
-    ChatUtils.coloredTell(cs, "&aDownload: &fhttps://spigotmc.org/resources/" + resourceId);
-    ChatUtils.coloredTell(cs, "&2" + line);
+    TextUtils.coloredTell(cs, "&2" + line);
+    TextUtils.coloredTell(cs, "&aA new update for " + Common.getName() + " is available!");
+    TextUtils.coloredTell(cs, "&aYour version: &f" + Common.getVersion());
+    TextUtils.coloredTell(cs, "&aLatest version: &f" + latestVersion);
+    TextUtils.coloredTell(cs, "&aDownload: &fhttps://spigotmc.org/resources/" + resourceId);
+    TextUtils.coloredTell(cs, "&2" + line);
   }
 
   private String retrieveVersionFromSpigot() {

@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.chat.ChatUtils;
+import dev.demeng.pluginbase.chat.TextUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -79,10 +79,10 @@ public interface DynamicPlaceholders {
     final ItemMeta meta = replaced.getItemMeta();
     Objects.requireNonNull(meta, "Item meta is null");
 
-    meta.setDisplayName(ChatUtils.colorize(setPlaceholders(meta.getDisplayName())));
+    meta.setDisplayName(TextUtils.colorize(setPlaceholders(meta.getDisplayName())));
 
     if (meta.getLore() != null && !meta.getLore().isEmpty()) {
-      meta.setLore(ChatUtils.colorize(setPlaceholders(meta.getLore())));
+      meta.setLore(TextUtils.colorize(setPlaceholders(meta.getLore())));
     }
 
     replaced.setItemMeta(meta);
