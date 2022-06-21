@@ -198,12 +198,11 @@ public final class Common {
       throwable.printStackTrace();
     }
 
-    ChatUtils.coloredConsole(
-        "&4" + ChatUtils.CONSOLE_LINE,
-        "&cAn internal error has occurred in " + Common.getName() + "!",
-        "&cContact the plugin author if you cannot fix this error.",
-        "&cDescription: &6" + description,
-        "&4" + ChatUtils.CONSOLE_LINE);
+    ChatUtils.coloredConsole("&4" + ChatUtils.CONSOLE_LINE);
+    ChatUtils.coloredConsole("&cAn internal error has occurred in " + Common.getName() + "!");
+    ChatUtils.coloredConsole("&cContact the plugin author if you cannot fix this error.");
+    ChatUtils.coloredConsole("&cDescription: &6" + description);
+    ChatUtils.coloredConsole("&4" + ChatUtils.CONSOLE_LINE);
 
     Arrays.stream(players).filter(Player.class::isInstance)
         .forEach(p -> ChatUtils.coloredTell(p, PLAYERS_ERROR_MESSAGE));
