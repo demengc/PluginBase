@@ -27,6 +27,7 @@ package dev.demeng.pluginbase.plugin;
 import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.exceptions.BaseException;
+import dev.demeng.pluginbase.locale.Translator;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,14 +48,19 @@ public final class BaseManager {
   private static Thread mainThread = null;
 
   /**
+   * The translator used for handling localized messages.
+   */
+  @NotNull @Getter @Setter private static Translator translator;
+
+  /**
    * The command handler for the plugin. Should be set when your plugin enables.
    */
-  @Getter @Setter private static CommandHandler commandHandler;
+  @NotNull @Getter @Setter private static CommandHandler commandHandler;
 
   /**
    * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.
    */
-  @Getter @Setter private static BukkitAudiences adventure;
+  @NotNull @Getter @Setter private static BukkitAudiences adventure;
 
   /**
    * The settings the library should use.

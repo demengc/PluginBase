@@ -74,6 +74,7 @@ import dev.demeng.pluginbase.commands.util.ClassMap;
 import dev.demeng.pluginbase.commands.util.Primitives;
 import dev.demeng.pluginbase.commands.util.StackTraceSanitizer;
 import dev.demeng.pluginbase.locale.Translator;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
@@ -125,7 +126,6 @@ public class BaseCommandHandler implements CommandHandler {
   CommandHelpWriter<?> helpWriter;
   boolean failOnExtra = false;
   final List<CommandCondition> conditions = new ArrayList<>();
-  private final Translator translator = Translator.create();
 
   public BaseCommandHandler() {
     registerContextResolverFactory(new SenderContextResolverFactory(senderResolvers));
@@ -216,17 +216,17 @@ public class BaseCommandHandler implements CommandHandler {
 
   @Override
   public @NotNull Locale getLocale() {
-    return translator.getLocale();
+    return getTranslator().getLocale();
   }
 
   @Override
   public void setLocale(@NotNull Locale locale) {
-    translator.setLocale(locale);
+    getTranslator().setLocale(locale);
   }
 
   @Override
   public @NotNull Translator getTranslator() {
-    return translator;
+    return BaseManager.getTranslator();
   }
 
   private void findPermission(@Nullable CommandExecutable executable) {

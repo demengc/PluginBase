@@ -31,6 +31,7 @@ import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
+import dev.demeng.pluginbase.locale.Translator;
 import dev.demeng.pluginbase.menu.MenuManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -47,7 +48,7 @@ public abstract class BasePlugin extends JavaPlugin {
   /**
    * The dependency engine for this plugin.
    */
-  private @Nullable DependencyEngine dependencyEngine;
+  @Nullable private DependencyEngine dependencyEngine;
 
   @Override
   public final void onLoad() {
@@ -64,6 +65,7 @@ public abstract class BasePlugin extends JavaPlugin {
       return;
     }
 
+    BaseManager.setTranslator(Translator.create());
     BaseManager.setCommandHandler(BukkitCommandHandler.create(this));
 
     Registerer.registerListener(new MenuManager());
