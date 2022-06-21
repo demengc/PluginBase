@@ -39,21 +39,23 @@ final class CompletionStageResponseHandler implements ResponseHandler<Completion
   private final CommandHandler handler;
   private final ResponseHandler<Object> delegate;
 
-  public CompletionStageResponseHandler(CommandHandler handler, ResponseHandler<Object> delegate) {
+  public CompletionStageResponseHandler(final CommandHandler handler,
+      final ResponseHandler<Object> delegate) {
     this.handler = handler;
     this.delegate = delegate;
   }
 
   @Override
-  public void handleResponse(CompletionStage<Object> response, @NotNull CommandActor actor,
-      @NotNull ExecutableCommand command) {
+  public void handleResponse(final CompletionStage<Object> response,
+      @NotNull final CommandActor actor,
+      @NotNull final ExecutableCommand command) {
     response.whenComplete((value, exception) -> {
       if (exception != null) {
         handler.getExceptionHandler().handleException(exception, actor);
       } else {
         try {
           delegate.handleResponse(value, actor, command);
-        } catch (Throwable throwable) {
+        } catch (final Throwable throwable) {
           handler.getExceptionHandler().handleException(throwable, actor);
         }
       }

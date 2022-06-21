@@ -58,7 +58,7 @@ public interface CommandHelpWriter<T> {
    * @param predicate Predicate to test for
    * @return The command help writer that filters according to that predicate.
    */
-  default CommandHelpWriter<T> ignore(@NotNull Predicate<ExecutableCommand> predicate) {
+  default CommandHelpWriter<T> ignore(@NotNull final Predicate<ExecutableCommand> predicate) {
     return (command, subject) -> {
       if (predicate.test(command)) {
         return null;
@@ -73,7 +73,7 @@ public interface CommandHelpWriter<T> {
    * @param predicate Predicate to test for
    * @return The command help writer that only allows elements that match the predicate.
    */
-  default CommandHelpWriter<T> only(@NotNull Predicate<ExecutableCommand> predicate) {
+  default CommandHelpWriter<T> only(@NotNull final Predicate<ExecutableCommand> predicate) {
     return ignore(predicate.negate());
   }
 

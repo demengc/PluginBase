@@ -46,22 +46,22 @@ enum CooldownCondition implements CommandCondition {
   private final Map<UUID, Map<Integer, Long>> cooldowns = new ConcurrentHashMap<>();
 
   @Override
-  public void test(@NotNull CommandActor actor, @NotNull ExecutableCommand command,
-      @NotNull @Unmodifiable List<String> arguments) {
-    Cooldown cooldown = command.getAnnotation(Cooldown.class);
+  public void test(@NotNull final CommandActor actor, @NotNull final ExecutableCommand command,
+      @NotNull @Unmodifiable final List<String> arguments) {
+    final Cooldown cooldown = command.getAnnotation(Cooldown.class);
     if (cooldown == null || cooldown.value() == 0) {
       return;
     }
-    UUID uuid = actor.getUniqueId();
-    Map<Integer, Long> spans = get(uuid);
-    Long created = spans.get(command.getId());
+    final UUID uuid = actor.getUniqueId();
+    final Map<Integer, Long> spans = get(uuid);
+    final Long created = spans.get(command.getId());
     if (created == null) {
       spans.put(command.getId(), System.currentTimeMillis());
       COOLDOWN_POOL.schedule(() -> spans.remove(command.getId()), cooldown.value(),
           cooldown.unit());
       return;
     }
-    long passed = System.currentTimeMillis() - created;
+    final long passed = System.currentTimeMillis() - created;
     long left = cooldown.unit().toMillis(cooldown.value()) - passed;
     if (left > 0 && left < 1000) {
       left = 1000L; // for formatting
@@ -69,7 +69,7 @@ enum CooldownCondition implements CommandCondition {
     throw new CooldownException(left);
   }
 
-  private Map<Integer, Long> get(@NotNull UUID uuid) {
+  private Map<Integer, Long> get(@NotNull final UUID uuid) {
     return cooldowns.computeIfAbsent(uuid, u -> new ConcurrentHashMap<>());
   }
 }

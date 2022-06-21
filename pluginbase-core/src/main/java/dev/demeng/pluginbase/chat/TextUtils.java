@@ -97,7 +97,7 @@ public final class TextUtils {
    * @return The sender's locale or the default locale if the sender's locale could not be resolved
    */
   @NotNull
-  public static Locale getLocale(@Nullable CommandSender sender) {
+  public static Locale getLocale(@Nullable final CommandSender sender) {
 
     if (sender instanceof Player) {
       final Player player = (Player) sender;
@@ -106,13 +106,13 @@ public final class TextUtils {
       try {
         playerLocale = player.getLocale();
 
-      } catch (NoSuchMethodError ex) {
+      } catch (final NoSuchMethodError ex) {
         try {
           final Player.Spigot spigotPlayer = player.spigot();
           playerLocale = (String) spigotPlayer.getClass().getDeclaredMethod("getLocale")
               .invoke(spigotPlayer);
 
-        } catch (Exception ex1) {
+        } catch (final Exception ex1) {
           return BaseManager.getTranslator().getLocale();
         }
       }
@@ -135,7 +135,7 @@ public final class TextUtils {
    * @see #getLocale(CommandSender)
    */
   @NotNull
-  public static String localized(@Nullable String key, @Nullable CommandSender sender) {
+  public static String localized(@Nullable final String key, @Nullable final CommandSender sender) {
 
     if (key == null) {
       return "";
@@ -153,7 +153,7 @@ public final class TextUtils {
    * @return The localized message, or key if unable to resolve
    */
   @NotNull
-  public static String localized(@Nullable String key, @Nullable Locale locale) {
+  public static String localized(@Nullable final String key, @Nullable final Locale locale) {
 
     if (key == null) {
       return "";
@@ -462,7 +462,7 @@ public final class TextUtils {
   public static void tellLocalized(
       @NotNull final CommandSender sender,
       @Nullable final String key,
-      Object... args) {
+      final Object... args) {
 
     if (key == null) {
       return;
@@ -510,7 +510,7 @@ public final class TextUtils {
   public static void coloredTellLocalized(
       @NotNull final CommandSender sender,
       @Nullable final String key,
-      Object... args) {
+      final Object... args) {
 
     if (key == null) {
       return;

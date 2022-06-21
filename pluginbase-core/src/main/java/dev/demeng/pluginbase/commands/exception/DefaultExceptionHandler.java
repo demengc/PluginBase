@@ -45,105 +45,112 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
   public static final NumberFormat FORMAT = NumberFormat.getInstance();
 
   @Override
-  public void missingArgument(@NotNull CommandActor actor,
-      @NotNull MissingArgumentException exception) {
+  public void missingArgument(@NotNull final CommandActor actor,
+      @NotNull final MissingArgumentException exception) {
     actor.errorLocalized("commands.missing-argument", exception.getParameter().getName());
   }
 
   @Override
-  public void invalidEnumValue(@NotNull CommandActor actor,
-      @NotNull EnumNotFoundException exception) {
-    actor.errorLocalized("commands.invalid-enum", exception.getParameter().getName(), exception.getInput());
+  public void invalidEnumValue(@NotNull final CommandActor actor,
+      @NotNull final EnumNotFoundException exception) {
+    actor.errorLocalized("commands.invalid-enum", exception.getParameter().getName(),
+        exception.getInput());
   }
 
   @Override
-  public void invalidNumber(@NotNull CommandActor actor,
-      @NotNull InvalidNumberException exception) {
+  public void invalidNumber(@NotNull final CommandActor actor,
+      @NotNull final InvalidNumberException exception) {
 //        actor.error("Expected a number, but found '" + exception.getInput() + "'.");
     actor.errorLocalized("commands.invalid-number", exception.getInput());
   }
 
   @Override
-  public void invalidUUID(@NotNull CommandActor actor, @NotNull InvalidUUIDException exception) {
+  public void invalidUUID(@NotNull final CommandActor actor,
+      @NotNull final InvalidUUIDException exception) {
     actor.errorLocalized("commands.invalid-uuid", exception.getInput());
   }
 
   @Override
-  public void invalidURL(@NotNull CommandActor actor, @NotNull InvalidURLException exception) {
+  public void invalidURL(@NotNull final CommandActor actor,
+      @NotNull final InvalidURLException exception) {
     actor.errorLocalized("commands.invalid-url", exception.getInput());
   }
 
   @Override
-  public void invalidBoolean(@NotNull CommandActor actor,
-      @NotNull InvalidBooleanException exception) {
+  public void invalidBoolean(@NotNull final CommandActor actor,
+      @NotNull final InvalidBooleanException exception) {
     actor.errorLocalized("commands.invalid-boolean", exception.getInput());
   }
 
   @Override
-  public void noPermission(@NotNull CommandActor actor, @NotNull NoPermissionException exception) {
+  public void noPermission(@NotNull final CommandActor actor,
+      @NotNull final NoPermissionException exception) {
     actor.errorLocalized("commands.no-permission");
   }
 
   @Override
-  public void argumentParse(@NotNull CommandActor actor,
-      @NotNull ArgumentParseException exception) {
+  public void argumentParse(@NotNull final CommandActor actor,
+      @NotNull final ArgumentParseException exception) {
     actor.errorLocalized("commands.invalid-quoted-string");
     actor.error(exception.getSourceString());
     actor.error(exception.getAnnotatedPosition());
   }
 
   @Override
-  public void commandInvocation(@NotNull CommandActor actor,
-      @NotNull CommandInvocationException exception) {
+  public void commandInvocation(@NotNull final CommandActor actor,
+      @NotNull final CommandInvocationException exception) {
     actor.errorLocalized("commands.error-occurred");
     exception.getCause().printStackTrace();
   }
 
   @Override
-  public void tooManyArguments(@NotNull CommandActor actor,
-      @NotNull TooManyArgumentsException exception) {
-    ExecutableCommand command = exception.getCommand();
-    String usage = (command.getPath().toRealString() + " " + command.getUsage()).trim();
+  public void tooManyArguments(@NotNull final CommandActor actor,
+      @NotNull final TooManyArgumentsException exception) {
+    final ExecutableCommand command = exception.getCommand();
+    final String usage = (command.getPath().toRealString() + " " + command.getUsage()).trim();
     actor.errorLocalized("commands.too-many-arguments", usage);
   }
 
   @Override
-  public void invalidCommand(@NotNull CommandActor actor,
-      @NotNull InvalidCommandException exception) {
+  public void invalidCommand(@NotNull final CommandActor actor,
+      @NotNull final InvalidCommandException exception) {
     actor.errorLocalized("commands.invalid-command", exception.getInput());
   }
 
   @Override
-  public void invalidSubcommand(@NotNull CommandActor actor,
-      @NotNull InvalidSubcommandException exception) {
+  public void invalidSubcommand(@NotNull final CommandActor actor,
+      @NotNull final InvalidSubcommandException exception) {
     actor.errorLocalized("commands.invalid-subcommand", exception.getInput());
   }
 
   @Override
-  public void noSubcommandSpecified(@NotNull CommandActor actor,
-      @NotNull NoSubcommandSpecifiedException exception) {
+  public void noSubcommandSpecified(@NotNull final CommandActor actor,
+      @NotNull final NoSubcommandSpecifiedException exception) {
     actor.errorLocalized("commands.no-subcommand-specified");
   }
 
   @Override
-  public void cooldown(@NotNull CommandActor actor, @NotNull CooldownException exception) {
+  public void cooldown(@NotNull final CommandActor actor,
+      @NotNull final CooldownException exception) {
     actor.errorLocalized("commands.on-cooldown", formatTimeFancy(exception.getTimeLeftMillis()));
   }
 
   @Override
-  public void invalidHelpPage(@NotNull CommandActor actor,
-      @NotNull InvalidHelpPageException exception) {
-    actor.errorLocalized("commands.invalid-help-page", exception.getPage(), exception.getPageCount());
+  public void invalidHelpPage(@NotNull final CommandActor actor,
+      @NotNull final InvalidHelpPageException exception) {
+    actor.errorLocalized("commands.invalid-help-page", exception.getPage(),
+        exception.getPageCount());
   }
 
   @Override
-  public void sendableException(@NotNull CommandActor actor, @NotNull SendableException exception) {
+  public void sendableException(@NotNull final CommandActor actor,
+      @NotNull final SendableException exception) {
     exception.sendTo(actor);
   }
 
   @Override
-  public void numberNotInRange(@NotNull CommandActor actor,
-      @NotNull NumberNotInRangeException exception) {
+  public void numberNotInRange(@NotNull final CommandActor actor,
+      @NotNull final NumberNotInRangeException exception) {
     actor.errorLocalized("commands.number-not-in-range",
         exception.getParameter().getName(),
         FORMAT.format(exception.getMinimum()),
@@ -153,16 +160,17 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
   }
 
   @Override
-  public void onUnhandledException(@NotNull CommandActor actor, @NotNull Throwable throwable) {
+  public void onUnhandledException(@NotNull final CommandActor actor,
+      @NotNull final Throwable throwable) {
     throwable.printStackTrace();
   }
 
-  public static String formatTimeFancy(long time) {
-    Duration d = Duration.ofMillis(time);
-    long hours = d.toHours();
-    long minutes = d.minusHours(hours).getSeconds() / 60;
-    long seconds = d.minusMinutes(minutes).minusHours(hours).getSeconds();
-    List<String> words = new ArrayList<>();
+  public static String formatTimeFancy(final long time) {
+    final Duration d = Duration.ofMillis(time);
+    final long hours = d.toHours();
+    final long minutes = d.minusHours(hours).getSeconds() / 60;
+    final long seconds = d.minusMinutes(minutes).minusHours(hours).getSeconds();
+    final List<String> words = new ArrayList<>();
     if (hours != 0) {
       words.add(hours + plural(hours, " hour"));
     }
@@ -175,8 +183,8 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
     return toFancyString(words);
   }
 
-  public static <T> String toFancyString(List<T> list) {
-    StringJoiner builder = new StringJoiner(", ");
+  public static <T> String toFancyString(final List<T> list) {
+    final StringJoiner builder = new StringJoiner(", ");
     if (list.isEmpty()) {
       return "";
     }
@@ -184,7 +192,7 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
       return list.get(0).toString();
     }
     for (int i = 0; i < list.size(); i++) {
-      T el = list.get(i);
+      final T el = list.get(i);
       if (i + 1 == list.size()) {
         return builder + " and " + el.toString();
       } else {
@@ -194,7 +202,7 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
     return builder.toString();
   }
 
-  public static String plural(Number count, String thing) {
+  public static String plural(final Number count, final String thing) {
     if (count.intValue() == 1) {
       return thing;
     }

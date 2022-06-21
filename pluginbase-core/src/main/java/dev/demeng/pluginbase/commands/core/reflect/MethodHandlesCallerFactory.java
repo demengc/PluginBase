@@ -44,19 +44,19 @@ final class MethodHandlesCallerFactory implements MethodCallerFactory {
   public static final MethodHandlesCallerFactory INSTANCE = new MethodHandlesCallerFactory();
 
   @Override
-  public @NotNull MethodCaller createFor(@NotNull Method method) throws Throwable {
+  public @NotNull MethodCaller createFor(@NotNull final Method method) throws Throwable {
     if (!method.isAccessible()) {
       method.setAccessible(true);
     }
-    MethodHandle handle = MethodHandles.lookup().unreflect(method);
-    String methodString = method.toString();
-    boolean isStatic = Modifier.isStatic(method.getModifiers());
+    final MethodHandle handle = MethodHandles.lookup().unreflect(method);
+    final String methodString = method.toString();
+    final boolean isStatic = Modifier.isStatic(method.getModifiers());
     return new MethodCaller() {
       @SneakyThrows
       @Override
-      public Object call(@Nullable Object instance, Object... arguments) {
+      public Object call(@Nullable final Object instance, final Object... arguments) {
         if (!isStatic) {
-          List<Object> args = new ArrayList<>();
+          final List<Object> args = new ArrayList<>();
           args.add(instance);
           addAll(args, arguments);
           return handle.invokeWithArguments(args);

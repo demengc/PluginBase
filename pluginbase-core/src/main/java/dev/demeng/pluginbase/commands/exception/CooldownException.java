@@ -46,7 +46,7 @@ public class CooldownException extends RuntimeException {
    *
    * @param timeLeft The time left in milliseconds
    */
-  public CooldownException(long timeLeft) {
+  public CooldownException(final long timeLeft) {
     this.timeLeft = timeLeft;
   }
 
@@ -56,7 +56,7 @@ public class CooldownException extends RuntimeException {
    * @param unit     The time unit in which the time left is given
    * @param timeLeft The time left in the given unit
    */
-  public CooldownException(TimeUnit unit, long timeLeft) {
+  public CooldownException(final TimeUnit unit, final long timeLeft) {
     this.timeLeft = unit.toMillis(timeLeft);
   }
 
@@ -75,7 +75,7 @@ public class CooldownException extends RuntimeException {
    * @param unit Unit to convert to
    * @return The time left
    */
-  public long getTimeLeft(@NotNull TimeUnit unit) {
+  public long getTimeLeft(@NotNull final TimeUnit unit) {
     Preconditions.notNull(unit, "unit");
     return unit.convert(timeLeft, TimeUnit.MILLISECONDS);
   }

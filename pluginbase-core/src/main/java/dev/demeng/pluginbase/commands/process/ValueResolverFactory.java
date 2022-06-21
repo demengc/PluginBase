@@ -91,7 +91,8 @@ public interface ValueResolverFactory {
    * @param <T>      The resolver value type
    * @return The resolver factory
    */
-  static <T> @NotNull ValueResolverFactory forType(Class<T> type, ValueResolver<T> resolver) {
+  static <T> @NotNull ValueResolverFactory forType(final Class<T> type,
+      final ValueResolver<T> resolver) {
     return (parameter) -> parameter.getType() == type ? resolver : null;
   }
 
@@ -104,8 +105,8 @@ public interface ValueResolverFactory {
    * @param <T>      The resolver value type
    * @return The resolver factory
    */
-  static <T> @NotNull ValueResolverFactory forHierarchyType(Class<T> type,
-      ValueResolver<T> resolver) {
+  static <T> @NotNull ValueResolverFactory forHierarchyType(final Class<T> type,
+      final ValueResolver<T> resolver) {
     return (parameter) -> parameter.getType() == type || parameter.getType().isAssignableFrom(type)
         ? resolver : null;
   }

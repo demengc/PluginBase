@@ -71,12 +71,12 @@ public interface SuggestionProvider {
    * @return The new provider
    */
   @Contract("null -> this; !null -> new")
-  default SuggestionProvider compose(@Nullable SuggestionProvider other) {
+  default SuggestionProvider compose(@Nullable final SuggestionProvider other) {
     if (other == null) {
       return this;
     }
     return (args, sender, command) -> {
-      Set<String> completions = new HashSet<>(other.getSuggestions(args, sender, command));
+      final Set<String> completions = new HashSet<>(other.getSuggestions(args, sender, command));
       completions.addAll(getSuggestions(args, sender, command));
       return completions;
     };
@@ -88,7 +88,7 @@ public interface SuggestionProvider {
    * @param suggestions Values to return.
    * @return The provider
    */
-  static SuggestionProvider of(@Nullable Collection<String> suggestions) {
+  static SuggestionProvider of(@Nullable final Collection<String> suggestions) {
     if (suggestions == null) {
       return EMPTY;
     }
@@ -101,11 +101,11 @@ public interface SuggestionProvider {
    * @param suggestions Values to return.
    * @return The provider
    */
-  static SuggestionProvider of(@Nullable String... suggestions) {
+  static SuggestionProvider of(@Nullable final String... suggestions) {
     if (suggestions == null) {
       return EMPTY;
     }
-    List<String> values = dev.demeng.pluginbase.commands.util.Collections.listOf(suggestions);
+    final List<String> values = dev.demeng.pluginbase.commands.util.Collections.listOf(suggestions);
     return (args, sender, command) -> values;
   }
 
@@ -116,7 +116,7 @@ public interface SuggestionProvider {
    * @param supplier The collection supplier
    * @return The provider
    */
-  static SuggestionProvider of(@NotNull Supplier<Collection<String>> supplier) {
+  static SuggestionProvider of(@NotNull final Supplier<Collection<String>> supplier) {
     return (args, sender, command) -> supplier.get();
   }
 
@@ -129,8 +129,8 @@ public interface SuggestionProvider {
    * @param <T>      The values type
    * @return The provider
    */
-  static <T> SuggestionProvider map(@NotNull Supplier<Collection<T>> values,
-      Function<T, String> function) {
+  static <T> SuggestionProvider map(@NotNull final Supplier<Collection<T>> values,
+      final Function<T, String> function) {
     return (args, sender, command) -> values.get().stream().map(function)
         .collect(Collectors.toList());
   }

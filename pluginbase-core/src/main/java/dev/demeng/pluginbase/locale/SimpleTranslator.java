@@ -53,7 +53,7 @@ final class SimpleTranslator implements Translator {
     reload();
   }
 
-  public void addResourceBundleFromFilesystem(@NotNull String resourceBundle) {
+  public void addResourceBundleFromFilesystem(@NotNull final String resourceBundle) {
     notNull(resourceBundle, "resource bundle");
 
     final File folder = BaseManager.getPlugin().getDataFolder().toPath().resolve(LOCALES_FOLDER)
@@ -67,7 +67,7 @@ final class SimpleTranslator implements Translator {
 
     try {
       urls = new URL[]{folder.toURI().toURL()};
-    } catch (MalformedURLException ex) {
+    } catch (final MalformedURLException ex) {
       throw new BaseException("Could not load resource bundle from filesystem: " + resourceBundle,
           ex);
     }
@@ -76,20 +76,21 @@ final class SimpleTranslator implements Translator {
   }
 
   @Override
-  public @NotNull String get(@NotNull String key) {
+  public @NotNull String get(@NotNull final String key) {
     return get(key, locale);
   }
 
   @Override
-  public @NotNull String get(@NotNull String key, @NotNull Locale locale) {
+  public @NotNull String get(@NotNull final String key, @NotNull final Locale locale) {
     notNull(key, "key");
     notNull(locale, "locale");
-    for (LocaleReader registeredBundle : registeredBundles.getOrDefault(locale, EMPTY_LIST)) {
+    for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(locale, EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return registeredBundle.get(key);
       }
     }
-    for (LocaleReader registeredBundle : registeredBundles.getOrDefault(this.locale, EMPTY_LIST)) {
+    for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(this.locale,
+        EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return registeredBundle.get(key);
       }
@@ -98,8 +99,8 @@ final class SimpleTranslator implements Translator {
   }
 
   @Override
-  public void add(@NotNull LocaleReader reader) {
-    LinkedList<LocaleReader> list = registeredBundles.computeIfAbsent(reader.getLocale(),
+  public void add(@NotNull final LocaleReader reader) {
+    final LinkedList<LocaleReader> list = registeredBundles.computeIfAbsent(reader.getLocale(),
         v -> new LinkedList<>());
     list.push(reader);
   }
@@ -110,39 +111,40 @@ final class SimpleTranslator implements Translator {
   }
 
   @Override
-  public void setLocale(@NotNull Locale locale) {
+  public void setLocale(@NotNull final Locale locale) {
     notNull(locale, "locale");
     this.locale = locale;
   }
 
   @Override
   public void addResourceBundle(
-      @NotNull ClassLoader loader,
-      @NotNull String resourceBundle,
-      @NotNull Locale... locales) {
+      @NotNull final ClassLoader loader,
+      @NotNull final String resourceBundle,
+      @NotNull final Locale... locales) {
     notNull(loader, "loader");
     notNull(resourceBundle, "resource bundle");
     notNull(locales, "locales");
-    for (Locale l : locales) {
+    for (final Locale l : locales) {
       try {
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
+        final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
             UTF8Control.INSTANCE);
         add(bundle);
-      } catch (MissingResourceException ignored) {
+      } catch (final MissingResourceException ignored) {
       }
     }
   }
 
   @Override
-  public void addResourceBundle(@NotNull ClassLoader loader, @NotNull String resourceBundle) {
+  public void addResourceBundle(@NotNull final ClassLoader loader,
+      @NotNull final String resourceBundle) {
     notNull(loader, "loader");
     notNull(resourceBundle, "resource bundle");
-    for (Locale l : Locales.getLocales()) {
+    for (final Locale l : Locales.getLocales()) {
       try {
-        ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
+        final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
             UTF8Control.INSTANCE);
         add(bundle);
-      } catch (MissingResourceException ignored) {
+      } catch (final MissingResourceException ignored) {
       }
     }
   }
@@ -160,16 +162,16 @@ final class SimpleTranslator implements Translator {
   }
 
   @Override
-  public void add(@NotNull ResourceBundle resourceBundle) {
+  public void add(@NotNull final ResourceBundle resourceBundle) {
     notNull(resourceBundle, "resource bundle");
     add(LocaleReader.wrap(resourceBundle));
   }
 
-  private static boolean classExists(String name) {
+  private static boolean classExists(final String name) {
     try {
       Class.forName(name);
       return true;
-    } catch (ClassNotFoundException e) {
+    } catch (final ClassNotFoundException e) {
       return false;
     }
   }

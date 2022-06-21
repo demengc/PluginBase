@@ -35,17 +35,17 @@ final class ResourceBundleLocaleReader implements LocaleReader {
 
   private final ResourceBundle resourceBundle;
 
-  public ResourceBundleLocaleReader(ResourceBundle resourceBundle) {
+  public ResourceBundleLocaleReader(final ResourceBundle resourceBundle) {
     this.resourceBundle = notNull(resourceBundle, "resource bundle");
   }
 
   @Override
-  public boolean containsKey(String key) {
+  public boolean containsKey(final String key) {
     return resourceBundle.containsKey(key);
   }
 
   @Override
-  public String get(String key) {
+  public String get(final String key) {
     return resourceBundle.getString(key);
   }
 

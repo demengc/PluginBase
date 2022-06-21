@@ -111,7 +111,7 @@ final class DefaultArgTypeResolvers {
     return MULTI_ENTITY;
   };
 
-  private static ArgumentType<?> entity(boolean single, boolean playerOnly) {
+  private static ArgumentType<?> entity(final boolean single, final boolean playerOnly) {
     return MinecraftArgumentType.ENTITY.create(single, playerOnly);
   }
 }

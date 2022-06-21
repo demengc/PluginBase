@@ -258,8 +258,8 @@ public enum MinecraftArgumentType {
   private @Nullable Constructor<? extends ArgumentType> argumentConstructor;
   private final Class<?>[] parameters;
 
-  MinecraftArgumentType(String name, Class<?>... parameters) {
-    Class<?> argumentClass = resolveArgumentClass(name);
+  MinecraftArgumentType(final String name, final Class<?>... parameters) {
+    final Class<?> argumentClass = resolveArgumentClass(name);
     this.parameters = parameters;
     if (argumentClass == null) {
       argumentType = null;
@@ -277,7 +277,7 @@ public enum MinecraftArgumentType {
       } else {
         argumentType = null;
       }
-    } catch (Throwable e) {
+    } catch (final Throwable e) {
       argumentType = null;
       argumentConstructor = null;
     }
@@ -333,7 +333,7 @@ public enum MinecraftArgumentType {
    * @throws IllegalArgumentException if not supported in this version
    */
   @SneakyThrows
-  public @NotNull <T> ArgumentType<T> create(Object... arguments) {
+  public @NotNull <T> ArgumentType<T> create(final Object... arguments) {
     if (argumentConstructor == null) {
       throw new IllegalArgumentException(
           "Argument type '" + name().toLowerCase() + "' is not available on this version.");
@@ -373,7 +373,7 @@ public enum MinecraftArgumentType {
    * @return The created argument type optional.
    */
   @SneakyThrows
-  public @NotNull <T> Optional<ArgumentType<T>> createIfPresent(Object... arguments) {
+  public @NotNull <T> Optional<ArgumentType<T>> createIfPresent(final Object... arguments) {
     if (argumentConstructor == null) {
       return Optional.empty();
     }
@@ -383,12 +383,12 @@ public enum MinecraftArgumentType {
     return Optional.of(argumentConstructor.newInstance(arguments));
   }
 
-  private static @Nullable Class<?> resolveArgumentClass(String name) {
+  private static @Nullable Class<?> resolveArgumentClass(final String name) {
     try {
       if (ReflectionUtil.minecraftVersion() > 16) {
         return ReflectionUtil.mcClass("commands.arguments." + name);
       } else {
-        String stripped;
+        final String stripped;
         if (name.lastIndexOf('.') != -1) {
           stripped = name.substring(name.lastIndexOf('.'));
         } else {
@@ -396,7 +396,7 @@ public enum MinecraftArgumentType {
         }
         return ReflectionUtil.nmsClass(stripped);
       }
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       return null;
     }
   }

@@ -39,7 +39,7 @@ final class Resolver implements ParameterResolver<Object> {
   private final ContextResolver<?> contextResolver;
   private final ValueResolver<?> valueResolver;
 
-  public Resolver(ContextResolver<?> contextResolver, ValueResolver<?> valueResolver) {
+  public Resolver(final ContextResolver<?> contextResolver, final ValueResolver<?> valueResolver) {
     this.contextResolver = contextResolver;
     this.valueResolver = valueResolver;
     mutates = valueResolver != null;
@@ -51,14 +51,14 @@ final class Resolver implements ParameterResolver<Object> {
   }
 
   @SneakyThrows
-  public Object resolve(@NotNull ParameterResolverContext context) {
+  public Object resolve(@NotNull final ParameterResolverContext context) {
     if (valueResolver != null) {
       return valueResolver.resolve((ValueResolverContext) context);
     }
     return contextResolver.resolve((ContextResolverContext) context);
   }
 
-  public static Resolver wrap(Object resolver) {
+  public static Resolver wrap(final Object resolver) {
     if (resolver instanceof ValueResolver) {
       return new Resolver(null, (ValueResolver<?>) resolver);
     }

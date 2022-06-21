@@ -39,15 +39,15 @@ enum EnumResolverFactory implements ValueResolverFactory {
   INSTANCE;
 
   @Override
-  public @Nullable ValueResolver<?> create(@NotNull CommandParameter parameter) {
-    Class<?> type = parameter.getType();
+  public @Nullable ValueResolver<?> create(@NotNull final CommandParameter parameter) {
+    final Class<?> type = parameter.getType();
     if (!type.isEnum()) {
       return null;
     }
-    Class<? extends Enum> enumType = type.asSubclass(Enum.class);
-    Map<String, Enum<?>> values = new HashMap<>();
-    boolean caseSensitive = parameter.hasAnnotation(CaseSensitive.class);
-    for (Enum<?> enumConstant : enumType.getEnumConstants()) {
+    final Class<? extends Enum> enumType = type.asSubclass(Enum.class);
+    final Map<String, Enum<?>> values = new HashMap<>();
+    final boolean caseSensitive = parameter.hasAnnotation(CaseSensitive.class);
+    for (final Enum<?> enumConstant : enumType.getEnumConstants()) {
       if (caseSensitive) {
         values.put(enumConstant.name(), enumConstant);
       } else {
@@ -55,8 +55,8 @@ enum EnumResolverFactory implements ValueResolverFactory {
       }
     }
     return (ValueResolver<Enum<?>>) context -> {
-      String value = context.pop();
-      Enum<?> v = values.get(caseSensitive ? value : value.toLowerCase());
+      final String value = context.pop();
+      final Enum<?> v = values.get(caseSensitive ? value : value.toLowerCase());
       if (v == null) {
         throw new EnumNotFoundException(parameter, value);
       }

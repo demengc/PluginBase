@@ -36,8 +36,8 @@ enum BukkitPermissionReader implements PermissionReader {
   INSTANCE;
 
   @Override
-  public @Nullable CommandPermission getPermission(@NotNull CommandAnnotationHolder command) {
-    dev.demeng.pluginbase.commands.bukkit.annotation.CommandPermission permissionAnn = command.getAnnotation(
+  public @Nullable CommandPermission getPermission(@NotNull final CommandAnnotationHolder command) {
+    final dev.demeng.pluginbase.commands.bukkit.annotation.CommandPermission permissionAnn = command.getAnnotation(
         dev.demeng.pluginbase.commands.bukkit.annotation.CommandPermission.class);
     if (permissionAnn == null) {
       return null;

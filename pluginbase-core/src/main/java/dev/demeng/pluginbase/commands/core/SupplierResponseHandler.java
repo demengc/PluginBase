@@ -37,16 +37,16 @@ final class SupplierResponseHandler implements ResponseHandler<Supplier<Object>>
 
   private final ResponseHandler<Object> delegate;
 
-  public SupplierResponseHandler(ResponseHandler<Object> delegate) {
+  public SupplierResponseHandler(final ResponseHandler<Object> delegate) {
     this.delegate = delegate;
   }
 
   @Override
-  public void handleResponse(Supplier<Object> response, @NotNull CommandActor actor,
-      @NotNull ExecutableCommand command) {
+  public void handleResponse(final Supplier<Object> response, @NotNull final CommandActor actor,
+      @NotNull final ExecutableCommand command) {
     try {
       delegate.handleResponse(response.get(), actor, command);
-    } catch (Throwable throwable) {
+    } catch (final Throwable throwable) {
       command.getCommandHandler().getExceptionHandler().handleException(throwable, actor);
     }
   }

@@ -70,7 +70,7 @@ public class UpdateChecker {
    *
    * @param sender The console or player to notify, defaults to console if null
    */
-  public void notifyResult(@Nullable CommandSender sender) {
+  public void notifyResult(@Nullable final CommandSender sender) {
 
     if (getResult() != Result.OUTDATED) {
       return;

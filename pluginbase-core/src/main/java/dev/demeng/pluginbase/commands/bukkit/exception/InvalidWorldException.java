@@ -33,7 +33,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InvalidWorldException extends InvalidValueException {
 
-  public InvalidWorldException(@NotNull CommandParameter parameter, @NotNull String input) {
+  public InvalidWorldException(@NotNull final CommandParameter parameter,
+      @NotNull final String input) {
     super(parameter, input);
   }
 }

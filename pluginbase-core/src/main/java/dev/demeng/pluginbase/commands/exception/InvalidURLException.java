@@ -33,7 +33,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InvalidURLException extends InvalidValueException {
 
-  public InvalidURLException(@NotNull CommandParameter parameter, @NotNull String input) {
+  public InvalidURLException(@NotNull final CommandParameter parameter,
+      @NotNull final String input) {
     super(parameter, input);
   }
 }

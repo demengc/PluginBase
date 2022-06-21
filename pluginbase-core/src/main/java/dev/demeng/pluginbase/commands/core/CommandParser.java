@@ -83,26 +83,30 @@ final class CommandParser {
   private CommandParser() {
   }
 
-  public static void parse(@NotNull BaseCommandHandler handler, @NotNull OrphanRegistry orphan) {
-    OrphanCommand instance = orphan.getHandler();
-    Class<?> type = instance.getClass();
+  public static void parse(@NotNull final BaseCommandHandler handler,
+      @NotNull final OrphanRegistry orphan) {
+    final OrphanCommand instance = orphan.getHandler();
+    final Class<?> type = instance.getClass();
 
     // we pass the type of the orphan handler, but pass the object as the orphan registry
     parse(handler, type, orphan);
   }
 
-  public static void parse(@NotNull BaseCommandHandler handler, @NotNull Object boundTarget) {
-    Class<?> type = boundTarget instanceof Class ? (Class<?>) boundTarget : boundTarget.getClass();
+  public static void parse(@NotNull final BaseCommandHandler handler,
+      @NotNull final Object boundTarget) {
+    final Class<?> type =
+        boundTarget instanceof Class ? (Class<?>) boundTarget : boundTarget.getClass();
     parse(handler, type, boundTarget);
   }
 
   @SneakyThrows
-  public static void parse(@NotNull BaseCommandHandler handler, @NotNull Class<?> container,
-      @NotNull Object boundTarget) {
-    Map<CommandPath, BaseCommandCategory> categories = handler.categories;
-    Map<CommandPath, CommandExecutable> subactions = new HashMap<>();
-    for (Method method : getAllMethods(container)) {
-      AnnotationReader reader = AnnotationReader.create(handler, method);
+  public static void parse(@NotNull final BaseCommandHandler handler,
+      @NotNull final Class<?> container,
+      @NotNull final Object boundTarget) {
+    final Map<CommandPath, BaseCommandCategory> categories = handler.categories;
+    final Map<CommandPath, CommandExecutable> subactions = new HashMap<>();
+    for (final Method method : getAllMethods(container)) {
+      final AnnotationReader reader = AnnotationReader.create(handler, method);
       Object invokeTarget = boundTarget;
       if (reader.shouldDismiss()) {
         continue;
@@ -113,16 +117,16 @@ final class CommandParser {
       }
       reader.distributeAnnotations();
       reader.replaceAnnotations(handler);
-      List<CommandPath> paths = getCommandPath(container, method, reader);
-      BoundMethodCaller caller = handler.getMethodCallerFactory().createFor(method)
+      final List<CommandPath> paths = getCommandPath(container, method, reader);
+      final BoundMethodCaller caller = handler.getMethodCallerFactory().createFor(method)
           .bindTo(invokeTarget);
-      int id = COMMAND_ID.getAndIncrement();
-      boolean isDefault = reader.contains(Default.class);
+      final int id = COMMAND_ID.getAndIncrement();
+      final boolean isDefault = reader.contains(Default.class);
       paths.forEach(path -> {
-        for (BaseCommandCategory category : getCategories(handler, isDefault, path)) {
+        for (final BaseCommandCategory category : getCategories(handler, isDefault, path)) {
           categories.putIfAbsent(category.path, category);
         }
-        CommandExecutable executable = new CommandExecutable();
+        final CommandExecutable executable = new CommandExecutable();
         if (!isDefault) {
           categories.remove(path); // prevent duplication.
         }
@@ -156,16 +160,18 @@ final class CommandParser {
     }
 
     subactions.forEach((path, subaction) -> {
-      BaseCommandCategory cat = categories.get(path);
+      final BaseCommandCategory cat = categories.get(path);
       if (cat != null) { // should never be null but let's just do that
         cat.defaultAction = subaction;
       }
     });
   }
 
-  private static void insertCommandPath(OrphanRegistry boundTarget, AnnotationReader reader) {
-    List<CommandPath> paths = boundTarget.getParentPaths();
-    String[] pathsArray = paths.stream().map(CommandPath::toRealString).toArray(String[]::new);
+  private static void insertCommandPath(final OrphanRegistry boundTarget,
+      final AnnotationReader reader) {
+    final List<CommandPath> paths = boundTarget.getParentPaths();
+    final String[] pathsArray = paths.stream().map(CommandPath::toRealString)
+        .toArray(String[]::new);
     reader.add(new Command() {
       @Override
       public Class<? extends Annotation> annotationType() {
@@ -179,8 +185,8 @@ final class CommandParser {
     });
   }
 
-  private static Set<Method> getAllMethods(Class<?> c) {
-    Set<Method> methods = new HashSet<>();
+  private static Set<Method> getAllMethods(final Class<?> c) {
+    final Set<Method> methods = new HashSet<>();
     Class<?> current = c;
     while (current != null && current != Object.class) {
       addAll(methods, current.getDeclaredMethods());
@@ -189,10 +195,10 @@ final class CommandParser {
     return methods;
   }
 
-  private static String generateUsage(@NotNull ExecutableCommand command) {
-    StringJoiner joiner = new StringJoiner(" ");
-    CommandHandler handler = command.getCommandHandler();
-    for (CommandParameter parameter : command.getValueParameters().values()) {
+  private static String generateUsage(@NotNull final ExecutableCommand command) {
+    final StringJoiner joiner = new StringJoiner(" ");
+    final CommandHandler handler = command.getCommandHandler();
+    for (final CommandParameter parameter : command.getValueParameters().values()) {
       if (!parameter.getResolver().mutatesArguments()) {
         continue;
       }
@@ -212,52 +218,55 @@ final class CommandParser {
   }
 
   @SuppressWarnings("rawtypes")
-  private static ResponseHandler<?> getResponseHandler(BaseCommandHandler handler,
-      Type genericType) {
-    Class<?> rawType = Primitives.getRawType(genericType);
+  private static ResponseHandler<?> getResponseHandler(final BaseCommandHandler handler,
+      final Type genericType) {
+    final Class<?> rawType = Primitives.getRawType(genericType);
     if (CompletionStage.class.isAssignableFrom(rawType)) {
-      ResponseHandler delegateHandler = getResponseHandler(handler, getInsideGeneric(genericType));
+      final ResponseHandler delegateHandler = getResponseHandler(handler,
+          getInsideGeneric(genericType));
       return new CompletionStageResponseHandler(handler, delegateHandler);
     }
     if (java.util.Optional.class.isAssignableFrom(rawType)) {
-      ResponseHandler delegateHandler = getResponseHandler(handler, getInsideGeneric(genericType));
+      final ResponseHandler delegateHandler = getResponseHandler(handler,
+          getInsideGeneric(genericType));
       return new OptionalResponseHandler(delegateHandler);
     }
     if (Supplier.class.isAssignableFrom(rawType)) {
-      ResponseHandler delegateHandler = getResponseHandler(handler, getInsideGeneric(genericType));
+      final ResponseHandler delegateHandler = getResponseHandler(handler,
+          getInsideGeneric(genericType));
       return new SupplierResponseHandler(delegateHandler);
     }
     return handler.responseHandlers.getFlexibleOrDefault(rawType, VOID_HANDLER);
   }
 
-  private static Type getInsideGeneric(Type genericType) {
+  private static Type getInsideGeneric(final Type genericType) {
     try {
       return ((ParameterizedType) genericType).getActualTypeArguments()[0];
-    } catch (ClassCastException e) {
+    } catch (final ClassCastException e) {
       return Object.class;
     }
   }
 
-  private static Set<BaseCommandCategory> getCategories(CommandHandler handler,
-      boolean respectDefault, @NotNull CommandPath path) {
+  private static Set<BaseCommandCategory> getCategories(final CommandHandler handler,
+      final boolean respectDefault, @NotNull final CommandPath path) {
     if (path.size() == 1 && !respectDefault) {
       return Collections.emptySet();
     }
-    String parent = path.getParent();
-    Set<BaseCommandCategory> categories = new HashSet<>();
+    final String parent = path.getParent();
+    final Set<BaseCommandCategory> categories = new HashSet<>();
 
-    BaseCommandCategory root = new BaseCommandCategory();
+    final BaseCommandCategory root = new BaseCommandCategory();
     root.handler = handler;
     root.path = CommandPath.get(parent);
     root.name = parent;
     categories.add(root);
 
-    List<String> pathList = new ArrayList<>();
+    final List<String> pathList = new ArrayList<>();
     pathList.add(parent);
 
-    for (String subcommand : path.getSubcommandPath()) {
+    for (final String subcommand : path.getSubcommandPath()) {
       pathList.add(subcommand);
-      BaseCommandCategory cat = new BaseCommandCategory();
+      final BaseCommandCategory cat = new BaseCommandCategory();
       cat.handler = handler;
       cat.path = CommandPath.get(pathList);
       cat.name = cat.path.getName();
@@ -267,20 +276,20 @@ final class CommandParser {
     return categories;
   }
 
-  private static List<CommandParameter> getParameters(@NotNull BaseCommandHandler handler,
-      @NotNull Method method,
-      @NotNull CommandExecutable parent) {
-    List<CommandParameter> parameters = new ArrayList<>();
-    Parameter[] methodParameters = method.getParameters();
+  private static List<CommandParameter> getParameters(@NotNull final BaseCommandHandler handler,
+      @NotNull final Method method,
+      @NotNull final CommandExecutable parent) {
+    final List<CommandParameter> parameters = new ArrayList<>();
+    final Parameter[] methodParameters = method.getParameters();
     int cIndex = 0;
     for (int i = 0; i < methodParameters.length; i++) {
-      Parameter parameter = methodParameters[i];
-      AnnotationReader paramAnns = AnnotationReader.create(handler, parameter);
-      List<ParameterValidator<Object>> validators = new ArrayList<>(
+      final Parameter parameter = methodParameters[i];
+      final AnnotationReader paramAnns = AnnotationReader.create(handler, parameter);
+      final List<ParameterValidator<Object>> validators = new ArrayList<>(
           handler.validators.getFlexibleOrDefault(parameter.getType(), Collections.emptyList())
       );
-      String[] defaultValue = paramAnns.get(Default.class, Default::value);
-      BaseCommandParameter param = new BaseCommandParameter(
+      final String[] defaultValue = paramAnns.get(Default.class, Default::value);
+      final BaseCommandParameter param = new BaseCommandParameter(
           getName(parameter),
           paramAnns.get(Description.class, Description::value),
           i,
@@ -295,8 +304,8 @@ final class CommandParser {
           Collections.unmodifiableList(validators)
       );
 
-      for (PermissionReader reader : handler.getPermissionReaders()) {
-        CommandPermission permission = reader.getPermission(param);
+      for (final PermissionReader reader : handler.getPermissionReaders()) {
+        final CommandPermission permission = reader.getPermission(param);
         if (permission != null) {
           param.permission = permission;
           break;
@@ -314,7 +323,7 @@ final class CommandParser {
               "Switch parameter " + parameter + " at " + method + " must be of boolean type!");
         }
       }
-      ParameterResolver<?> resolver;
+      final ParameterResolver<?> resolver;
       if (param.getType() == ArgumentStack.class) {
         resolver = new Resolver(context -> ArgumentStack.copy(context.input()), null);
       } else {
@@ -335,38 +344,38 @@ final class CommandParser {
     return Collections.unmodifiableList(parameters);
   }
 
-  private static List<CommandPath> getCommandPath(@NotNull Class<?> container,
-      @NotNull Method method,
-      @NotNull AnnotationReader reader) {
-    List<CommandPath> paths = new ArrayList<>();
+  private static List<CommandPath> getCommandPath(@NotNull final Class<?> container,
+      @NotNull final Method method,
+      @NotNull final AnnotationReader reader) {
+    final List<CommandPath> paths = new ArrayList<>();
 
-    List<String> commands = new ArrayList<>();
-    List<String> subcommands = new ArrayList<>();
-    Command commandAnnotation = reader.get(Command.class, "Method " + method.getName()
+    final List<String> commands = new ArrayList<>();
+    final List<String> subcommands = new ArrayList<>();
+    final Command commandAnnotation = reader.get(Command.class, "Method " + method.getName()
         + " does not have a parent command! You might have forgotten one of the following:\n" +
         "- @Command on the method or class\n" +
         "- implement OrphanCommand");
     Preconditions.notEmpty(commandAnnotation.value(), "@Command#value() cannot be an empty array!");
     addAll(commands, commandAnnotation.value());
 
-    List<String> parentSubcommandAliases = new ArrayList<>();
+    final List<String> parentSubcommandAliases = new ArrayList<>();
 
-    for (Class<?> topClass : getTopClasses(container)) {
-      Subcommand ps = topClass.getAnnotation(Subcommand.class);
+    for (final Class<?> topClass : getTopClasses(container)) {
+      final Subcommand ps = topClass.getAnnotation(Subcommand.class);
       if (ps != null) {
         addAll(parentSubcommandAliases, ps.value());
       }
     }
 
-    Subcommand subcommandAnnotation = reader.get(Subcommand.class);
+    final Subcommand subcommandAnnotation = reader.get(Subcommand.class);
     if (subcommandAnnotation != null) {
       addAll(subcommands, subcommandAnnotation.value());
     }
 
-    for (String command : commands) {
+    for (final String command : commands) {
       if (!subcommands.isEmpty()) {
-        for (String subcommand : subcommands) {
-          List<String> path = new ArrayList<>(splitBySpace(command));
+        for (final String subcommand : subcommands) {
+          final List<String> path = new ArrayList<>(splitBySpace(command));
           parentSubcommandAliases.forEach(
               subcommandAlias -> path.addAll(splitBySpace(subcommandAlias)));
           path.addAll(splitBySpace(subcommand));
@@ -380,8 +389,8 @@ final class CommandParser {
   }
 
   private static List<Class<?>> getTopClasses(Class<?> c) {
-    List<Class<?>> classes = listOf(c);
-    Class<?> enclosingClass = c.getEnclosingClass();
+    final List<Class<?>> classes = listOf(c);
+    final Class<?> enclosingClass = c.getEnclosingClass();
     while (c.getEnclosingClass() != null) {
       classes.add(c = enclosingClass);
     }
@@ -389,7 +398,8 @@ final class CommandParser {
     return classes;
   }
 
-  private static <K, V> void putOrError(Map<K, V> map, K key, V value, String err) {
+  private static <K, V> void putOrError(final Map<K, V> map, final K key, final V value,
+      final String err) {
     if (map.containsKey(key)) {
       throw new IllegalStateException(err);
     }

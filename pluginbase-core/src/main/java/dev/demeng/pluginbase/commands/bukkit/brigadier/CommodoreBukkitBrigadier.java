@@ -46,7 +46,7 @@ public final class CommodoreBukkitBrigadier implements BukkitBrigadier {
   private final Commodore commodore;
   private final ClassMap<ArgumentTypeResolver> argumentTypes = new ClassMap<>();
 
-  public CommodoreBukkitBrigadier(BukkitCommandHandler handler) {
+  public CommodoreBukkitBrigadier(final BukkitCommandHandler handler) {
     this.handler = handler;
     commodore = new Commodore(handler.getPlugin());
     if (CommodoreProvider.isSupported()) {
@@ -59,30 +59,31 @@ public final class CommodoreBukkitBrigadier implements BukkitBrigadier {
   }
 
   @Override
-  public void bind(@NotNull Class<?> type, @NotNull ArgumentTypeResolver resolver) {
+  public void bind(@NotNull final Class<?> type, @NotNull final ArgumentTypeResolver resolver) {
     Preconditions.notNull(type, "type");
     Preconditions.notNull(resolver, "resolver");
     argumentTypes.add(type, resolver);
   }
 
   @Override
-  public void bind(@NotNull Class<?> type, @NotNull ArgumentType<?> argumentType) {
+  public void bind(@NotNull final Class<?> type, @NotNull final ArgumentType<?> argumentType) {
     Preconditions.notNull(type, "type");
     Preconditions.notNull(argumentType, "argument type");
     argumentTypes.add(type, parameter -> argumentType);
   }
 
   @Override
-  public void bind(@NotNull Class<?> type, @NotNull MinecraftArgumentType argumentType) {
+  public void bind(@NotNull final Class<?> type,
+      @NotNull final MinecraftArgumentType argumentType) {
     Preconditions.notNull(type, "type");
     Preconditions.notNull(argumentType, "argument type");
     argumentType.getIfPresent().ifPresent(c -> argumentTypes.add(type, parameter -> c));
   }
 
-  public @NotNull ArgumentType<?> getArgumentType(@NotNull CommandParameter parameter) {
-    ArgumentTypeResolver resolver = argumentTypes.getFlexible(parameter.getType());
+  public @NotNull ArgumentType<?> getArgumentType(@NotNull final CommandParameter parameter) {
+    final ArgumentTypeResolver resolver = argumentTypes.getFlexible(parameter.getType());
     if (resolver != null) {
-      ArgumentType<?> type = resolver.getArgumentType(parameter);
+      final ArgumentType<?> type = resolver.getArgumentType(parameter);
       if (type != null) {
         return type;
       }
@@ -97,7 +98,7 @@ public final class CommodoreBukkitBrigadier implements BukkitBrigadier {
   }
 
   @Override
-  public @NotNull CommandActor wrapSource(@NotNull Object commandSource) {
+  public @NotNull CommandActor wrapSource(@NotNull final Object commandSource) {
     checkSupported();
     return new BukkitActor(commodore.getBukkitSender(commandSource), handler);
   }
@@ -110,8 +111,8 @@ public final class CommodoreBukkitBrigadier implements BukkitBrigadier {
     BrigadierTreeParser.parse(this, handler).forEach(n -> register(n.build()));
   }
 
-  private void register(@NotNull LiteralCommandNode<?> node) {
-    Command command = ((JavaPlugin) handler.getPlugin()).getCommand(node.getLiteral());
+  private void register(@NotNull final LiteralCommandNode<?> node) {
+    final Command command = ((JavaPlugin) handler.getPlugin()).getCommand(node.getLiteral());
     if (command == null) {
       commodore.register(node);
     } else {

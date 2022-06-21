@@ -53,8 +53,8 @@ public interface ResponseHandler<T> {
    * @param actor    The command actor
    * @param command  The command being executed
    */
-  static void reply(Object response, @NotNull CommandActor actor,
-      @NotNull ExecutableCommand command) {
+  static void reply(final Object response, @NotNull final CommandActor actor,
+      @NotNull final ExecutableCommand command) {
     actor.reply(String.valueOf(response));
   }
 }

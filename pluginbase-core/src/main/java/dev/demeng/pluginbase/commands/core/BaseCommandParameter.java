@@ -126,7 +126,7 @@ final class BaseCommandParameter implements CommandParameter {
   }
 
   @Override
-  public <A extends Annotation> A getAnnotation(@NotNull Class<A> annotation) {
+  public <A extends Annotation> A getAnnotation(@NotNull final Class<A> annotation) {
     return parameter.getAnnotation(annotation);
   }
 
@@ -165,7 +165,7 @@ final class BaseCommandParameter implements CommandParameter {
   }
 
   @Override
-  public boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation) {
+  public boolean hasAnnotation(@NotNull final Class<? extends Annotation> annotation) {
     return parameter.isAnnotationPresent(annotation);
   }
 
@@ -190,7 +190,7 @@ final class BaseCommandParameter implements CommandParameter {
   }
 
   @Override
-  public int compareTo(@NotNull CommandParameter o) {
+  public int compareTo(@NotNull final CommandParameter o) {
     if (isFlag() && o.isSwitch()) {
       return 1;
     }

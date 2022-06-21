@@ -60,7 +60,7 @@ final class BaseAutoCompleter implements AutoCompleter {
   final Map<String, SuggestionProvider> suggestionKeys = new HashMap<>();
   final LinkedList<SuggestionProviderFactory> factories = new LinkedList<>();
 
-  public BaseAutoCompleter(BaseCommandHandler handler) {
+  public BaseAutoCompleter(final BaseCommandHandler handler) {
     this.handler = handler;
     registerSuggestion("nothing", SuggestionProvider.EMPTY);
     registerSuggestion("empty", SuggestionProvider.EMPTY);
@@ -69,8 +69,8 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public AutoCompleter registerSuggestion(@NotNull String providerID,
-      @NotNull SuggestionProvider provider) {
+  public AutoCompleter registerSuggestion(@NotNull final String providerID,
+      @NotNull final SuggestionProvider provider) {
     notNull(provider, "provider ID");
     notNull(provider, "tab suggestion provider");
     suggestionKeys.put(providerID, provider);
@@ -78,8 +78,8 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public AutoCompleter registerSuggestion(@NotNull String providerID,
-      @NotNull Collection<String> completions) {
+  public AutoCompleter registerSuggestion(@NotNull final String providerID,
+      @NotNull final Collection<String> completions) {
     notNull(providerID, "provider ID");
     notNull(completions, "completions");
     suggestionKeys.put(providerID, (args, sender, command) -> completions);
@@ -87,19 +87,19 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public AutoCompleter registerSuggestion(@NotNull String providerID,
-      @NotNull String... completions) {
+  public AutoCompleter registerSuggestion(@NotNull final String providerID,
+      @NotNull final String... completions) {
     registerSuggestion(providerID, listOf(completions));
     return this;
   }
 
   @Override
-  public AutoCompleter registerParameterSuggestions(@NotNull Class<?> parameterType,
-      @NotNull SuggestionProvider provider) {
+  public AutoCompleter registerParameterSuggestions(@NotNull final Class<?> parameterType,
+      @NotNull final SuggestionProvider provider) {
     notNull(parameterType, "parameter type");
     notNull(provider, "provider");
     registerSuggestionFactory(SuggestionProviderFactory.forType(parameterType, provider));
-    Class<?> wrapped = Primitives.wrap(parameterType);
+    final Class<?> wrapped = Primitives.wrap(parameterType);
     if (wrapped != parameterType) {
       registerSuggestionFactory(SuggestionProviderFactory.forType(wrapped, provider));
     }
@@ -107,11 +107,11 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public AutoCompleter registerParameterSuggestions(@NotNull Class<?> parameterType,
-      @NotNull String providerID) {
+  public AutoCompleter registerParameterSuggestions(@NotNull final Class<?> parameterType,
+      @NotNull final String providerID) {
     notNull(parameterType, "parameter type");
     notNull(providerID, "provider ID");
-    SuggestionProvider provider = suggestionKeys.get(providerID);
+    final SuggestionProvider provider = suggestionKeys.get(providerID);
     if (provider == null) {
       throw new IllegalArgumentException(
           "No such tab provider: " + providerID + ". Available: " + suggestionKeys.keySet());
@@ -121,26 +121,26 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public AutoCompleter registerSuggestionFactory(@NotNull SuggestionProviderFactory factory) {
+  public AutoCompleter registerSuggestionFactory(@NotNull final SuggestionProviderFactory factory) {
     notNull(factory, "suggestion provider factory cannot be null!");
     factories.add(factory);
     return this;
   }
 
   @Override
-  public AutoCompleter registerSuggestionFactory(int priority,
-      @NotNull SuggestionProviderFactory factory) {
+  public AutoCompleter registerSuggestionFactory(final int priority,
+      @NotNull final SuggestionProviderFactory factory) {
     notNull(factory, "suggestion provider factory cannot be null!");
     factories.add(coerceIn(priority, 0, factories.size()), factory);
     return this;
   }
 
-  public SuggestionProvider getProvider(CommandParameter parameter) {
+  public SuggestionProvider getProvider(final CommandParameter parameter) {
     if (parameter.isSwitch()) {
       return SuggestionProvider.of(handler.switchPrefix + parameter.getSwitchName());
     }
-    for (SuggestionProviderFactory factory : factories) {
-      SuggestionProvider provider = factory.createSuggestionProvider(parameter);
+    for (final SuggestionProviderFactory factory : factories) {
+      final SuggestionProvider provider = factory.createSuggestionProvider(parameter);
       if (provider == null) {
         continue;
       }
@@ -153,20 +153,21 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public SuggestionProvider getSuggestionProvider(@NotNull String id) {
+  public SuggestionProvider getSuggestionProvider(@NotNull final String id) {
     return suggestionKeys.get(id);
   }
 
   @Override
-  public List<String> complete(@NotNull CommandActor actor, @NotNull ArgumentStack arguments) {
-    CommandPath path = CommandPath.get(arguments.subList(0, arguments.size() - 1));
-    int originalSize = arguments.size();
-    ExecutableCommand command = searchForCommand(path, actor);
+  public List<String> complete(@NotNull final CommandActor actor,
+      @NotNull final ArgumentStack arguments) {
+    final CommandPath path = CommandPath.get(arguments.subList(0, arguments.size() - 1));
+    final int originalSize = arguments.size();
+    final ExecutableCommand command = searchForCommand(path, actor);
     if (command != null) {
       command.getPath().forEach(c -> arguments.removeFirst());
       return getCompletions(actor, arguments, command);
     }
-    CommandCategory category = getLastCategory(path);
+    final CommandCategory category = getLastCategory(path);
     if (category == null) {
       return emptyList();
     }
@@ -176,17 +177,17 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @Override
-  public List<String> complete(@NotNull CommandActor actor, @NotNull String buffer) {
+  public List<String> complete(@NotNull final CommandActor actor, @NotNull final String buffer) {
     return complete(actor, handler.parseArgumentsForCompletion(buffer));
   }
 
-  private ExecutableCommand searchForCommand(CommandPath path, CommandActor actor) {
+  private ExecutableCommand searchForCommand(final CommandPath path, final CommandActor actor) {
     ExecutableCommand found = handler.getCommand(path);
     if (found != null && !found.isSecret() && found.getPermission().canExecute(actor)) {
       return found;
     }
-    MutableCommandPath mpath = MutableCommandPath.empty();
-    for (String p : path) {
+    final MutableCommandPath mpath = MutableCommandPath.empty();
+    for (final String p : path) {
       mpath.add(p);
       found = handler.getCommand(mpath);
       if (found != null && !found.isSecret() && found.getPermission().canExecute(actor)) {
@@ -196,12 +197,12 @@ final class BaseAutoCompleter implements AutoCompleter {
     return null;
   }
 
-  private CommandCategory getLastCategory(CommandPath path) {
-    MutableCommandPath mpath = MutableCommandPath.empty();
+  private CommandCategory getLastCategory(final CommandPath path) {
+    final MutableCommandPath mpath = MutableCommandPath.empty();
     CommandCategory category = null;
-    for (String p : path) {
+    for (final String p : path) {
       mpath.add(p);
-      CommandCategory c = handler.getCategory(mpath);
+      final CommandCategory c = handler.getCategory(mpath);
       if (c == null && category != null) {
         return category;
       }
@@ -213,9 +214,9 @@ final class BaseAutoCompleter implements AutoCompleter {
   }
 
   @SneakyThrows
-  private List<String> getCompletions(CommandActor actor,
-      ArgumentStack args,
-      @NotNull ExecutableCommand command) {
+  private List<String> getCompletions(final CommandActor actor,
+      final ArgumentStack args,
+      @NotNull final ExecutableCommand command) {
     try {
       if (args.isEmpty()) {
         return emptyList();
@@ -223,9 +224,10 @@ final class BaseAutoCompleter implements AutoCompleter {
       if (command.getValueParameters().isEmpty()) {
         return emptyList();
       }
-      List<CommandParameter> parameters = new ArrayList<>(command.getValueParameters().values());
+      final List<CommandParameter> parameters = new ArrayList<>(
+          command.getValueParameters().values());
       Collections.sort(parameters);
-      for (CommandParameter parameter : parameters) {
+      for (final CommandParameter parameter : parameters) {
         try {
           if (parameter.isFlag()) {
             continue;
@@ -234,27 +236,27 @@ final class BaseAutoCompleter implements AutoCompleter {
             if (!parameter.getPermission().canExecute(actor)) {
               return emptyList();
             }
-            SuggestionProvider provider = parameter.getSuggestionProvider();
+            final SuggestionProvider provider = parameter.getSuggestionProvider();
             notNull(provider, "provider must not be null!");
             return getParamCompletions(provider.getSuggestions(args, actor, command), args);
           }
-        } catch (Throwable ignored) {
+        } catch (final Throwable ignored) {
         }
       }
       parameters.removeIf(c -> !c.isFlag());
       if (parameters.isEmpty()) {
         return emptyList();
       }
-      Optional<CommandParameter> currentFlag = parameters.stream().filter(c -> {
-        int index = args.indexOf(handler.getFlagPrefix() + c.getFlagName());
+      final Optional<CommandParameter> currentFlag = parameters.stream().filter(c -> {
+        final int index = args.indexOf(handler.getFlagPrefix() + c.getFlagName());
         return index == args.size() - 2;
       }).findFirst();
       if (currentFlag.isPresent()) {
-        SuggestionProvider provider = currentFlag.get().getSuggestionProvider();
+        final SuggestionProvider provider = currentFlag.get().getSuggestionProvider();
         return getParamCompletions(provider.getSuggestions(args, actor, command), args);
       }
-      for (CommandParameter flag : parameters) {
-        int index = args.indexOf(handler.getFlagPrefix() + flag.getFlagName());
+      for (final CommandParameter flag : parameters) {
+        final int index = args.indexOf(handler.getFlagPrefix() + flag.getFlagName());
         if (index == -1) {
           return listOf(handler.getFlagPrefix() + flag.getFlagName());
         } else if (index == args.size() - 2) {
@@ -263,13 +265,14 @@ final class BaseAutoCompleter implements AutoCompleter {
         }
       }
       return emptyList();
-    } catch (IndexOutOfBoundsException e) {
+    } catch (final IndexOutOfBoundsException e) {
       return emptyList();
     }
   }
 
   @NotNull
-  private List<String> getParamCompletions(Collection<String> provider, ArgumentStack args) {
+  private List<String> getParamCompletions(final Collection<String> provider,
+      final ArgumentStack args) {
     return provider
         .stream()
         .filter(c -> c.toLowerCase().startsWith(args.getLast().toLowerCase()))
@@ -278,12 +281,13 @@ final class BaseAutoCompleter implements AutoCompleter {
         .collect(Collectors.toList());
   }
 
-  private List<String> getCompletions(CommandActor actor, @Unmodifiable ArgumentStack args,
-      CommandCategory category, int originalSize) {
+  private List<String> getCompletions(final CommandActor actor,
+      @Unmodifiable final ArgumentStack args,
+      final CommandCategory category, final int originalSize) {
     if (args.isEmpty()) {
       return emptyList();
     }
-    Set<String> suggestions = new HashSet<>();
+    final Set<String> suggestions = new HashSet<>();
     if (category.getDefaultAction() != null) {
       suggestions.addAll(getCompletions(actor, args, category.getDefaultAction()));
     }

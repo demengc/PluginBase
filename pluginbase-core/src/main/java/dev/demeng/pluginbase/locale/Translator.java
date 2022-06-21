@@ -146,7 +146,8 @@ public interface Translator {
    * @param resourceBundle Resource bundle to register
    * @see #addResourceBundle(ClassLoader, String, Locale...)
    */
-  default void addResourceBundle(@NotNull String resourceBundle, @NotNull Locale... locales) {
+  default void addResourceBundle(@NotNull final String resourceBundle,
+      @NotNull final Locale... locales) {
     addResourceBundle(getClass().getClassLoader(), resourceBundle, locales);
   }
 
@@ -156,7 +157,7 @@ public interface Translator {
    * @param resourceBundle Resource bundle to register
    * @see #addResourceBundle(ClassLoader, String)
    */
-  default void addResourceBundle(@NotNull String resourceBundle) {
+  default void addResourceBundle(@NotNull final String resourceBundle) {
     addResourceBundle(getClass().getClassLoader(), resourceBundle);
   }
 }

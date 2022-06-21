@@ -38,24 +38,24 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 public final class LinkedArgumentStack extends LinkedList<String> implements ArgumentStack {
 
-  public LinkedArgumentStack(@NotNull Collection<? extends String> c) {
+  public LinkedArgumentStack(@NotNull final Collection<? extends String> c) {
     super(c);
   }
 
-  public LinkedArgumentStack(@NotNull String... c) {
+  public LinkedArgumentStack(@NotNull final String... c) {
     Collections.addAll(this, c);
   }
 
   private final List<String> unmodifiableView = Collections.unmodifiableList(this);
 
   @Override
-  public @NotNull String join(String delimiter) {
+  public @NotNull String join(final String delimiter) {
     return String.join(delimiter, this);
   }
 
   @Override
-  public @NotNull String join(@NotNull String delimiter, int startIndex) {
-    StringJoiner joiner = new StringJoiner(delimiter);
+  public @NotNull String join(@NotNull final String delimiter, final int startIndex) {
+    final StringJoiner joiner = new StringJoiner(delimiter);
     for (int i = startIndex; i < size(); i++) {
       joiner.add(get(i));
     }
@@ -63,9 +63,9 @@ public final class LinkedArgumentStack extends LinkedList<String> implements Arg
   }
 
   @Override
-  public @NotNull String popForParameter(@NotNull CommandParameter parameter) {
+  public @NotNull String popForParameter(@NotNull final CommandParameter parameter) {
     if (parameter.consumesAllString()) {
-      String value = join(" ");
+      final String value = join(" ");
       clear();
       return value;
     }

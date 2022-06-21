@@ -39,22 +39,22 @@ final class BukkitCommandExecutor implements TabExecutor {
 
   private final BukkitHandler handler;
 
-  public BukkitCommandExecutor(BukkitHandler handler) {
+  public BukkitCommandExecutor(final BukkitHandler handler) {
     this.handler = handler;
   }
 
   @Override
-  public boolean onCommand(@NotNull CommandSender sender,
-      @NotNull Command command,
-      @NotNull String label,
-      @NotNull String[] args) {
-    BukkitCommandActor actor = new BukkitActor(sender, handler);
+  public boolean onCommand(@NotNull final CommandSender sender,
+      @NotNull final Command command,
+      @NotNull final String label,
+      @NotNull final String[] args) {
+    final BukkitCommandActor actor = new BukkitActor(sender, handler);
     try {
-      ArgumentStack arguments = handler.parseArguments(args);
+      final ArgumentStack arguments = handler.parseArguments(args);
       arguments.addFirst(command.getName());
 
       handler.dispatch(actor, arguments);
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       handler.getExceptionHandler().handleException(t, actor);
     }
     return true;
@@ -62,17 +62,17 @@ final class BukkitCommandExecutor implements TabExecutor {
 
   @Nullable
   @Override
-  public List<String> onTabComplete(@NotNull CommandSender sender,
-      @NotNull Command command,
-      @NotNull String alias,
-      @NotNull String[] args) {
+  public List<String> onTabComplete(@NotNull final CommandSender sender,
+      @NotNull final Command command,
+      @NotNull final String alias,
+      @NotNull final String[] args) {
     try {
-      BukkitCommandActor actor = new BukkitActor(sender, handler);
-      ArgumentStack arguments = handler.parseArgumentsForCompletion(args);
+      final BukkitCommandActor actor = new BukkitActor(sender, handler);
+      final ArgumentStack arguments = handler.parseArgumentsForCompletion(args);
 
       arguments.addFirst(command.getName());
       return handler.getAutoCompleter().complete(actor, arguments);
-    } catch (ArgumentParseException e) {
+    } catch (final ArgumentParseException e) {
       return Collections.emptyList();
     }
   }

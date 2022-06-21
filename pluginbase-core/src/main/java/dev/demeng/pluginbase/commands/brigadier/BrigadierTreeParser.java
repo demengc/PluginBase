@@ -74,18 +74,18 @@ public final class BrigadierTreeParser {
    * @return All root nodes
    */
   public static <T> List<LiteralArgumentBuilder<T>> parse(
-      @NotNull LampBrigadier brigadier,
-      @NotNull CommandHandler handler
+      @NotNull final LampBrigadier brigadier,
+      @NotNull final CommandHandler handler
   ) {
-    List<LiteralArgumentBuilder<T>> nodes = new ArrayList<>();
-    List<CommandCategory> roots = handler.getCategories().values().stream()
+    final List<LiteralArgumentBuilder<T>> nodes = new ArrayList<>();
+    final List<CommandCategory> roots = handler.getCategories().values().stream()
         .filter(c -> c.getPath().isRoot()).collect(Collectors.toList());
-    List<ExecutableCommand> rootCommands = handler.getCommands().values().stream()
+    final List<ExecutableCommand> rootCommands = handler.getCommands().values().stream()
         .filter(c -> c.getPath().isRoot()).collect(Collectors.toList());
-    for (CommandCategory root : roots) {
+    for (final CommandCategory root : roots) {
       nodes.add(parse(brigadier, literal(root.getName()), root));
     }
-    for (ExecutableCommand root : rootCommands) {
+    for (final ExecutableCommand root : rootCommands) {
       nodes.add(parse(brigadier, literal(root.getName()), root));
     }
     return nodes;
@@ -99,14 +99,14 @@ public final class BrigadierTreeParser {
    * @param category  Category to parse
    * @return The parsed command node
    */
-  public static <T> LiteralArgumentBuilder<T> parse(LampBrigadier brigadier,
-      LiteralArgumentBuilder<?> into, CommandCategory category) {
-    for (CommandCategory child : category.getCategories().values()) {
-      LiteralArgumentBuilder childLiteral = parse(brigadier, literal(child.getName()), child);
+  public static <T> LiteralArgumentBuilder<T> parse(final LampBrigadier brigadier,
+      final LiteralArgumentBuilder<?> into, final CommandCategory category) {
+    for (final CommandCategory child : category.getCategories().values()) {
+      final LiteralArgumentBuilder childLiteral = parse(brigadier, literal(child.getName()), child);
       into.then(childLiteral);
     }
-    for (ExecutableCommand child : category.getCommands().values()) {
-      LiteralArgumentBuilder childLiteral = parse(brigadier, literal(child.getName()), child);
+    for (final ExecutableCommand child : category.getCommands().values()) {
+      final LiteralArgumentBuilder childLiteral = parse(brigadier, literal(child.getName()), child);
       into.then(childLiteral);
     }
     if (category.getDefaultAction() != null) {
@@ -124,20 +124,20 @@ public final class BrigadierTreeParser {
    * @param command   Command to parse
    * @return The parsed command node
    */
-  public static <T> LiteralArgumentBuilder<T> parse(LampBrigadier brigadier,
-      LiteralArgumentBuilder<?> into,
-      ExecutableCommand command) {
+  public static <T> LiteralArgumentBuilder<T> parse(final LampBrigadier brigadier,
+      final LiteralArgumentBuilder<?> into,
+      final ExecutableCommand command) {
     CommandNode lastParameter = null;
-    List<CommandParameter> sortedParameters = new ArrayList<>(
+    final List<CommandParameter> sortedParameters = new ArrayList<>(
         command.getValueParameters().values());
     Collections.sort(sortedParameters);
     for (int i = 0; i < sortedParameters.size(); i++) {
-      boolean isLast = i == sortedParameters.size() - 1;
-      CommandParameter parameter = sortedParameters.get(i);
+      final boolean isLast = i == sortedParameters.size() - 1;
+      final CommandParameter parameter = sortedParameters.get(i);
       if (parameter.isFlag()) {
         break;
       }
-      ArgumentBuilder<?, ?> builder = getBuilder(brigadier, command, parameter);
+      final ArgumentBuilder<?, ?> builder = getBuilder(brigadier, command, parameter);
       if (!isLast && sortedParameters.get(i + 1).isOptional()) {
         builder.executes(NO_ACTION);
       }
@@ -152,7 +152,7 @@ public final class BrigadierTreeParser {
     }
     sortedParameters.removeIf(parameter -> !parameter.isFlag());
     CommandNode next = null;
-    for (CommandParameter parameter : sortedParameters) {
+    for (final CommandParameter parameter : sortedParameters) {
       if (next == null) {
         if (lastParameter == null) {
           into.then(next = literal(
@@ -171,31 +171,31 @@ public final class BrigadierTreeParser {
     return (LiteralArgumentBuilder<T>) into;
   }
 
-  private static ArgumentBuilder getBuilder(LampBrigadier brigadier,
-      ExecutableCommand command,
-      CommandParameter parameter) {
+  private static ArgumentBuilder getBuilder(final LampBrigadier brigadier,
+      final ExecutableCommand command,
+      final CommandParameter parameter) {
     if (parameter.isSwitch()) {
       return literal(parameter.getCommandHandler().getSwitchPrefix() + parameter.getSwitchName());
     }
-    ArgumentType<?> argumentType = getArgumentType(brigadier, parameter);
+    final ArgumentType<?> argumentType = getArgumentType(brigadier, parameter);
 
     return argument(parameter.getName(), argumentType)
         .requires(a -> parameter.hasPermission(brigadier.wrapSource(a)))
         .suggests(createSuggestionProvider(brigadier, command, parameter));
   }
 
-  private static ArgumentType<?> getArgumentType(LampBrigadier brigadier,
-      @NotNull CommandParameter parameter) {
+  private static ArgumentType<?> getArgumentType(final LampBrigadier brigadier,
+      @NotNull final CommandParameter parameter) {
     ArgumentType<?> registeredType = brigadier.getArgumentType(parameter);
     if (registeredType != null) {
       return registeredType;
     }
-    Class<?> type = Primitives.wrap(parameter.getType());
+    final Class<?> type = Primitives.wrap(parameter.getType());
     registeredType = brigadier.getAdditionalArgumentTypes().getFlexible(type);
     if (registeredType != null) {
       return registeredType;
     }
-    @Nullable Range range = parameter.getAnnotation(Range.class);
+    @Nullable final Range range = parameter.getAnnotation(Range.class);
     if (type == String.class) {
       if (parameter.consumesAllString()) {
         return greedyString();
@@ -228,9 +228,9 @@ public final class BrigadierTreeParser {
   }
 
   private static SuggestionProvider<Object> createSuggestionProvider(
-      LampBrigadier brigadier,
-      ExecutableCommand command,
-      CommandParameter parameter
+      final LampBrigadier brigadier,
+      final ExecutableCommand command,
+      final CommandParameter parameter
   ) {
     if (parameter.getSuggestionProvider()
         == dev.demeng.pluginbase.commands.autocomplete.SuggestionProvider.EMPTY) {
@@ -238,13 +238,13 @@ public final class BrigadierTreeParser {
     }
     return (context, builder) -> {
       try {
-        CommandActor actor = brigadier.wrapSource(context.getSource());
-        String tooltipMessage =
+        final CommandActor actor = brigadier.wrapSource(context.getSource());
+        final String tooltipMessage =
             parameter.getDescription() == null ? parameter.getName() : parameter.getDescription();
-        Message tooltip = new LiteralMessage(tooltipMessage);
-        String input = context.getInput();
+        final Message tooltip = new LiteralMessage(tooltipMessage);
+        final String input = context.getInput();
         try {
-          ArgumentStack args = parameter.getCommandHandler().parseArgumentsForCompletion(
+          final ArgumentStack args = parameter.getCommandHandler().parseArgumentsForCompletion(
               input.startsWith("/") ? input.substring(1) : input
           );
           parameter.getSuggestionProvider().getSuggestions(args, actor, command)
@@ -253,9 +253,9 @@ public final class BrigadierTreeParser {
               .sorted(String.CASE_INSENSITIVE_ORDER)
               .distinct()
               .forEach(c -> builder.suggest(c, tooltip));
-        } catch (ArgumentParseException ignore) {
+        } catch (final ArgumentParseException ignore) {
         }
-      } catch (Throwable e) {
+      } catch (final Throwable e) {
         e.printStackTrace();
       }
       return builder.buildFuture();

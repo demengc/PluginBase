@@ -39,14 +39,14 @@ public final class ComponentResponseHandler implements ResponseHandler<Component
 
   private final BukkitAudiences audiences;
 
-  public ComponentResponseHandler(BukkitAudiences audiences) {
+  public ComponentResponseHandler(final BukkitAudiences audiences) {
     this.audiences = audiences;
   }
 
   @Override
-  public void handleResponse(ComponentLike response, @NotNull CommandActor actor,
-      @NotNull ExecutableCommand command) {
-    BukkitCommandActor bActor = (BukkitCommandActor) actor;
+  public void handleResponse(final ComponentLike response, @NotNull final CommandActor actor,
+      @NotNull final ExecutableCommand command) {
+    final BukkitCommandActor bActor = (BukkitCommandActor) actor;
     if (response != null) {
       audiences.sender(bActor.getSender()).sendMessage(response);
     }

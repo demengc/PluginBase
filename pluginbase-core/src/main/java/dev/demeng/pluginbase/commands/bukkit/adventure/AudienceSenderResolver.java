@@ -39,19 +39,20 @@ public final class AudienceSenderResolver implements SenderResolver {
 
   private final BukkitAudiences audiences;
 
-  public AudienceSenderResolver(BukkitAudiences audiences) {
+  public AudienceSenderResolver(final BukkitAudiences audiences) {
     this.audiences = audiences;
   }
 
   @Override
-  public boolean isCustomType(Class<?> type) {
+  public boolean isCustomType(final Class<?> type) {
     return Audience.class.isAssignableFrom(type);
   }
 
   @Override
-  public @NotNull Object getSender(@NotNull Class<?> customSenderType, @NotNull CommandActor actor,
-      @NotNull ExecutableCommand command) {
-    BukkitCommandActor bActor = (BukkitCommandActor) actor;
+  public @NotNull Object getSender(@NotNull final Class<?> customSenderType,
+      @NotNull final CommandActor actor,
+      @NotNull final ExecutableCommand command) {
+    final BukkitCommandActor bActor = (BukkitCommandActor) actor;
     return audiences.sender(bActor.getSender());
   }
 }

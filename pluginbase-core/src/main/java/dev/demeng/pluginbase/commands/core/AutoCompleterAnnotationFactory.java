@@ -40,42 +40,42 @@ class AutoCompleterAnnotationFactory implements SuggestionProviderFactory {
 
   private final Map<String, SuggestionProvider> tabProviders;
 
-  public AutoCompleterAnnotationFactory(Map<String, SuggestionProvider> tabProviders) {
+  public AutoCompleterAnnotationFactory(final Map<String, SuggestionProvider> tabProviders) {
     this.tabProviders = tabProviders;
   }
 
   @Override
   public @Nullable SuggestionProvider createSuggestionProvider(
-      @NotNull CommandParameter parameter) {
-    AutoComplete ann = parameter.getDeclaringCommand().getAnnotation(AutoComplete.class);
+      @NotNull final CommandParameter parameter) {
+    final AutoComplete ann = parameter.getDeclaringCommand().getAnnotation(AutoComplete.class);
     if (ann != null) {
       return parseTabAnnotation(ann, parameter.getCommandIndex());
     }
     return null;
   }
 
-  private SuggestionProvider parseTabAnnotation(@NotNull AutoComplete annotation,
-      int commandIndex) {
+  private SuggestionProvider parseTabAnnotation(@NotNull final AutoComplete annotation,
+      final int commandIndex) {
     if (annotation.value().isEmpty()) {
       return SuggestionProvider.EMPTY;
     }
-    String[] values = Strings.SPACE.split(annotation.value());
+    final String[] values = Strings.SPACE.split(annotation.value());
     try {
-      String providerV = values[commandIndex];
+      final String providerV = values[commandIndex];
       if (providerV.equals("*")) {
         return null;
       } else if (providerV.startsWith("@")) {
-        SuggestionProvider provider = tabProviders.get(providerV.substring(1));
+        final SuggestionProvider provider = tabProviders.get(providerV.substring(1));
         if (provider == null) {
           throw new IllegalStateException(
               "No such tab suggestion provider: " + providerV.substring(1));
         }
         return provider;
       } else {
-        List<String> suggestions = Arrays.asList(VERTICAL_BAR.split(providerV));
+        final List<String> suggestions = Arrays.asList(VERTICAL_BAR.split(providerV));
         return SuggestionProvider.of(suggestions);
       }
-    } catch (IndexOutOfBoundsException e) {
+    } catch (final IndexOutOfBoundsException e) {
       return SuggestionProvider.EMPTY;
     }
   }

@@ -62,7 +62,7 @@ public interface LampBrigadier {
    * @return The argument type, or {@code null} if not applicable.
    */
   @Nullable
-  default ArgumentType<?> getArgumentType(@NotNull CommandParameter parameter) {
+  default ArgumentType<?> getArgumentType(@NotNull final CommandParameter parameter) {
     return null;
   }
 
@@ -78,7 +78,7 @@ public interface LampBrigadier {
    *
    * @param node Node to register
    */
-  default void register(@NotNull LiteralArgumentBuilder<?> node) {
+  default void register(@NotNull final LiteralArgumentBuilder<?> node) {
     register(node.build());
   }
 }

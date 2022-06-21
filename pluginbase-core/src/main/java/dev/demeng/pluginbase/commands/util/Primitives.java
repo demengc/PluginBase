@@ -54,7 +54,7 @@ public final class Primitives {
    * @param o Object to get for
    * @return The object type
    */
-  public static Class<?> getType(@NotNull Object o) {
+  public static Class<?> getType(@NotNull final Object o) {
     return o instanceof Class ? (Class<?>) o : o.getClass();
   }
 
@@ -68,18 +68,18 @@ public final class Primitives {
    *     wrap(String.class) == String.class
    * </pre>
    */
-  public static <T> Class<T> wrap(Class<T> type) {
+  public static <T> Class<T> wrap(final Class<T> type) {
     notNull(type, "type");
-    Class<T> wrapped = (Class<T>) PRIMITIVE_TO_WRAPPER.get(type);
+    final Class<T> wrapped = (Class<T>) PRIMITIVE_TO_WRAPPER.get(type);
     return (wrapped == null) ? type : wrapped;
   }
 
-  public static Type wrapType(Type type) {
+  public static Type wrapType(final Type type) {
     notNull(type, "type");
     if (!(type instanceof Class)) {
       return type;
     }
-    Class<?> wrapped = PRIMITIVE_TO_WRAPPER.get(type);
+    final Class<?> wrapped = PRIMITIVE_TO_WRAPPER.get(type);
     return (wrapped == null) ? type : wrapped;
   }
 
@@ -93,9 +93,9 @@ public final class Primitives {
    *     unwrap(String.class) == String.class
    * </pre>
    */
-  public static <T> Class<T> unwrap(Class<T> type) {
+  public static <T> Class<T> unwrap(final Class<T> type) {
     notNull(type, "type");
-    Class<T> unwrapped = (Class<T>) WRAPPER_TO_PRIMITIVE.get(type);
+    final Class<T> unwrapped = (Class<T>) WRAPPER_TO_PRIMITIVE.get(type);
     return (unwrapped == null) ? type : unwrapped;
   }
 
@@ -106,30 +106,30 @@ public final class Primitives {
    * @param type Type to check
    * @see Class#isPrimitive
    */
-  public static boolean isWrapperType(Class<?> type) {
+  public static boolean isWrapperType(final Class<?> type) {
     notNull(type, "type");
     return WRAPPER_TO_PRIMITIVE.containsKey(type);
   }
 
-  public static Class<?> getRawType(Type type) {
+  public static Class<?> getRawType(final Type type) {
     if (type instanceof Class<?>) {
       // type is a normal class.
       return (Class<?>) type;
 
     } else if (type instanceof ParameterizedType) {
-      ParameterizedType parameterizedType = (ParameterizedType) type;
+      final ParameterizedType parameterizedType = (ParameterizedType) type;
 
       // I'm not exactly sure why getRawType() returns Type instead of Class.
       // Neal isn't either but suspects some pathological case related
       // to nested classes exists.
-      Type rawType = parameterizedType.getRawType();
+      final Type rawType = parameterizedType.getRawType();
       if (!(rawType instanceof Class)) {
         throw new IllegalStateException("Expected a Class, found a " + rawType);
       }
       return (Class<?>) rawType;
 
     } else if (type instanceof GenericArrayType) {
-      Type componentType = ((GenericArrayType) type).getGenericComponentType();
+      final Type componentType = ((GenericArrayType) type).getGenericComponentType();
       return Array.newInstance(getRawType(componentType), 0).getClass();
 
     } else if (type instanceof TypeVariable) {
@@ -141,23 +141,23 @@ public final class Primitives {
       return getRawType(((WildcardType) type).getUpperBounds()[0]);
 
     } else {
-      String className = type == null ? "null" : type.getClass().getName();
+      final String className = type == null ? "null" : type.getClass().getName();
       throw new IllegalArgumentException("Expected a Class, ParameterizedType, or "
           + "GenericArrayType, but <" + type + "> is of type " + className);
     }
   }
 
-  public static Type getInsideGeneric(Type genericType, Type fallback) {
+  public static Type getInsideGeneric(final Type genericType, final Type fallback) {
     try {
       return ((ParameterizedType) genericType).getActualTypeArguments()[0];
-    } catch (ClassCastException e) {
+    } catch (final ClassCastException e) {
       return fallback;
     }
   }
 
   static {
-    Map<Class<?>, Class<?>> primToWrap = new LinkedHashMap<>(16);
-    Map<Class<?>, Class<?>> wrapToPrim = new LinkedHashMap<>(16);
+    final Map<Class<?>, Class<?>> primToWrap = new LinkedHashMap<>(16);
+    final Map<Class<?>, Class<?>> wrapToPrim = new LinkedHashMap<>(16);
 
     add(primToWrap, wrapToPrim, boolean.class, Boolean.class);
     add(primToWrap, wrapToPrim, byte.class, Byte.class);
@@ -174,10 +174,10 @@ public final class Primitives {
   }
 
   private static void add(
-      Map<Class<?>, Class<?>> forward,
-      Map<Class<?>, Class<?>> backward,
-      Class<?> key,
-      Class<?> value) {
+      final Map<Class<?>, Class<?>> forward,
+      final Map<Class<?>, Class<?>> backward,
+      final Class<?> key,
+      final Class<?> value) {
     forward.put(key, value);
     backward.put(value, key);
   }

@@ -43,13 +43,13 @@ enum EnumSuggestionProviderFactory implements SuggestionProviderFactory {
   @SuppressWarnings("rawtypes")
   @Override
   public @Nullable SuggestionProvider createSuggestionProvider(
-      @NotNull CommandParameter parameter) {
+      @NotNull final CommandParameter parameter) {
     if (!parameter.getType().isEnum()) {
       return null;
     }
-    Class<? extends Enum> enumType = parameter.getType().asSubclass(Enum.class);
-    Enum<?>[] enums = enumType.getEnumConstants();
-    List<String> suggestions = new ArrayList<>();
+    final Class<? extends Enum> enumType = parameter.getType().asSubclass(Enum.class);
+    final Enum<?>[] enums = enumType.getEnumConstants();
+    final List<String> suggestions = new ArrayList<>();
     for (int i = 0; i < enums.length; i++) {
       if (i >= MAX_ENUMS_SIZE - 1) {
         break;

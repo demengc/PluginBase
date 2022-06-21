@@ -56,31 +56,31 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
     try {
       Bukkit.getServer().selectEntities(Bukkit.getConsoleSender(), "@a");
       supportComplexSelectors = true;
-    } catch (Throwable t) {
+    } catch (final Throwable t) {
       supportComplexSelectors = false;
     }
   }
 
   @Override
-  public @Nullable ValueResolver<?> create(@NotNull CommandParameter parameter) {
+  public @Nullable ValueResolver<?> create(@NotNull final CommandParameter parameter) {
     if (EntitySelector.class.isAssignableFrom(parameter.getType())) {
-      Class<?> entityType = (Class<?>) Primitives.getInsideGeneric(parameter.getFullType(),
+      final Class<?> entityType = (Class<?>) Primitives.getInsideGeneric(parameter.getFullType(),
           Entity.class);
       if (Player.class.isAssignableFrom(entityType)) {
         return this::resolvePlayerSelector;
       }
       return context -> {
-        String selector = context.pop();
+        final String selector = context.pop();
         try {
-          BukkitCommandActor actor = context.actor();
-          List<Entity> c = new ArrayList<>(
+          final BukkitCommandActor actor = context.actor();
+          final List<Entity> c = new ArrayList<>(
               Bukkit.getServer().selectEntities(actor.getSender(), selector));
           c.removeIf(obj -> !entityType.isInstance(obj));
           return new EntitySelectorImpl<>(c);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
           throw new MalformedEntitySelectorException(context.actor(), selector,
               e.getCause().getMessage());
-        } catch (NoSuchMethodError e) {
+        } catch (final NoSuchMethodError e) {
           throw new CommandErrorException(
               "Entity selectors on legacy versions are not supported yet!");
         }
@@ -89,19 +89,19 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
     return null;
   }
 
-  private EntitySelector<Player> resolvePlayerSelector(ValueResolverContext context) {
-    String selector = context.pop().toLowerCase();
+  private EntitySelector<Player> resolvePlayerSelector(final ValueResolverContext context) {
+    final String selector = context.pop().toLowerCase();
     try {
-      BukkitCommandActor bActor = context.actor();
+      final BukkitCommandActor bActor = context.actor();
 
-      List<Player> coll;
+      final List<Player> coll;
       if (supportComplexSelectors) {
         coll = Bukkit.getServer().selectEntities(bActor.getSender(), selector).stream()
             .filter(c -> c instanceof Player).map(Player.class::cast).collect(Collectors.toList());
         return new EntitySelectorImpl<>(coll);
       }
       coll = new ArrayList<>();
-      Player[] players = Bukkit.getOnlinePlayers().toArray(new Player[0]);
+      final Player[] players = Bukkit.getOnlinePlayers().toArray(new Player[0]);
       switch (selector) {
         case "@r":
           coll.add(players[ThreadLocalRandom.current().nextInt(players.length)]);
@@ -116,7 +116,7 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
           return new EntitySelectorImpl<>(coll);
         }
         default: {
-          Player player = Bukkit.getPlayer(selector);
+          final Player player = Bukkit.getPlayer(selector);
           if (player == null) {
             throw new InvalidPlayerException(context.parameter(), selector);
           }
@@ -124,7 +124,7 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
           return new EntitySelectorImpl<>(coll);
         }
       }
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       throw new MalformedEntitySelectorException(context.actor(), selector,
           e.getCause().getMessage());
     }
@@ -135,7 +135,7 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
 
     private final List<E> entities;
 
-    public EntitySelectorImpl(List<E> entities) {
+    public EntitySelectorImpl(final List<E> entities) {
       this.entities = entities;
     }
 
@@ -155,16 +155,17 @@ public enum EntitySelectorResolver implements ValueResolverFactory {
       try {
         Bukkit.getServer().selectEntities(Bukkit.getConsoleSender(), "@a");
         supportComplexSelectors = true;
-      } catch (Throwable t) {
+      } catch (final Throwable t) {
         supportComplexSelectors = false;
       }
     }
 
     @Override
     public @Nullable SuggestionProvider createSuggestionProvider(
-        @NotNull CommandParameter parameter) {
+        @NotNull final CommandParameter parameter) {
       if (parameter.getType().isAssignableFrom(EntitySelector.class)) {
-        Class<? extends Entity> type = BukkitHandler.getSelectedEntity(parameter.getFullType());
+        final Class<? extends Entity> type = BukkitHandler.getSelectedEntity(
+            parameter.getFullType());
         if (Player.class.isAssignableFrom(type) && !supportComplexSelectors) {
           return SuggestionProvider.of("@a", "@p", "@r", "@s").compose(
               parameter.getCommandHandler().getAutoCompleter().getSuggestionProvider("players")

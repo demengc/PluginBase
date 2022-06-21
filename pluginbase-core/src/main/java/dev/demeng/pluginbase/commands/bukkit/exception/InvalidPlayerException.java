@@ -34,7 +34,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InvalidPlayerException extends InvalidValueException {
 
-  public InvalidPlayerException(@NotNull CommandParameter parameter, @NotNull String input) {
+  public InvalidPlayerException(@NotNull final CommandParameter parameter,
+      @NotNull final String input) {
     super(parameter, input);
   }
 }

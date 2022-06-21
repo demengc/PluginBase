@@ -75,76 +75,82 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
   }
 
   @Ignore
-  public void onUnhandledException(@NotNull CommandActor actor, @NotNull Throwable throwable) {
+  public void onUnhandledException(@NotNull final CommandActor actor,
+      @NotNull final Throwable throwable) {
   }
 
-  public void missingArgument(@NotNull CommandActor actor,
-      @NotNull MissingArgumentException exception) {
+  public void missingArgument(@NotNull final CommandActor actor,
+      @NotNull final MissingArgumentException exception) {
   }
 
-  public void invalidEnumValue(@NotNull CommandActor actor,
-      @NotNull EnumNotFoundException exception) {
+  public void invalidEnumValue(@NotNull final CommandActor actor,
+      @NotNull final EnumNotFoundException exception) {
   }
 
-  public void invalidUUID(@NotNull CommandActor actor, @NotNull InvalidUUIDException exception) {
+  public void invalidUUID(@NotNull final CommandActor actor,
+      @NotNull final InvalidUUIDException exception) {
   }
 
-  public void invalidNumber(@NotNull CommandActor actor,
-      @NotNull InvalidNumberException exception) {
+  public void invalidNumber(@NotNull final CommandActor actor,
+      @NotNull final InvalidNumberException exception) {
   }
 
-  public void invalidURL(@NotNull CommandActor actor, @NotNull InvalidURLException exception) {
+  public void invalidURL(@NotNull final CommandActor actor,
+      @NotNull final InvalidURLException exception) {
   }
 
-  public void invalidBoolean(@NotNull CommandActor actor,
-      @NotNull InvalidBooleanException exception) {
+  public void invalidBoolean(@NotNull final CommandActor actor,
+      @NotNull final InvalidBooleanException exception) {
   }
 
-  public void numberNotInRange(@NotNull CommandActor actor,
-      @NotNull NumberNotInRangeException exception) {
+  public void numberNotInRange(@NotNull final CommandActor actor,
+      @NotNull final NumberNotInRangeException exception) {
   }
 
-  public void noPermission(@NotNull CommandActor actor, @NotNull NoPermissionException exception) {
+  public void noPermission(@NotNull final CommandActor actor,
+      @NotNull final NoPermissionException exception) {
   }
 
-  public void argumentParse(@NotNull CommandActor actor,
-      @NotNull ArgumentParseException exception) {
+  public void argumentParse(@NotNull final CommandActor actor,
+      @NotNull final ArgumentParseException exception) {
   }
 
-  public void commandInvocation(@NotNull CommandActor actor,
-      @NotNull CommandInvocationException exception) {
+  public void commandInvocation(@NotNull final CommandActor actor,
+      @NotNull final CommandInvocationException exception) {
   }
 
-  public void tooManyArguments(@NotNull CommandActor actor,
-      @NotNull TooManyArgumentsException exception) {
+  public void tooManyArguments(@NotNull final CommandActor actor,
+      @NotNull final TooManyArgumentsException exception) {
   }
 
-  public void invalidCommand(@NotNull CommandActor actor,
-      @NotNull InvalidCommandException exception) {
+  public void invalidCommand(@NotNull final CommandActor actor,
+      @NotNull final InvalidCommandException exception) {
   }
 
-  public void invalidSubcommand(@NotNull CommandActor actor,
-      @NotNull InvalidSubcommandException exception) {
+  public void invalidSubcommand(@NotNull final CommandActor actor,
+      @NotNull final InvalidSubcommandException exception) {
   }
 
-  public void noSubcommandSpecified(@NotNull CommandActor actor,
-      @NotNull NoSubcommandSpecifiedException exception) {
+  public void noSubcommandSpecified(@NotNull final CommandActor actor,
+      @NotNull final NoSubcommandSpecifiedException exception) {
   }
 
-  public void cooldown(@NotNull CommandActor actor, @NotNull CooldownException exception) {
+  public void cooldown(@NotNull final CommandActor actor,
+      @NotNull final CooldownException exception) {
   }
 
-  public void invalidHelpPage(@NotNull CommandActor actor,
-      @NotNull InvalidHelpPageException exception) {
+  public void invalidHelpPage(@NotNull final CommandActor actor,
+      @NotNull final InvalidHelpPageException exception) {
   }
 
-  public void sendableException(@NotNull CommandActor actor, @NotNull SendableException exception) {
+  public void sendableException(@NotNull final CommandActor actor,
+      @NotNull final SendableException exception) {
   }
 
   private static final List<Method> IGNORED_METHODS = new ArrayList<>();
 
   static {
-    for (Method method : CommandExceptionAdapter.class.getDeclaredMethods()) {
+    for (final Method method : CommandExceptionAdapter.class.getDeclaredMethods()) {
       if (method.getParameterCount() != 2) {
         continue;
       }
@@ -156,8 +162,9 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
 
   @Override
   @Ignore
-  public void handleException(@NotNull Throwable throwable, @NotNull CommandActor actor) {
-    MethodExceptionHandler handler = handlers.getFlexibleOrDefault(throwable.getClass(),
+  public void handleException(@NotNull final Throwable throwable,
+      @NotNull final CommandActor actor) {
+    final MethodExceptionHandler handler = handlers.getFlexibleOrDefault(throwable.getClass(),
         unknownHandler);
     if (handler == unknownHandler && throwable instanceof SelfHandledException) {
       ((SelfHandledException) throwable).handle(actor);
@@ -167,7 +174,7 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
   }
 
   public CommandExceptionAdapter() {
-    for (Method m : getClass().getMethods()) {
+    for (final Method m : getClass().getMethods()) {
       register(m);
     }
   }
@@ -176,7 +183,7 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
   private final MethodExceptionHandler unknownHandler = this::onUnhandledException;
 
   @SneakyThrows
-  private void register(@NotNull Method method) {
+  private void register(@NotNull final Method method) {
     if (!CommandExceptionAdapter.class.isAssignableFrom(method.getDeclaringClass())) {
       return;
     }
@@ -186,27 +193,27 @@ public abstract class CommandExceptionAdapter implements CommandExceptionHandler
     if (method.isAnnotationPresent(Ignore.class)) {
       return;
     }
-    for (Method ignoredMethod : IGNORED_METHODS) {
+    for (final Method ignoredMethod : IGNORED_METHODS) {
       if (method.getName().equals(ignoredMethod.getName()) && Arrays.equals(
           method.getParameterTypes(), ignoredMethod.getParameterTypes())) {
         return;
       }
     }
-    Parameter[] parameters = method.getParameters();
-    Class<?> firstType = parameters[0].getType();
-    Class<?> secondType = parameters[1].getType();
-    Class<?> exceptionType;
-    MethodExceptionHandler handler;
+    final Parameter[] parameters = method.getParameters();
+    final Class<?> firstType = parameters[0].getType();
+    final Class<?> secondType = parameters[1].getType();
+    final Class<?> exceptionType;
+    final MethodExceptionHandler handler;
     if (CommandActor.class.isAssignableFrom(firstType) && Throwable.class.isAssignableFrom(
         secondType)) {
       exceptionType = secondType;
-      BoundMethodCaller caller = MethodCallerFactory.defaultFactory().createFor(method)
+      final BoundMethodCaller caller = MethodCallerFactory.defaultFactory().createFor(method)
           .bindTo(this);
       handler = caller::call;
     } else if (Throwable.class.isAssignableFrom(firstType) && CommandActor.class.isAssignableFrom(
         secondType)) {
       exceptionType = firstType;
-      BoundMethodCaller caller = MethodCallerFactory.defaultFactory().createFor(method)
+      final BoundMethodCaller caller = MethodCallerFactory.defaultFactory().createFor(method)
           .bindTo(this);
       handler = (actor, throwable) -> caller.call(throwable, actor);
     } else {

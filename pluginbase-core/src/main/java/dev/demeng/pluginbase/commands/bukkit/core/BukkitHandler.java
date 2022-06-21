@@ -88,23 +88,23 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
   private Optional<BukkitBrigadier> brigadier;
 
   @SuppressWarnings("rawtypes")
-  public BukkitHandler(@NotNull Plugin plugin) {
+  public BukkitHandler(@NotNull final Plugin plugin) {
     super();
     this.plugin = Preconditions.notNull(plugin, "plugin");
     try {
       brigadier = Optional.of(new CommodoreBukkitBrigadier(this));
-    } catch (NoClassDefFoundError e) {
+    } catch (final NoClassDefFoundError e) {
       brigadier = Optional.empty();
     }
     registerSenderResolver(BukkitSenderResolver.INSTANCE);
     registerValueResolver(Player.class, context -> {
-      String value = context.pop();
+      final String value = context.pop();
       if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) {
         return ((BukkitCommandActor) context.actor()).requirePlayer();
       }
       if (EntitySelectorResolver.INSTANCE.supportsComplexSelectors()) {
         try {
-          List<Entity> entityList = Bukkit.selectEntities(
+          final List<Entity> entityList = Bukkit.selectEntities(
               ((BukkitActor) context.actor()).getSender(), value);
           if (entityList.stream().anyMatch(c -> !(c instanceof Player))) {
             throw new NonPlayerEntitiesException(value);
@@ -113,34 +113,34 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
             throw new MoreThanOnePlayerException(value);
           }
           return (Player) entityList.get(0);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
           throw new MalformedEntitySelectorException(context.actor(), value,
               e.getCause().getMessage());
         }
       }
-      Player player = Bukkit.getPlayerExact(value);
+      final Player player = Bukkit.getPlayerExact(value);
       if (player == null) {
         throw new InvalidPlayerException(context.parameter(), value);
       }
       return player;
     });
     registerValueResolver(OfflinePlayer.class, context -> {
-      String value = context.pop();
+      final String value = context.pop();
       if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) {
         return ((BukkitCommandActor) context.actor()).requirePlayer();
       }
-      OfflinePlayer player = Bukkit.getOfflinePlayer(value);
+      final OfflinePlayer player = Bukkit.getOfflinePlayer(value);
       if (!player.hasPlayedBefore()) {
         throw new InvalidPlayerException(context.parameter(), value);
       }
       return player;
     });
     registerValueResolver(World.class, context -> {
-      String value = context.pop();
+      final String value = context.pop();
       if (value.equalsIgnoreCase("self") || value.equalsIgnoreCase("me")) {
         return ((BukkitCommandActor) context.actor()).requirePlayer().getWorld();
       }
-      World world = Bukkit.getWorld(value);
+      final World world = Bukkit.getWorld(value);
       if (world == null) {
         throw new InvalidWorldException(context.parameter(), value);
       }
@@ -151,7 +151,7 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
       if (value.startsWith("minecraft:")) {
         value = value.substring("minecraft:".length());
       }
-      EntityType type = EntityType.fromName(value);
+      final EntityType type = EntityType.fromName(value);
       if (type == null) {
         throw new EnumNotFoundException(context.parameter(), value);
       }
@@ -183,15 +183,15 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
   }
 
   @Override
-  public @NotNull CommandHandler register(@NotNull Object... commands) {
+  public @NotNull CommandHandler register(@NotNull final Object... commands) {
     super.register(commands);
-    for (ExecutableCommand command : executables.values()) {
+    for (final ExecutableCommand command : executables.values()) {
       if (command.getParent() != null) {
         continue;
       }
       createPluginCommand(command.getName(), command.getDescription(), command.getUsage());
     }
-    for (CommandCategory category : categories.values()) {
+    for (final CommandCategory category : categories.values()) {
       if (category.getParent() != null) {
         continue;
       }
@@ -221,11 +221,12 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
     return plugin;
   }
 
-  private @SneakyThrows void createPluginCommand(String name, @Nullable String description,
-      @Nullable String usage) {
-    PluginCommand cmd = COMMAND_CONSTRUCTOR.newInstance(name, plugin);
+  private @SneakyThrows void createPluginCommand(final String name,
+      @Nullable final String description,
+      @Nullable final String usage) {
+    final PluginCommand cmd = COMMAND_CONSTRUCTOR.newInstance(name, plugin);
     COMMAND_MAP.register(plugin.getName(), cmd);
-    BukkitCommandExecutor executor = new BukkitCommandExecutor(this);
+    final BukkitCommandExecutor executor = new BukkitCommandExecutor(this);
     cmd.setExecutor(executor);
     cmd.setTabCompleter(executor);
     cmd.setDescription(description == null ? "" : description);
@@ -235,20 +236,20 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
   }
 
   @Override
-  public boolean unregister(@NotNull CommandPath path) {
+  public boolean unregister(@NotNull final CommandPath path) {
     if (path.isRoot()) {
-      PluginCommand command = ((JavaPlugin) plugin).getCommand(path.getFirst());
+      final PluginCommand command = ((JavaPlugin) plugin).getCommand(path.getFirst());
       unregisterCommand(command);
     }
     return super.unregister(path);
   }
 
-  private void unregisterCommand(PluginCommand command) {
+  private void unregisterCommand(final PluginCommand command) {
     if (command != null) {
       command.unregister(COMMAND_MAP);
-      Map<String, Command> knownCommands = getKnownCommands();
+      final Map<String, Command> knownCommands = getKnownCommands();
       if (knownCommands != null) {
-        Command rawAlias = knownCommands.get(command.getName());
+        final Command rawAlias = knownCommands.get(command.getName());
         if (rawAlias instanceof PluginCommand && ((PluginCommand) rawAlias).getPlugin() == plugin) {
           knownCommands.remove(command.getName());
         }
@@ -262,22 +263,22 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
   private static final CommandMap COMMAND_MAP;
 
   static {
-    Constructor<PluginCommand> ctr;
+    final Constructor<PluginCommand> ctr;
     Field knownCommands = null;
-    CommandMap commandMap;
+    final CommandMap commandMap;
     try {
       ctr = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
       ctr.setAccessible(true);
-      Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+      final Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
       commandMapField.setAccessible(true);
       commandMap = (CommandMap) commandMapField.get(Bukkit.getServer());
       if (commandMap instanceof SimpleCommandMap) {
         knownCommands = SimpleCommandMap.class.getDeclaredField("knownCommands");
         knownCommands.setAccessible(true);
       }
-    } catch (NoSuchMethodException e) {
+    } catch (final NoSuchMethodException e) {
       throw new IllegalStateException("Unable to access PluginCommand(String, Plugin) construtor!");
-    } catch (NoSuchFieldException | IllegalAccessException e) {
+    } catch (final NoSuchFieldException | IllegalAccessException e) {
       e.printStackTrace();
       throw new IllegalStateException("Unable to access Bukkit.getServer()#commandMap!");
     }
@@ -286,7 +287,7 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
     KNOWN_COMMANDS = knownCommands;
   }
 
-  public static Class<? extends Entity> getSelectedEntity(@NotNull Type selectorType) {
+  public static Class<? extends Entity> getSelectedEntity(@NotNull final Type selectorType) {
     return (Class<? extends Entity>) Primitives.getInsideGeneric(selectorType, Entity.class);
   }
 

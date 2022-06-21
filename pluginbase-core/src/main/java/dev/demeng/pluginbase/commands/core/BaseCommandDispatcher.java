@@ -51,46 +51,46 @@ public final class BaseCommandDispatcher {
 
   private final BaseCommandHandler handler;
 
-  public BaseCommandDispatcher(BaseCommandHandler handler) {
+  public BaseCommandDispatcher(final BaseCommandHandler handler) {
     this.handler = handler;
   }
 
-  public Object eval(@NotNull CommandActor actor, @NotNull ArgumentStack arguments) {
+  public Object eval(@NotNull final CommandActor actor, @NotNull final ArgumentStack arguments) {
     try {
-      MutableCommandPath path = MutableCommandPath.empty();
-      String argument = arguments.getFirst();
+      final MutableCommandPath path = MutableCommandPath.empty();
+      final String argument = arguments.getFirst();
       path.add(argument);
-      CommandExecutable executable = handler.executables.get(path);
+      final CommandExecutable executable = handler.executables.get(path);
       if (executable != null) {
         arguments.removeFirst();
         return execute(executable, actor, arguments);
       }
 
-      BaseCommandCategory category = handler.categories.get(path);
+      final BaseCommandCategory category = handler.categories.get(path);
       if (category != null) {
         arguments.removeFirst();
         return searchCategory(actor, category, path, arguments);
       } else {
         throw new InvalidCommandException(path, path.getFirst());
       }
-    } catch (Throwable throwable) {
+    } catch (final Throwable throwable) {
       handler.getExceptionHandler().handleException(throwable, actor);
     }
     return null;
   }
 
-  private Object searchCategory(CommandActor actor, BaseCommandCategory category,
-      MutableCommandPath path, ArgumentStack arguments) {
+  private Object searchCategory(final CommandActor actor, final BaseCommandCategory category,
+      final MutableCommandPath path, final ArgumentStack arguments) {
     if (!arguments.isEmpty()) {
       path.add(arguments.getFirst());
     }
-    CommandExecutable executable = (CommandExecutable) category.commands.get(path);
+    final CommandExecutable executable = (CommandExecutable) category.commands.get(path);
     if (executable != null) {
       arguments.removeFirst();
       return execute(executable, actor, arguments);
     }
     category.checkPermission(actor);
-    BaseCommandCategory found = (BaseCommandCategory) category.getCategories().get(path);
+    final BaseCommandCategory found = (BaseCommandCategory) category.getCategories().get(path);
     if (found == null) {
       if (category.defaultAction == null) {
         throw new NoSubcommandSpecifiedException(category);
@@ -103,20 +103,20 @@ public final class BaseCommandDispatcher {
     }
   }
 
-  private Object execute(@NotNull CommandExecutable executable,
-      @NotNull CommandActor actor,
-      @NotNull ArgumentStack args) {
-    List<String> input = args.asImmutableCopy();
+  private Object execute(@NotNull final CommandExecutable executable,
+      @NotNull final CommandActor actor,
+      @NotNull final ArgumentStack args) {
+    final List<String> input = args.asImmutableCopy();
     handler.conditions.forEach(
         condition -> condition.test(actor, executable, args.asImmutableView()));
-    Object[] methodArguments = getMethodArguments(executable, actor, args, input);
+    final Object[] methodArguments = getMethodArguments(executable, actor, args, input);
     if (!args.isEmpty() && handler.failOnExtra) {
       throw new TooManyArgumentsException(executable, args);
     }
-    Object result;
+    final Object result;
     try {
       result = executable.methodCaller.call(methodArguments);
-    } catch (Throwable throwable) {
+    } catch (final Throwable throwable) {
       throw new CommandInvocationException(executable, throwable);
     }
     executable.responseHandler.handleResponse(result, actor, executable);
@@ -124,10 +124,10 @@ public final class BaseCommandDispatcher {
   }
 
   @SneakyThrows
-  private Object[] getMethodArguments(CommandExecutable executable, CommandActor actor,
-      ArgumentStack args, List<String> input) {
-    Object[] values = new Object[executable.parameters.size()];
-    for (CommandParameter parameter : executable.parameters) {
+  private Object[] getMethodArguments(final CommandExecutable executable, final CommandActor actor,
+      final ArgumentStack args, final List<String> input) {
+    final Object[] values = new Object[executable.parameters.size()];
+    for (final CommandParameter parameter : executable.parameters) {
       if (ArgumentStack.class.isAssignableFrom(parameter.getType())) {
         values[parameter.getMethodIndex()] = args;
       } else if (parameter.isSwitch()) {
@@ -136,27 +136,28 @@ public final class BaseCommandDispatcher {
         handleFlag(input, actor, args, values, parameter);
       }
     }
-    for (CommandParameter parameter : executable.parameters) {
+    for (final CommandParameter parameter : executable.parameters) {
       if (ArgumentStack.class.isAssignableFrom(parameter.getType())) {
         values[parameter.getMethodIndex()] = args;
         continue;
       }
       if (!parameter.isSwitch() && !parameter.isFlag()) {
-        ParameterResolver<?> resolver = parameter.getResolver();
+        final ParameterResolver<?> resolver = parameter.getResolver();
         if (!resolver.mutatesArguments()) {
           parameter.checkPermission(actor);
-          ContextResolverContext cxt = new ContextResolverContext(input, actor, parameter, values);
-          Object value = resolver.resolve(cxt);
-          for (ParameterValidator<Object> v : parameter.getValidators()) {
+          final ContextResolverContext cxt = new ContextResolverContext(input, actor, parameter,
+              values);
+          final Object value = resolver.resolve(cxt);
+          for (final ParameterValidator<Object> v : parameter.getValidators()) {
             v.validate(value, parameter, actor);
           }
           values[parameter.getMethodIndex()] = value;
         } else {
           if (!addDefaultValues(args, parameter, actor, values)) {
             parameter.checkPermission(actor);
-            ValueContextR cxt = new ValueContextR(input, actor, parameter, values, args);
-            Object value = resolver.resolve(cxt);
-            for (ParameterValidator<Object> v : parameter.getValidators()) {
+            final ValueContextR cxt = new ValueContextR(input, actor, parameter, values, args);
+            final Object value = resolver.resolve(cxt);
+            for (final ParameterValidator<Object> v : parameter.getValidators()) {
               v.validate(value, parameter, actor);
             }
             values[parameter.getMethodIndex()] = value;
@@ -167,10 +168,10 @@ public final class BaseCommandDispatcher {
     return values;
   }
 
-  private boolean addDefaultValues(ArgumentStack args,
-      CommandParameter parameter,
-      CommandActor actor,
-      Object[] values) {
+  private boolean addDefaultValues(final ArgumentStack args,
+      final CommandParameter parameter,
+      final CommandActor actor,
+      final Object[] values) {
     if (args.isEmpty()) {
       if (parameter.getDefaultValue().isEmpty() && parameter.isOptional()) {
         values[parameter.getMethodIndex()] = null;
@@ -187,8 +188,9 @@ public final class BaseCommandDispatcher {
     return false;
   }
 
-  private void handleSwitch(ArgumentStack args, Object[] values, CommandParameter parameter) {
-    boolean provided = args.remove(handler.switchPrefix + parameter.getSwitchName());
+  private void handleSwitch(final ArgumentStack args, final Object[] values,
+      final CommandParameter parameter) {
+    final boolean provided = args.remove(handler.switchPrefix + parameter.getSwitchName());
     if (!provided) {
       values[parameter.getMethodIndex()] = parameter.getDefaultSwitch();
     } else {
@@ -197,11 +199,12 @@ public final class BaseCommandDispatcher {
   }
 
   @SneakyThrows
-  private void handleFlag(List<String> input, CommandActor actor, ArgumentStack args,
-      Object[] values, CommandParameter parameter) {
-    String lookup = handler.getFlagPrefix() + parameter.getFlagName();
+  private void handleFlag(final List<String> input, final CommandActor actor,
+      final ArgumentStack args,
+      final Object[] values, final CommandParameter parameter) {
+    final String lookup = handler.getFlagPrefix() + parameter.getFlagName();
     int index = args.indexOf(lookup);
-    ArgumentStack flagArguments;
+    final ArgumentStack flagArguments;
     if (index == -1) { // flag isn't specified, use default value or throw an MPE.
       if (parameter.isOptional()) {
         if (!parameter.getDefaultValue().isEmpty()) {
@@ -212,7 +215,7 @@ public final class BaseCommandDispatcher {
           flagArguments = handler.parseArguments(
               args.remove(index)); // put the actual value in a separate argument stack
         } else {
-          for (ParameterValidator<Object> v : parameter.getValidators()) {
+          for (final ParameterValidator<Object> v : parameter.getValidators()) {
             v.validate(null, parameter, actor);
           }
           values[parameter.getMethodIndex()] = null;
@@ -229,9 +232,10 @@ public final class BaseCommandDispatcher {
       flagArguments = handler.parseArguments(
           args.remove(index)); // put the actual value in a separate argument stack
     }
-    ValueContextR contextR = new ValueContextR(input, actor, parameter, values, flagArguments);
-    Object value = parameter.getResolver().resolve(contextR);
-    for (ParameterValidator<Object> v : parameter.getValidators()) {
+    final ValueContextR contextR = new ValueContextR(input, actor, parameter, values,
+        flagArguments);
+    final Object value = parameter.getResolver().resolve(contextR);
+    for (final ParameterValidator<Object> v : parameter.getValidators()) {
       v.validate(value, parameter, actor);
     }
     values[parameter.getMethodIndex()] = value;
@@ -272,17 +276,17 @@ public final class BaseCommandDispatcher {
     }
 
     @Override
-    public <T> @NotNull T getResolvedParameter(@NotNull CommandParameter parameter) {
+    public <T> @NotNull T getResolvedParameter(@NotNull final CommandParameter parameter) {
       try {
         return (T) resolved[parameter.getMethodIndex()];
-      } catch (Throwable throwable) {
+      } catch (final Throwable throwable) {
         throw new IllegalArgumentException("This parameter has not been resolved yet!");
       }
     }
 
     @Override
-    public <T> @NotNull T getResolvedArgument(@NotNull Class<T> type) {
-      for (Object o : resolved) {
+    public <T> @NotNull T getResolvedArgument(@NotNull final Class<T> type) {
+      for (final Object o : resolved) {
         if (type.isInstance(o)) {
           return (T) o;
         }
@@ -294,8 +298,8 @@ public final class BaseCommandDispatcher {
   private static final class ContextResolverContext extends ParamResolverContext implements
       ContextResolver.ContextResolverContext {
 
-    public ContextResolverContext(List<String> input, CommandActor actor,
-        CommandParameter parameter, Object[] resolved) {
+    public ContextResolverContext(final List<String> input, final CommandActor actor,
+        final CommandParameter parameter, final Object[] resolved) {
       super(input, actor, parameter, resolved);
     }
   }
@@ -305,11 +309,11 @@ public final class BaseCommandDispatcher {
 
     private final ArgumentStack argumentStack;
 
-    public ValueContextR(List<String> input,
-        CommandActor actor,
-        CommandParameter parameter,
-        Object[] resolved,
-        ArgumentStack argumentStack) {
+    public ValueContextR(final List<String> input,
+        final CommandActor actor,
+        final CommandParameter parameter,
+        final Object[] resolved,
+        final ArgumentStack argumentStack) {
       super(input, actor, parameter, resolved);
       this.argumentStack = argumentStack;
     }
@@ -329,14 +333,14 @@ public final class BaseCommandDispatcher {
       return argumentStack.pop();
     }
 
-    private <T> T num(Function<String, T> f) {
-      String input = pop();
+    private <T> T num(final Function<String, T> f) {
+      final String input = pop();
       try {
         if (input.startsWith("0x")) {
           return (T) Integer.valueOf(input.substring(2), 16);
         }
         return f.apply(input);
-      } catch (NumberFormatException e) {
+      } catch (final NumberFormatException e) {
         throw new InvalidNumberException(parameter(), input);
       }
     }

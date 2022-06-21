@@ -32,7 +32,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InvalidNumberException extends InvalidValueException {
 
-  public InvalidNumberException(@NotNull CommandParameter parameter, @NotNull String input) {
+  public InvalidNumberException(@NotNull final CommandParameter parameter,
+      @NotNull final String input) {
     super(parameter, input);
   }
 }

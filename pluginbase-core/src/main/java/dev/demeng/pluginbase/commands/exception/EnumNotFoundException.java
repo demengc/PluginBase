@@ -32,7 +32,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class EnumNotFoundException extends InvalidValueException {
 
-  public EnumNotFoundException(@NotNull CommandParameter parameter, @NotNull String input) {
+  public EnumNotFoundException(@NotNull final CommandParameter parameter,
+      @NotNull final String input) {
     super(parameter, input);
   }
 }

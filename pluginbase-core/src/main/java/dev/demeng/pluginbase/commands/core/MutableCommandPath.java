@@ -34,11 +34,11 @@ public class MutableCommandPath extends CommandPath {
     return new MutableCommandPath(new String[0]);
   }
 
-  public MutableCommandPath(String[] path) {
+  public MutableCommandPath(final String[] path) {
     super(path);
   }
 
-  public MutableCommandPath(ArgumentStack argumentStack) {
+  public MutableCommandPath(final ArgumentStack argumentStack) {
     super(argumentStack.toArray(new String[0]));
   }
 
@@ -50,19 +50,19 @@ public class MutableCommandPath extends CommandPath {
     return path.removeLast();
   }
 
-  public void addFirst(String s) {
+  public void addFirst(final String s) {
     path.addFirst(s);
   }
 
-  public void addLast(String s) {
+  public void addLast(final String s) {
     path.addLast(s);
   }
 
-  public boolean contains(Object o) {
+  public boolean contains(final Object o) {
     return path.contains(o);
   }
 
-  public boolean add(String s) {
+  public boolean add(final String s) {
     return path.add(s);
   }
 
@@ -70,7 +70,7 @@ public class MutableCommandPath extends CommandPath {
     path.clear();
   }
 
-  public void add(int index, String element) {
+  public void add(final int index, final String element) {
     path.add(index, element);
   }
 
@@ -82,7 +82,7 @@ public class MutableCommandPath extends CommandPath {
     return path.poll();
   }
 
-  public void push(String s) {
+  public void push(final String s) {
     path.push(s);
   }
 

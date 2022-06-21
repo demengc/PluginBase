@@ -110,8 +110,8 @@ public interface CommandActor {
    * @param key  Key of the message
    * @param args The arguments to format with
    */
-  default void replyLocalized(@NotNull String key, Object... args) {
-    String message = MessageFormat.format(getTranslator().get(key, getLocale()), args);
+  default void replyLocalized(@NotNull final String key, final Object... args) {
+    final String message = MessageFormat.format(getTranslator().get(key, getLocale()), args);
     reply(message);
   }
 
@@ -121,8 +121,8 @@ public interface CommandActor {
    * @param key  Key of the message
    * @param args The arguments to format with
    */
-  default void errorLocalized(@NotNull String key, Object... args) {
-    String message = MessageFormat.format(getTranslator().get(key, getLocale()), args);
+  default void errorLocalized(@NotNull final String key, final Object... args) {
+    final String message = MessageFormat.format(getTranslator().get(key, getLocale()), args);
     error(message);
   }
 
@@ -134,7 +134,7 @@ public interface CommandActor {
    * @param <T>  The actor type
    * @return This actor but casted.
    */
-  default <T extends CommandActor> T as(@NotNull Class<T> type) {
+  default <T extends CommandActor> T as(@NotNull final Class<T> type) {
     return type.cast(this);
   }
 

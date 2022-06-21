@@ -53,7 +53,7 @@ public final class BukkitActor implements BukkitCommandActor {
   private final CommandSender sender;
   private final BukkitHandler handler;
 
-  public BukkitActor(CommandSender sender, CommandHandler handler) {
+  public BukkitActor(final CommandSender sender, final CommandHandler handler) {
     this.sender = Preconditions.notNull(sender, "sender");
     this.handler = (BukkitHandler) Preconditions.notNull(handler, "handler");
   }
@@ -100,7 +100,7 @@ public final class BukkitActor implements BukkitCommandActor {
   }
 
   @Override
-  public void reply(@NotNull ComponentLike component) {
+  public void reply(@NotNull final ComponentLike component) {
     audience().sendMessage(component);
   }
 
@@ -121,13 +121,13 @@ public final class BukkitActor implements BukkitCommandActor {
   }
 
   @Override
-  public void reply(@NotNull String message) {
+  public void reply(@NotNull final String message) {
     Preconditions.notNull(message, "message");
     TextUtils.tell(sender, message);
   }
 
   @Override
-  public void error(@NotNull String message) {
+  public void error(@NotNull final String message) {
     Preconditions.notNull(message, "message");
     TextUtils.tell(sender, "&c" + message);
   }

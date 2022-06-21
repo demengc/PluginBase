@@ -51,8 +51,8 @@ final class AnnotationReader {
       Default.class
   ).collect(Collectors.toList());
 
-  public static AnnotationReader create(@NotNull BaseCommandHandler handler,
-      @NotNull AnnotatedElement method) {
+  public static AnnotationReader create(@NotNull final BaseCommandHandler handler,
+      @NotNull final AnnotatedElement method) {
 
     return createReader(handler, method);
   }
@@ -60,21 +60,21 @@ final class AnnotationReader {
   private final AnnotatedElement element;
   private Map<Class<? extends Annotation>, Annotation> annotations;
 
-  public <T extends Annotation> T get(@NotNull Class<T> annotationType) {
+  public <T extends Annotation> T get(@NotNull final Class<T> annotationType) {
     return (T) annotations.get(annotationType);
   }
 
-  public void add(@NotNull Annotation annotation) {
+  public void add(@NotNull final Annotation annotation) {
     annotations.putIfAbsent(annotation.annotationType(), annotation);
   }
 
-  void replaceAnnotations(BaseCommandHandler handler) {
+  void replaceAnnotations(final BaseCommandHandler handler) {
     if (handler.annotationReplacers.isEmpty()) {
       return;
     }
-    Map<Class<? extends Annotation>, Annotation> newAnnotations = new HashMap<>(annotations);
-    for (Annotation annotation : annotations.values()) {
-      List<Annotation> replaced = handler.replaceAnnotation(element, annotation);
+    final Map<Class<? extends Annotation>, Annotation> newAnnotations = new HashMap<>(annotations);
+    for (final Annotation annotation : annotations.values()) {
+      final List<Annotation> replaced = handler.replaceAnnotation(element, annotation);
       if (replaced == null) {
         continue;
       }
@@ -96,11 +96,11 @@ final class AnnotationReader {
   }
 
   @NotNull
-  private static AnnotationReader createReader(@NotNull BaseCommandHandler handler,
-      @NotNull AnnotatedElement method) {
-    Map<Class<? extends Annotation>, Annotation> annotations = toMap(method.getAnnotations());
+  private static AnnotationReader createReader(@NotNull final BaseCommandHandler handler,
+      @NotNull final AnnotatedElement method) {
+    final Map<Class<? extends Annotation>, Annotation> annotations = toMap(method.getAnnotations());
 
-    AnnotationReader reader = new AnnotationReader(method, annotations);
+    final AnnotationReader reader = new AnnotationReader(method, annotations);
     reader.replaceAnnotations(handler);
     return reader;
   }
@@ -119,34 +119,35 @@ final class AnnotationReader {
     }
   }
 
-  public <R, T extends Annotation> R get(@NotNull Class<T> type, Function<T, R> f) {
+  public <R, T extends Annotation> R get(@NotNull final Class<T> type, final Function<T, R> f) {
     return get(type, f, () -> null);
   }
 
-  public <R, T extends Annotation> R get(@NotNull Class<T> type, Function<T, R> f,
-      Supplier<R> def) {
-    T ann = (T) annotations.get(type);
+  public <R, T extends Annotation> R get(@NotNull final Class<T> type, final Function<T, R> f,
+      final Supplier<R> def) {
+    final T ann = (T) annotations.get(type);
     if (ann != null) {
       return f.apply(ann);
     }
     return def.get();
   }
 
-  public <T extends Annotation> @NotNull T get(@NotNull Class<T> type, String err) {
-    T ann = get(type);
+  public <T extends Annotation> @NotNull T get(@NotNull final Class<T> type, final String err) {
+    final T ann = get(type);
     if (ann == null) {
       throw new IllegalStateException(err);
     }
     return ann;
   }
 
-  public boolean contains(Class<? extends Annotation> annotation) {
+  public boolean contains(final Class<? extends Annotation> annotation) {
     return annotations.containsKey(annotation);
   }
 
-  private static Map<Class<? extends Annotation>, Annotation> toMap(Annotation[] annotations) {
-    Map<Class<? extends Annotation>, Annotation> map = new HashMap<>();
-    for (Annotation annotation : annotations) {
+  private static Map<Class<? extends Annotation>, Annotation> toMap(
+      final Annotation[] annotations) {
+    final Map<Class<? extends Annotation>, Annotation> map = new HashMap<>();
+    for (final Annotation annotation : annotations) {
       map.put(annotation.annotationType(), annotation);
     }
     return map;

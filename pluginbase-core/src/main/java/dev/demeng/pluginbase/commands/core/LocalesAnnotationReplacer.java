@@ -44,16 +44,17 @@ final class LocalesAnnotationReplacer implements AnnotationReplacer<Description>
 
   private final CommandHandler handler;
 
-  public LocalesAnnotationReplacer(CommandHandler handler) {
+  public LocalesAnnotationReplacer(final CommandHandler handler) {
     this.handler = handler;
   }
 
   @Override
-  public @Nullable Collection<Annotation> replaceAnnotations(@NotNull AnnotatedElement element,
-      @NotNull Description annotation) {
-    Matcher matcher = LOCALE_PATTERN.matcher(annotation.value());
+  public @Nullable Collection<Annotation> replaceAnnotations(
+      @NotNull final AnnotatedElement element,
+      @NotNull final Description annotation) {
+    final Matcher matcher = LOCALE_PATTERN.matcher(annotation.value());
     if (matcher.matches()) {
-      String key = matcher.group("key");
+      final String key = matcher.group("key");
       return listOf(
           Annotations.create(Description.class, "value", handler.getTranslator().get(key)));
     }

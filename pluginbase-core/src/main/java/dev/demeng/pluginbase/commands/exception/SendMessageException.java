@@ -43,7 +43,7 @@ public class SendMessageException extends SendableException {
    *
    * @param message Message to send
    */
-  public SendMessageException(String message, Object... arguments) {
+  public SendMessageException(final String message, final Object... arguments) {
     super(message);
     this.arguments = arguments;
   }
@@ -54,7 +54,7 @@ public class SendMessageException extends SendableException {
    * @param actor Actor to send to
    */
   @Override
-  public void sendTo(@NotNull CommandActor actor) {
+  public void sendTo(@NotNull final CommandActor actor) {
     actor.replyLocalized(getMessage(), arguments);
   }
 }

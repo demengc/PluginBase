@@ -81,13 +81,13 @@ final class BaseCommandCategory implements CommandCategory {
 
   @Override
   public boolean isSecret() {
-    for (ExecutableCommand command : commands.values()) {
+    for (final ExecutableCommand command : commands.values()) {
       if (command.isSecret()) {
         continue;
       }
       return false;
     }
-    for (CommandCategory category : categories.values()) {
+    for (final CommandCategory category : categories.values()) {
       if (category.isSecret()) {
         continue;
       }
@@ -122,7 +122,7 @@ final class BaseCommandCategory implements CommandCategory {
     return "CommandCategory{path=" + path + ", name='" + name + "'}";
   }
 
-  public void parent(BaseCommandCategory cat) {
+  public void parent(final BaseCommandCategory cat) {
     parent = cat;
     if (cat != null) {
       cat.categories.put(path, this);
@@ -132,13 +132,13 @@ final class BaseCommandCategory implements CommandCategory {
   private class CategoryPermission implements CommandPermission {
 
     @Override
-    public boolean canExecute(@NotNull CommandActor actor) {
-      for (ExecutableCommand command : commands.values()) {
+    public boolean canExecute(@NotNull final CommandActor actor) {
+      for (final ExecutableCommand command : commands.values()) {
         if (command.getPermission().canExecute(actor)) {
           return true;
         }
       }
-      for (CommandCategory category : categories.values()) {
+      for (final CommandCategory category : categories.values()) {
         if (category.getPermission().canExecute(actor)) {
           return true;
         }
@@ -148,7 +148,7 @@ final class BaseCommandCategory implements CommandCategory {
   }
 
   @Override
-  public int compareTo(@NotNull CommandCategory o) {
+  public int compareTo(@NotNull final CommandCategory o) {
     return path.compareTo(o.getPath());
   }
 }

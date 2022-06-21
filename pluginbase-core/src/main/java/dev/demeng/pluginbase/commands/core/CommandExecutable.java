@@ -122,16 +122,16 @@ class CommandExecutable implements ExecutableCommand {
   }
 
   @Override
-  public <A extends Annotation> A getAnnotation(@NotNull Class<A> annotation) {
+  public <A extends Annotation> A getAnnotation(@NotNull final Class<A> annotation) {
     return reader.get(annotation);
   }
 
   @Override
-  public boolean hasAnnotation(@NotNull Class<? extends Annotation> annotation) {
+  public boolean hasAnnotation(@NotNull final Class<? extends Annotation> annotation) {
     return reader.contains(annotation);
   }
 
-  public void parent(BaseCommandCategory cat) {
+  public void parent(final BaseCommandCategory cat) {
     parent = cat;
     if (hasAnnotation(Default.class) && cat != null) {
       cat.defaultAction = this;
@@ -142,7 +142,7 @@ class CommandExecutable implements ExecutableCommand {
     }
   }
 
-  public void setPermission(@NotNull CommandPermission permission) {
+  public void setPermission(@NotNull final CommandPermission permission) {
     notNull(permission, "permission");
     this.permission = permission;
   }
@@ -156,7 +156,7 @@ class CommandExecutable implements ExecutableCommand {
   }
 
   @Override
-  public int compareTo(@NotNull ExecutableCommand o) {
+  public int compareTo(@NotNull final ExecutableCommand o) {
     return path.compareTo(o.getPath());
   }
 }

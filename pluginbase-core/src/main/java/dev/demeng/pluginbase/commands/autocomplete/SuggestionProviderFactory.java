@@ -83,7 +83,7 @@ public interface SuggestionProviderFactory {
    * @param provider The provider to use
    * @return The provider factory
    */
-  static SuggestionProviderFactory forType(Class<?> type, SuggestionProvider provider) {
+  static SuggestionProviderFactory forType(final Class<?> type, final SuggestionProvider provider) {
     return parameter -> parameter.getType() == type ? provider : null;
   }
 
@@ -95,7 +95,8 @@ public interface SuggestionProviderFactory {
    * @param provider The provider to use
    * @return The provider factory
    */
-  static SuggestionProviderFactory forHierarchyType(Class<?> type, SuggestionProvider provider) {
+  static SuggestionProviderFactory forHierarchyType(final Class<?> type,
+      final SuggestionProvider provider) {
     return parameter -> parameter.getType() == type || parameter.getType().isAssignableFrom(type)
         ? provider : null;
   }

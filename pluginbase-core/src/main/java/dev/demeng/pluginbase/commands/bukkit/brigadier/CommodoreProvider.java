@@ -44,7 +44,7 @@ final class CommodoreProvider {
       Commodore.ensureSetup();
       MinecraftArgumentType.ensureSetup();
       return null;
-    } catch (Throwable e) {
+    } catch (final Throwable e) {
       return e;
     }
   }
@@ -64,7 +64,7 @@ final class CommodoreProvider {
    * @param plugin the plugin
    * @return the commodore instance
    */
-  public static Commodore getCommodore(Plugin plugin) {
+  public static Commodore getCommodore(final Plugin plugin) {
     Objects.requireNonNull(plugin, "plugin");
     return new Commodore(plugin);
   }

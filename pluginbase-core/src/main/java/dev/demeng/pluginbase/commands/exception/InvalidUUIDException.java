@@ -32,7 +32,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class InvalidUUIDException extends InvalidValueException {
 
-  public InvalidUUIDException(@NotNull CommandParameter parameter, @NotNull String input) {
+  public InvalidUUIDException(@NotNull final CommandParameter parameter,
+      @NotNull final String input) {
     super(parameter, input);
   }
 }

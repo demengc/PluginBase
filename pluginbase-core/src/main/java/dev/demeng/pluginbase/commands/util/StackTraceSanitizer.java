@@ -68,17 +68,17 @@ public final class StackTraceSanitizer {
    *
    * @param throwable Throwable to strip
    */
-  public void sanitize(@NotNull Throwable throwable) {
+  public void sanitize(@NotNull final Throwable throwable) {
     if (filters.isEmpty()) {
       return;
     }
     if (throwable.getCause() != null) {
       sanitize(throwable.getCause());
     }
-    List<StackTraceElement> trace = listOf(throwable.getStackTrace());
+    final List<StackTraceElement> trace = listOf(throwable.getStackTrace());
     int stripIndex = trace.size();
     for (int i = 0; i < trace.size(); i++) {
-      StackTraceElement stackTraceElement = trace.get(i);
+      final StackTraceElement stackTraceElement = trace.get(i);
       if (filters.stream().anyMatch(f -> f.test(stackTraceElement))) {
         stripIndex = i;
         break;
@@ -88,7 +88,7 @@ public final class StackTraceSanitizer {
     throwable.setStackTrace(trace.toArray(new StackTraceElement[0]));
   }
 
-  private StackTraceSanitizer(@Unmodifiable List<Predicate<StackTraceElement>> filters) {
+  private StackTraceSanitizer(@Unmodifiable final List<Predicate<StackTraceElement>> filters) {
     this.filters = filters;
   }
 
@@ -124,8 +124,8 @@ public final class StackTraceSanitizer {
      * @param classes Classes to strip
      * @return This builder
      */
-    public Builder ignoreClasses(@NotNull Class<?>... classes) {
-      for (Class<?> clazz : classes) {
+    public Builder ignoreClasses(@NotNull final Class<?>... classes) {
+      for (final Class<?> clazz : classes) {
         filters.add(c -> c.getClassName().equals(clazz.getName()));
       }
       return this;
@@ -137,7 +137,7 @@ public final class StackTraceSanitizer {
      * @param packageName Package name to strip
      * @return This builder
      */
-    public Builder ignorePackage(@NotNull String packageName) {
+    public Builder ignorePackage(@NotNull final String packageName) {
       filters.add(c -> c.getClassName().startsWith(packageName));
       return this;
     }
@@ -149,7 +149,7 @@ public final class StackTraceSanitizer {
      * @return This builder
      */
 
-    public Builder ignorePackage(@NotNull Package pkg) {
+    public Builder ignorePackage(@NotNull final Package pkg) {
       filters.add(c -> c.getClassName().startsWith(pkg.getName()));
       return this;
     }
@@ -160,7 +160,7 @@ public final class StackTraceSanitizer {
      * @param methodName The method name to strip
      * @return This builder
      */
-    public Builder ignoreMethod(@NotNull String methodName) {
+    public Builder ignoreMethod(@NotNull final String methodName) {
       filters.add(c -> c.getMethodName().equals(methodName));
       return this;
     }

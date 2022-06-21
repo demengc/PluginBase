@@ -32,43 +32,43 @@ public final class Preconditions {
   private Preconditions() {
   }
 
-  public static <T> void notEmpty(T[] array, String err) {
+  public static <T> void notEmpty(final T[] array, final String err) {
     if (array.length == 0) {
       throw new IllegalStateException(err);
     }
   }
 
-  public static <T> void notEmpty(Collection<T> collection, String err) {
+  public static <T> void notEmpty(final Collection<T> collection, final String err) {
     if (collection.size() == 0) {
       throw new IllegalStateException(err);
     }
   }
 
-  public static <T> void notEmpty(String s, String err) {
+  public static <T> void notEmpty(final String s, final String err) {
     if (s.length() == 0) {
       throw new IllegalStateException(err);
     }
   }
 
-  public static void checkArgument(boolean expr, String err) {
+  public static void checkArgument(final boolean expr, final String err) {
     if (!expr) {
       throw new IllegalArgumentException(err);
     }
   }
 
-  public static int coerceIn(int value, int min, int max) {
+  public static int coerceIn(final int value, final int min, final int max) {
     return value < min ? min : Math.min(value, max);
   }
 
-  public static int coerceAtMost(int value, int max) {
+  public static int coerceAtMost(final int value, final int max) {
     return Math.min(value, max);
   }
 
-  public static int coerceAtLeast(int value, int min) {
+  public static int coerceAtLeast(final int value, final int min) {
     return Math.max(value, min);
   }
 
-  public static <T> T notNull(T t, String err) {
+  public static <T> T notNull(final T t, final String err) {
     return Objects.requireNonNull(t, err + " cannot be null!");
   }
 

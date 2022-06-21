@@ -40,7 +40,7 @@ public abstract class SendableException extends RuntimeException {
    *
    * @param message Message to send
    */
-  public SendableException(String message) {
+  public SendableException(final String message) {
     super(message);
   }
 

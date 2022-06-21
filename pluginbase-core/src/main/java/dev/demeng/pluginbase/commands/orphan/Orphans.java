@@ -70,7 +70,7 @@ public final class Orphans {
    * @param path The command path. This accepts spaces for commands with subcategories.
    * @return A builder {@link Orphans}. You must call {@link #handler(OrphanCommand)} after.
    */
-  public static Orphans path(@NotNull String path) {
+  public static Orphans path(@NotNull final String path) {
     Preconditions.notNull(path, "path");
     return new Orphans(
         Collections.singletonList(CommandPath.get(Strings.splitBySpace(path.trim()))));
@@ -85,7 +85,7 @@ public final class Orphans {
    * @param paths The command paths. These accept spaces for commands with subcategories.
    * @return A builder {@link Orphans}. You must call {@link #handler(OrphanCommand)} after.
    */
-  public static Orphans path(@NotNull String... paths) {
+  public static Orphans path(@NotNull final String... paths) {
     Preconditions.notNull(paths, "paths");
     return new Orphans(Arrays.stream(paths)
         .map(text -> Strings.splitBySpace(text.trim()))
@@ -99,7 +99,7 @@ public final class Orphans {
    * @param path The command path. See {@link CommandPath}.
    * @return A builder {@link Orphans}. You must call {@link #handler(OrphanCommand)} after.
    */
-  public static Orphans path(@NotNull CommandPath path) {
+  public static Orphans path(@NotNull final CommandPath path) {
     Preconditions.notNull(path, "path");
     return new Orphans(Collections.singletonList(path));
   }
@@ -112,7 +112,7 @@ public final class Orphans {
    * @return An {@link OrphanRegistry} that can be passed to
    * {@link CommandHandler#register(Object...)} to be registered.
    */
-  public OrphanRegistry handler(OrphanCommand handler) {
+  public OrphanRegistry handler(final OrphanCommand handler) {
     Preconditions.notNull(handler, "orphan command");
     return new OrphanRegistry(path, handler);
   }

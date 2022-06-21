@@ -54,21 +54,21 @@ public final class QuotedStringTokenizer implements ArgumentParser {
   private static final int CHAR_DOUBLE_QUOTE = '"';
 
   @Override
-  public ArgumentStack parse(@NotNull String arguments) throws ArgumentParseException {
+  public ArgumentStack parse(@NotNull final String arguments) throws ArgumentParseException {
     if (arguments.length() == 0) {
       return ArgumentStack.empty();
     }
-    TokenizerState state = new TokenizerState(arguments);
-    ArgumentStack returnedArgs = ArgumentStack.empty();
+    final TokenizerState state = new TokenizerState(arguments);
+    final ArgumentStack returnedArgs = ArgumentStack.empty();
     while (state.hasMore()) {
       skipWhiteSpace(state);
-      String arg = nextArg(state);
+      final String arg = nextArg(state);
       returnedArgs.add(arg);
     }
     return returnedArgs;
   }
 
-  private void skipWhiteSpace(TokenizerState state) throws ArgumentParseException {
+  private void skipWhiteSpace(final TokenizerState state) throws ArgumentParseException {
     if (!state.hasMore()) {
       return;
     }
@@ -77,10 +77,10 @@ public final class QuotedStringTokenizer implements ArgumentParser {
     }
   }
 
-  private String nextArg(TokenizerState state) throws ArgumentParseException {
-    StringBuilder argBuilder = new StringBuilder();
+  private String nextArg(final TokenizerState state) throws ArgumentParseException {
+    final StringBuilder argBuilder = new StringBuilder();
     if (state.hasMore()) {
-      int codePoint = state.peek();
+      final int codePoint = state.peek();
       if (codePoint == CHAR_DOUBLE_QUOTE || codePoint == CHAR_SINGLE_QUOTE) {
         // quoted string
         parseQuotedString(state, codePoint, argBuilder);
@@ -91,7 +91,8 @@ public final class QuotedStringTokenizer implements ArgumentParser {
     return argBuilder.toString();
   }
 
-  private void parseQuotedString(TokenizerState state, int startQuotation, StringBuilder builder)
+  private void parseQuotedString(final TokenizerState state, final int startQuotation,
+      final StringBuilder builder)
       throws ArgumentParseException {
     // Consume the start quotation character
     int nextCodePoint = state.next();
@@ -117,10 +118,10 @@ public final class QuotedStringTokenizer implements ArgumentParser {
     }
   }
 
-  private void parseUnquotedString(TokenizerState state, StringBuilder builder)
+  private void parseUnquotedString(final TokenizerState state, final StringBuilder builder)
       throws ArgumentParseException {
     while (state.hasMore()) {
-      int nextCodePoint = state.peek();
+      final int nextCodePoint = state.peek();
       if (Character.isWhitespace(nextCodePoint)) {
         return;
       } else if (nextCodePoint == CHAR_BACKSLASH) {
@@ -131,7 +132,7 @@ public final class QuotedStringTokenizer implements ArgumentParser {
     }
   }
 
-  private static void parseEscape(TokenizerState state, StringBuilder builder)
+  private static void parseEscape(final TokenizerState state, final StringBuilder builder)
       throws ArgumentParseException {
     state.next(); // Consume \
     builder.appendCodePoint(state.next());
@@ -142,7 +143,7 @@ public final class QuotedStringTokenizer implements ArgumentParser {
     private final String buffer;
     private int index = -1;
 
-    TokenizerState(String buffer) {
+    TokenizerState(final String buffer) {
       this.buffer = buffer;
     }
 
@@ -165,7 +166,7 @@ public final class QuotedStringTokenizer implements ArgumentParser {
       return buffer.codePointAt(++index);
     }
 
-    public ArgumentParseException createException(String message) {
+    public ArgumentParseException createException(final String message) {
       return new ArgumentParseException(message, buffer, index);
     }
 

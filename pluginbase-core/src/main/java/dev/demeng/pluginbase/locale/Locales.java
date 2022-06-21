@@ -84,7 +84,7 @@ public final class Locales {
    * @param language Language to get locale for
    * @return The locale, or null if not found.
    */
-  public static Locale get(@NotNull String language) {
+  public static Locale get(@NotNull final String language) {
     notNull(language, "language");
     return LOCALES.get(language);
   }
@@ -105,14 +105,14 @@ public final class Locales {
   private static final Map<String, Locale> LOCALES;
 
   static {
-    Map<String, Locale> locales = new HashMap<>();
-    for (Field field : Locales.class.getDeclaredFields()) {
+    final Map<String, Locale> locales = new HashMap<>();
+    for (final Field field : Locales.class.getDeclaredFields()) {
       if (field.getType() == Locale.class) {
         try {
-          Locale locale = (Locale) field.get(null);
+          final Locale locale = (Locale) field.get(null);
           locales.putIfAbsent(locale.getLanguage(), locale);
           locales.put(locale.toString(), locale);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
           e.printStackTrace();
         }
       }

@@ -51,7 +51,7 @@ public final class Annotations {
    * @param <T>  Annotation type
    * @return The newly created annotation
    */
-  public static @NotNull <T extends Annotation> T create(@NotNull Class<T> type) {
+  public static @NotNull <T extends Annotation> T create(@NotNull final Class<T> type) {
     return create(type, Collections.emptyMap());
   }
 
@@ -66,8 +66,8 @@ public final class Annotations {
    * @param <T>     Annotation type
    * @return The newly created annotation
    */
-  public static @NotNull <T extends Annotation> T create(@NotNull Class<T> type,
-      @NotNull Map<String, Object> members) {
+  public static @NotNull <T extends Annotation> T create(@NotNull final Class<T> type,
+      @NotNull final Map<String, Object> members) {
     Preconditions.notNull(type, "type");
     Preconditions.notNull(members, "members");
     return type.cast(Proxy.newProxyInstance(
@@ -87,18 +87,18 @@ public final class Annotations {
    * @param <T>  Annotation type
    * @return The newly created annotation
    */
-  public static @NotNull <T extends Annotation> T create(@NotNull Class<T> type,
-      @NotNull Object... members) {
+  public static @NotNull <T extends Annotation> T create(@NotNull final Class<T> type,
+      @NotNull final Object... members) {
     Preconditions.notNull(type, "type");
     Preconditions.notNull(members, "members");
     if (members.length % 2 != 0) {
       throw new IllegalArgumentException(
           "Cannot have a non-even amount of members! Found " + members.length);
     }
-    Map<String, Object> values = new HashMap<>();
+    final Map<String, Object> values = new HashMap<>();
     for (int i = 0; i < members.length; i += 2) {
-      String key = String.valueOf(members[i]);
-      Object value = members[i + 1];
+      final String key = String.valueOf(members[i]);
+      final Object value = members[i + 1];
       values.put(key, value);
     }
     return type.cast(Proxy.newProxyInstance(
@@ -115,11 +115,12 @@ public final class Annotations {
    * @param members The annotation members
    * @return The annotation's hashcode.
    */
-  private static int hashCode(Class<? extends Annotation> type, Map<String, Object> members) {
+  private static int hashCode(final Class<? extends Annotation> type,
+      final Map<String, Object> members) {
     int result = 0;
-    for (Method method : type.getDeclaredMethods()) {
-      String name = method.getName();
-      Object value = members.get(name);
+    for (final Method method : type.getDeclaredMethods()) {
+      final String name = method.getName();
+      final Object value = members.get(name);
       result += (127 * name.hashCode()) ^ (Arrays.deepHashCode(new Object[]{value}) - 31);
     }
     return result;
@@ -133,13 +134,14 @@ public final class Annotations {
    * @param other   The other annotation to compare
    * @return if they are equal
    */
-  private static boolean equals(Class<? extends Annotation> type, Map<String, Object> members,
-      Object other) throws Exception {
+  private static boolean equals(final Class<? extends Annotation> type,
+      final Map<String, Object> members,
+      final Object other) throws Exception {
     if (!type.isInstance(other)) {
       return false;
     }
-    for (Method method : type.getDeclaredMethods()) {
-      String name = method.getName();
+    for (final Method method : type.getDeclaredMethods()) {
+      final String name = method.getName();
       if (!Arrays.deepEquals(new Object[]{method.invoke(other)}, new Object[]{members.get(name)})) {
         return false;
       }
@@ -154,18 +156,19 @@ public final class Annotations {
    * @param members The annotation members
    * @return The annotation's hashcode.
    */
-  private static String toString(Class<? extends Annotation> type, Map<String, Object> members) {
-    StringBuilder sb = new StringBuilder().append("@").append(type.getName()).append("(");
-    StringJoiner joiner = new StringJoiner(", ");
-    for (Entry<String, Object> entry : members.entrySet()) {
+  private static String toString(final Class<? extends Annotation> type,
+      final Map<String, Object> members) {
+    final StringBuilder sb = new StringBuilder().append("@").append(type.getName()).append("(");
+    final StringJoiner joiner = new StringJoiner(", ");
+    for (final Entry<String, Object> entry : members.entrySet()) {
       joiner.add(entry.getKey() + "=" + deepToString(entry.getValue()));
     }
     sb.append(joiner);
     return sb.append(")").toString();
   }
 
-  private static String deepToString(Object arg) {
-    String s = Arrays.deepToString(new Object[]{arg});
+  private static String deepToString(final Object arg) {
+    final String s = Arrays.deepToString(new Object[]{arg});
     return s.substring(1, s.length() - 1); // cut off the []
   }
 
@@ -174,17 +177,18 @@ public final class Annotations {
     private final Class<? extends Annotation> annotationType;
     private final Map<String, Object> annotationMembers;
 
-    DynamicAnnotationHandler(Class<? extends Annotation> annotationType,
-        Map<String, Object> annotationMembers) {
+    DynamicAnnotationHandler(final Class<? extends Annotation> annotationType,
+        final Map<String, Object> annotationMembers) {
       this.annotationType = annotationType;
       this.annotationMembers = new HashMap<>(annotationMembers);
-      for (Method method : annotationType.getDeclaredMethods()) {
+      for (final Method method : annotationType.getDeclaredMethods()) {
         this.annotationMembers.putIfAbsent(method.getName(), method.getDefaultValue());
       }
     }
 
     @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    public Object invoke(final Object proxy, final Method method, final Object[] args)
+        throws Throwable {
       switch (method.getName()) {
         case "toString":
           return Annotations.toString(annotationType, annotationMembers);
@@ -195,7 +199,7 @@ public final class Annotations {
         case "annotationType":
           return annotationType;
         default: {
-          Object v = annotationMembers.get(method.getName());
+          final Object v = annotationMembers.get(method.getName());
           if (v == null) {
             throw new AbstractMethodError(method.getName());
           }

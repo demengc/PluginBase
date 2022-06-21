@@ -37,11 +37,11 @@ enum DependencyResolverFactory implements ContextResolverFactory {
   INSTANCE;
 
   @Override
-  public @Nullable ContextResolver<?> create(@NotNull CommandParameter parameter) {
+  public @Nullable ContextResolver<?> create(@NotNull final CommandParameter parameter) {
     if (!parameter.hasAnnotation(Dependency.class)) {
       return null;
     }
-    Supplier<?> value = parameter.getCommandHandler().getDependency(parameter.getType());
+    final Supplier<?> value = parameter.getCommandHandler().getDependency(parameter.getType());
     if (value == null) {
       throw new IllegalArgumentException("Unable to resolve dependency for parameter " +
           parameter.getName() + " in " + parameter.getDeclaringCommand().getPath().toRealString());

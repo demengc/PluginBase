@@ -84,7 +84,8 @@ public interface ContextResolverFactory {
    * @param <T>      The resolver value type
    * @return The resolver factory
    */
-  static <T> @NotNull ContextResolverFactory forType(Class<T> type, ContextResolver<T> resolver) {
+  static <T> @NotNull ContextResolverFactory forType(final Class<T> type,
+      final ContextResolver<T> resolver) {
     return parameter -> parameter.getType() == type ? resolver : null;
   }
 
@@ -97,8 +98,8 @@ public interface ContextResolverFactory {
    * @param <T>      The resolver value type
    * @return The resolver factory
    */
-  static <T> @NotNull ContextResolverFactory forHierarchyType(Class<T> type,
-      ContextResolver<T> resolver) {
+  static <T> @NotNull ContextResolverFactory forHierarchyType(final Class<T> type,
+      final ContextResolver<T> resolver) {
     return parameter -> parameter.getType() == type || parameter.getType().isAssignableFrom(type)
         ? resolver : null;
   }

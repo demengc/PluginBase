@@ -44,7 +44,7 @@ public class CommandErrorException extends SendableException {
    *
    * @param message Message to send
    */
-  public CommandErrorException(String message, Object... arguments) {
+  public CommandErrorException(final String message, final Object... arguments) {
     super(message);
     this.arguments = arguments;
   }
@@ -55,7 +55,7 @@ public class CommandErrorException extends SendableException {
    * @param actor Actor to send to
    */
   @Override
-  public void sendTo(@NotNull CommandActor actor) {
+  public void sendTo(@NotNull final CommandActor actor) {
     actor.errorLocalized(getMessage(), arguments);
   }
 }

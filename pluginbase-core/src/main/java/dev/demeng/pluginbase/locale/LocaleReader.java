@@ -63,7 +63,7 @@ public interface LocaleReader {
    * @param bundle Bundle to wrap
    * @return The locale reader
    */
-  static @NotNull LocaleReader wrap(@NotNull ResourceBundle bundle) {
+  static @NotNull LocaleReader wrap(@NotNull final ResourceBundle bundle) {
     return new ResourceBundleLocaleReader(bundle);
   }
 }

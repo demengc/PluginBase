@@ -48,7 +48,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param path Path to wrap
    * @return The command path
    */
-  public static @NotNull CommandPath get(@NotNull String... path) {
+  public static @NotNull CommandPath get(@NotNull final String... path) {
     Preconditions.notEmpty(path, "Path cannot be empty!");
     return new CommandPath(path.clone());
   }
@@ -59,7 +59,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param path Path to wrap
    * @return The command path
    */
-  public static @NotNull CommandPath get(@NotNull Collection<String> path) {
+  public static @NotNull CommandPath get(@NotNull final Collection<String> path) {
     Preconditions.notEmpty(path, "Path cannot be empty!");
     return new CommandPath(path.toArray(new String[0]));
   }
@@ -74,9 +74,9 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    *
    * @param path Path to use.
    */
-  CommandPath(String[] path) {
+  CommandPath(final String[] path) {
     for (int i = 0; i < path.length; i++) {
-      String s = path[i];
+      final String s = path[i];
       path[i] = s.toLowerCase();
     }
     this.path = linkedListOf(path);
@@ -145,7 +145,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @return The string at the given index
    * @throws IndexOutOfBoundsException -
    */
-  public @NotNull String get(int index) {
+  public @NotNull String get(final int index) {
     return path.get(index);
   }
 
@@ -177,7 +177,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
     if (path.size() <= 1) {
       return null;
     }
-    LinkedList<String> list = toList();
+    final LinkedList<String> list = toList();
     list.removeLast();
     return CommandPath.get(list);
   }
@@ -218,7 +218,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param other Path to test against
    * @return True if this is a child of it, false if otherwise.
    */
-  public boolean isChildOf(CommandPath other) {
+  public boolean isChildOf(final CommandPath other) {
     return toRealString().startsWith(other.toRealString());
   }
 
@@ -228,19 +228,19 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
    * @param other Path to test against
    * @return True if this is a child of it, false if otherwise.
    */
-  public boolean isParentOf(CommandPath other) {
+  public boolean isParentOf(final CommandPath other) {
     return other.toRealString().startsWith(toRealString());
   }
 
   @Override
-  public boolean equals(Object o) {
+  public boolean equals(final Object o) {
     if (this == o) {
       return true;
     }
     if (!(o instanceof CommandPath)) {
       return false;
     }
-    CommandPath that = (CommandPath) o;
+    final CommandPath that = (CommandPath) o;
     return Objects.equals(path, that.path);
   }
 
@@ -290,7 +290,7 @@ public class CommandPath implements Iterable<String>, Comparable<CommandPath> {
   }
 
   @Override
-  public int compareTo(@NotNull CommandPath o) {
+  public int compareTo(@NotNull final CommandPath o) {
     if (isParentOf(o)) {
       return -1;
     } else if (isChildOf(o)) {

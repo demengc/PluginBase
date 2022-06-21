@@ -32,12 +32,12 @@ final class BukkitCommandListeners implements Listener {
 
   private final BukkitCommandHandler handler;
 
-  public BukkitCommandListeners(BukkitCommandHandler handler) {
+  public BukkitCommandListeners(final BukkitCommandHandler handler) {
     this.handler = handler;
   }
 
   @EventHandler(ignoreCancelled = true)
-  public void onPluginDisable(PluginDisableEvent event) {
+  public void onPluginDisable(final PluginDisableEvent event) {
     if (!event.getPlugin().equals(handler.getPlugin())) {
       return;
     }

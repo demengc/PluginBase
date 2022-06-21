@@ -59,38 +59,38 @@ public final class Strings {
    */
   public static final Pattern SNOWFLAKE = Pattern.compile("<(@!|@|@&|#)(?<snowflake>\\d{18})>");
 
-  public static LinkedList<String> splitBySpace(String text) {
-    String[] result = SPACE.split(text);
-    LinkedList<String> list = new LinkedList<>();
+  public static LinkedList<String> splitBySpace(final String text) {
+    final String[] result = SPACE.split(text);
+    final LinkedList<String> list = new LinkedList<>();
     Collections.addAll(list, result);
     return list;
   }
 
-  public static @Nullable String getSnowflake(String mention) {
-    Matcher matcher = SNOWFLAKE.matcher(mention);
+  public static @Nullable String getSnowflake(final String mention) {
+    final Matcher matcher = SNOWFLAKE.matcher(mention);
     if (matcher.find()) {
       return matcher.group(2);
     }
     return null;
   }
 
-  public static String getName(@NotNull Parameter parameter) {
-    Named named = parameter.getAnnotation(Named.class);
+  public static String getName(@NotNull final Parameter parameter) {
+    final Named named = parameter.getAnnotation(Named.class);
     if (named != null) {
       return named.value();
     }
-    Switch switchAnn = parameter.getAnnotation(Switch.class);
+    final Switch switchAnn = parameter.getAnnotation(Switch.class);
     if (switchAnn != null) {
       return switchAnn.value().isEmpty() ? parameter.getName() : switchAnn.value();
     }
-    Flag flag = parameter.getAnnotation(Flag.class);
+    final Flag flag = parameter.getAnnotation(Flag.class);
     if (flag != null) {
       return flag.value().isEmpty() ? parameter.getName() : flag.value();
     }
     return parameter.getName();
   }
 
-  public static String repeat(String string, int count) {
+  public static String repeat(final String string, final int count) {
     Preconditions.notNull(string, "string");
 
     if (count <= 1) {

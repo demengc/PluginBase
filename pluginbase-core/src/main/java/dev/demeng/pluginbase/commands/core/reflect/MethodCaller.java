@@ -48,7 +48,7 @@ public interface MethodCaller {
    * @param instance Instance to invoke from. Can be null in case of static methods.
    * @return The bound method caller
    */
-  default BoundMethodCaller bindTo(@Nullable Object instance) {
+  default BoundMethodCaller bindTo(@Nullable final Object instance) {
     return arguments -> call(instance, arguments);
   }
 

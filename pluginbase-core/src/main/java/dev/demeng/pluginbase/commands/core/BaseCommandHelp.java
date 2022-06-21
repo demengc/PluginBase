@@ -37,17 +37,18 @@ import org.jetbrains.annotations.Range;
 final class BaseCommandHelp<T> extends ArrayList<T> implements CommandHelp<T> {
 
   @Override
-  public CommandHelp<T> paginate(int page, int elementsPerPage) throws InvalidHelpPageException {
+  public CommandHelp<T> paginate(final int page, final int elementsPerPage)
+      throws InvalidHelpPageException {
     if (isEmpty()) {
       return new BaseCommandHelp<>();
     }
-    BaseCommandHelp<T> list = new BaseCommandHelp<>();
-    int size = getPageSize(elementsPerPage);
+    final BaseCommandHelp<T> list = new BaseCommandHelp<>();
+    final int size = getPageSize(elementsPerPage);
     if (page > size) {
       throw new InvalidHelpPageException(this, page, elementsPerPage);
     }
-    int listIndex = page - 1;
-    int l = Math.min(page * elementsPerPage, size());
+    final int listIndex = page - 1;
+    final int l = Math.min(page * elementsPerPage, size());
     for (int i = listIndex * elementsPerPage; i < l; ++i) {
       list.add(get(i));
     }
@@ -55,7 +56,7 @@ final class BaseCommandHelp<T> extends ArrayList<T> implements CommandHelp<T> {
   }
 
   @Override
-  public @Range(from = 1, to = Long.MAX_VALUE) int getPageSize(int elementsPerPage) {
+  public @Range(from = 1, to = Long.MAX_VALUE) int getPageSize(final int elementsPerPage) {
     if (elementsPerPage < 1) {
       throw new IllegalArgumentException(
           "Elements per page cannot be less than 1! (Found " + elementsPerPage + ")");
@@ -67,24 +68,24 @@ final class BaseCommandHelp<T> extends ArrayList<T> implements CommandHelp<T> {
 
     private final BaseCommandHandler handler;
 
-    public Resolver(BaseCommandHandler handler) {
+    public Resolver(final BaseCommandHandler handler) {
       this.handler = handler;
     }
 
     @Override
-    public CommandHelp<?> resolve(@NotNull ContextResolverContext context) {
+    public CommandHelp<?> resolve(@NotNull final ContextResolverContext context) {
       if (handler.getHelpWriter() == null) {
         throw new IllegalArgumentException("No help writer is registered!");
       }
-      ExecutableCommand helpCommand = context.command();
-      CommandHelpWriter<?> writer = handler.getHelpWriter();
-      BaseCommandHelp<Object> entries = new BaseCommandHelp<>();
-      CommandCategory parent = helpCommand.getParent();
-      CommandPath parentPath = parent == null ? null : parent.getPath();
+      final ExecutableCommand helpCommand = context.command();
+      final CommandHelpWriter<?> writer = handler.getHelpWriter();
+      final BaseCommandHelp<Object> entries = new BaseCommandHelp<>();
+      final CommandCategory parent = helpCommand.getParent();
+      final CommandPath parentPath = parent == null ? null : parent.getPath();
       handler.executables.values().stream().sorted().forEach(c -> {
         if (parentPath == null || parentPath.isParentOf(c.getPath())) {
           if (c != helpCommand) {
-            Object generated = writer.generate(c, context.actor());
+            final Object generated = writer.generate(c, context.actor());
             if (generated != null) {
               entries.add(generated);
             }

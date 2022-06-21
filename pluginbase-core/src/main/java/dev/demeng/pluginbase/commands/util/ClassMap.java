@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class ClassMap<V> extends HashMap<Class<?>, V> {
 
-  public boolean add(Class<?> type, V value) {
-    Class<?> wrapped = Primitives.wrap(type);
+  public boolean add(final Class<?> type, final V value) {
+    final Class<?> wrapped = Primitives.wrap(type);
     if (containsKey(wrapped)) {
       return false;
     }
@@ -38,8 +38,8 @@ public final class ClassMap<V> extends HashMap<Class<?>, V> {
     return false;
   }
 
-  public V getFlexibleOrDefault(@NotNull Class<?> key, V def) {
-    V value = getFlexible(key);
+  public V getFlexibleOrDefault(@NotNull final Class<?> key, final V def) {
+    final V value = getFlexible(key);
     if (value == null) {
       return def;
     }
@@ -52,7 +52,7 @@ public final class ClassMap<V> extends HashMap<Class<?>, V> {
     if (v != null) {
       return v;
     }
-    for (Entry<Class<?>, V> entry : entrySet()) {
+    for (final Entry<Class<?>, V> entry : entrySet()) {
       if (entry.getKey().isAssignableFrom(key)) {
         v = entry.getValue();
         break;

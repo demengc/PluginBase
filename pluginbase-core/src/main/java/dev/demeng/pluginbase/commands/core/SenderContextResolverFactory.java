@@ -41,34 +41,34 @@ final class SenderContextResolverFactory implements ContextResolverFactory {
   private static final SenderResolver SELF = new SenderResolver() {
 
     @Override
-    public boolean isCustomType(Class<?> type) {
+    public boolean isCustomType(final Class<?> type) {
       return CommandActor.class.isAssignableFrom(type);
     }
 
     @Override
-    public @NotNull Object getSender(@NotNull Class<?> customSenderType,
-        @NotNull CommandActor actor,
-        @NotNull ExecutableCommand command) {
+    public @NotNull Object getSender(@NotNull final Class<?> customSenderType,
+        @NotNull final CommandActor actor,
+        @NotNull final ExecutableCommand command) {
       return actor;
     }
   };
 
   private final List<SenderResolver> resolvers;
 
-  public SenderContextResolverFactory(List<SenderResolver> resolvers) {
+  public SenderContextResolverFactory(final List<SenderResolver> resolvers) {
     this.resolvers = resolvers;
     resolvers.add(SELF);
   }
 
   @Override
-  public @Nullable ContextResolver<?> create(@NotNull CommandParameter parameter) {
+  public @Nullable ContextResolver<?> create(@NotNull final CommandParameter parameter) {
     if (parameter.getMethodIndex() != 0) {
       return null;
     }
     if (parameter.hasAnnotation(NotSender.class)) {
       return null;
     }
-    for (SenderResolver resolver : resolvers) {
+    for (final SenderResolver resolver : resolvers) {
       if (resolver.isCustomType(parameter.getType())) {
         return context -> Preconditions.notNull(
             resolver.getSender(parameter.getType(), context.actor(), context.command()),

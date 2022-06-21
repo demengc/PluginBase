@@ -116,8 +116,8 @@ public interface BukkitCommandActor extends CommandActor {
    * @param sender Command sender to wrap
    * @return The wrapping {@link BukkitCommandActor}.
    */
-  static @NotNull BukkitCommandActor wrap(@NotNull CommandSender sender,
-      @NotNull CommandHandler handler) {
+  static @NotNull BukkitCommandActor wrap(@NotNull final CommandSender sender,
+      @NotNull final CommandHandler handler) {
     return new BukkitActor(sender, handler);
   }
 }

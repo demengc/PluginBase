@@ -101,7 +101,7 @@ public interface ArgumentStack extends Deque<String>, List<String>, Cloneable {
    * @param arguments Arguments to clone from
    * @return The newly created argument stack.
    */
-  static @NotNull ArgumentStack copy(@NotNull Collection<String> arguments) {
+  static @NotNull ArgumentStack copy(@NotNull final Collection<String> arguments) {
     if (arguments.size() == 0) {
       return empty();
     }
@@ -115,7 +115,7 @@ public interface ArgumentStack extends Deque<String>, List<String>, Cloneable {
    * @param arguments Arguments to clone from
    * @return The newly created argument stack.
    */
-  static @NotNull ArgumentStack copy(@NotNull String... arguments) {
+  static @NotNull ArgumentStack copy(@NotNull final String... arguments) {
     if (arguments.length == 0) {
       return empty();
     }

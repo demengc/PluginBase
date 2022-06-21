@@ -54,7 +54,7 @@ public interface ContextResolver<T> {
    * @return The context resolver
    * @since 1.3.0
    */
-  static <T> ContextResolver<T> of(@NotNull T value) {
+  static <T> ContextResolver<T> of(@NotNull final T value) {
     return context -> value;
   }
 
@@ -67,7 +67,7 @@ public interface ContextResolver<T> {
    * @return The context resolver
    * @since 1.3.0
    */
-  static <T> ContextResolver<T> of(@NotNull Supplier<T> value) {
+  static <T> ContextResolver<T> of(@NotNull final Supplier<T> value) {
     return context -> value.get();
   }
 

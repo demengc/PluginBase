@@ -131,7 +131,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
         .getConfigurationSection("enchantments");
 
     if (enchantmentsSection != null) {
-      for (String strEnchantment : enchantmentsSection.getKeys(false)) {
+      for (final String strEnchantment : enchantmentsSection.getKeys(false)) {
         final Enchantment enchantment = parseEnchantment(strEnchantment);
 
         if (enchantment == null) {
@@ -146,13 +146,13 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
     return builder.get();
   }
 
-  private Enchantment parseEnchantment(String str) {
+  private Enchantment parseEnchantment(final String str) {
 
     final Enchantment enchantment;
 
     try {
       enchantment = Enchantment.getByKey(NamespacedKey.minecraft(str.toLowerCase()));
-    } catch (IllegalArgumentException ex) {
+    } catch (final IllegalArgumentException ex) {
       return null;
     }
 

@@ -52,7 +52,7 @@ public final class BukkitCommandPermission implements CommandPermission {
    * @return {@code true} if they can use it, false if otherwise.
    */
   @Override
-  public boolean canExecute(@NotNull CommandActor actor) {
+  public boolean canExecute(@NotNull final CommandActor actor) {
     return ((BukkitCommandActor) actor).getSender().hasPermission(permission);
   }
 }

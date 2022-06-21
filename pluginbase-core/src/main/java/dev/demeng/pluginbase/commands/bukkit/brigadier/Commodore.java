@@ -98,7 +98,7 @@ final class Commodore {
         commandDispatcher = ReflectionUtil.nmsClass("CommandDispatcher");
       }
 
-      Class<?> craftServer = ReflectionUtil.obcClass("CraftServer");
+      final Class<?> craftServer = ReflectionUtil.obcClass("CraftServer");
       CONSOLE_FIELD = craftServer.getDeclaredField("console");
       CONSOLE_FIELD.setAccessible(true);
 
@@ -127,11 +127,11 @@ final class Commodore {
       LITERALS_FIELD = CommandNode.class.getDeclaredField("literals");
       ARGUMENTS_FIELD = CommandNode.class.getDeclaredField("arguments");
       CHILDREN_FIELDS = new Field[]{CHILDREN_FIELD, LITERALS_FIELD, ARGUMENTS_FIELD};
-      for (Field field : CHILDREN_FIELDS) {
+      for (final Field field : CHILDREN_FIELDS) {
         field.setAccessible(true);
       }
 
-    } catch (ReflectiveOperationException e) {
+    } catch (final ReflectiveOperationException e) {
       throw new ExceptionInInitializerError(e);
     }
   }
@@ -139,7 +139,7 @@ final class Commodore {
   private final Plugin plugin;
   private final List<LiteralCommandNode<?>> registeredNodes = new ArrayList<>();
 
-  Commodore(Plugin plugin) {
+  Commodore(final Plugin plugin) {
     this.plugin = plugin;
     this.plugin.getServer().getPluginManager()
         .registerEvents(new ServerReloadListener(), this.plugin);
@@ -147,47 +147,47 @@ final class Commodore {
 
   public CommandDispatcher<?> getDispatcher() {
     try {
-      Object mcServerObject = CONSOLE_FIELD.get(Bukkit.getServer());
-      Object commandDispatcherObject = GET_COMMAND_DISPATCHER_METHOD.invoke(mcServerObject);
+      final Object mcServerObject = CONSOLE_FIELD.get(Bukkit.getServer());
+      final Object commandDispatcherObject = GET_COMMAND_DISPATCHER_METHOD.invoke(mcServerObject);
       return (CommandDispatcher<?>) GET_BRIGADIER_DISPATCHER_METHOD.invoke(commandDispatcherObject);
-    } catch (ReflectiveOperationException e) {
+    } catch (final ReflectiveOperationException e) {
       throw new RuntimeException(e);
     }
   }
 
-  public CommandSender getBukkitSender(Object commandWrapperListener) {
+  public CommandSender getBukkitSender(final Object commandWrapperListener) {
     Objects.requireNonNull(commandWrapperListener, "commandWrapperListener");
     try {
       return (CommandSender) GET_BUKKIT_SENDER_METHOD.invoke(commandWrapperListener);
-    } catch (ReflectiveOperationException e) {
+    } catch (final ReflectiveOperationException e) {
       throw new RuntimeException(e);
     }
   }
 
   @SuppressWarnings({"rawtypes"})
-  public void register(LiteralCommandNode<?> node) {
+  public void register(final LiteralCommandNode<?> node) {
     Objects.requireNonNull(node, "node");
 
-    CommandDispatcher dispatcher = getDispatcher();
-    RootCommandNode root = dispatcher.getRoot();
+    final CommandDispatcher dispatcher = getDispatcher();
+    final RootCommandNode root = dispatcher.getRoot();
 
     removeChild(root, node.getName());
     root.addChild(node);
     registeredNodes.add(node);
   }
 
-  public void register(Command command, LiteralCommandNode<?> node,
-      Predicate<? super Player> permissionTest) {
+  public void register(final Command command, LiteralCommandNode<?> node,
+      final Predicate<? super Player> permissionTest) {
     Objects.requireNonNull(command, "command");
     Objects.requireNonNull(node, "node");
     Objects.requireNonNull(permissionTest, "permissionTest");
 
-    Collection<String> aliases = getAliases(command);
+    final Collection<String> aliases = getAliases(command);
     if (!aliases.contains(node.getLiteral())) {
       node = renameLiteralNode(node, command.getName());
     }
 
-    for (String alias : aliases) {
+    for (final String alias : aliases) {
       if (node.getLiteral().equals(alias)) {
         register(node);
       } else {
@@ -200,7 +200,7 @@ final class Commodore {
         .registerEvents(new CommandDataSendListener(command, permissionTest), plugin);
   }
 
-  public void register(Command command, LiteralCommandNode<?> node) {
+  public void register(final Command command, final LiteralCommandNode<?> node) {
     Objects.requireNonNull(command, "command");
     Objects.requireNonNull(node, "node");
 
@@ -208,22 +208,22 @@ final class Commodore {
   }
 
   @SuppressWarnings({"rawtypes"})
-  private static void removeChild(RootCommandNode root, String name) {
+  private static void removeChild(final RootCommandNode root, final String name) {
     try {
-      for (Field field : CHILDREN_FIELDS) {
-        Map<String, ?> children = (Map<String, ?>) field.get(root);
+      for (final Field field : CHILDREN_FIELDS) {
+        final Map<String, ?> children = (Map<String, ?>) field.get(root);
         children.remove(name);
       }
-    } catch (ReflectiveOperationException e) {
+    } catch (final ReflectiveOperationException e) {
       throw new RuntimeException(e);
     }
   }
 
-  private static <S> LiteralCommandNode<S> renameLiteralNode(LiteralCommandNode<S> node,
-      String newLiteral) {
-    LiteralCommandNode<S> clone = new LiteralCommandNode<>(newLiteral, node.getCommand(),
+  private static <S> LiteralCommandNode<S> renameLiteralNode(final LiteralCommandNode<S> node,
+      final String newLiteral) {
+    final LiteralCommandNode<S> clone = new LiteralCommandNode<>(newLiteral, node.getCommand(),
         node.getRequirement(), node.getRedirect(), node.getRedirectModifier(), node.isFork());
-    for (CommandNode<S> child : node.getChildren()) {
+    for (final CommandNode<S> child : node.getChildren()) {
       clone.addChild(child);
     }
     return clone;
@@ -236,11 +236,11 @@ final class Commodore {
 
     @SuppressWarnings({"rawtypes"})
     @EventHandler
-    public void onLoad(ServerLoadEvent e) {
-      CommandDispatcher dispatcher = getDispatcher();
-      RootCommandNode root = dispatcher.getRoot();
+    public void onLoad(final ServerLoadEvent e) {
+      final CommandDispatcher dispatcher = getDispatcher();
+      final RootCommandNode root = dispatcher.getRoot();
 
-      for (LiteralCommandNode<?> node : registeredNodes) {
+      for (final LiteralCommandNode<?> node : registeredNodes) {
         removeChild(root, node.getName());
         root.addChild(node);
       }
@@ -257,7 +257,8 @@ final class Commodore {
     private final Set<String> minecraftPrefixedAliases;
     private final Predicate<? super Player> permissionTest;
 
-    CommandDataSendListener(Command pluginCommand, Predicate<? super Player> permissionTest) {
+    CommandDataSendListener(final Command pluginCommand,
+        final Predicate<? super Player> permissionTest) {
       aliases = new HashSet<>(getAliases(pluginCommand));
       minecraftPrefixedAliases = aliases.stream().map(alias -> "minecraft:" + alias)
           .collect(Collectors.toSet());
@@ -265,7 +266,7 @@ final class Commodore {
     }
 
     @EventHandler
-    public void onCommandSend(PlayerCommandSendEvent e) {
+    public void onCommandSend(final PlayerCommandSendEvent e) {
       // always remove 'minecraft:' prefixed aliases added by craftbukkit.
       // this happens because bukkit thinks our injected commands are vanilla commands.
       e.getCommands().removeAll(minecraftPrefixedAliases);
@@ -281,7 +282,7 @@ final class Commodore {
     // do nothing - this is only called to trigger the static initializer
   }
 
-  private static Collection<String> getAliases(Command command) {
+  private static Collection<String> getAliases(final Command command) {
     Objects.requireNonNull(command, "command");
     Stream<String> aliasesStream = Stream.concat(
         Stream.of(command.getLabel()),
@@ -289,7 +290,8 @@ final class Commodore {
     );
 
     if (command instanceof PluginCommand) {
-      String fallbackPrefix = ((PluginCommand) command).getPlugin().getName().toLowerCase().trim();
+      final String fallbackPrefix = ((PluginCommand) command).getPlugin().getName().toLowerCase()
+          .trim();
       aliasesStream = aliasesStream.flatMap(
           alias -> Stream.of(alias, fallbackPrefix + ":" + alias));
     }

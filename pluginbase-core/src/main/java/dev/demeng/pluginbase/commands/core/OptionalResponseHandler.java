@@ -37,13 +37,13 @@ final class OptionalResponseHandler implements ResponseHandler<Optional<Object>>
 
   private final ResponseHandler<Object> delegate;
 
-  public OptionalResponseHandler(ResponseHandler<Object> delegate) {
+  public OptionalResponseHandler(final ResponseHandler<Object> delegate) {
     this.delegate = delegate;
   }
 
   @Override
-  public void handleResponse(Optional<Object> response, @NotNull CommandActor actor,
-      @NotNull ExecutableCommand command) {
+  public void handleResponse(final Optional<Object> response, @NotNull final CommandActor actor,
+      @NotNull final ExecutableCommand command) {
     response.ifPresent(v -> delegate.handleResponse(v, actor, command));
   }
 }

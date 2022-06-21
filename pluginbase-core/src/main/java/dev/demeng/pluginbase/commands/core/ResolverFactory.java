@@ -34,12 +34,12 @@ final class ResolverFactory {
 
   private final Object factory;
 
-  public ResolverFactory(Object factory) {
+  public ResolverFactory(final Object factory) {
     this.factory = factory;
   }
 
-  public @Nullable Resolver create(@NotNull CommandParameter parameter) {
-    Object resolver;
+  public @Nullable Resolver create(@NotNull final CommandParameter parameter) {
+    final Object resolver;
 
     if (factory instanceof ContextResolverFactory) {
       resolver = ((ContextResolverFactory) factory).create(parameter);

@@ -42,7 +42,7 @@ public class ArgumentParseException extends RuntimeException {
    * @param source   The source string being parsed
    * @param position The current position in the source string
    */
-  public ArgumentParseException(String message, String source, int position) {
+  public ArgumentParseException(final String message, final String source, final int position) {
     super(message);
     this.source = source;
     this.position = position;
@@ -57,7 +57,8 @@ public class ArgumentParseException extends RuntimeException {
    * @param source   The source string being parsed
    * @param position The current position in the source string
    */
-  public ArgumentParseException(String message, Throwable cause, String source, int position) {
+  public ArgumentParseException(final String message, final Throwable cause, final String source,
+      final int position) {
     super(message, cause);
     this.source = source;
     this.position = position;
@@ -69,12 +70,12 @@ public class ArgumentParseException extends RuntimeException {
    * @return The appropriate position string
    */
   public String getAnnotatedPosition() {
-    String source = this.source;
+    final String source = this.source;
     int position = this.position;
     if (source.length() > 80) {
       if (position >= 37) {
-        int startPos = position - 37;
-        int endPos = Math.min(source.length(), position + 37);
+        final int startPos = position - 37;
+        final int endPos = Math.min(source.length(), position + 37);
         position -= 40;
       }
     }

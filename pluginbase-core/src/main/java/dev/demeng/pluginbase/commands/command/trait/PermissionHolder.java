@@ -49,7 +49,7 @@ public interface PermissionHolder {
    * @param actor Actor to check against
    * @return {@code true} if they have the permission, false if otherwise.
    */
-  default boolean hasPermission(@NotNull CommandActor actor) {
+  default boolean hasPermission(@NotNull final CommandActor actor) {
     return getPermission().canExecute(actor);
   }
 
@@ -59,7 +59,7 @@ public interface PermissionHolder {
    *
    * @param actor Actor to check against.
    */
-  default void checkPermission(@NotNull CommandActor actor) {
+  default void checkPermission(@NotNull final CommandActor actor) {
     if (!getPermission().canExecute(actor)) {
       throw new NoPermissionException(this, getPermission());
     }
