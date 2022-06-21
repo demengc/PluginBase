@@ -54,6 +54,11 @@ import org.jetbrains.annotations.Nullable;
 public final class ChatUtils {
 
   /**
+   * The message value that will cause the message to not be sent. Ignores case.
+   */
+  private static final String IGNORE_MESSAGE_VALUE = "ignore";
+
+  /**
    * The prefix to look for in messages to determine if the advanced parser should be used. Any
    * messages that do not contain this prefix will be parsed normally.
    */
@@ -92,29 +97,27 @@ public final class ChatUtils {
   }
 
   /**
-   * Convert plain string(s) with color codes into a colorized message. Supports HEX colors in the
+   * Convert plain string with color codes into a colorized message. Supports HEX colors in the
    * format of {@code <#HEX>}. 1.16+ HEX support requires the server software to be Spigot, or a
    * fork of Spigot.
    *
-   * @param strings The plain string(s)
-   * @return Colorized strings separated by new lines, or empty if the provided strings are null
+   * @param str The plain string
+   * @return Colorized string, or empty if the provided string is null
    */
   @NotNull
-  public static String colorize(final String... strings) {
+  public static String colorize(@Nullable final String str) {
 
-    if (strings == null) {
+    if (str == null) {
       return "";
     }
 
-    String message = String.join("\n", strings);
+    String message = str;
 
-    if (BaseManager.getBaseSettings() != null) {
-      final ColorScheme scheme = BaseManager.getBaseSettings().colorScheme();
-      if (scheme != null) {
-        message = message.replace("&p", scheme.getPrimary())
-            .replace("&s", scheme.getSecondary())
-            .replace("&t", scheme.getTertiary());
-      }
+    final ColorScheme scheme = BaseManager.getBaseSettings().colorScheme();
+    if (scheme != null) {
+      message = message.replace("&p", scheme.getPrimary())
+          .replace("&s", scheme.getSecondary())
+          .replace("&t", scheme.getTertiary());
     }
 
     if (Common.SPIGOT && Common.isServerVersionAtLeast(16)) {
@@ -141,7 +144,7 @@ public final class ChatUtils {
    *
    * @param strList The plain strings
    * @return Colorized strings, or an empty collection if the provided list is null
-   * @see #colorize(String...)
+   * @see #colorize(String)
    */
   @NotNull
   public static List<String> colorize(@Nullable final List<String> strList) {
@@ -156,57 +159,34 @@ public final class ChatUtils {
   /**
    * Appends the prefix, and then colorizes.
    *
-   * @param strings The plain, non-prefixed string(s)
-   * @return Colorized strings separated by new lines, or empty if the provided strings are null
+   * @param str The plain, non-prefixed string
+   * @return Formatted string, or empty if the provided string is null
    */
   @NotNull
-  public static String format(final String... strings) {
+  public static String format(@Nullable final String str) {
 
-    if (strings == null) {
+    if (str == null) {
       return "";
     }
 
-    if (strings.length == 1) {
-      return colorize(getPrefix() + strings[0]);
-    }
-
-    final StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < strings.length; i++) {
-      builder.append(getPrefix()).append(strings[i]);
-
-      if (i != strings.length - 1) {
-        builder.append("\n");
-      }
-    }
-
-    return colorize(builder.toString());
+    return colorize(getPrefix() + str);
   }
 
   /**
    * Parses the string using the advanced Adventure and MiniMessage library. Format:
    * https://docs.adventure.kyori.net/minimessage.html#format
    *
-   * @param strings The raw string(s)
-   * @return The result component for the strings, or empty if the provided strings are null
+   * @param str The raw string
+   * @return The result component for the string, or empty if the provided string is null
    */
   @NotNull
-  public static Component parseAdvanced(final String... strings) {
+  public static Component parseAdvanced(@Nullable final String str) {
 
-    if (strings == null) {
+    if (str == null) {
       return Component.empty();
     }
 
-    if (strings.length == 1) {
-      return MINI_MESSAGE.deserialize(strings[0]);
-    }
-
-    Component component = MINI_MESSAGE.deserialize(strings[0]);
-
-    for (int i = 1; i < strings.length; i++) {
-      component = component.append(MINI_MESSAGE.deserialize("\n" + strings[i]));
-    }
-
-    return component;
+    return MINI_MESSAGE.deserialize(str);
   }
 
   /**
@@ -214,12 +194,12 @@ public final class ChatUtils {
    * legacy Bukkit Component Serializer to return a String rather than a Compnent. Format:
    * https://docs.adventure.kyori.net/minimessage.html#format
    *
-   * @param strings The raw string(s)
-   * @return The serialized component for the strings, or empty if the provided strings are null
+   * @param str The raw string(s)
+   * @return The serialized component for the string, or empty if the provided string is null
    */
   @NotNull
-  public static String legacyParseAdvanced(final String... strings) {
-    return legacySerialize(parseAdvanced(strings));
+  public static String legacyParseAdvanced(@Nullable final String str) {
+    return legacySerialize(parseAdvanced(str));
   }
 
   /**
@@ -228,7 +208,7 @@ public final class ChatUtils {
    *
    * @param component The component to serialize
    * @return The serialized component
-   * @see #legacyParseAdvanced(String...)
+   * @see #legacyParseAdvanced(String)
    */
   @NotNull
   public static String legacySerialize(@NotNull final Component component) {
@@ -289,72 +269,62 @@ public final class ChatUtils {
   // ---------------------------------------------------------------------------------
 
   /**
-   * Send formatted console messages. Any message equaling "none" will be ignored.
+   * Sends a formatted console message. Any message equaling null or {@link #IGNORE_MESSAGE_VALUE}
+   * (ignore case) will be ignored.
    *
-   * @param strings The messages to send
+   * @param str The message to send
    */
-  public static void console(final String... strings) {
+  public static void console(@Nullable final String str) {
 
-    if (strings == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
-    for (final String s : strings) {
-      if (!s.equalsIgnoreCase("none")) {
-        Bukkit.getConsoleSender().sendMessage(format(s));
-      }
-    }
+    Bukkit.getConsoleSender().sendMessage(format(str));
   }
 
   /**
-   * Send colored console messages. Any message equaling "none" will be ignored.
+   * Sends a colored console message. Any message equaling null or {@link #IGNORE_MESSAGE_VALUE}
+   * (ignore case) will be ignored.
    *
-   * @param strings The messages to send
+   * @param str The message to send
    */
-  public static void coloredConsole(final String... strings) {
+  public static void coloredConsole(@Nullable final String str) {
 
-    if (strings == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
-    for (final String s : strings) {
-      if (!s.equalsIgnoreCase("none")) {
-        Bukkit.getConsoleSender().sendMessage(colorize(s));
-      }
-    }
+    Bukkit.getConsoleSender().sendMessage(colorize(str));
   }
 
   /**
-   * Log plain messages into the console.
+   * Logs a plain message into the console.
    *
-   * @param strings The messages to send
+   * @param str The message to send
    */
-  public static void log(final String... strings) {
+  public static void log(@Nullable final String str) {
 
-    if (strings == null) {
+    if (str == null) {
       return;
     }
 
-    for (final String s : strings) {
-      BaseManager.getPlugin().getLogger().info(s);
-    }
+    BaseManager.getPlugin().getLogger().info(str);
   }
 
   /**
-   * Log plain messages into the console.
+   * Logs a plain message into the console.
    *
-   * @param strings The messages to send
-   * @param level   The logging level
+   * @param str   The message to send
+   * @param level The logging level
    */
-  public static void log(final Level level, final String... strings) {
+  public static void log(final Level level, final String str) {
 
-    if (strings == null) {
+    if (str == null) {
       return;
     }
 
-    for (final String s : strings) {
-      BaseManager.getPlugin().getLogger().log(level, s);
-    }
+    BaseManager.getPlugin().getLogger().log(level, str);
   }
 
   // ---------------------------------------------------------------------------------
@@ -362,36 +332,38 @@ public final class ChatUtils {
   // ---------------------------------------------------------------------------------
 
   /**
-   * Sends a colored and prefixed message to the command sender.
+   * Sends a colored and prefixed message to the command sender. Any message equaling null or
+   * {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
-   * @param lines  The lines to send
+   * @param str    The message to send
    */
-  public static void tell(@NotNull final CommandSender sender, final String... lines) {
+  public static void tell(@NotNull final CommandSender sender, @Nullable final String str) {
 
-    if (lines == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
-    if (!attemptTellAdvanced(sender, lines)) {
-      sender.sendMessage(format(lines));
+    if (!attemptTellAdvanced(sender, str)) {
+      sender.sendMessage(format(str));
     }
   }
 
   /**
-   * Does the same thing as {@link #tell(CommandSender, String...)}, but without the prefix.
+   * Does the same thing as {@link #tell(CommandSender, String)}, but without the prefix. Any
+   * message equaling null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
-   * @param lines  The lines to send
+   * @param str    The message to send
    */
-  public static void coloredTell(@NotNull final CommandSender sender, final String... lines) {
+  public static void coloredTell(@NotNull final CommandSender sender, @Nullable final String str) {
 
-    if (lines == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
-    if (!attemptTellAdvanced(sender, lines)) {
-      sender.sendMessage(colorize(lines));
+    if (!attemptTellAdvanced(sender, str)) {
+      sender.sendMessage(colorize(str));
     }
   }
 
@@ -400,7 +372,7 @@ public final class ChatUtils {
    *
    * @param player    The player who should receive the component
    * @param component The component to send
-   * @see #parseAdvanced(String...)
+   * @see #parseAdvanced(String)
    */
   public static void tellAdvanced(@NotNull final Player player,
       @NotNull final Component component) {
@@ -409,103 +381,103 @@ public final class ChatUtils {
 
   /**
    * Sends a colored and centered message. May not work if the player has changed their chat size,
-   * used a custom font (resource pack), or if the message contains HEX colors.
+   * used a custom font (resource pack), or if the message contains HEX colors. Any message equaling
+   * null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
    * @param player The player that will receive the message
-   * @param lines  The lines to send
+   * @param str    The message to send
    */
-  public static void tellCentered(@NotNull final Player player, final String... lines) {
+  public static void tellCentered(@NotNull final Player player, @Nullable final String str) {
 
-    if (lines == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
-    for (String line : lines) {
-
-      if (line == null || line.equals("")) {
-        player.sendMessage("");
-        continue;
-      }
-
-      line = colorize(line);
-
-      int messagePxSize = 0;
-      boolean previousCode = false;
-      boolean isBold = false;
-
-      for (final char c : line.toCharArray()) {
-
-        if (c == ChatColor.COLOR_CHAR) {
-          previousCode = true;
-
-        } else if (previousCode) {
-          previousCode = false;
-          isBold = c == 'l' || c == 'L';
-
-        } else {
-          final DefaultFontInfo dfi = DefaultFontInfo.getDefaultFontInfo(c);
-          messagePxSize += isBold ? dfi.getBoldLength() : dfi.getLength();
-          messagePxSize++;
-        }
-      }
-
-      final int halvedMessageSize = messagePxSize / 2;
-      final int toCompensate = 154 - halvedMessageSize;
-      final int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
-      int compensated = 0;
-
-      final StringBuilder sb = new StringBuilder();
-
-      while (compensated < toCompensate) {
-        sb.append(" ");
-        compensated += spaceLength;
-      }
-
-      player.sendMessage(sb + line);
+    if (str.isEmpty()) {
+      player.sendMessage("");
     }
+
+    final String colorized = colorize(str);
+
+    int messagePxSize = 0;
+    boolean previousCode = false;
+    boolean isBold = false;
+
+    for (final char c : colorized.toCharArray()) {
+
+      if (c == ChatColor.COLOR_CHAR) {
+        previousCode = true;
+
+      } else if (previousCode) {
+        previousCode = false;
+        isBold = c == 'l' || c == 'L';
+
+      } else {
+        final DefaultFontInfo dfi = DefaultFontInfo.getDefaultFontInfo(c);
+        messagePxSize += isBold ? dfi.getBoldLength() : dfi.getLength();
+        messagePxSize++;
+      }
+    }
+
+    final int halvedMessageSize = messagePxSize / 2;
+    final int toCompensate = 154 - halvedMessageSize;
+    final int spaceLength = DefaultFontInfo.SPACE.getLength() + 1;
+    int compensated = 0;
+
+    final StringBuilder sb = new StringBuilder();
+
+    while (compensated < toCompensate) {
+      sb.append(" ");
+      compensated += spaceLength;
+    }
+
+    player.sendMessage(sb + colorized);
   }
 
   /**
-   * Broadcasts the message after coloring and formatting them.
+   * Broadcasts the message after coloring and formatting it. Any message equaling null or
+   * {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
    *                   the broadcast should be seen by everyone
-   * @param lines      The lines to send
+   * @param str        The message to send
    */
-  public static void broadcast(@Nullable final String permission, final String... lines) {
+  public static void broadcast(@Nullable final String permission, @Nullable final String str) {
 
-    if (lines == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
     if (permission == null) {
-      Bukkit.broadcastMessage(format(lines));
+      Bukkit.broadcastMessage(format(str));
       return;
     }
 
-    Bukkit.broadcast(format(lines), permission);
+    Bukkit.broadcast(format(str), permission);
   }
 
   /**
-   * Same thing as {@link #broadcast(String, String...)}, but without the prefix.
+   * Same thing as {@link #broadcast(String, String)}, but without the prefix. Any message equaling
+   * null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
    *                   the broadcast should be seen by everyone
-   * @param lines      The lines to send
-   * @see #broadcast(String, String...)
+   * @param str        The message to send
+   * @see #broadcast(String, String)
    */
-  public static void broadcastColored(@Nullable final String permission, final String... lines) {
+  public static void broadcastColored(@Nullable final String permission,
+      @Nullable final String str) {
 
-    if (lines == null) {
+    if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
     }
 
     if (permission == null) {
-      Bukkit.broadcastMessage(colorize(lines));
+      Bukkit.broadcastMessage(colorize(str));
       return;
     }
 
-    Bukkit.broadcast(colorize(lines), permission);
+    Bukkit.broadcast(colorize(str), permission);
   }
 
   // ---------------------------------------------------------------------------------
@@ -558,19 +530,17 @@ public final class ChatUtils {
   // ---------------------------------------------------------------------------------
 
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  private static boolean attemptTellAdvanced(final CommandSender sender, final String... lines) {
+  private static boolean attemptTellAdvanced(final CommandSender sender, final String str) {
 
     if (!(sender instanceof Player)) {
       return false;
     }
 
-    final String joined = String.join("\n", lines);
-
-    if (!joined.startsWith(ADVANCED_PREFIX)) {
+    if (!str.startsWith(ADVANCED_PREFIX)) {
       return false;
     }
 
-    tellAdvanced((Player) sender, parseAdvanced(lines));
+    tellAdvanced((Player) sender, parseAdvanced(str));
     return true;
   }
 }
