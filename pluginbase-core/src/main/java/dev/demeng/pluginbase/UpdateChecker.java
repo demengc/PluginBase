@@ -24,11 +24,16 @@
 
 package dev.demeng.pluginbase;
 
+import dev.demeng.pluginbase.chat.ChatUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Scanner;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Simple utility for checking for resource updates on SpigotMC.
@@ -37,6 +42,7 @@ public class UpdateChecker {
 
   @Getter private final int resourceId;
   @Getter private final String latestVersion;
+  @Getter private final UpdateChecker.Result result;
 
   /**
    * Creates a new update checker instance and caches the latest version from Spigot. Should be
@@ -47,24 +53,39 @@ public class UpdateChecker {
   public UpdateChecker(final int resourceId) {
     this.resourceId = resourceId;
     this.latestVersion = retrieveVersionFromSpigot();
+
+    if (latestVersion == null) {
+      this.result = UpdateChecker.Result.ERROR;
+    } else if (Common.getVersion().equals(latestVersion)) {
+      this.result = UpdateChecker.Result.UP_TO_DATE;
+    } else {
+      this.result = UpdateChecker.Result.OUTDATED;
+    }
   }
 
   /**
-   * Checks if this plugin version is the same as the one on Spigot.
+   * Notifies the console or a player about a new update. Calling this method if the
+   * {@link #getResult()} is anything other than {@link UpdateChecker.Result#OUTDATED} will do
+   * nothing.
    *
-   * @return The update check result
+   * @param sender The console or player to notify, defaults to console if null
    */
-  public UpdateChecker.Result getResult() {
+  public void notifyResult(@Nullable CommandSender sender) {
 
-    if (latestVersion == null) {
-      return UpdateChecker.Result.ERROR;
+    if (getResult() != Result.OUTDATED) {
+      return;
     }
 
-    if (Common.getVersion().equals(latestVersion)) {
-      return UpdateChecker.Result.UP_TO_DATE;
-    }
+    final CommandSender cs = Common.getOrDefault(sender, Bukkit.getConsoleSender());
+    final String line = cs instanceof ConsoleCommandSender
+        ? ChatUtils.CONSOLE_LINE : ChatUtils.CHAT_LINE;
 
-    return UpdateChecker.Result.OUTDATED;
+    ChatUtils.coloredTell(cs, "&2" + line);
+    ChatUtils.coloredTell(cs, "&aA new update for " + Common.getName() + " is available!");
+    ChatUtils.coloredTell(cs, "&aYour version: &f" + Common.getVersion());
+    ChatUtils.coloredTell(cs, "&aLatest version: &f" + latestVersion);
+    ChatUtils.coloredTell(cs, "&aDownload: &fhttps://spigotmc.org/resources/" + resourceId);
+    ChatUtils.coloredTell(cs, "&2" + line);
   }
 
   private String retrieveVersionFromSpigot() {
