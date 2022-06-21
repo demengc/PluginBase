@@ -24,9 +24,9 @@
 
 package dev.demeng.pluginbase.input;
 
-import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.chat.ChatUtils;
 import dev.demeng.pluginbase.plugin.BaseManager;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
@@ -54,15 +54,11 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
    */
   @NotNull private final Function<@NotNull String, @Nullable T> parser;
 
-  @Nullable private String title =
-      BaseManager.getBaseSettings().inputRequestDefaultTitle();
-  @Nullable private String subtitle =
-      BaseManager.getBaseSettings().inputRequestDefaultSubtitle();
+  @Nullable private String title;
+  @Nullable private String subtitle;
   @Nullable private String initialMessage;
-  @Nullable private String retryMessage =
-      BaseManager.getBaseSettings().inputRequestDefaultRetryMessage();
-  @Nullable private String timeoutMessage =
-      BaseManager.getBaseSettings().inputRequestDefaultTimeoutMessage();
+  @Nullable private String retryMessage;
+  @Nullable private String timeoutMessage;
   @Nullable private Consumer<T> consumer;
   @Nullable private Runnable exitRunnable;
 
@@ -70,8 +66,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   private boolean firstAttempt = true;
 
   /**
-   * Sets the title that is sent when input is requested. If not set,
-   * {@link BaseSettings#inputRequestDefaultTitle()} will be used.
+   * Sets the title that is sent when input is requested. If not set, the default localized title
+   * will be used.
    *
    * @param title The title sent on input request
    * @return this
@@ -83,8 +79,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * Sets the subttile that is sent when input is requested. If not set,
-   * {@link BaseSettings#inputRequestDefaultSubtitle()} will be used.
+   * Sets the subttile that is sent when input is requested. If not set, the default localized
+   * subtitle will be used.
    *
    * @param subtitle The subtitle sent on input request
    * @return this
@@ -109,8 +105,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * The message that is sent after an invalid input. If not set,
-   * {@link BaseSettings#inputRequestDefaultRetryMessage()} will be used.
+   * The message that is sent after an invalid input. If not set, the default localized message will
+   * be used.
    *
    * @param retryMessage The message sent on invalid input
    * @return this
@@ -122,8 +118,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
   }
 
   /**
-   * The message that is sent after the request timeout of 5 minutes. If not set,
-   * {@link BaseSettings#inputRequestDefaultTimeoutMessage()} will be used.
+   * The message that is sent after the request timeout of 5 minutes. If not set, the default
+   * localized message will be used.
    *
    * @param timeoutMessage The message sent on timeout
    * @return this
@@ -150,8 +146,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
   /**
    * The runnable ran on exit (conversation abandon). This is called both when an input is accepted
-   * and when the input request is cancelled using the escape sequence
-   * ({@link BaseSettings#inputRequestEscapeSequence()}).
+   * and when the input request is cancelled using the localized escape sequence.
    *
    * @param exitRunnable The runnable to run on exit
    * @return this
@@ -169,24 +164,37 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
    */
   public void start(@NotNull final Player p) {
 
-    if (title != null || subtitle != null) {
-      ChatUtils.sendTitle(p, title, subtitle, 20, 12000, 20);
+    final Locale locale = ChatUtils.getLocale(p);
+
+    if (title == null) {
+      title = ChatUtils.localized("input-requests.default-title", locale);
     }
+
+    if (subtitle == null) {
+      subtitle = ChatUtils.localized("input-requests.default-subtitle", locale);
+    }
+
+    if (retryMessage == null) {
+      retryMessage = ChatUtils.localized("input-requests.default-retry-message", locale);
+    }
+
+    if (timeoutMessage == null) {
+      timeoutMessage = ChatUtils.localized("input-requests.default-timeout-message", locale);
+    }
+
+    ChatUtils.sendTitle(p, title, subtitle, 20, 12000, 20);
 
     new ConversationFactory(BaseManager.getPlugin())
         .withModality(false)
         .withFirstPrompt(this)
-        .withEscapeSequence(BaseManager.getBaseSettings().inputRequestEscapeSequence())
+        .withEscapeSequence(ChatUtils.localized("input-requests.exit-value", locale))
         .addConversationAbandonedListener(e -> {
 
-          if (e.getCanceller() instanceof InactivityConversationCanceller
-              && timeoutMessage != null) {
+          if (e.getCanceller() instanceof InactivityConversationCanceller) {
             ChatUtils.tell(p, timeoutMessage);
           }
 
-          if (title != null || subtitle != null) {
-            ChatUtils.clearTitle(p);
-          }
+          ChatUtils.clearTitle(p);
 
           if (exitRunnable != null) {
             exitRunnable.run();

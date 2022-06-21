@@ -47,47 +47,47 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
   @Override
   public void missingArgument(@NotNull CommandActor actor,
       @NotNull MissingArgumentException exception) {
-    actor.errorLocalized("missing-argument", exception.getParameter().getName());
+    actor.errorLocalized("commands.missing-argument", exception.getParameter().getName());
   }
 
   @Override
   public void invalidEnumValue(@NotNull CommandActor actor,
       @NotNull EnumNotFoundException exception) {
-    actor.errorLocalized("invalid-enum", exception.getParameter().getName(), exception.getInput());
+    actor.errorLocalized("commands.invalid-enum", exception.getParameter().getName(), exception.getInput());
   }
 
   @Override
   public void invalidNumber(@NotNull CommandActor actor,
       @NotNull InvalidNumberException exception) {
 //        actor.error("Expected a number, but found '" + exception.getInput() + "'.");
-    actor.errorLocalized("invalid-number", exception.getInput());
+    actor.errorLocalized("commands.invalid-number", exception.getInput());
   }
 
   @Override
   public void invalidUUID(@NotNull CommandActor actor, @NotNull InvalidUUIDException exception) {
-    actor.errorLocalized("invalid-uuid", exception.getInput());
+    actor.errorLocalized("commands.invalid-uuid", exception.getInput());
   }
 
   @Override
   public void invalidURL(@NotNull CommandActor actor, @NotNull InvalidURLException exception) {
-    actor.errorLocalized("invalid-url", exception.getInput());
+    actor.errorLocalized("commands.invalid-url", exception.getInput());
   }
 
   @Override
   public void invalidBoolean(@NotNull CommandActor actor,
       @NotNull InvalidBooleanException exception) {
-    actor.errorLocalized("invalid-boolean", exception.getInput());
+    actor.errorLocalized("commands.invalid-boolean", exception.getInput());
   }
 
   @Override
   public void noPermission(@NotNull CommandActor actor, @NotNull NoPermissionException exception) {
-    actor.errorLocalized("no-permission");
+    actor.errorLocalized("commands.no-permission");
   }
 
   @Override
   public void argumentParse(@NotNull CommandActor actor,
       @NotNull ArgumentParseException exception) {
-    actor.errorLocalized("invalid-quoted-string");
+    actor.errorLocalized("commands.invalid-quoted-string");
     actor.error(exception.getSourceString());
     actor.error(exception.getAnnotatedPosition());
   }
@@ -95,7 +95,7 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
   @Override
   public void commandInvocation(@NotNull CommandActor actor,
       @NotNull CommandInvocationException exception) {
-    actor.errorLocalized("error-occurred");
+    actor.errorLocalized("commands.error-occurred");
     exception.getCause().printStackTrace();
   }
 
@@ -104,36 +104,36 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
       @NotNull TooManyArgumentsException exception) {
     ExecutableCommand command = exception.getCommand();
     String usage = (command.getPath().toRealString() + " " + command.getUsage()).trim();
-    actor.errorLocalized("too-many-arguments", usage);
+    actor.errorLocalized("commands.too-many-arguments", usage);
   }
 
   @Override
   public void invalidCommand(@NotNull CommandActor actor,
       @NotNull InvalidCommandException exception) {
-    actor.errorLocalized("invalid-command", exception.getInput());
+    actor.errorLocalized("commands.invalid-command", exception.getInput());
   }
 
   @Override
   public void invalidSubcommand(@NotNull CommandActor actor,
       @NotNull InvalidSubcommandException exception) {
-    actor.errorLocalized("invalid-subcommand", exception.getInput());
+    actor.errorLocalized("commands.invalid-subcommand", exception.getInput());
   }
 
   @Override
   public void noSubcommandSpecified(@NotNull CommandActor actor,
       @NotNull NoSubcommandSpecifiedException exception) {
-    actor.errorLocalized("no-subcommand-specified");
+    actor.errorLocalized("commands.no-subcommand-specified");
   }
 
   @Override
   public void cooldown(@NotNull CommandActor actor, @NotNull CooldownException exception) {
-    actor.errorLocalized("on-cooldown", formatTimeFancy(exception.getTimeLeftMillis()));
+    actor.errorLocalized("commands.on-cooldown", formatTimeFancy(exception.getTimeLeftMillis()));
   }
 
   @Override
   public void invalidHelpPage(@NotNull CommandActor actor,
       @NotNull InvalidHelpPageException exception) {
-    actor.errorLocalized("invalid-help-page", exception.getPage(), exception.getPageCount());
+    actor.errorLocalized("commands.invalid-help-page", exception.getPage(), exception.getPageCount());
   }
 
   @Override
@@ -144,7 +144,7 @@ public class DefaultExceptionHandler extends CommandExceptionAdapter {
   @Override
   public void numberNotInRange(@NotNull CommandActor actor,
       @NotNull NumberNotInRangeException exception) {
-    actor.errorLocalized("number-not-in-range",
+    actor.errorLocalized("commands.number-not-in-range",
         exception.getParameter().getName(),
         FORMAT.format(exception.getMinimum()),
         FORMAT.format(exception.getMaximum()),

@@ -34,35 +34,35 @@ public class BukkitExceptionAdapter extends DefaultExceptionHandler {
 
   public void senderNotPlayer(@NotNull CommandActor actor,
       @NotNull SenderNotPlayerException exception) {
-    actor.errorLocalized("must-be-player");
+    actor.errorLocalized("commands.must-be-player");
   }
 
   public void senderNotConsole(@NotNull CommandActor actor,
       @NotNull SenderNotConsoleException exception) {
-    actor.errorLocalized("must-be-console");
+    actor.errorLocalized("commands.must-be-console");
   }
 
   public void invalidPlayer(@NotNull CommandActor actor,
       @NotNull InvalidPlayerException exception) {
-    actor.errorLocalized("invalid-player", exception.getInput());
+    actor.errorLocalized("commands.invalid-player", exception.getInput());
   }
 
   public void invalidWorld(@NotNull CommandActor actor, @NotNull InvalidWorldException exception) {
-    actor.errorLocalized("invalid-world", exception.getInput());
+    actor.errorLocalized("commands.invalid-world", exception.getInput());
   }
 
   public void malformedEntitySelector(@NotNull CommandActor actor,
       @NotNull MalformedEntitySelectorException exception) {
-    actor.errorLocalized("invalid-selector", exception.getInput());
+    actor.errorLocalized("commands.invalid-selector", exception.getInput());
   }
 
   public void moreThanOnePlayer(@NotNull CommandActor actor,
       @NotNull MoreThanOnePlayerException exception) {
-    actor.errorLocalized("only-one-player", exception.getInput());
+    actor.errorLocalized("commands.only-one-player", exception.getInput());
   }
 
   public void nonPlayerEntities(@NotNull CommandActor actor,
       @NotNull NonPlayerEntitiesException exception) {
-    actor.errorLocalized("non-players-not-allowed", exception.getInput());
+    actor.errorLocalized("commands.non-players-not-allowed", exception.getInput());
   }
 }

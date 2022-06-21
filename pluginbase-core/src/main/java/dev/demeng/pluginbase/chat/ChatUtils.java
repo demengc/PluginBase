@@ -27,10 +27,12 @@ package dev.demeng.pluginbase.chat;
 import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.BaseSettings.ColorScheme;
 import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.locale.Locales;
 import dev.demeng.pluginbase.model.BaseTitle;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,6 +83,87 @@ public final class ChatUtils {
       "*-----------------------------------------------------*";
 
   public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().build();
+
+  // ---------------------------------------------------------------------------------
+  // LOCALE
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Gets the locale for the specified console or player. If the player's locale cannot be resolved,
+   * the sender is a console, or the sender is null, the default locale is returned.
+   *
+   * @param sender The sender to get the locale of
+   * @return The sender's locale or the default locale if the sender's locale could not be resolved
+   */
+  @NotNull
+  public static Locale getLocale(@Nullable CommandSender sender) {
+
+    if (sender instanceof Player) {
+      final Player player = (Player) sender;
+      String playerLocale;
+
+      try {
+        playerLocale = player.getLocale();
+
+      } catch (NoSuchMethodError ex) {
+        try {
+          final Player.Spigot spigotPlayer = player.spigot();
+          playerLocale = (String) spigotPlayer.getClass().getDeclaredMethod("getLocale")
+              .invoke(spigotPlayer);
+
+        } catch (Exception ex1) {
+          return BaseManager.getTranslator().getLocale();
+        }
+      }
+
+      final Locale locale = Locales.get(playerLocale);
+      return locale == null ? BaseManager.getTranslator().getLocale() : locale;
+    }
+
+    return BaseManager.getTranslator().getLocale();
+  }
+
+  /**
+   * Gets the localized string with the given key using the provided sender's locale. Uses the
+   * default locale if the localized string could not be resolved with the provided sender's
+   * locale.
+   *
+   * @param key    The key of the message
+   * @param sender The sender to get the locale of
+   * @return The localized message, or key if unable to resolve
+   * @see #getLocale(CommandSender)
+   */
+  @NotNull
+  public static String localized(@Nullable String key, @Nullable CommandSender sender) {
+
+    if (key == null) {
+      return "";
+    }
+
+    return BaseManager.getTranslator().get(key, getLocale(sender));
+  }
+
+  /**
+   * Gets the localized string with the given key using the provided locale. Uses the default locale
+   * if the localized string could not be resolved with the provided locale.
+   *
+   * @param key    The key of the message
+   * @param locale The locale
+   * @return The localized message, or key if unable to resolve
+   */
+  @NotNull
+  public static String localized(@Nullable String key, @Nullable Locale locale) {
+
+    if (key == null) {
+      return "";
+    }
+
+    if (locale == null) {
+      return localized(key, BaseManager.getTranslator().getLocale());
+    }
+
+    return BaseManager.getTranslator().get(key, locale);
+  }
 
   // ---------------------------------------------------------------------------------
   // FORMATTING
