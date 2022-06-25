@@ -25,6 +25,8 @@
 package dev.demeng.pluginbase.mysql;
 
 import lombok.Data;
+import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The POJO containing the credentials to an SQL database.
@@ -35,7 +37,7 @@ public final class DatabaseCredentials {
   /**
    * The host (IP) of the database. Local host is supported.
    */
-  private final String host;
+  @NotNull private final String host;
 
   /**
    * The port to the database, typically 3306.
@@ -45,15 +47,31 @@ public final class DatabaseCredentials {
   /**
    * The name of the database.
    */
-  private final String database;
+  @NotNull private final String database;
 
   /**
    * The username to the database.
    */
-  private final String user;
+  @NotNull private final String user;
 
   /**
    * The password to the database.
    */
-  private final String password;
+  @NotNull private final String password;
+
+  /**
+   * Gets database credentials from a configuration section.
+   *
+   * @param section The configuration section
+   * @return The database credentials provided
+   */
+  @NotNull
+  public static DatabaseCredentials fromConfig(@NotNull ConfigurationSection section) {
+    return new DatabaseCredentials(
+        section.getString("host", "localhost"),
+        section.getInt("port", 3306),
+        section.getString("host", "minecraft"),
+        section.getString("user", "root"),
+        section.getString("password", "root"));
+  }
 }
