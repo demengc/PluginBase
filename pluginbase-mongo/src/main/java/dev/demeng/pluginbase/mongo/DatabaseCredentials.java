@@ -66,7 +66,7 @@ public final class DatabaseCredentials {
    * @return The database credentials provided
    */
   @NotNull
-  public static DatabaseCredentials fromConfig(@NotNull ConfigurationSection section) {
+  public static DatabaseCredentials fromConfig(@NotNull final ConfigurationSection section) {
     return new DatabaseCredentials(
         section.getString("host", "localhost"),
         section.getInt("port", 27017),

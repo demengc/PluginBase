@@ -48,7 +48,7 @@ public final class Services {
    * @return the service instance
    */
   @NotNull
-  public static <T> T load(@NotNull Class<T> clazz) {
+  public static <T> T load(@NotNull final Class<T> clazz) {
     Objects.requireNonNull(clazz, "clazz");
     return get(clazz).orElseThrow(() -> new IllegalStateException(
         "No registration present for service '" + clazz.getName() + "'"));
@@ -62,9 +62,9 @@ public final class Services {
    * @return the service instance, as an optional
    */
   @NotNull
-  public static <T> Optional<T> get(@NotNull Class<T> clazz) {
+  public static <T> Optional<T> get(@NotNull final Class<T> clazz) {
     Objects.requireNonNull(clazz, "clazz");
-    RegisteredServiceProvider<T> registration = Bukkit.getServicesManager().getRegistration(clazz);
+    final RegisteredServiceProvider<T> registration = Bukkit.getServicesManager().getRegistration(clazz);
     if (registration == null) {
       return Optional.empty();
     }
@@ -82,8 +82,8 @@ public final class Services {
    * @return the same service instance
    */
   @NotNull
-  public static <T> T provide(@NotNull Class<T> clazz, @NotNull T instance, @NotNull Plugin plugin,
-      @NotNull ServicePriority priority) {
+  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance, @NotNull final Plugin plugin,
+      @NotNull final ServicePriority priority) {
     Objects.requireNonNull(clazz, "clazz");
     Objects.requireNonNull(instance, "instance");
     Objects.requireNonNull(plugin, "plugin");
@@ -102,8 +102,8 @@ public final class Services {
    * @return the same service instance
    */
   @NotNull
-  public static <T> T provide(@NotNull Class<T> clazz, @NotNull T instance,
-      @NotNull ServicePriority priority) {
+  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance,
+      @NotNull final ServicePriority priority) {
     return provide(clazz, instance, BaseManager.getPlugin(), priority);
   }
 
@@ -116,7 +116,7 @@ public final class Services {
    * @return the same service instance
    */
   @NotNull
-  public static <T> T provide(@NotNull Class<T> clazz, @NotNull T instance) {
+  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance) {
     return provide(clazz, instance, ServicePriority.Normal);
   }
 

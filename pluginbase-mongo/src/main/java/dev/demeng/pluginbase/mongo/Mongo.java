@@ -48,7 +48,7 @@ public class Mongo implements IMongo {
   @Getter private final Morphia morphia;
   @Getter private final Datastore morphiaDatastore;
 
-  public Mongo(@NotNull DatabaseCredentials credentials) {
+  public Mongo(@NotNull final DatabaseCredentials credentials) {
     final MongoCredential mongoCredential = MongoCredential.createCredential(
         credentials.getUser(),
         credentials.getDatabase(),
@@ -72,12 +72,12 @@ public class Mongo implements IMongo {
   }
 
   @Override
-  public MongoDatabase getDatabase(String name) {
+  public MongoDatabase getDatabase(final String name) {
     return this.client.getDatabase(name);
   }
 
   @Override
-  public Datastore getMorphiaDatastore(String name) {
+  public Datastore getMorphiaDatastore(final String name) {
     return this.morphia.createDatastore(this.client, name);
   }
 
