@@ -28,6 +28,7 @@ package dev.demeng.pluginbase.mongo;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
+import com.mongodb.MongoClientURI;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
@@ -49,17 +50,23 @@ public class Mongo implements IMongo {
   @Getter private final Datastore morphiaDatastore;
 
   public Mongo(@NotNull final DatabaseCredentials credentials) {
-    final MongoCredential mongoCredential = MongoCredential.createCredential(
-        credentials.getUser(),
-        credentials.getDatabase(),
-        credentials.getPassword().toCharArray()
-    );
 
-    this.client = new MongoClient(
-        new ServerAddress(credentials.getHost(), credentials.getPort()),
-        mongoCredential,
-        MongoClientOptions.builder().build()
-    );
+    if (credentials.getUri() == null || credentials.getUri().isEmpty()) {
+      final MongoCredential mongoCredential = MongoCredential.createCredential(
+          credentials.getUser(),
+          credentials.getDatabase(),
+          credentials.getPassword().toCharArray()
+      );
+
+      this.client = new MongoClient(
+          new ServerAddress(credentials.getHost(), credentials.getPort()),
+          mongoCredential,
+          MongoClientOptions.builder().build()
+      );
+    } else {
+      this.client = new MongoClient(new MongoClientURI(credentials.getUri()));
+    }
+
     this.database = this.client.getDatabase(credentials.getDatabase());
     this.morphia = new Morphia();
     this.morphiaDatastore = this.morphia.createDatastore(this.client, credentials.getDatabase());
