@@ -78,7 +78,7 @@ public final class DatabaseCredentials {
         section.getString("uri", ""),
         section.getString("host", "localhost"),
         section.getInt("port", 27017),
-        section.getString("host", "minecraft"),
+        section.getString("database", "minecraft"),
         section.getString("user", "root"),
         section.getString("password", "root"));
   }

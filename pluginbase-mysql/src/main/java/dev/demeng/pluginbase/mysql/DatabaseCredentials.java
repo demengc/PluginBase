@@ -70,7 +70,7 @@ public final class DatabaseCredentials {
     return new DatabaseCredentials(
         section.getString("host", "localhost"),
         section.getInt("port", 3306),
-        section.getString("host", "minecraft"),
+        section.getString("database", "minecraft"),
         section.getString("user", "root"),
         section.getString("password", "root"));
   }
