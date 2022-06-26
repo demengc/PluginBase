@@ -26,12 +26,10 @@
 
 package dev.demeng.pluginbase.mongo;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import dev.demeng.pluginbase.terminable.Terminable;
 import org.jetbrains.annotations.NotNull;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
 
 /**
  * Represents an individual Mongo datasource, created by the library.
@@ -61,26 +59,4 @@ public interface IMongo extends Terminable {
    * @return the database
    */
   MongoDatabase getDatabase(String name);
-
-  /**
-   * Gets the Morphia instance for this datasource
-   *
-   * @return the morphia instance
-   */
-  Morphia getMorphia();
-
-  /**
-   * Gets the main Morphia datastore in use by the instance
-   *
-   * @return the main datastore
-   */
-  Datastore getMorphiaDatastore();
-
-  /**
-   * Gets a specific Morphia datastore instance
-   *
-   * @param name the name of the database
-   * @return the datastore
-   */
-  Datastore getMorphiaDatastore(String name);
 }

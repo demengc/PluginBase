@@ -26,18 +26,11 @@
 
 package dev.demeng.pluginbase.mongo;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoClientURI;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
-import dev.demeng.pluginbase.plugin.BaseManager;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
-import org.mongodb.morphia.mapping.DefaultCreator;
 
 /**
  * Represents an individual Mongo datasource, created by the library.
@@ -46,36 +39,10 @@ public class Mongo implements IMongo {
 
   @Getter @NotNull private final MongoClient client;
   @Getter @NotNull private final MongoDatabase database;
-  @Getter private final Morphia morphia;
-  @Getter private final Datastore morphiaDatastore;
 
   public Mongo(@NotNull final DatabaseCredentials credentials) {
-
-    if (credentials.getUri() == null || credentials.getUri().isEmpty()) {
-      final MongoCredential mongoCredential = MongoCredential.createCredential(
-          credentials.getUser(),
-          credentials.getDatabase(),
-          credentials.getPassword().toCharArray()
-      );
-
-      this.client = new MongoClient(
-          new ServerAddress(credentials.getHost(), credentials.getPort()),
-          mongoCredential,
-          MongoClientOptions.builder().build()
-      );
-    } else {
-      this.client = new MongoClient(new MongoClientURI(credentials.getUri()));
-    }
-
+    this.client = MongoClients.create(credentials.getUri());
     this.database = this.client.getDatabase(credentials.getDatabase());
-    this.morphia = new Morphia();
-    this.morphiaDatastore = this.morphia.createDatastore(this.client, credentials.getDatabase());
-    this.morphia.getMapper().getOptions().setObjectFactory(new DefaultCreator() {
-      @Override
-      protected ClassLoader getClassLoaderForClass() {
-        return BaseManager.getPlugin().getClass().getClassLoader();
-      }
-    });
   }
 
   @Override
@@ -84,12 +51,9 @@ public class Mongo implements IMongo {
   }
 
   @Override
-  public Datastore getMorphiaDatastore(final String name) {
-    return this.morphia.createDatastore(this.client, name);
-  }
-
-  @Override
   public void close() {
-    this.client.close();
+    if (this.client != null) {
+      this.client.close();
+    }
   }
 }
