@@ -43,10 +43,9 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <minimizeJar>false</minimizeJar>
               <artifactSet>
-                <includes>
-                  <include>org.mongodb:mongo-java-driver</include>
-                  <include>org.mongodb.morphia:morphia</include>
-                </includes>
+                <excludes>
+                  <exclude>org.mongodb:bson-record-codec</exclude>
+                </excludes>
               </artifactSet>
               <relocations>
                 <relocation>
