@@ -60,7 +60,7 @@ public final class BaseManager {
   /**
    * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.
    */
-  @NotNull @Getter @Setter private static BukkitAudiences adventure;
+  @Getter @Setter private static BukkitAudiences adventure;
 
   /**
    * The settings the library should use.
