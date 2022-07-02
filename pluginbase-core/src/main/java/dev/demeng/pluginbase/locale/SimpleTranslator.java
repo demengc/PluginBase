@@ -42,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 final class SimpleTranslator implements Translator {
 
-  private static final String LOCALE_PREFIX = "locale";
+  private static final String DEFAULT_RESOURCE_BUNDLE = "pluginbase";
   private static final String LOCALES_FOLDER = "locales";
   private static final LinkedList<LocaleReader> EMPTY_LIST = new LinkedList<>();
 
@@ -50,10 +50,14 @@ final class SimpleTranslator implements Translator {
   private volatile Locale locale = Locale.ENGLISH;
 
   SimpleTranslator() {
-    reload();
+    loadDefault();
   }
 
-  public void addResourceBundleFromFilesystem(@NotNull final String resourceBundle) {
+  public void loadDefault() {
+    addResourceBundle(DEFAULT_RESOURCE_BUNDLE);
+  }
+
+  public void addResourceBundleFromFolder(@NotNull final String resourceBundle) {
     notNull(resourceBundle, "resource bundle");
 
     final File folder = BaseManager.getPlugin().getDataFolder().toPath().resolve(LOCALES_FOLDER)
@@ -155,24 +159,8 @@ final class SimpleTranslator implements Translator {
   }
 
   @Override
-  public void reload() {
-    clear();
-    addResourceBundle(LOCALE_PREFIX);
-    addResourceBundleFromFilesystem(LOCALE_PREFIX);
-  }
-
-  @Override
   public void add(@NotNull final ResourceBundle resourceBundle) {
     notNull(resourceBundle, "resource bundle");
     add(LocaleReader.wrap(resourceBundle));
-  }
-
-  private static boolean classExists(final String name) {
-    try {
-      Class.forName(name);
-      return true;
-    } catch (final ClassNotFoundException e) {
-      return false;
-    }
   }
 }

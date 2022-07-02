@@ -122,11 +122,6 @@ public interface Translator {
   void clear();
 
   /**
-   * Reloads all translations.
-   */
-  void reload();
-
-  /**
    * Gets the current, default locale used by this translator
    *
    * @return The default locale
@@ -146,7 +141,8 @@ public interface Translator {
    * @param resourceBundle Resource bundle to register
    * @see #addResourceBundle(ClassLoader, String, Locale...)
    */
-  default void addResourceBundle(@NotNull final String resourceBundle,
+  default void addResourceBundle(
+      @NotNull final String resourceBundle,
       @NotNull final Locale... locales) {
     addResourceBundle(getClass().getClassLoader(), resourceBundle, locales);
   }
