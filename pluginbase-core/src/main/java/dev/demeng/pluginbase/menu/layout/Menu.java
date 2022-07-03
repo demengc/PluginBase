@@ -110,7 +110,7 @@ public abstract class Menu implements IMenu {
    */
   public void addButton(final int slot, @NotNull final ItemStack stack,
       @Nullable final Consumer<InventoryClickEvent> actions) {
-    addButton(new MenuButton(slot, stack, actions));
+    addButton(MenuButton.create(slot, stack, actions));
   }
 
   /**
@@ -127,8 +127,8 @@ public abstract class Menu implements IMenu {
     for (int slot = 0; slot < inventory.getSize(); slot++) {
       final ItemStack current = inventory.getItem(slot);
       if (current == null || current.getType() == Material.AIR) {
-        addButton(new MenuButton(slot,
-            new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+        addButton(MenuButton.create(slot,
+            ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
       }
     }
   }
@@ -153,8 +153,8 @@ public abstract class Menu implements IMenu {
 
       if (current == null || current.getType() == Material.AIR) {
         addButton(
-            new MenuButton(slot,
-                new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+            MenuButton.create(slot,
+                ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
       }
     }
   }
@@ -178,8 +178,8 @@ public abstract class Menu implements IMenu {
 
       if (current == null || current.getType() == Material.AIR) {
         addButton(
-            new MenuButton(slot,
-                new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+            MenuButton.create(slot,
+                ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
       }
     }
   }
@@ -203,8 +203,8 @@ public abstract class Menu implements IMenu {
 
         if (current == null || current.getType() == Material.AIR) {
           addButton(
-              new MenuButton(i,
-                  new ItemBuilder(stack).name(EMPTY_NAME).get(), null));
+              MenuButton.create(i,
+                  ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
         }
       }
     }

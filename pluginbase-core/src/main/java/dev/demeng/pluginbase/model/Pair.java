@@ -32,13 +32,13 @@ import lombok.Data;
  * @param <A> The type of object A
  * @param <B> The type of object B
  */
-@Data
+@Data(staticConstructor = "of")
 public class Pair<A, B> {
 
   private final A a;
   private final B b;
 
-  public Pair<A, B> copy() {
-    return new Pair<>(a, b);
+  public static <A, B> Pair<A, B> of(final Pair<A, B> pair) {
+    return of(pair.getA(), pair.getB());
   }
 }

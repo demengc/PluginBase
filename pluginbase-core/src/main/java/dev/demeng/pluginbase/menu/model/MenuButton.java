@@ -28,6 +28,7 @@ import dev.demeng.pluginbase.DynamicPlaceholders;
 import dev.demeng.pluginbase.menu.layout.Menu;
 import dev.demeng.pluginbase.serializer.ItemSerializer;
 import java.util.function.Consumer;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,28 +43,34 @@ import org.jetbrains.annotations.Nullable;
  * is assigned with a nullable consumer for {@link InventoryClickEvent}, which will be accepted on
  * click.
  */
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MenuButton {
 
-  /**
-   * The slot the button should show up in. Must be less than the inventory size minus 1. Note that
-   * inventory slots start at 0. In single-page menus, this button will be ignored and not be placed
-   * inside the menu if the slot is negative. In paged menus, this slot must be set to -1. If it is
-   * higher, the button will be placed in the specified slot on the first page. If it is lower, the
-   * button will not be placed.
-   */
   @Getter @Setter private int slot;
-
-  /**
-   * The item stack of the button.
-   */
   @NotNull @Getter @Setter private ItemStack stack;
+  @Nullable @Getter @Setter private Consumer<InventoryClickEvent> consumer;
 
   /**
-   * The consumer for the {@link InventoryClickEvent}, which will be accepted when this button is
-   * clicked.
+   * Creates a new menu button.
+   *
+   * @param slot     The slot the button should show up in. Must be less than the inventory size
+   *                 minus 1. Note that inventory slots start at 0. In single-page menus, this
+   *                 button will be ignored and not be placed inside the menu if the slot is
+   *                 negative. In paged menus, this slot must be set to -1. If it is higher, the
+   *                 button will be placed in the specified slot on the first page. If it is lower,
+   *                 the button will not be placed
+   * @param stack    The item stack of the button
+   * @param consumer The consumer for the {@link InventoryClickEvent}, which will be accepted when
+   *                 this button is clicked
+   * @return The button
    */
-  @Nullable @Getter @Setter private Consumer<InventoryClickEvent> consumer;
+  @NotNull
+  public static MenuButton create(
+      final int slot,
+      @NotNull final ItemStack stack,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return new MenuButton(slot, stack, consumer);
+  }
 
   /**
    * Creates a new menu button from a configuration section. The slot value must be an integer named
@@ -76,7 +83,7 @@ public class MenuButton {
    * @return The button from config
    */
   @NotNull
-  public static MenuButton fromConfig(
+  public static MenuButton create(
       @NotNull final ConfigurationSection section,
       @Nullable final DynamicPlaceholders placeholders,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
@@ -87,7 +94,7 @@ public class MenuButton {
       slot--;
     }
 
-    return new MenuButton(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
+    return create(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
   }
 
   /**
@@ -100,15 +107,15 @@ public class MenuButton {
    * @return The button from config
    */
   @NotNull
-  public static MenuButton fromConfig(
+  public static MenuButton create(
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return fromConfig(section, null, consumer);
+    return create(section, null, consumer);
   }
 
   /**
    * Creates a new menu button from a configuration section, but overrides any slot values the
-   * configuration section may have. Unlike {@link #fromConfig(ConfigurationSection, Consumer)}, the
+   * configuration section may have. Unlike {@link #create(ConfigurationSection, Consumer)}, the
    * slot is not subtracted 1. See {@link ItemSerializer} for the format of item stacks.
    *
    * @param slot         The slot of the button
@@ -118,17 +125,17 @@ public class MenuButton {
    * @return The button from config
    */
   @NotNull
-  public static MenuButton fromConfig(
+  public static MenuButton create(
       final int slot,
       @NotNull final ConfigurationSection section,
       @Nullable final DynamicPlaceholders placeholders,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return new MenuButton(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
+    return create(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
   }
 
   /**
    * Creates a new menu button from a configuration section, but overrides any slot values the
-   * configuration section may have. Unlike {@link #fromConfig(ConfigurationSection, Consumer)}, the
+   * configuration section may have. Unlike {@link #create(ConfigurationSection, Consumer)}, the
    * slot is not subtracted 1. See {@link ItemSerializer} for the format of item stacks.
    *
    * @param slot     The slot of the button
@@ -137,10 +144,10 @@ public class MenuButton {
    * @return The button from config
    */
   @NotNull
-  public static MenuButton fromConfig(
+  public static MenuButton create(
       final int slot,
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return fromConfig(slot, section, null, consumer);
+    return create(slot, section, null, consumer);
   }
 }

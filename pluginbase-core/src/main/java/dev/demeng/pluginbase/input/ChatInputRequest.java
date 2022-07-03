@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
@@ -46,12 +47,9 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> The expected return type for the input request
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class ChatInputRequest<T> extends ValidatingPrompt {
 
-  /**
-   * The input parser that returns the {@link T} object, or null if the string input is invalid.
-   */
   @NotNull private final Function<@NotNull String, @Nullable T> parser;
 
   @Nullable private String title;
@@ -64,6 +62,20 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
   @Nullable private T currentResponse;
   private boolean firstAttempt = true;
+
+  /**
+   * Creates a new chat input request builder.
+   *
+   * @param parser The input parser that returns the expected object, or null if the string input is
+   *               invalid
+   * @param <T>    The expected return type for the input request
+   * @return A new chat input request builder
+   */
+  @NotNull
+  public static <T> ChatInputRequest<T> create(
+      @NotNull final Function<@NotNull String, @Nullable T> parser) {
+    return new ChatInputRequest<>(parser);
+  }
 
   /**
    * Sets the title that is sent when input is requested. If not set, the default localized title

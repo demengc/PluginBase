@@ -152,7 +152,7 @@ public abstract class PagedMenu implements IMenu {
   public void addButton(final int slot, @NotNull final ItemStack stack,
       @Nullable final Consumer<InventoryClickEvent> actions) {
     for (final Menu page : pages) {
-      page.addButton(new MenuButton(slot, stack, actions));
+      page.addButton(MenuButton.create(slot, stack, actions));
     }
   }
 
@@ -187,7 +187,7 @@ public abstract class PagedMenu implements IMenu {
       super(pageSize, title);
 
       super.addButton(
-          new MenuButton(
+          MenuButton.create(
               settings.getPreviousButton().getSlot(),
               settings.getPreviousButton().getStack(),
               event -> {
@@ -199,7 +199,7 @@ public abstract class PagedMenu implements IMenu {
               }));
 
       super.addButton(
-          new MenuButton(
+          MenuButton.create(
               settings.getNextButton().getSlot(),
               settings.getNextButton().getStack(),
               event -> {
@@ -283,26 +283,26 @@ public abstract class PagedMenu implements IMenu {
         @Override
         public @NotNull MenuButton getPreviousButton() {
           return MenuButton
-              .fromConfig(Objects.requireNonNull(section.getConfigurationSection("previous-page")),
+              .create(Objects.requireNonNull(section.getConfigurationSection("previous-page")),
                   null);
         }
 
         @Override
         public @NotNull MenuButton getDummyPreviousButton() {
-          return MenuButton.fromConfig(getPreviousButton().getSlot(), Objects.requireNonNull(
+          return MenuButton.create(getPreviousButton().getSlot(), Objects.requireNonNull(
               section.getConfigurationSection("previous-page.no-more-pages")), null);
         }
 
         @Override
         public @NotNull MenuButton getNextButton() {
           return MenuButton
-              .fromConfig(Objects.requireNonNull(section.getConfigurationSection("next-page")),
+              .create(Objects.requireNonNull(section.getConfigurationSection("next-page")),
                   null);
         }
 
         @Override
         public @NotNull MenuButton getDummyNextButton() {
-          return MenuButton.fromConfig(getNextButton().getSlot(), Objects.requireNonNull(
+          return MenuButton.create(getNextButton().getSlot(), Objects.requireNonNull(
               section.getConfigurationSection("next-page.no-more-pages")), null);
         }
 

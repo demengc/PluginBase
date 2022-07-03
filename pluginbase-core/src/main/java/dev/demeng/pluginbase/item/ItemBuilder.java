@@ -39,6 +39,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -55,27 +57,46 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A utility for quickly creating {@link ItemStack}s.
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemBuilder {
 
+  private static final Material DEFAULT_MATERIAL = Material.STONE;
+
   /**
-   * The item stack that is being built- can be retrieved at any time.
+   * The current item stack.
    */
   @NotNull private final ItemStack stack;
 
   // ---------------------------------------------------------------------------------
-  // CONSTRUCTORS
+  // STATIC FACTORY
   // ---------------------------------------------------------------------------------
 
   /**
-   * Creates a new builder from a material, amount, and durability.
+   * Creates a new builder from an existing item stack.
    *
-   * @param material   The material of the stack, replaced with STONE if null
-   * @param amount     The amount of the stack
-   * @param durability The durability of the stack
+   * @param stack The item stack to clone, replaced with STONE item stack if null
+   * @return The builder
    */
-  public ItemBuilder(@Nullable final Material material, final int amount, final byte durability) {
+  @NotNull
+  public static ItemBuilder create(@Nullable final ItemStack stack) {
+    return new ItemBuilder(stack == null ? new ItemStack(DEFAULT_MATERIAL) : stack.clone());
+  }
+
+  /**
+   * Creates a new builder from a material, amount, and damage.
+   *
+   * @param material The material of the stack, replaced with STONE if null
+   * @param amount   The amount of the stack
+   * @param damage   The damage (a.k.a. the durability) of the stack
+   * @return The builder
+   */
+  @NotNull
+  public static ItemBuilder create(
+      @Nullable final Material material,
+      final int amount,
+      final short damage) {
     //noinspection deprecation
-    this.stack = new ItemStack(Common.getOrDefault(material, Material.STONE), amount, durability);
+    return create(new ItemStack(Common.getOrDefault(material, DEFAULT_MATERIAL), amount, damage));
   }
 
   /**
@@ -83,27 +104,22 @@ public class ItemBuilder {
    *
    * @param material The material of the stack, replaced with STONE if null
    * @param amount   The amount of the stack
+   * @return The builder
    */
-  public ItemBuilder(@Nullable final Material material, final int amount) {
-    this.stack = new ItemStack(Common.getOrDefault(material, Material.STONE), amount);
+  @NotNull
+  public static ItemBuilder create(@Nullable final Material material, final int amount) {
+    return create(material, amount, (short) 0);
   }
 
   /**
    * Creates a new builder from a simple material.
    *
    * @param material The material of the stack, replaced with STONE if null
+   * @return The builder
    */
-  public ItemBuilder(@Nullable final Material material) {
-    this(material, 1);
-  }
-
-  /**
-   * Creates a new builder from an existing item stack.
-   *
-   * @param stack The item stack to clone, replaced with STONE item stack if null
-   */
-  public ItemBuilder(@Nullable final ItemStack stack) {
-    this.stack = Common.getOrDefault(stack, new ItemStack(Material.STONE)).clone();
+  @NotNull
+  public static ItemBuilder create(@Nullable final Material material) {
+    return create(material, 1);
   }
 
   // ---------------------------------------------------------------------------------

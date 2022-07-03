@@ -90,7 +90,7 @@ public class ItemSerializer implements YamlSerializable<ItemStack> {
       return new ItemStack(Material.AIR);
     }
 
-    final ItemBuilder builder = new ItemBuilder(
+    final ItemBuilder builder = ItemBuilder.create(
         ItemBuilder.getMaterial(replace(placeholders, configMaterial)));
 
     final String texture = section.getString("skull-texture");
