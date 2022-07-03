@@ -25,7 +25,7 @@
 package dev.demeng.pluginbase.menu.layout;
 
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.DynamicPlaceholders;
+import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;

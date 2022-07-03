@@ -22,20 +22,14 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.chat;
+package dev.demeng.pluginbase.placeholders;
 
-import dev.demeng.pluginbase.DynamicPlaceholders;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementation of {@link DynamicPlaceholders}, allowing you to quickly add and set placeholders
@@ -65,6 +59,16 @@ public final class Placeholders implements DynamicPlaceholders {
   }
 
   /**
+   * Creates a new placeholders object from an existing Placeholders object.
+   *
+   * @param placeholders The placeholdesr to clone
+   * @return The placeholders object (cloned)
+   */
+  public static Placeholders of(@NotNull final Placeholders placeholders) {
+    return of(placeholders.getReplacements());
+  }
+
+  /**
    * Creates a new placeholders object with the given placeholder.
    *
    * @param toReplace   The string to replace
@@ -91,64 +95,6 @@ public final class Placeholders implements DynamicPlaceholders {
   public Placeholders add(@NotNull final String toReplace, @NotNull final String replaceWith) {
     replacements.put(toReplace, replaceWith);
     return this;
-  }
-
-  /**
-   * Sets the placeholders into the given string.
-   *
-   * @param str The string to have placeholders set
-   * @return The replaced string
-   */
-  @NotNull
-  public String set(@Nullable final String str) {
-
-    if (str == null) {
-      return "";
-    }
-
-    return setPlaceholders(str);
-  }
-
-  /**
-   * Sets the placeholders into the given string list.
-   *
-   * @param list The string list to have placeholders set
-   * @return The replaced string list
-   */
-  @NotNull
-  public List<String> set(@Nullable final List<String> list) {
-
-    if (list == null) {
-      return Collections.emptyList();
-    }
-
-    return setPlaceholders(list);
-  }
-
-  /**
-   * Sets the placeholders into the given item stack.
-   *
-   * @param stack The item stack to have placeholders set
-   * @return The replaced item stack
-   */
-  @NotNull
-  public ItemStack set(@Nullable final ItemStack stack) {
-
-    if (stack == null || stack.getType() == Material.AIR) {
-      return new ItemStack(Material.AIR);
-    }
-
-    return setPlaceholders(stack);
-  }
-
-  /**
-   * Creates a copy of the current placeholders object.
-   *
-   * @return A copy of the current placeholders object
-   */
-  @NotNull
-  public Placeholders copy() {
-    return Placeholders.of(replacements);
   }
 
   @Override

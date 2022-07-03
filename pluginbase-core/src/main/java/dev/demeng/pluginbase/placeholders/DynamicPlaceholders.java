@@ -22,15 +22,18 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase;
+package dev.demeng.pluginbase.placeholders;
 
 import dev.demeng.pluginbase.chat.TextUtils;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An easy way to provides methods for setting placeholders in lists and item stacks, simply by
@@ -48,13 +51,33 @@ public interface DynamicPlaceholders {
   String setPlaceholders(@NotNull String str);
 
   /**
+   * Sets the placeholders in the string.
+   *
+   * @param str The string to replace
+   * @return The replaced string, or an empty string if the provided string is null
+   */
+  @NotNull
+  default String replace(@Nullable final String str) {
+
+    if (str == null) {
+      return "";
+    }
+
+    return setPlaceholders(str);
+  }
+
+  /**
    * Sets the placeholders in a string list.
    *
    * @param list The list to replace
-   * @return The replaced list
+   * @return The replaced list, or an empty list if the provided list is null
    */
   @NotNull
-  default List<String> setPlaceholders(@NotNull final List<String> list) {
+  default List<String> replace(@Nullable final List<String> list) {
+
+    if (list == null) {
+      return Collections.emptyList();
+    }
 
     final List<String> replaced = new ArrayList<>();
 
@@ -70,10 +93,14 @@ public interface DynamicPlaceholders {
    * name and lore.
    *
    * @param stack The item stack to replace
-   * @return The replaced item stack
+   * @return The replaced item stack, or air if the provided stack is null
    */
   @NotNull
-  default ItemStack setPlaceholders(@NotNull final ItemStack stack) {
+  default ItemStack replace(@Nullable final ItemStack stack) {
+
+    if (stack == null || stack.getType() == Material.AIR) {
+      return new ItemStack(Material.AIR);
+    }
 
     final ItemStack replaced = new ItemStack(stack);
     final ItemMeta meta = replaced.getItemMeta();
@@ -82,7 +109,7 @@ public interface DynamicPlaceholders {
     meta.setDisplayName(TextUtils.colorize(setPlaceholders(meta.getDisplayName())));
 
     if (meta.getLore() != null && !meta.getLore().isEmpty()) {
-      meta.setLore(TextUtils.colorize(setPlaceholders(meta.getLore())));
+      meta.setLore(TextUtils.colorize(replace(meta.getLore())));
     }
 
     replaced.setItemMeta(meta);
