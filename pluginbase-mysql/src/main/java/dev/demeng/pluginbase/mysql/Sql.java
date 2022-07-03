@@ -49,10 +49,10 @@ import org.jetbrains.annotations.Nullable;
  * Represents an SQL database. Contains several useful utilities such as quickly querying and
  * executing (prepared) statements as well as initializing the database with optimal settings.
  */
-public class SqlDatabase {
+public class Sql implements ISql {
 
-  private static final String DEFAULT_JDBC_URL = "jdbc:mysql://{host}:{port}/{database}"
-      + "?autoReconnect=true&useSSL=false";
+  private static final String DEFAULT_JDBC_URL =
+      "jdbc:mysql://{host}:{port}/{database}" + "?autoReconnect=true&useSSL=false";
 
   private static final AtomicInteger POOL_COUNTER = new AtomicInteger(0);
 
@@ -73,9 +73,7 @@ public class SqlDatabase {
    * @param jdbcUrl     The JDBC URL, or null for the default URL
    * @param credentials The database credentials
    */
-  public SqlDatabase(
-      final @NotNull String driverClass,
-      final @Nullable String jdbcUrl,
+  public Sql(final @NotNull String driverClass, final @Nullable String jdbcUrl,
       final @NotNull SqlCredentials credentials) {
 
     final HikariConfig hikari = new HikariConfig();
@@ -83,10 +81,10 @@ public class SqlDatabase {
     hikari.setPoolName(Common.getName() + "-" + POOL_COUNTER.getAndIncrement());
 
     hikari.setDriverClassName(driverClass);
-    hikari.setJdbcUrl(Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL)
-        .replace("{host}", credentials.getHost())
-        .replace("{port}", "" + credentials.getPort())
-        .replace("{database}", credentials.getDatabase()));
+    hikari.setJdbcUrl(
+        Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL).replace("{host}", credentials.getHost())
+            .replace("{port}", "" + credentials.getPort())
+            .replace("{database}", credentials.getDatabase()));
 
     hikari.setUsername(credentials.getUser());
     hikari.setPassword(credentials.getPassword());
@@ -122,93 +120,52 @@ public class SqlDatabase {
     this.stream = SqlStream.connect(this.source);
   }
 
-  /**
-   * Gets a connection from the data source.
-   *
-   * @return A connection
-   * @throws SQLException If the connection could not be retrieved
-   */
   @NotNull
+  @Override
+  public HikariDataSource getHikari() {
+    return this.source;
+  }
+
+  @NotNull
+  @Override
   public Connection getConnection() throws SQLException {
-    return Objects.requireNonNull(source.getConnection(), "Connection is null");
+    return Objects.requireNonNull(this.source.getConnection(), "Connection is null");
   }
 
-  /**
-   * Executes a new SQL statement.
-   *
-   * @param sql      The SQL statement
-   * @param preparer The preparer for the statement- this is where you should set your placeholders
-   * @throws SQLException If the statement could not be executed
-   */
-  public final void execute(
-      final @NotNull @Language("SQL") String sql,
-      final @Nullable SqlConsumer<PreparedStatement> preparer) throws SQLException {
+  @NotNull
+  @Override
+  public SqlStream stream() {
+    return this.stream;
+  }
 
-    try (final Connection connection = getConnection();
-        final PreparedStatement statement = connection.prepareStatement(sql)) {
-
-      if (preparer != null) {
-        preparer.accept(statement);
-      }
-
-      statement.execute();
+  @Override
+  public void execute(@Language("MySQL") @NotNull String statement,
+      @NotNull SqlConsumer<PreparedStatement> preparer) {
+    try (Connection c = this.getConnection(); PreparedStatement s = c.prepareStatement(statement)) {
+      preparer.accept(s);
+      s.execute();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
     }
   }
 
-  /**
-   * Executes a new query to the SQL database.
-   *
-   * @param sql      The SQL statement
-   * @param preparer The preparer for the statement- this is where you should set your placeholders
-   * @param handler  The handler for the result set- determines what should be done with the data
-   * @param <R>      The return value of the handler
-   * @return The return value of the handler
-   * @throws SQLException If the statement could not be executed
-   */
-  public <R> Optional<R> query(
-      @NotNull @Language("SQL") final String sql,
-      @Nullable final SqlConsumer<PreparedStatement> preparer,
-      @NotNull final SqlFunction<ResultSet, R> handler) throws SQLException {
-
-    try (final Connection connection = getConnection();
-        final PreparedStatement statement = connection.prepareStatement(sql)) {
-
-      if (preparer != null) {
-        preparer.accept(statement);
+  @Override
+  public <R> @NotNull Optional<R> query(@Language("MySQL") @NotNull String query,
+      @NotNull SqlConsumer<PreparedStatement> preparer,
+      @NotNull SqlFunction<ResultSet, R> handler) {
+    try (Connection c = this.getConnection(); PreparedStatement s = c.prepareStatement(query)) {
+      preparer.accept(s);
+      try (ResultSet r = s.executeQuery()) {
+        return Optional.ofNullable(handler.apply(r));
       }
-
-      try (final ResultSet rs = statement.executeQuery()) {
-        return Optional.ofNullable(handler.apply(rs));
-      }
+    } catch (SQLException ex) {
+      ex.printStackTrace();
+      return Optional.empty();
     }
   }
 
-  /**
-   * Executes a quick query to the SQL database. This automatically checks if the result set is
-   * empty and will return null by default if the handler cannot return a proper value.
-   *
-   * @param sql      The SQL statement
-   * @param preparer The preparer for the statement- this is where you should set your placeholders
-   * @param handler  The handler for the result set- determines what should be done with the data
-   * @param <R>      The return value of the handler
-   * @return The return value of the handler
-   * @throws SQLException If the statement could not be executed
-   */
-  @Nullable
-  public <R> R quickQuery(
-      @NotNull @Language("SQL") final String sql,
-      @Nullable final SqlConsumer<PreparedStatement> preparer,
-      @NotNull final SqlFunction<ResultSet, R> handler) throws SQLException {
-    return query(sql, preparer, rs -> rs.next() ? handler.apply(rs) : null).orElse(null);
-  }
-
-  /**
-   * Executes a batch statement (multiple statements in 1 connection).
-   *
-   * @param builder The batch builder
-   * @throws SQLException If the batch statement could not be executed
-   */
-  public void executeBatch(@NotNull final BatchBuilder builder) throws SQLException {
+  @Override
+  public void executeBatch(@NotNull BatchBuilder builder) {
 
     if (builder.getHandlers().isEmpty()) {
       return;
@@ -219,32 +176,25 @@ public class SqlDatabase {
       return;
     }
 
-    try (final Connection connection = getConnection();
-        final PreparedStatement statement = connection.prepareStatement(builder.getStatement())) {
-      for (final SqlConsumer<PreparedStatement> handlers : builder.getHandlers()) {
-        handlers.accept(statement);
-        statement.addBatch();
+    try (Connection c = this.getConnection(); PreparedStatement s = c.prepareStatement(
+        builder.getStatement())) {
+      for (SqlConsumer<PreparedStatement> handlers : builder.getHandlers()) {
+        handlers.accept(s);
+        s.addBatch();
       }
-
-      statement.executeBatch();
+      s.executeBatch();
+    } catch (SQLException ex) {
+      ex.printStackTrace();
     }
   }
 
-  /**
-   * Gets a new batch builder for the provided statement.
-   *
-   * @param statement The statement the batch builder should be based off of
-   * @return The batch builder
-   */
-  @NotNull
-  public BatchBuilder batch(@NotNull @Language("SQL") final String statement) {
+  @Override
+  public @NotNull BatchBuilder batch(@Language("MySQL") @NotNull String statement) {
     return new BatchBuilder(this, statement);
   }
 
-  /**
-   * Closes the data source.
-   */
+  @Override
   public void close() {
-    source.close();
+    this.source.close();
   }
 }
