@@ -28,7 +28,6 @@ import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.BaseSettings.ColorScheme;
 import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.locale.Locales;
-import dev.demeng.pluginbase.model.BaseTitle;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -656,7 +655,7 @@ public final class TextUtils {
       @NotNull final Player p,
       @Nullable final String title,
       @Nullable final String subtitle) {
-    new BaseTitle(title, subtitle).send(p);
+    Titles.sendTitle(p, TextUtils.colorize(title), TextUtils.colorize(subtitle));
   }
 
   /**
@@ -674,7 +673,9 @@ public final class TextUtils {
       @Nullable final String title,
       @Nullable final String subtitle,
       final int fadeIn, final int stay, final int fadeOut) {
-    new BaseTitle(title, subtitle, fadeIn, stay, fadeOut).send(p);
+    Titles.sendTitle(p, fadeIn, stay, fadeOut,
+        TextUtils.colorize(title),
+        TextUtils.colorize(subtitle));
   }
 
   /**

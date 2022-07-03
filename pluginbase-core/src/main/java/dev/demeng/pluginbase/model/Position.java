@@ -22,39 +22,53 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.serializer.type;
+package dev.demeng.pluginbase.model;
 
-import dev.demeng.pluginbase.YamlConfig;
-import java.io.IOException;
+import dev.demeng.pluginbase.serialize.YamlSerializable;
+import java.util.Objects;
+import lombok.Data;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an object that can be serialized to a YAML configuration section. This is primarily
- * used (internally) for Bukkit objects and is completely different from Bukkit's
- * {@link org.bukkit.configuration.serialization.ConfigurationSerializable} because it allows each
- * object to have its own method of serialization.
- *
- * @param <T> The serializable object
+ * An immutable and serializable Location object without the yaw or pitch.
  */
-public interface YamlSerializable<T> {
+@Data(staticConstructor = "of")
+public class Position implements YamlSerializable {
+
+  @NotNull private final String world;
+  private final double x;
+  private final double y;
+  private final double z;
+
+  @NotNull
+  public static Position of(@NotNull Location loc) {
+    return of(Objects.requireNonNull(loc.getWorld()).getName(), loc.getX(), loc.getY(), loc.getZ());
+  }
+
+  @Override
+  public void serialize(@NotNull ConfigurationSection section) {
+    section.set("world", world);
+    section.set("x", x);
+    section.set("y", y);
+    section.set("z", z);
+  }
+
+  @NotNull
+  public static Position deserialize(@NotNull ConfigurationSection section) {
+    return of(Objects.requireNonNull(section.getString("world")),
+        section.getDouble("x"), section.getDouble("y"), section.getDouble("z"));
+  }
 
   /**
-   * Serializes an object and saves it into a configuration file.
+   * Converts the position to a Bukkit {@link Location}.
    *
-   * @param obj        The object to serialize
-   * @param configFile The configuration file to save
-   * @param path       The configuration path to save in
-   * @throws IOException If the file fails to save
+   * @return The Bukkit Location
    */
-  void serialize(@NotNull T obj, @NotNull YamlConfig configFile, @NotNull String path)
-      throws IOException;
-
-  /**
-   * Deserializes an object from a configuration section.
-   *
-   * @param section The serialized object
-   * @return The deserialized object
-   */
-  T deserialize(@NotNull ConfigurationSection section);
+  @NotNull
+  public Location toLocation() {
+    return new Location(Bukkit.getWorld(world), x, y, z);
+  }
 }
