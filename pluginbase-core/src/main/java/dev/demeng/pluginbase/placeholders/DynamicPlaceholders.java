@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -115,5 +116,15 @@ public interface DynamicPlaceholders {
     replaced.setItemMeta(meta);
 
     return replaced;
+  }
+
+  /**
+   * Gets the function for setting the placeholders.
+   *
+   * @return The replacing function
+   */
+  @NotNull
+  default Function<String, String> toFunction() {
+    return this::replace;
   }
 }
