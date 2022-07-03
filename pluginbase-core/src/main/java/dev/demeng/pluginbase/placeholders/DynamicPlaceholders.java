@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase.placeholders;
 
-import dev.demeng.pluginbase.chat.TextUtils;
+import dev.demeng.pluginbase.text.TextUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

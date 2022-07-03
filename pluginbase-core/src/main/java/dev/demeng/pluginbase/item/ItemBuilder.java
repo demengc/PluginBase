@@ -28,7 +28,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.chat.TextUtils;
+import dev.demeng.pluginbase.text.TextUtils;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;

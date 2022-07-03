@@ -26,7 +26,7 @@ package dev.demeng.pluginbase.model;
 
 import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.Players;
-import dev.demeng.pluginbase.chat.TextUtils;
+import dev.demeng.pluginbase.text.TextUtils;
 import lombok.Data;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;

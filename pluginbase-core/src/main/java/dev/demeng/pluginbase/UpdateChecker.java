@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import dev.demeng.pluginbase.chat.TextUtils;
+import dev.demeng.pluginbase.text.TextUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

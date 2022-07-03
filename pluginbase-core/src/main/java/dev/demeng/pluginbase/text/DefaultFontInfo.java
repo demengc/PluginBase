@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.chat;
+package dev.demeng.pluginbase.text;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

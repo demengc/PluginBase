@@ -25,9 +25,9 @@
 package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
-import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
+import dev.demeng.pluginbase.text.TextUtils;
 import java.util.Arrays;
 import java.util.function.IntConsumer;
 import lombok.AccessLevel;

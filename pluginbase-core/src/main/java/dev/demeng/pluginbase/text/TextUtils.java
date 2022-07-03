@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.chat;
+package dev.demeng.pluginbase.text;
 
 import com.cryptomorin.xseries.messages.Titles;
 import dev.demeng.pluginbase.BaseSettings.ColorScheme;

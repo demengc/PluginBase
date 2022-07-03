@@ -24,7 +24,6 @@
 
 package dev.demeng.pluginbase.commands.bukkit.core;
 
-import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.bukkit.BukkitCommandActor;
 import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
@@ -32,6 +31,7 @@ import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotConsoleException
 import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotPlayerException;
 import dev.demeng.pluginbase.commands.util.Preconditions;
 import dev.demeng.pluginbase.plugin.BaseManager;
+import dev.demeng.pluginbase.text.TextUtils;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.UUID;

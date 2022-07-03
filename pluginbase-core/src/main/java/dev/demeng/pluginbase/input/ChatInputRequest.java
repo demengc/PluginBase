@@ -24,8 +24,8 @@
 
 package dev.demeng.pluginbase.input;
 
-import dev.demeng.pluginbase.chat.TextUtils;
 import dev.demeng.pluginbase.plugin.BaseManager;
+import dev.demeng.pluginbase.text.TextUtils;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.Function;

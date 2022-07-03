@@ -64,7 +64,8 @@ public final class Services {
   @NotNull
   public static <T> Optional<T> get(@NotNull final Class<T> clazz) {
     Objects.requireNonNull(clazz, "clazz");
-    final RegisteredServiceProvider<T> registration = Bukkit.getServicesManager().getRegistration(clazz);
+    final RegisteredServiceProvider<T> registration = Bukkit.getServicesManager()
+        .getRegistration(clazz);
     if (registration == null) {
       return Optional.empty();
     }
@@ -82,7 +83,8 @@ public final class Services {
    * @return the same service instance
    */
   @NotNull
-  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance, @NotNull final Plugin plugin,
+  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance,
+      @NotNull final Plugin plugin,
       @NotNull final ServicePriority priority) {
     Objects.requireNonNull(clazz, "clazz");
     Objects.requireNonNull(instance, "instance");

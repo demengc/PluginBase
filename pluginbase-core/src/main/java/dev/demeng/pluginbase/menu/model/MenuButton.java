@@ -24,8 +24,8 @@
 
 package dev.demeng.pluginbase.menu.model;
 
-import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.menu.layout.Menu;
+import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.serializer.ItemSerializer;
 import java.util.function.Consumer;
 import lombok.AccessLevel;

@@ -25,9 +25,9 @@
 package dev.demeng.pluginbase.serializer;
 
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.YamlConfig;
 import dev.demeng.pluginbase.item.ItemBuilder;
+import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.serializer.type.YamlSerializable;
 import java.util.ArrayList;
 import java.util.List;
