@@ -76,7 +76,7 @@ public class SqlDatabase {
   public SqlDatabase(
       final @NotNull String driverClass,
       final @Nullable String jdbcUrl,
-      final @NotNull DatabaseCredentials credentials) {
+      final @NotNull SqlCredentials credentials) {
 
     final HikariConfig hikari = new HikariConfig();
 

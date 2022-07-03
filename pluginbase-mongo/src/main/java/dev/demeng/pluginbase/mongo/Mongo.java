@@ -40,7 +40,7 @@ public class Mongo implements IMongo {
   @Getter @NotNull private final MongoClient client;
   @Getter @NotNull private final MongoDatabase database;
 
-  public Mongo(@NotNull final DatabaseCredentials credentials) {
+  public Mongo(@NotNull final MongoCredentials credentials) {
     this.client = MongoClients.create(credentials.getUri());
     this.database = this.client.getDatabase(credentials.getDatabase());
   }

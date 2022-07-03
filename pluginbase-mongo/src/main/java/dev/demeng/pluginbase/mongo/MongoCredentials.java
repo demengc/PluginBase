@@ -22,42 +22,27 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.mysql;
+package dev.demeng.pluginbase.mongo;
 
 import lombok.Data;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The POJO containing the credentials to an SQL database.
+ * The POJO containing the credentials to a Mongo database.
  */
 @Data
-public final class DatabaseCredentials {
+public final class MongoCredentials {
 
   /**
-   * The host (IP) of the database. Local host is supported.
+   * The connection URI for the database.
    */
-  @NotNull private final String host;
-
-  /**
-   * The port to the database, typically 3306.
-   */
-  private final int port;
+  @NotNull private final String uri;
 
   /**
    * The name of the database.
    */
   @NotNull private final String database;
-
-  /**
-   * The username to the database.
-   */
-  @NotNull private final String user;
-
-  /**
-   * The password to the database.
-   */
-  @NotNull private final String password;
 
   /**
    * Gets database credentials from a configuration section.
@@ -66,12 +51,9 @@ public final class DatabaseCredentials {
    * @return The database credentials provided
    */
   @NotNull
-  public static DatabaseCredentials fromConfig(@NotNull final ConfigurationSection section) {
-    return new DatabaseCredentials(
-        section.getString("host", "localhost"),
-        section.getInt("port", 3306),
-        section.getString("database", "minecraft"),
-        section.getString("user", "root"),
-        section.getString("password", "root"));
+  public static MongoCredentials fromConfig(@NotNull final ConfigurationSection section) {
+    return new MongoCredentials(
+        section.getString("uri", "mongodb://localhost:27017"),
+        section.getString("database", "minecraft"));
   }
 }
