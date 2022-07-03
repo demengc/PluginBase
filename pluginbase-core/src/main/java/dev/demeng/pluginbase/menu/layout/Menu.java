@@ -30,7 +30,7 @@ import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
 import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
-import dev.demeng.pluginbase.serializer.ItemSerializer;
+import dev.demeng.pluginbase.serialize.ItemSerializer;
 import dev.demeng.pluginbase.text.TextUtils;
 import java.util.HashMap;
 import java.util.Map;
@@ -313,7 +313,7 @@ public abstract class Menu implements IMenu {
           final ItemStack current = inventory.getItem(slot - 1);
 
           if (current == null || current.getType() == Material.AIR) {
-            addButton(slot - 1, ItemSerializer.get().deserialize(slotSection, placeholders), null);
+            addButton(slot - 1, ItemSerializer.deserialize(slotSection, placeholders), null);
           }
         });
 

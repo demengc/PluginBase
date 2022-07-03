@@ -26,7 +26,7 @@ package dev.demeng.pluginbase.menu.model;
 
 import dev.demeng.pluginbase.menu.layout.Menu;
 import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
-import dev.demeng.pluginbase.serializer.ItemSerializer;
+import dev.demeng.pluginbase.serialize.ItemSerializer;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -94,7 +94,7 @@ public class MenuButton {
       slot--;
     }
 
-    return create(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
+    return create(slot, ItemSerializer.deserialize(section, placeholders), consumer);
   }
 
   /**
@@ -130,7 +130,7 @@ public class MenuButton {
       @NotNull final ConfigurationSection section,
       @Nullable final DynamicPlaceholders placeholders,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return create(slot, ItemSerializer.get().deserialize(section, placeholders), consumer);
+    return create(slot, ItemSerializer.deserialize(section, placeholders), consumer);
   }
 
   /**
