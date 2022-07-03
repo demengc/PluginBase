@@ -2,6 +2,8 @@
  * MIT License
  *
  * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) lucko (Luck) <luck@lucko.me>
+ * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
