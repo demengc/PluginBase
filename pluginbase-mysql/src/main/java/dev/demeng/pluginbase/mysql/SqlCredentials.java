@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The POJO containing the credentials to an SQL database.
  */
-@Data
+@Data(staticConstructor = "of")
 public final class SqlCredentials {
 
   /**
@@ -66,7 +66,7 @@ public final class SqlCredentials {
    * @return The database credentials provided
    */
   @NotNull
-  public static SqlCredentials fromConfig(@NotNull final ConfigurationSection section) {
+  public static SqlCredentials of(@NotNull final ConfigurationSection section) {
     return new SqlCredentials(
         section.getString("host", "localhost"),
         section.getInt("port", 3306),

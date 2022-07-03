@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The POJO containing the credentials to a Mongo database.
  */
-@Data
+@Data(staticConstructor = "of")
 public final class MongoCredentials {
 
   /**
@@ -51,7 +51,7 @@ public final class MongoCredentials {
    * @return The database credentials provided
    */
   @NotNull
-  public static MongoCredentials fromConfig(@NotNull final ConfigurationSection section) {
+  public static MongoCredentials of(@NotNull final ConfigurationSection section) {
     return new MongoCredentials(
         section.getString("uri", "mongodb://localhost:27017"),
         section.getString("database", "minecraft"));
