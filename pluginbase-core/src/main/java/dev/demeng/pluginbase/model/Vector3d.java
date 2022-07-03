@@ -44,24 +44,24 @@ public class Vector3d implements YamlSerializable {
   private final double z;
 
   @NotNull
-  public static Vector3d of(@NotNull Location loc) {
+  public static Vector3d of(@NotNull final Location loc) {
     return of(loc.getX(), loc.getY(), loc.getZ());
   }
 
   @NotNull
-  public static Vector3d of(@NotNull Vector vector) {
+  public static Vector3d of(@NotNull final Vector vector) {
     return of(vector.getX(), vector.getY(), vector.getZ());
   }
 
   @Override
-  public void serialize(@NotNull ConfigurationSection section) {
+  public void serialize(@NotNull final ConfigurationSection section) {
     section.set("x", x);
     section.set("y", y);
     section.set("z", z);
   }
 
   @NotNull
-  public static Vector3d deserialize(@NotNull ConfigurationSection section) {
+  public static Vector3d deserialize(@NotNull final ConfigurationSection section) {
     return of(section.getDouble("x"), section.getDouble("y"), section.getDouble("z"));
   }
 
@@ -72,7 +72,7 @@ public class Vector3d implements YamlSerializable {
    * @return The Bukkit Location
    */
   @NotNull
-  public Location toLocation(@Nullable World world) {
+  public Location toLocation(@Nullable final World world) {
     return new Location(world, x, y, z);
   }
 

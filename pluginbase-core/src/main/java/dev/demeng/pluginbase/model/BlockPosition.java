@@ -45,13 +45,13 @@ public class BlockPosition implements YamlSerializable {
   private final int z;
 
   @NotNull
-  public static BlockPosition of(@NotNull Location loc) {
+  public static BlockPosition of(@NotNull final Location loc) {
     return of(Objects.requireNonNull(loc.getWorld()).getName(),
         loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
   }
 
   @Override
-  public void serialize(@NotNull ConfigurationSection section) {
+  public void serialize(@NotNull final ConfigurationSection section) {
     section.set("world", world);
     section.set("x", x);
     section.set("y", y);
@@ -59,7 +59,7 @@ public class BlockPosition implements YamlSerializable {
   }
 
   @NotNull
-  public static BlockPosition deserialize(@NotNull ConfigurationSection section) {
+  public static BlockPosition deserialize(@NotNull final ConfigurationSection section) {
     return of(Objects.requireNonNull(section.getString("world")),
         section.getInt("x"), section.getInt("y"), section.getInt("z"));
   }

@@ -46,13 +46,13 @@ public class Point implements YamlSerializable {
   private final float pitch;
 
   @NotNull
-  public static Point of(@NotNull Location loc) {
+  public static Point of(@NotNull final Location loc) {
     return of(Objects.requireNonNull(loc.getWorld()).getName(), loc.getX(), loc.getY(), loc.getZ(),
         loc.getYaw(), loc.getPitch());
   }
 
   @Override
-  public void serialize(@NotNull ConfigurationSection section) {
+  public void serialize(@NotNull final ConfigurationSection section) {
     section.set("world", world);
     section.set("x", x);
     section.set("y", y);
@@ -62,7 +62,7 @@ public class Point implements YamlSerializable {
   }
 
   @NotNull
-  public static Point deserialize(@NotNull ConfigurationSection section) {
+  public static Point deserialize(@NotNull final ConfigurationSection section) {
     return of(Objects.requireNonNull(section.getString("world")),
         section.getDouble("x"), section.getDouble("y"), section.getDouble("z"),
         (float) section.getDouble("yaw"), (float) section.getDouble("pitch"));

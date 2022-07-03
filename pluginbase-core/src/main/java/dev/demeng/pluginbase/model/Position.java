@@ -44,12 +44,12 @@ public class Position implements YamlSerializable {
   private final double z;
 
   @NotNull
-  public static Position of(@NotNull Location loc) {
+  public static Position of(@NotNull final Location loc) {
     return of(Objects.requireNonNull(loc.getWorld()).getName(), loc.getX(), loc.getY(), loc.getZ());
   }
 
   @Override
-  public void serialize(@NotNull ConfigurationSection section) {
+  public void serialize(@NotNull final ConfigurationSection section) {
     section.set("world", world);
     section.set("x", x);
     section.set("y", y);
@@ -57,7 +57,7 @@ public class Position implements YamlSerializable {
   }
 
   @NotNull
-  public static Position deserialize(@NotNull ConfigurationSection section) {
+  public static Position deserialize(@NotNull final ConfigurationSection section) {
     return of(Objects.requireNonNull(section.getString("world")),
         section.getDouble("x"), section.getDouble("y"), section.getDouble("z"));
   }
