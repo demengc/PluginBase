@@ -33,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * The YAML serializer for Bukkit {@link ItemStack}s.
+ *
+ * @see XItemStack
  */
 public class ItemSerializer {
 
@@ -42,7 +44,9 @@ public class ItemSerializer {
    *
    * @param section The section the item stack will be serialized into
    */
-  public static void serialize(@NotNull final ItemStack stack, @NotNull final ConfigurationSection section) {
+  public static void serialize(
+      @NotNull final ItemStack stack,
+      @NotNull final ConfigurationSection section) {
     XItemStack.serialize(stack, section);
   }
 
