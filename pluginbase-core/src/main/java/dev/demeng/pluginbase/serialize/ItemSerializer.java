@@ -26,6 +26,8 @@ package dev.demeng.pluginbase.serialize;
 
 import com.cryptomorin.xseries.XItemStack;
 import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see XItemStack
  */
+@NoArgsConstructor(access = AccessLevel.PACKAGE)
 public class ItemSerializer {
 
   /**
