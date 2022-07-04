@@ -32,7 +32,6 @@ import be.bendem.sqlstreams.util.SqlFunction;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.demeng.pluginbase.delegate.Delegates;
 import dev.demeng.pluginbase.promise.Promise;
-import dev.demeng.pluginbase.promise.ThreadContext;
 import dev.demeng.pluginbase.terminable.Terminable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -78,7 +77,7 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default Promise<Void> executeAsync(@Language("MySQL") @NotNull final String statement) {
-    return Promise.supplying(ThreadContext.ASYNC,
+    return Promise.supplyingAsync(
         Delegates.runnableToSupplier(() -> this.execute(statement)));
   }
 
@@ -109,7 +108,7 @@ public interface ISql extends Terminable {
   default Promise<Void> executeAsync(
       @Language("MySQL") @NotNull final String statement,
       @NotNull final SqlConsumer<PreparedStatement> preparer) {
-    return Promise.supplying(ThreadContext.ASYNC,
+    return Promise.supplyingAsync(
         Delegates.runnableToSupplier(() -> this.execute(statement, preparer)));
   }
 
@@ -145,7 +144,7 @@ public interface ISql extends Terminable {
   default <R> Promise<Optional<R>> queryAsync(
       @Language("MySQL") @NotNull final String query,
       @NotNull final SqlFunction<ResultSet, R> handler) {
-    return Promise.supplying(ThreadContext.ASYNC, () -> this.query(query, handler));
+    return Promise.supplyingAsync(() -> this.query(query, handler));
   }
 
   /**
@@ -192,7 +191,7 @@ public interface ISql extends Terminable {
       @Language("MySQL") @NotNull final String query,
       @NotNull final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) {
-    return Promise.supplying(ThreadContext.ASYNC, () -> this.query(query, preparer, handler));
+    return Promise.supplyingAsync(() -> this.query(query, preparer, handler));
   }
 
   /**
@@ -230,7 +229,7 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default Promise<Void> executeBatchAsync(@NotNull final BatchBuilder builder) {
-    return Promise.supplying(ThreadContext.ASYNC,
+    return Promise.supplyingAsync(
         Delegates.runnableToSupplier(() -> this.executeBatch(builder)));
   }
 
