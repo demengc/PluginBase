@@ -48,7 +48,7 @@ import redis.clients.jedis.JedisPoolConfig;
 
 public class Redis implements IRedis {
 
-  private final String logPrefix = "[ " + Common.getName() + "-redis" + "] ";
+  private final String logPrefix = "[" + Common.getName() + "-redis" + "] ";
 
   private final JedisPool jedisPool;
   private final AbstractMessenger messenger;
