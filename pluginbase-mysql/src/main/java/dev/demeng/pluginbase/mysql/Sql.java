@@ -148,7 +148,7 @@ public class Sql implements ISql {
       preparer.accept(s);
       s.execute();
     } catch (final SQLException ex) {
-      ex.printStackTrace();
+      Common.error(ex, "Failed to execute SQL statement.", false);
     }
   }
 
@@ -163,7 +163,7 @@ public class Sql implements ISql {
         return Optional.ofNullable(handler.apply(r));
       }
     } catch (final SQLException ex) {
-      ex.printStackTrace();
+      Common.error(ex, "Failed to query SQL statement.", false);
       return Optional.empty();
     }
   }
@@ -188,7 +188,7 @@ public class Sql implements ISql {
       }
       s.executeBatch();
     } catch (final SQLException ex) {
-      ex.printStackTrace();
+      Common.error(ex, "Failed to batch execute SQL statement.", false);
     }
   }
 
