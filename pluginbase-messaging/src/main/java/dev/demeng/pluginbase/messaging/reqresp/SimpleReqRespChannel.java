@@ -47,31 +47,32 @@ public class SimpleReqRespChannel<Req, Resp> implements ReqRespChannel<Req, Resp
 
   private final ConversationChannel<ReqResMessage<Req>, ReqResMessage<Resp>> channel;
 
-  public SimpleReqRespChannel(Messenger messenger, String name, TypeToken<Req> reqType,
-      TypeToken<Resp> respType) {
-    TypeToken<ReqResMessage<Req>> reqMsgType = new TypeToken<ReqResMessage<Req>>() {
+  public SimpleReqRespChannel(final Messenger messenger, final String name,
+      final TypeToken<Req> reqType,
+      final TypeToken<Resp> respType) {
+    final TypeToken<ReqResMessage<Req>> reqMsgType = new TypeToken<ReqResMessage<Req>>() {
     }.where(new TypeParameter<Req>() {
     }, reqType);
-    TypeToken<ReqResMessage<Resp>> respMsgType = new TypeToken<ReqResMessage<Resp>>() {
+    final TypeToken<ReqResMessage<Resp>> respMsgType = new TypeToken<ReqResMessage<Resp>>() {
     }.where(new TypeParameter<Resp>() {
     }, respType);
     this.channel = messenger.getConversationChannel(name, reqMsgType, respMsgType);
   }
 
   @Override
-  public Promise<Resp> request(Req req) {
-    ReqResMessage<Req> msg = new ReqResMessage<>(UUID.randomUUID(), req);
-    Promise<Resp> promise = Promise.empty();
+  public Promise<Resp> request(final Req req) {
+    final ReqResMessage<Req> msg = new ReqResMessage<>(UUID.randomUUID(), req);
+    final Promise<Resp> promise = Promise.empty();
     this.channel.sendMessage(msg, new ConversationReplyListener<ReqResMessage<Resp>>() {
       @NotNull
       @Override
-      public RegistrationAction onReply(@NotNull ReqResMessage<Resp> reply) {
+      public RegistrationAction onReply(@NotNull final ReqResMessage<Resp> reply) {
         promise.supply(reply.getBody());
         return RegistrationAction.STOP_LISTENING;
       }
 
       @Override
-      public void onTimeout(@NotNull List<ReqResMessage<Resp>> replies) {
+      public void onTimeout(@NotNull final List<ReqResMessage<Resp>> replies) {
         promise.supplyException(new TimeoutException("Request timed out"));
       }
     }, 5, TimeUnit.SECONDS);
@@ -79,12 +80,12 @@ public class SimpleReqRespChannel<Req, Resp> implements ReqRespChannel<Req, Resp
   }
 
   @Override
-  public void responseHandler(ResponseHandler<Req, Resp> handler) {
+  public void responseHandler(final ResponseHandler<Req, Resp> handler) {
     this.channel.newAgent((agent, message) -> {
-      UUID id = message.getConversationId();
-      Req req = message.getBody();
+      final UUID id = message.getConversationId();
+      final Req req = message.getBody();
 
-      Resp resp = handler.response(req);
+      final Resp resp = handler.response(req);
       if (resp != null) {
         return ConversationReply.of(new ReqResMessage<>(id, resp));
       } else {
@@ -94,14 +95,14 @@ public class SimpleReqRespChannel<Req, Resp> implements ReqRespChannel<Req, Resp
   }
 
   @Override
-  public void asyncResponseHandler(AsyncResponseHandler<Req, Resp> handler) {
+  public void asyncResponseHandler(final AsyncResponseHandler<Req, Resp> handler) {
     this.channel.newAgent((agent, message) -> {
-      UUID id = message.getConversationId();
-      Req req = message.getBody();
+      final UUID id = message.getConversationId();
+      final Req req = message.getBody();
 
-      Promise<Resp> promise = handler.response(req);
+      final Promise<Resp> promise = handler.response(req);
       if (promise != null) {
-        Promise<ReqResMessage<Resp>> composedPromise = promise.thenApplyAsync(
+        final Promise<ReqResMessage<Resp>> composedPromise = promise.thenApplyAsync(
             resp -> resp == null ? null : new ReqResMessage<>(id, resp));
         return ConversationReply.ofPromise(composedPromise);
       } else {

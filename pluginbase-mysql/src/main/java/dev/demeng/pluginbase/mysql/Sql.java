@@ -141,33 +141,35 @@ public class Sql implements ISql {
   }
 
   @Override
-  public void execute(@Language("MySQL") @NotNull String statement,
-      @NotNull SqlConsumer<PreparedStatement> preparer) {
-    try (Connection c = this.getConnection(); PreparedStatement s = c.prepareStatement(statement)) {
+  public void execute(@Language("MySQL") @NotNull final String statement,
+      @NotNull final SqlConsumer<PreparedStatement> preparer) {
+    try (final Connection c = this.getConnection(); final PreparedStatement s = c.prepareStatement(
+        statement)) {
       preparer.accept(s);
       s.execute();
-    } catch (SQLException ex) {
+    } catch (final SQLException ex) {
       ex.printStackTrace();
     }
   }
 
   @Override
-  public <R> @NotNull Optional<R> query(@Language("MySQL") @NotNull String query,
-      @NotNull SqlConsumer<PreparedStatement> preparer,
-      @NotNull SqlFunction<ResultSet, R> handler) {
-    try (Connection c = this.getConnection(); PreparedStatement s = c.prepareStatement(query)) {
+  public <R> @NotNull Optional<R> query(@Language("MySQL") @NotNull final String query,
+      @NotNull final SqlConsumer<PreparedStatement> preparer,
+      @NotNull final SqlFunction<ResultSet, R> handler) {
+    try (final Connection c = this.getConnection(); final PreparedStatement s = c.prepareStatement(
+        query)) {
       preparer.accept(s);
-      try (ResultSet r = s.executeQuery()) {
+      try (final ResultSet r = s.executeQuery()) {
         return Optional.ofNullable(handler.apply(r));
       }
-    } catch (SQLException ex) {
+    } catch (final SQLException ex) {
       ex.printStackTrace();
       return Optional.empty();
     }
   }
 
   @Override
-  public void executeBatch(@NotNull BatchBuilder builder) {
+  public void executeBatch(@NotNull final BatchBuilder builder) {
 
     if (builder.getHandlers().isEmpty()) {
       return;
@@ -178,20 +180,20 @@ public class Sql implements ISql {
       return;
     }
 
-    try (Connection c = this.getConnection(); PreparedStatement s = c.prepareStatement(
+    try (final Connection c = this.getConnection(); final PreparedStatement s = c.prepareStatement(
         builder.getStatement())) {
-      for (SqlConsumer<PreparedStatement> handlers : builder.getHandlers()) {
+      for (final SqlConsumer<PreparedStatement> handlers : builder.getHandlers()) {
         handlers.accept(s);
         s.addBatch();
       }
       s.executeBatch();
-    } catch (SQLException ex) {
+    } catch (final SQLException ex) {
       ex.printStackTrace();
     }
   }
 
   @Override
-  public @NotNull BatchBuilder batch(@Language("MySQL") @NotNull String statement) {
+  public @NotNull BatchBuilder batch(@Language("MySQL") @NotNull final String statement) {
     return new BatchBuilder(this, statement);
   }
 

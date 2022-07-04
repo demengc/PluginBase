@@ -60,10 +60,11 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
    * @return a new mapped channel receiver
    */
   @NotNull
-  public static <T, K, V> MappedChannelReceiver<T, K, V> createExpiring(@NotNull Channel<T> channel,
-      @NotNull Function<? super T, ? extends K> keyMapper,
-      @NotNull Function<? super T, ? extends V> valueMapper, long expiryDuration,
-      @NotNull TimeUnit unit) {
+  public static <T, K, V> MappedChannelReceiver<T, K, V> createExpiring(
+      @NotNull final Channel<T> channel,
+      @NotNull final Function<? super T, ? extends K> keyMapper,
+      @NotNull final Function<? super T, ? extends V> valueMapper, final long expiryDuration,
+      @NotNull final TimeUnit unit) {
     Objects.requireNonNull(channel, "channel");
     Objects.requireNonNull(keyMapper, "keyMapper");
     Objects.requireNonNull(unit, "unit");
@@ -84,9 +85,10 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
    * @return a new mapped channel receiver
    */
   @NotNull
-  public static <T, K> MappedChannelReceiver<T, K, T> createExpiring(@NotNull Channel<T> channel,
-      @NotNull Function<? super T, ? extends K> keyMapper, long expiryDuration,
-      @NotNull TimeUnit unit) {
+  public static <T, K> MappedChannelReceiver<T, K, T> createExpiring(
+      @NotNull final Channel<T> channel,
+      @NotNull final Function<? super T, ? extends K> keyMapper, final long expiryDuration,
+      @NotNull final TimeUnit unit) {
     return new MappedChannelReceiver<>(channel, keyMapper, Function.identity(),
         new CacheMessageStore<>(expiryDuration, unit));
   }
@@ -104,9 +106,9 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
    * @return a new mapped channel receiver
    */
   @NotNull
-  public static <T, K, V> MappedChannelReceiver<T, K, V> create(@NotNull Channel<T> channel,
-      @NotNull Function<? super T, ? extends K> keyMapper,
-      @NotNull Function<? super T, ? extends V> valueMapper, Map<K, V> map) {
+  public static <T, K, V> MappedChannelReceiver<T, K, V> create(@NotNull final Channel<T> channel,
+      @NotNull final Function<? super T, ? extends K> keyMapper,
+      @NotNull final Function<? super T, ? extends V> valueMapper, final Map<K, V> map) {
     Objects.requireNonNull(channel, "channel");
     Objects.requireNonNull(keyMapper, "keyMapper");
     Objects.requireNonNull(valueMapper, "valueMapper");
@@ -126,8 +128,8 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
    * @return a new mapped channel receiver
    */
   @NotNull
-  public static <T, K> MappedChannelReceiver<T, K, T> create(@NotNull Channel<T> channel,
-      @NotNull Function<? super T, ? extends K> keyMapper, Map<K, T> map) {
+  public static <T, K> MappedChannelReceiver<T, K, T> create(@NotNull final Channel<T> channel,
+      @NotNull final Function<? super T, ? extends K> keyMapper, final Map<K, T> map) {
     return create(channel, keyMapper, Function.identity(), map);
   }
 
@@ -136,8 +138,9 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
   private final Function<? super T, ? extends V> valueMapper;
   private final MessageStore<K, V> messageStore;
 
-  private MappedChannelReceiver(Channel<T> channel, Function<? super T, ? extends K> keyMapper,
-      Function<? super T, ? extends V> valueMapper, MessageStore<K, V> messageStore) {
+  private MappedChannelReceiver(final Channel<T> channel,
+      final Function<? super T, ? extends K> keyMapper,
+      final Function<? super T, ? extends V> valueMapper, final MessageStore<K, V> messageStore) {
     this.keyMapper = keyMapper;
     this.valueMapper = valueMapper;
     this.messageStore = messageStore;
@@ -145,9 +148,9 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
     this.agent = channel.newAgent(this::handleMessage);
   }
 
-  private void handleMessage(ChannelAgent<T> agent, T message) {
-    K key = this.keyMapper.apply(message);
-    V value = this.valueMapper.apply(message);
+  private void handleMessage(final ChannelAgent<T> agent, final T message) {
+    final K key = this.keyMapper.apply(message);
+    final V value = this.valueMapper.apply(message);
     this.messageStore.put(key, value);
   }
 
@@ -169,7 +172,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
    * @return the value, if present
    */
   @Nullable
-  public V getValue(@NotNull K key) {
+  public V getValue(@NotNull final K key) {
     return this.messageStore.getValue(key);
   }
 
@@ -178,7 +181,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
    *
    * @param key the key
    */
-  public void invalidateEntry(@NotNull K key) {
+  public void invalidateEntry(@NotNull final K key) {
     this.messageStore.invalidateEntry(key);
   }
 
@@ -204,7 +207,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
     private final Cache<K, V> cache;
     private final Map<K, V> asMap;
 
-    CacheMessageStore(long expiryDuration, TimeUnit unit) {
+    CacheMessageStore(final long expiryDuration, final TimeUnit unit) {
       this.cache = CacheBuilder.newBuilder()
           .expireAfterWrite(expiryDuration, unit)
           .build();
@@ -213,7 +216,7 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
     }
 
     @Override
-    public void put(K key, V message) {
+    public void put(final K key, final V message) {
       this.cache.put(key, message);
     }
 
@@ -223,12 +226,12 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
     }
 
     @Override
-    public V getValue(K key) {
+    public V getValue(final K key) {
       return this.cache.getIfPresent(key);
     }
 
     @Override
-    public void invalidateEntry(K key) {
+    public void invalidateEntry(final K key) {
       this.cache.invalidate(key);
     }
   }
@@ -238,13 +241,13 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
     private final Map<K, V> map;
     private final Map<K, V> asMap;
 
-    private MapMessageStore(Map<K, V> map) {
+    private MapMessageStore(final Map<K, V> map) {
       this.map = map;
       this.asMap = Collections.unmodifiableMap(this.map);
     }
 
     @Override
-    public void put(K key, V message) {
+    public void put(final K key, final V message) {
       this.map.put(key, message);
     }
 
@@ -254,12 +257,12 @@ public final class MappedChannelReceiver<T, K, V> implements Terminable {
     }
 
     @Override
-    public V getValue(K key) {
+    public V getValue(final K key) {
       return this.map.get(key);
     }
 
     @Override
-    public void invalidateEntry(K key) {
+    public void invalidateEntry(final K key) {
       this.map.remove(key);
     }
   }

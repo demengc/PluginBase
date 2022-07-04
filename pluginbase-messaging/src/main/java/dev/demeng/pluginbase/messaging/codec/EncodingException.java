@@ -32,15 +32,15 @@ public class EncodingException extends RuntimeException {
   public EncodingException() {
   }
 
-  public EncodingException(String message) {
+  public EncodingException(final String message) {
     super(message);
   }
 
-  public EncodingException(String message, Throwable cause) {
+  public EncodingException(final String message, final Throwable cause) {
     super(message, cause);
   }
 
-  public EncodingException(Throwable cause) {
+  public EncodingException(final Throwable cause) {
     super(cause);
   }
 }

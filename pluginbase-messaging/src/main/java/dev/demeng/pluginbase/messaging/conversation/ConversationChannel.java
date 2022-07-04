@@ -79,8 +79,9 @@ public interface ConversationChannel<T extends ConversationMessage, R extends Co
    * @return the resultant agent
    */
   @NotNull
-  default ConversationChannelAgent<T, R> newAgent(ConversationChannelListener<T, R> listener) {
-    ConversationChannelAgent<T, R> agent = newAgent();
+  default ConversationChannelAgent<T, R> newAgent(
+      final ConversationChannelListener<T, R> listener) {
+    final ConversationChannelAgent<T, R> agent = newAgent();
     agent.addListener(listener);
     return agent;
   }

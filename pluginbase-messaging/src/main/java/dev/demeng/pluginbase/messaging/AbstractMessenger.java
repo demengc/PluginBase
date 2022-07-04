@@ -77,8 +77,9 @@ public class AbstractMessenger implements Messenger {
    * @param notifyUnsub      the consumer to pass the names of channels which should be unsubscribed
    *                         from
    */
-  public AbstractMessenger(BiConsumer<String, byte[]> outgoingMessages, Consumer<String> notifySub,
-      Consumer<String> notifyUnsub) {
+  public AbstractMessenger(final BiConsumer<String, byte[]> outgoingMessages,
+      final Consumer<String> notifySub,
+      final Consumer<String> notifyUnsub) {
     this.outgoingMessages = Objects.requireNonNull(outgoingMessages, "outgoingMessages");
     this.notifySub = Objects.requireNonNull(notifySub, "notifySub");
     this.notifyUnsub = Objects.requireNonNull(notifyUnsub, "notifyUnsub");
@@ -90,11 +91,11 @@ public class AbstractMessenger implements Messenger {
    * @param channel the channel the message was received on
    * @param message the message
    */
-  public void registerIncomingMessage(String channel, byte[] message) {
+  public void registerIncomingMessage(final String channel, final byte[] message) {
     Objects.requireNonNull(channel, "channel");
     Objects.requireNonNull(message, "message");
 
-    for (Map.Entry<Map.Entry<String, TypeToken<?>>, AbstractChannel<?>> c : this.channels.asMap()
+    for (final Map.Entry<Map.Entry<String, TypeToken<?>>, AbstractChannel<?>> c : this.channels.asMap()
         .entrySet()) {
       if (c.getKey().getKey().equals(channel)) {
         c.getValue().onIncomingMessage(message);
@@ -105,7 +106,7 @@ public class AbstractMessenger implements Messenger {
   @NotNull
   @SuppressWarnings("unchecked")
   @Override
-  public <T> Channel<T> getChannel(@NotNull String name, @NotNull TypeToken<T> type) {
+  public <T> Channel<T> getChannel(@NotNull final String name, @NotNull final TypeToken<T> type) {
     Objects.requireNonNull(name, "name");
     Preconditions.checkArgument(!name.trim().isEmpty(), "name cannot be empty");
     Objects.requireNonNull(type, "type");
@@ -113,16 +114,16 @@ public class AbstractMessenger implements Messenger {
     return (Channel<T>) this.channels.getUnchecked(Maps.immutableEntry(name, type));
   }
 
-  private static <T> Codec<T> getCodec(TypeToken<T> type) {
+  private static <T> Codec<T> getCodec(final TypeToken<T> type) {
     Class<? super T> rawType = type.getRawType();
     do {
-      Message message = rawType.getAnnotation(Message.class);
+      final Message message = rawType.getAnnotation(Message.class);
       if (message != null) {
-        Class<? extends Codec<?>> codec = message.codec();
+        final Class<? extends Codec<?>> codec = message.codec();
         try {
           //noinspection unchecked
           return (Codec<T>) codec.getDeclaredConstructor().newInstance();
-        } catch (ReflectiveOperationException e) {
+        } catch (final ReflectiveOperationException e) {
           e.printStackTrace();
         }
       }
@@ -141,28 +142,29 @@ public class AbstractMessenger implements Messenger {
     private final Set<AbstractChannelAgent<T>> agents = ConcurrentHashMap.newKeySet();
     private boolean subscribed = false;
 
-    private AbstractChannel(AbstractMessenger messenger, String name, TypeToken<T> type) {
+    private AbstractChannel(final AbstractMessenger messenger, final String name,
+        final TypeToken<T> type) {
       this.messenger = messenger;
       this.name = name;
       this.type = type;
       this.codec = new GZipCodec<>(AbstractMessenger.getCodec(type));
     }
 
-    private void onIncomingMessage(byte[] message) {
+    private void onIncomingMessage(final byte[] message) {
       try {
-        T decoded = this.codec.decode(message);
+        final T decoded = this.codec.decode(message);
         Objects.requireNonNull(decoded, "decoded");
 
-        for (AbstractChannelAgent<T> agent : this.agents) {
+        for (final AbstractChannelAgent<T> agent : this.agents) {
           try {
             agent.onIncomingMessage(decoded);
-          } catch (Exception e) {
+          } catch (final Exception e) {
             new RuntimeException("Unable to pass decoded message to agent: " + decoded,
                 e).printStackTrace();
           }
         }
 
-      } catch (Exception e) {
+      } catch (final Exception e) {
         new RuntimeException(
             "Unable to decode message: " + Base64.getEncoder().encodeToString(message),
             e).printStackTrace();
@@ -170,7 +172,8 @@ public class AbstractMessenger implements Messenger {
     }
 
     private void checkSubscription() {
-      boolean shouldSubscribe = this.agents.stream().anyMatch(AbstractChannelAgent::hasListeners);
+      final boolean shouldSubscribe = this.agents.stream()
+          .anyMatch(AbstractChannelAgent::hasListeners);
       if (shouldSubscribe == this.subscribed) {
         return;
       }
@@ -183,7 +186,7 @@ public class AbstractMessenger implements Messenger {
           } else {
             this.messenger.notifyUnsub.accept(this.name);
           }
-        } catch (Exception e) {
+        } catch (final Exception e) {
           e.printStackTrace();
         }
       });
@@ -207,16 +210,16 @@ public class AbstractMessenger implements Messenger {
 
     @Override
     public ChannelAgent<T> newAgent() {
-      AbstractChannelAgent<T> agent = new AbstractChannelAgent<>(this);
+      final AbstractChannelAgent<T> agent = new AbstractChannelAgent<>(this);
       this.agents.add(agent);
       return agent;
     }
 
     @Override
-    public Promise<Void> sendMessage(T message) {
+    public Promise<Void> sendMessage(final T message) {
       Objects.requireNonNull(message, "message");
       return Promise.supplyingAsync(Delegates.callableToSupplier(() -> {
-        byte[] buf = this.codec.encode(message);
+        final byte[] buf = this.codec.encode(message);
         this.messenger.outgoingMessages.accept(this.name, buf);
         return null;
       }));
@@ -229,16 +232,16 @@ public class AbstractMessenger implements Messenger {
     private AbstractChannel<T> channel;
     private final Set<ChannelListener<T>> listeners = ConcurrentHashMap.newKeySet();
 
-    AbstractChannelAgent(AbstractChannel<T> channel) {
+    AbstractChannelAgent(final AbstractChannel<T> channel) {
       this.channel = channel;
     }
 
-    private void onIncomingMessage(T message) {
-      for (ChannelListener<T> listener : this.listeners) {
+    private void onIncomingMessage(final T message) {
+      for (final ChannelListener<T> listener : this.listeners) {
         TaskUtils.runAsync(task -> {
           try {
             listener.onMessage(this, message);
-          } catch (Exception e) {
+          } catch (final Exception e) {
             new RuntimeException("Unable to pass decoded message to listener: " + listener,
                 e).printStackTrace();
           }
@@ -264,7 +267,7 @@ public class AbstractMessenger implements Messenger {
     }
 
     @Override
-    public boolean addListener(ChannelListener<T> listener) {
+    public boolean addListener(final ChannelListener<T> listener) {
       Preconditions.checkState(this.channel != null, "agent not active");
       try {
         return this.listeners.add(listener);
@@ -274,7 +277,7 @@ public class AbstractMessenger implements Messenger {
     }
 
     @Override
-    public boolean removeListener(ChannelListener<T> listener) {
+    public boolean removeListener(final ChannelListener<T> listener) {
       Preconditions.checkState(this.channel != null, "agent not active");
       try {
         return this.listeners.remove(listener);
@@ -299,7 +302,7 @@ public class AbstractMessenger implements Messenger {
   private class ChannelLoader<T> extends CacheLoader<Map.Entry<String, TypeToken<T>>, Channel<T>> {
 
     @Override
-    public Channel<T> load(Map.Entry<String, TypeToken<T>> spec) throws Exception {
+    public Channel<T> load(final Map.Entry<String, TypeToken<T>> spec) throws Exception {
       return new AbstractChannel<>(AbstractMessenger.this, spec.getKey(), spec.getValue());
     }
   }

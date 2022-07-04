@@ -36,16 +36,16 @@ import org.jetbrains.annotations.NotNull;
 public interface ConversationReplyListener<R extends ConversationMessage> {
 
   static <R extends ConversationMessage> ConversationReplyListener<R> of(
-      Function<? super R, RegistrationAction> onReply) {
+      final Function<? super R, RegistrationAction> onReply) {
     return new ConversationReplyListener<R>() {
       @NotNull
       @Override
-      public RegistrationAction onReply(@NotNull R reply) {
+      public RegistrationAction onReply(@NotNull final R reply) {
         return onReply.apply(reply);
       }
 
       @Override
-      public void onTimeout(@NotNull List<R> replies) {
+      public void onTimeout(@NotNull final List<R> replies) {
 
       }
     };

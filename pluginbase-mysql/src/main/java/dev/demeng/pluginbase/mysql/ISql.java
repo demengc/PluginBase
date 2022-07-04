@@ -77,7 +77,7 @@ public interface ISql extends Terminable {
    * @see #execute(String) to perform this action synchronously
    */
   @NotNull
-  default Promise<Void> executeAsync(@Language("MySQL") @NotNull String statement) {
+  default Promise<Void> executeAsync(@Language("MySQL") @NotNull final String statement) {
     return Promise.supplying(ThreadContext.ASYNC,
         Delegates.runnableToSupplier(() -> this.execute(statement)));
   }
@@ -90,7 +90,7 @@ public interface ISql extends Terminable {
    * @param statement The statement to be executed
    * @see #executeAsync(String) to perform the same action asynchronously
    */
-  default void execute(@Language("MySQL") @NotNull String statement) {
+  default void execute(@Language("MySQL") @NotNull final String statement) {
     this.execute(statement, stmt -> {
     });
   }
@@ -107,8 +107,8 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default Promise<Void> executeAsync(
-      @Language("MySQL") @NotNull String statement,
-      @NotNull SqlConsumer<PreparedStatement> preparer) {
+      @Language("MySQL") @NotNull final String statement,
+      @NotNull final SqlConsumer<PreparedStatement> preparer) {
     return Promise.supplying(ThreadContext.ASYNC,
         Delegates.runnableToSupplier(() -> this.execute(statement, preparer)));
   }
@@ -143,8 +143,8 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default <R> Promise<Optional<R>> queryAsync(
-      @Language("MySQL") @NotNull String query,
-      @NotNull SqlFunction<ResultSet, R> handler) {
+      @Language("MySQL") @NotNull final String query,
+      @NotNull final SqlFunction<ResultSet, R> handler) {
     return Promise.supplying(ThreadContext.ASYNC, () -> this.query(query, handler));
   }
 
@@ -165,8 +165,8 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default <R> Optional<R> query(
-      @Language("MySQL") @NotNull String query,
-      @NotNull SqlFunction<ResultSet, R> handler) {
+      @Language("MySQL") @NotNull final String query,
+      @NotNull final SqlFunction<ResultSet, R> handler) {
     return this.query(query, stmt -> {
     }, handler);
   }
@@ -189,9 +189,9 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default <R> Promise<Optional<R>> queryAsync(
-      @Language("MySQL") @NotNull String query,
-      @NotNull SqlConsumer<PreparedStatement> preparer,
-      @NotNull SqlFunction<ResultSet, R> handler) {
+      @Language("MySQL") @NotNull final String query,
+      @NotNull final SqlConsumer<PreparedStatement> preparer,
+      @NotNull final SqlFunction<ResultSet, R> handler) {
     return Promise.supplying(ThreadContext.ASYNC, () -> this.query(query, preparer, handler));
   }
 
@@ -229,7 +229,7 @@ public interface ISql extends Terminable {
    * @see #executeBatch(BatchBuilder) to perform this action synchronously
    */
   @NotNull
-  default Promise<Void> executeBatchAsync(@NotNull BatchBuilder builder) {
+  default Promise<Void> executeBatchAsync(@NotNull final BatchBuilder builder) {
     return Promise.supplying(ThreadContext.ASYNC,
         Delegates.runnableToSupplier(() -> this.executeBatch(builder)));
   }

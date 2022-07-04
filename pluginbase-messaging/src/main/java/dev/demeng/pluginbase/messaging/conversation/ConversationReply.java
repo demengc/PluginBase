@@ -55,7 +55,7 @@ public final class ConversationReply<R extends ConversationMessage> {
    * @param <R>   the type
    * @return the new reply encapsulation
    */
-  public static <R extends ConversationMessage> ConversationReply<R> of(R reply) {
+  public static <R extends ConversationMessage> ConversationReply<R> of(final R reply) {
     Objects.requireNonNull(reply, "reply");
     return new ConversationReply<>(Promise.completed(reply));
   }
@@ -71,14 +71,14 @@ public final class ConversationReply<R extends ConversationMessage> {
    * @return the new reply encapsulation
    */
   public static <R extends ConversationMessage> ConversationReply<R> ofPromise(
-      Promise<R> promiseReply) {
+      final Promise<R> promiseReply) {
     Objects.requireNonNull(promiseReply, "promiseReply");
     return new ConversationReply<>(promiseReply);
   }
 
   private final Promise<R> reply;
 
-  private ConversationReply(Promise<R> reply) {
+  private ConversationReply(final Promise<R> reply) {
     this.reply = reply;
   }
 
@@ -106,7 +106,7 @@ public final class ConversationReply<R extends ConversationMessage> {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }
@@ -115,7 +115,7 @@ public final class ConversationReply<R extends ConversationMessage> {
       return false;
     }
 
-    ConversationReply<?> other = (ConversationReply<?>) obj;
+    final ConversationReply<?> other = (ConversationReply<?>) obj;
     return Objects.equals(this.reply, other.reply);
   }
 

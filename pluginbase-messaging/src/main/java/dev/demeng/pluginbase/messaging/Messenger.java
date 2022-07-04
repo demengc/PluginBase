@@ -61,7 +61,8 @@ public interface Messenger {
    */
   @NotNull
   default <T extends ConversationMessage, R extends ConversationMessage> ConversationChannel<T, R> getConversationChannel(
-      @NotNull String name, @NotNull TypeToken<T> type, @NotNull TypeToken<R> replyType) {
+      @NotNull final String name, @NotNull final TypeToken<T> type,
+      @NotNull final TypeToken<R> replyType) {
     return new SimpleConversationChannel<>(this, name, type, replyType);
   }
 
@@ -76,8 +77,8 @@ public interface Messenger {
    * @return the req/resp channel
    */
   @NotNull
-  default <Req, Resp> ReqRespChannel<Req, Resp> getReqRespChannel(@NotNull String name,
-      @NotNull TypeToken<Req> reqType, @NotNull TypeToken<Resp> respType) {
+  default <Req, Resp> ReqRespChannel<Req, Resp> getReqRespChannel(@NotNull final String name,
+      @NotNull final TypeToken<Req> reqType, @NotNull final TypeToken<Resp> respType) {
     return new SimpleReqRespChannel<>(this, name, reqType, respType);
   }
 
@@ -90,7 +91,7 @@ public interface Messenger {
    * @return a channel
    */
   @NotNull
-  default <T> Channel<T> getChannel(@NotNull String name, @NotNull Class<T> clazz) {
+  default <T> Channel<T> getChannel(@NotNull final String name, @NotNull final Class<T> clazz) {
     return getChannel(name, TypeToken.of(Objects.requireNonNull(clazz)));
   }
 
@@ -106,7 +107,8 @@ public interface Messenger {
    */
   @NotNull
   default <T extends ConversationMessage, R extends ConversationMessage> ConversationChannel<T, R> getConversationChannel(
-      @NotNull String name, @NotNull Class<T> clazz, @NotNull Class<R> replyClazz) {
+      @NotNull final String name, @NotNull final Class<T> clazz,
+      @NotNull final Class<R> replyClazz) {
     return getConversationChannel(name, TypeToken.of(Objects.requireNonNull(clazz)),
         TypeToken.of(Objects.requireNonNull(replyClazz)));
   }
@@ -122,8 +124,8 @@ public interface Messenger {
    * @return the req/resp channel
    */
   @NotNull
-  default <Req, Resp> ReqRespChannel<Req, Resp> getReqRespChannel(@NotNull String name,
-      @NotNull Class<Req> reqClass, @NotNull Class<Resp> respClass) {
+  default <Req, Resp> ReqRespChannel<Req, Resp> getReqRespChannel(@NotNull final String name,
+      @NotNull final Class<Req> reqClass, @NotNull final Class<Resp> respClass) {
     return getReqRespChannel(name, TypeToken.of(Objects.requireNonNull(reqClass)),
         TypeToken.of(Objects.requireNonNull(respClass)));
   }

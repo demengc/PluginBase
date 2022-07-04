@@ -58,8 +58,8 @@ public class Redis implements IRedis {
 
   private PubSubListener listener = null;
 
-  public Redis(@NotNull RedisCredentials credentials) {
-    JedisPoolConfig config = new JedisPoolConfig();
+  public Redis(@NotNull final RedisCredentials credentials) {
+    final JedisPoolConfig config = new JedisPoolConfig();
     config.setMaxTotal(16);
 
     // setup jedis
@@ -70,7 +70,7 @@ public class Redis implements IRedis {
           credentials.getPassword());
     }
 
-    try (Jedis jedis = this.jedisPool.getResource()) {
+    try (final Jedis jedis = this.jedisPool.getResource()) {
       jedis.ping();
     }
 
@@ -85,17 +85,17 @@ public class Redis implements IRedis {
           this.broken = false;
         }
 
-        try (Jedis jedis = getJedis()) {
+        try (final Jedis jedis = getJedis()) {
           try {
             Redis.this.listener = new PubSubListener();
             jedis.subscribe(Redis.this.listener,
                 "pluginbase-redis-dummy".getBytes(StandardCharsets.UTF_8));
-          } catch (Exception e) {
+          } catch (final Exception e) {
             // Attempt to unsubscribe this instance and try again.
             new BaseException("Error subscribing to listener", e).printStackTrace();
             try {
               Redis.this.listener.unsubscribe();
-            } catch (Exception ignored) {
+            } catch (final Exception ignored) {
             }
             Redis.this.listener = null;
             this.broken = true;
@@ -111,20 +111,20 @@ public class Redis implements IRedis {
 
     registry.add(TaskUtils.repeatAsync(task -> {
       // ensure subscribed to all channels
-      PubSubListener pubSubListener = Redis.this.listener;
+      final PubSubListener pubSubListener = Redis.this.listener;
 
       if (pubSubListener == null || !pubSubListener.isSubscribed()) {
         return;
       }
 
-      for (String channel : this.channels) {
+      for (final String channel : this.channels) {
         pubSubListener.subscribe(channel.getBytes(StandardCharsets.UTF_8));
       }
     }, 2L, 2L));
 
     this.messenger = new AbstractMessenger(
         (channel, message) -> {
-          try (Jedis jedis = getJedis()) {
+          try (final Jedis jedis = getJedis()) {
             jedis.publish(channel.getBytes(StandardCharsets.UTF_8), message);
           }
         },
@@ -165,14 +165,14 @@ public class Redis implements IRedis {
       this.jedisPool.close();
     }
 
-    for (BukkitTask task : registry) {
+    for (final BukkitTask task : registry) {
       task.cancel();
     }
   }
 
   @NotNull
   @Override
-  public <T> Channel<T> getChannel(@NotNull String name, @NotNull TypeToken<T> type) {
+  public <T> Channel<T> getChannel(@NotNull final String name, @NotNull final TypeToken<T> type) {
     return this.messenger.getChannel(name, type);
   }
 
@@ -182,11 +182,11 @@ public class Redis implements IRedis {
     private final Set<String> subscribed = ConcurrentHashMap.newKeySet();
 
     @Override
-    public void subscribe(byte[]... channels) {
+    public void subscribe(final byte[]... channels) {
       this.lock.lock();
       try {
-        for (byte[] channel : channels) {
-          String channelName = new String(channel, StandardCharsets.UTF_8);
+        for (final byte[] channel : channels) {
+          final String channelName = new String(channel, StandardCharsets.UTF_8);
           if (this.subscribed.add(channelName)) {
             super.subscribe(channel);
           }
@@ -197,7 +197,7 @@ public class Redis implements IRedis {
     }
 
     @Override
-    public void unsubscribe(byte[]... channels) {
+    public void unsubscribe(final byte[]... channels) {
       this.lock.lock();
       try {
         super.unsubscribe(channels);
@@ -207,24 +207,24 @@ public class Redis implements IRedis {
     }
 
     @Override
-    public void onSubscribe(byte[] channel, int subscribedChannels) {
+    public void onSubscribe(final byte[] channel, final int subscribedChannels) {
       TextUtils.log(
           logPrefix + "Subscribed to channel: " + new String(channel, StandardCharsets.UTF_8));
     }
 
     @Override
-    public void onUnsubscribe(byte[] channel, int subscribedChannels) {
-      String channelName = new String(channel, StandardCharsets.UTF_8);
+    public void onUnsubscribe(final byte[] channel, final int subscribedChannels) {
+      final String channelName = new String(channel, StandardCharsets.UTF_8);
       TextUtils.log(logPrefix + "Unsubscribed from channel: " + channelName);
       this.subscribed.remove(channelName);
     }
 
     @Override
-    public void onMessage(byte[] channel, byte[] message) {
-      String channelName = new String(channel, StandardCharsets.UTF_8);
+    public void onMessage(final byte[] channel, final byte[] message) {
+      final String channelName = new String(channel, StandardCharsets.UTF_8);
       try {
         Redis.this.messenger.registerIncomingMessage(channelName, message);
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         ex.printStackTrace();
       }
     }

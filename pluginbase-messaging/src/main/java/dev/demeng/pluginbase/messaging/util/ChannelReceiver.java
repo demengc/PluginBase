@@ -41,11 +41,11 @@ public final class ChannelReceiver<T> {
   private long timestamp = 0;
   private final long expiryMillis;
 
-  public ChannelReceiver(long expiryDuration, @NotNull TimeUnit unit) {
+  public ChannelReceiver(final long expiryDuration, @NotNull final TimeUnit unit) {
     this.expiryMillis = unit.toMillis(expiryDuration);
   }
 
-  public void set(T value) {
+  public void set(final T value) {
     this.value = value;
     this.timestamp = System.currentTimeMillis();
   }
@@ -67,8 +67,8 @@ public final class ChannelReceiver<T> {
    * @return the value
    */
   public Optional<T> getValue() {
-    long now = System.currentTimeMillis();
-    long diff = now - this.timestamp;
+    final long now = System.currentTimeMillis();
+    final long diff = now - this.timestamp;
     if (diff > this.expiryMillis) {
       return Optional.empty();
     }

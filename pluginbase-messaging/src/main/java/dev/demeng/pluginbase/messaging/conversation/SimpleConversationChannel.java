@@ -64,8 +64,9 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
   private final SetMultimap<UUID, ReplyListenerRegistration<R>> replyListeners = Multimaps.newSetMultimap(
       new ConcurrentHashMap<>(), ConcurrentHashMap::newKeySet);
 
-  public SimpleConversationChannel(Messenger messenger, String name, TypeToken<T> outgoingType,
-      TypeToken<R> replyType) {
+  public SimpleConversationChannel(final Messenger messenger, final String name,
+      final TypeToken<T> outgoingType,
+      final TypeToken<R> replyType) {
     this.name = name;
     this.outgoingChannel = messenger.getChannel(name + "-o", outgoingType);
     this.replyChannel = messenger.getChannel(name + "-r", replyType);
@@ -76,7 +77,7 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
   private final class ReplyListener implements ChannelListener<R> {
 
     @Override
-    public void onMessage(@NotNull ChannelAgent<R> agent, @NotNull R message) {
+    public void onMessage(@NotNull final ChannelAgent<R> agent, @NotNull final R message) {
       SimpleConversationChannel.this.replyListeners.get(message.getConversationId())
           .removeIf(l -> l.onReply(message));
     }
@@ -90,7 +91,7 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
 
     private boolean active = true;
 
-    private ReplyListenerRegistration(ConversationReplyListener<R> listener) {
+    private ReplyListenerRegistration(final ConversationReplyListener<R> listener) {
       this.listener = listener;
 
     }
@@ -102,14 +103,14 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
      * @param message the message
      * @return if the listener should be unregistered
      */
-    public boolean onReply(R message) {
+    public boolean onReply(final R message) {
       synchronized (this) {
         if (!this.active) {
           return true;
         }
 
         this.replies.add(message);
-        ConversationReplyListener.RegistrationAction action = this.listener.onReply(message);
+        final ConversationReplyListener.RegistrationAction action = this.listener.onReply(message);
         if (action == ConversationReplyListener.RegistrationAction.STOP_LISTENING) {
 
           // unregister
@@ -156,18 +157,18 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
   @NotNull
   @Override
   public ConversationChannelAgent<T, R> newAgent() {
-    Agent<T, R> agent = new Agent<>(this);
+    final Agent<T, R> agent = new Agent<>(this);
     this.agents.add(agent);
     return agent;
   }
 
   @NotNull
   @Override
-  public Promise<Void> sendMessage(@NotNull T message,
-      @NotNull ConversationReplyListener<R> replyListener, long timeoutDuration,
-      @NotNull TimeUnit unit) {
+  public Promise<Void> sendMessage(@NotNull final T message,
+      @NotNull final ConversationReplyListener<R> replyListener, final long timeoutDuration,
+      @NotNull final TimeUnit unit) {
     // register the listener
-    ReplyListenerRegistration<R> listenerRegistration = new ReplyListenerRegistration<>(
+    final ReplyListenerRegistration<R> listenerRegistration = new ReplyListenerRegistration<>(
         replyListener);
     listenerRegistration.timeoutFuture = this.replyTimeoutExecutor.schedule(
         listenerRegistration::timeout, timeoutDuration, unit);
@@ -190,7 +191,7 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
     private final SimpleConversationChannel<T, R> channel;
     private final ChannelAgent<T> delegateAgent;
 
-    private Agent(@NotNull SimpleConversationChannel<T, R> channel) {
+    private Agent(@NotNull final SimpleConversationChannel<T, R> channel) {
       this.channel = channel;
       this.delegateAgent = this.channel.getOutgoingChannel().newAgent();
     }
@@ -205,10 +206,10 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
     @NotNull
     @Override
     public Set<ConversationChannelListener<T, R>> getListeners() {
-      Set<ChannelListener<T>> listeners = this.delegateAgent.getListeners();
+      final Set<ChannelListener<T>> listeners = this.delegateAgent.getListeners();
 
-      ImmutableSet.Builder<ConversationChannelListener<T, R>> ret = ImmutableSet.builder();
-      for (ChannelListener<T> listener : listeners) {
+      final ImmutableSet.Builder<ConversationChannelListener<T, R>> ret = ImmutableSet.builder();
+      for (final ChannelListener<T> listener : listeners) {
         //noinspection unchecked
         ret.add(((WrappedListener) listener).delegate);
       }
@@ -221,15 +222,15 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
     }
 
     @Override
-    public boolean addListener(@NotNull ConversationChannelListener<T, R> listener) {
+    public boolean addListener(@NotNull final ConversationChannelListener<T, R> listener) {
       return this.delegateAgent.addListener(new WrappedListener(listener));
     }
 
     @Override
-    public boolean removeListener(@NotNull ConversationChannelListener<T, R> listener) {
-      Set<ChannelListener<T>> listeners = this.delegateAgent.getListeners();
-      for (ChannelListener<T> other : listeners) {
-        WrappedListener wrapped = (WrappedListener) other;
+    public boolean removeListener(@NotNull final ConversationChannelListener<T, R> listener) {
+      final Set<ChannelListener<T>> listeners = this.delegateAgent.getListeners();
+      for (final ChannelListener<T> other : listeners) {
+        final WrappedListener wrapped = (WrappedListener) other;
         if (wrapped.delegate == listener) {
           return this.delegateAgent.removeListener(other);
         }
@@ -246,13 +247,13 @@ public class SimpleConversationChannel<T extends ConversationMessage, R extends 
 
       private final ConversationChannelListener<T, R> delegate;
 
-      private WrappedListener(ConversationChannelListener<T, R> delegate) {
+      private WrappedListener(final ConversationChannelListener<T, R> delegate) {
         this.delegate = delegate;
       }
 
       @Override
-      public void onMessage(@NotNull ChannelAgent<T> agent, @NotNull T message) {
-        ConversationReply<R> reply = this.delegate.onMessage(Agent.this, message);
+      public void onMessage(@NotNull final ChannelAgent<T> agent, @NotNull final T message) {
+        final ConversationReply<R> reply = this.delegate.onMessage(Agent.this, message);
         if (reply.hasReply()) {
           reply.getReply().thenAcceptAsync(m -> {
             if (m != null) {

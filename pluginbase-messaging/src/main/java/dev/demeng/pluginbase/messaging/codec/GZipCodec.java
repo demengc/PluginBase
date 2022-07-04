@@ -40,28 +40,28 @@ public class GZipCodec<M> implements Codec<M> {
 
   private final Codec<M> delegate;
 
-  public GZipCodec(Codec<M> delegate) {
+  public GZipCodec(final Codec<M> delegate) {
     this.delegate = delegate;
   }
 
   @Override
-  public byte[] encode(M message) throws EncodingException {
-    byte[] in = this.delegate.encode(message);
-    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-    try (GZIPOutputStream gzipOut = new GZIPOutputStream(byteOut)) {
+  public byte[] encode(final M message) throws EncodingException {
+    final byte[] in = this.delegate.encode(message);
+    final ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+    try (final GZIPOutputStream gzipOut = new GZIPOutputStream(byteOut)) {
       gzipOut.write(in);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new EncodingException(e);
     }
     return byteOut.toByteArray();
   }
 
   @Override
-  public M decode(byte[] buf) throws EncodingException {
-    byte[] uncompressed;
-    try (GZIPInputStream gzipIn = new GZIPInputStream(new ByteArrayInputStream(buf))) {
+  public M decode(final byte[] buf) throws EncodingException {
+    final byte[] uncompressed;
+    try (final GZIPInputStream gzipIn = new GZIPInputStream(new ByteArrayInputStream(buf))) {
       uncompressed = ByteStreams.toByteArray(gzipIn);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new EncodingException(e);
     }
     return this.delegate.decode(uncompressed);

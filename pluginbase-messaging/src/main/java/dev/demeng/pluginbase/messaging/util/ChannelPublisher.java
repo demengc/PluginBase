@@ -53,9 +53,10 @@ public final class ChannelPublisher<T> implements Terminable {
    * @return a channel publisher
    */
   @NotNull
-  public static <T> ChannelPublisher<T> create(@NotNull Channel<T> channel, long duration,
-      @NotNull TimeUnit unit, @NotNull ThreadContext threadContext,
-      @NotNull Supplier<? extends T> supplier) {
+  public static <T> ChannelPublisher<T> create(@NotNull final Channel<T> channel,
+      final long duration,
+      @NotNull final TimeUnit unit, @NotNull final ThreadContext threadContext,
+      @NotNull final Supplier<? extends T> supplier) {
     Objects.requireNonNull(channel, "channel");
     Objects.requireNonNull(unit, "unit");
     Objects.requireNonNull(threadContext, "threadContext");
@@ -75,8 +76,9 @@ public final class ChannelPublisher<T> implements Terminable {
    * @return a channel publisher
    */
   @NotNull
-  public static <T> ChannelPublisher<T> create(@NotNull Channel<T> channel, long duration,
-      @NotNull TimeUnit unit, @NotNull Supplier<? extends T> supplier) {
+  public static <T> ChannelPublisher<T> create(@NotNull final Channel<T> channel,
+      final long duration,
+      @NotNull final TimeUnit unit, @NotNull final Supplier<? extends T> supplier) {
     return create(channel, duration, unit, ThreadContext.ASYNC, supplier);
   }
 
@@ -84,8 +86,9 @@ public final class ChannelPublisher<T> implements Terminable {
   private final Supplier<? extends T> supplier;
   private final BukkitTask task;
 
-  private ChannelPublisher(Channel<T> channel, Supplier<? extends T> supplier, long duration,
-      TimeUnit unit, ThreadContext threadContext) {
+  private ChannelPublisher(final Channel<T> channel, final Supplier<? extends T> supplier,
+      final long duration,
+      final TimeUnit unit, final ThreadContext threadContext) {
     this.channel = channel;
     this.supplier = supplier;
 

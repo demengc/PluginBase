@@ -80,8 +80,8 @@ public interface Channel<T> extends TypeAware<T> {
    * @return the resultant agent
    */
   @NotNull
-  default ChannelAgent<T> newAgent(ChannelListener<T> listener) {
-    ChannelAgent<T> agent = newAgent();
+  default ChannelAgent<T> newAgent(final ChannelListener<T> listener) {
+    final ChannelAgent<T> agent = newAgent();
     agent.addListener(listener);
     return agent;
   }

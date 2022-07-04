@@ -38,7 +38,7 @@ class ReqResMessage<T> implements ConversationMessage {
   private final UUID id;
   private final T body;
 
-  ReqResMessage(UUID id, T body) {
+  ReqResMessage(final UUID id, final T body) {
     this.id = id;
     this.body = body;
   }

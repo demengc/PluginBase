@@ -51,33 +51,33 @@ public class GsonCodec<M> implements Codec<M> {
   private final Gson gson;
   private final TypeToken<M> type;
 
-  public GsonCodec(Gson gson, TypeToken<M> type) {
+  public GsonCodec(final Gson gson, final TypeToken<M> type) {
     this.gson = gson;
     this.type = type;
   }
 
-  public GsonCodec(TypeToken<M> type) {
+  public GsonCodec(final TypeToken<M> type) {
     this.gson = STANDARD_GSON;
     this.type = type;
   }
 
   @Override
-  public byte[] encode(M message) {
-    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-    try (Writer writer = new OutputStreamWriter(byteOut, StandardCharsets.UTF_8)) {
+  public byte[] encode(final M message) {
+    final ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+    try (final Writer writer = new OutputStreamWriter(byteOut, StandardCharsets.UTF_8)) {
       this.gson.toJson(message, this.type.getType(), writer);
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new EncodingException(e);
     }
     return byteOut.toByteArray();
   }
 
   @Override
-  public M decode(byte[] buf) {
-    ByteArrayInputStream byteIn = new ByteArrayInputStream(buf);
-    try (Reader reader = new InputStreamReader(byteIn, StandardCharsets.UTF_8)) {
+  public M decode(final byte[] buf) {
+    final ByteArrayInputStream byteIn = new ByteArrayInputStream(buf);
+    try (final Reader reader = new InputStreamReader(byteIn, StandardCharsets.UTF_8)) {
       return this.gson.fromJson(reader, this.type.getType());
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new EncodingException(e);
     }
   }
