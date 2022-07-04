@@ -45,12 +45,17 @@
               <artifactSet>
                 <includes>
                   <include>redis.clients:jedis</include>
+                  <include>org.apache.commons:commons-pool2</include>
                 </includes>
               </artifactSet>
               <relocations>
                 <relocation>
                   <pattern>redis.clients.util</pattern>
                   <shadedPattern>dev.demeng.pluginbase.messaging.lib.jedisutil</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.apache.commons.pool</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.messaging.lib.commonspool</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
@@ -83,6 +88,13 @@
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
       <version>4.2.3</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-pool2</artifactId>
+      <version>2.11.1</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
