@@ -47,6 +47,10 @@
                   <shadedPattern>dev.demeng.pluginbase.lib.xseries</shadedPattern>
                 </relocation>
                 <relocation>
+                  <pattern>net.jodah.expiringmap</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.lib.expiringmap</shadedPattern>
+                </relocation>
+                <relocation>
                   <pattern>net.kyori.adventure</pattern>
                   <shadedPattern>dev.demeng.pluginbase.lib.adventure</shadedPattern>
                 </relocation>
