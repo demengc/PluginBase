@@ -51,19 +51,19 @@ public class MutableCommandPath extends CommandPath {
   }
 
   public void addFirst(final String s) {
-    path.addFirst(s);
+    path.addFirst(s.toLowerCase());
   }
 
   public void addLast(final String s) {
-    path.addLast(s);
+    path.addLast(s.toLowerCase());
   }
 
   public boolean contains(final Object o) {
-    return path.contains(o);
+    return o instanceof String ? path.contains(((String) o).toLowerCase()) : path.contains(o);
   }
 
   public boolean add(final String s) {
-    return path.add(s);
+    return path.add(s.toLowerCase());
   }
 
   public void clear() {
@@ -71,7 +71,7 @@ public class MutableCommandPath extends CommandPath {
   }
 
   public void add(final int index, final String element) {
-    path.add(index, element);
+    path.add(index, element.toLowerCase());
   }
 
   public String peek() {
