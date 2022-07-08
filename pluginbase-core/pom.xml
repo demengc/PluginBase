@@ -157,6 +157,7 @@
       <artifactId>expiringmap</artifactId>
       <version>0.5.10</version>
       <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>
