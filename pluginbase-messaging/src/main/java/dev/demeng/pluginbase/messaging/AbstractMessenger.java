@@ -37,6 +37,7 @@ import dev.demeng.pluginbase.messaging.codec.Codec;
 import dev.demeng.pluginbase.messaging.codec.GZipCodec;
 import dev.demeng.pluginbase.messaging.codec.GsonCodec;
 import dev.demeng.pluginbase.messaging.codec.Message;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import dev.demeng.pluginbase.promise.Promise;
 import java.util.Base64;
 import java.util.Map;
@@ -179,17 +180,23 @@ public class AbstractMessenger implements Messenger {
       }
       this.subscribed = shouldSubscribe;
 
-      TaskUtils.runAsync(task -> {
-        try {
-          if (shouldSubscribe) {
-            this.messenger.notifySub.accept(this.name);
-          } else {
-            this.messenger.notifyUnsub.accept(this.name);
-          }
-        } catch (final Exception e) {
-          e.printStackTrace();
+      if (BaseManager.getPlugin().isEnabled()) {
+        TaskUtils.runAsync(task -> notifySubscription());
+      } else {
+        notifySubscription();
+      }
+    }
+
+    private void notifySubscription() {
+      try {
+        if (this.subscribed) {
+          this.messenger.notifySub.accept(this.name);
+        } else {
+          this.messenger.notifyUnsub.accept(this.name);
         }
-      });
+      } catch (final Exception e) {
+        e.printStackTrace();
+      }
     }
 
     @Override
