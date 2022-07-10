@@ -65,7 +65,7 @@ final class SenderContextResolverFactory implements ContextResolverFactory {
     if (parameter.getMethodIndex() != 0) {
       return null;
     }
-    if (parameter.hasAnnotation(NotSender.class)) {
+    if (parameter.isOptional() || parameter.hasAnnotation(NotSender.class)) {
       return null;
     }
     for (final SenderResolver resolver : resolvers) {
