@@ -76,7 +76,7 @@ class AutoCompleterAnnotationFactory implements SuggestionProviderFactory {
         return SuggestionProvider.of(suggestions);
       }
     } catch (final IndexOutOfBoundsException e) {
-      return SuggestionProvider.EMPTY;
+      return null;
     }
   }
 }
