@@ -28,6 +28,8 @@ package dev.demeng.pluginbase;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -37,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Utility class for interacting with the Bukkit {@link org.bukkit.plugin.ServicesManager}.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Services {
 
   /**
@@ -120,9 +123,5 @@ public final class Services {
   @NotNull
   public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance) {
     return provide(clazz, instance, ServicePriority.Normal);
-  }
-
-  private Services() {
-    throw new UnsupportedOperationException("This class cannot be instantiated");
   }
 }

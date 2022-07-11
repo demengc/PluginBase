@@ -74,7 +74,10 @@ public abstract class Messenger {
    * @param id      The unique ID of the message (NOT the player UUID)
    * @param message The message
    */
-  public void sendMessage(@NotNull final String channel, @NotNull final UUID id, @NotNull final Message message) {
+  public void sendMessage(
+      @NotNull final String channel,
+      @NotNull final UUID id,
+      @NotNull final Message message) {
     sendMessage(channel, encodeMessage(id, message));
   }
 

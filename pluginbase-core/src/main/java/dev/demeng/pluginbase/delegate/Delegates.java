@@ -34,10 +34,13 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * A collection of utility methods for delegating Java 8 functions.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Delegates {
 
   public static <T> Consumer<T> runnableToConsumer(final Runnable runnable) {
@@ -215,9 +218,5 @@ public final class Delegates {
       delegate.run();
       return null;
     }
-  }
-
-  private Delegates() {
-    throw new UnsupportedOperationException("This class cannot be instantiated");
   }
 }
