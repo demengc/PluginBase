@@ -2,6 +2,8 @@
  * MIT License
  *
  * Copyright (c) 2021-2022 Demeng Chen
+ * Copyright (c) lucko (Luck) <luck@lucko.me>
+ * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +24,16 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.queue;
+package dev.demeng.pluginbase.exceptions;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an object that has a <b>pre-determined</b> duration and should be queued to run at a
- * later time if another instance of the object is still running.
- *
- * <p>An example usage would be queueing titles/subtitles, since the Minecraft client automatically
- * cancels out whichever title was sent first.
+ * A general exception caused by a {@link dev.demeng.pluginbase.promise.Promise} chain.
  */
-public interface Queueable extends Runnable {
+public class PromiseChainException extends BaseException {
 
-  /**
-   * Gets the duration of the process, in ticks.
-   *
-   * @return The duration of the process, in ticks
-   */
-  int getDuration();
+  public PromiseChainException(@NotNull final Throwable cause) {
+    super("promise chain", cause);
+  }
 }

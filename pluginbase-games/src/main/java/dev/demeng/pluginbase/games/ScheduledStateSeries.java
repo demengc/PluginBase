@@ -25,13 +25,13 @@
 
 package dev.demeng.pluginbase.games;
 
-import dev.demeng.pluginbase.TaskUtils;
+import dev.demeng.pluginbase.Schedulers;
+import dev.demeng.pluginbase.scheduler.Task;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,7 +47,7 @@ public class ScheduledStateSeries extends GameState {
   private final long interval;
 
   protected int currentIndex = 0;
-  protected BukkitTask scheduledTask;
+  protected Task scheduledTask;
 
   /**
    * Creates a new state series.
@@ -131,7 +131,6 @@ public class ScheduledStateSeries extends GameState {
     addNext(nextStates.toArray(new GameState[0]));
   }
 
-
   @Override
   protected void onStart() {
 
@@ -141,7 +140,7 @@ public class ScheduledStateSeries extends GameState {
     }
 
     states.get(currentIndex).start();
-    scheduledTask = TaskUtils.repeat(task -> update(), 0L, interval);
+    scheduledTask = Schedulers.sync().runRepeating(this::update, 0L, interval);
   }
 
   @Override
@@ -172,7 +171,7 @@ public class ScheduledStateSeries extends GameState {
       states.get(currentIndex).end();
     }
 
-    scheduledTask.cancel();
+    scheduledTask.stop();
   }
 
   @Override

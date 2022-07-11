@@ -26,7 +26,7 @@
 
 package dev.demeng.pluginbase.redis;
 
-import dev.demeng.pluginbase.TaskUtils;
+import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.messaging.Messenger;
 import dev.demeng.pluginbase.text.TextUtils;
 import java.util.logging.Level;
@@ -67,7 +67,7 @@ public class Redis extends Messenger implements IRedis {
 
     this.channels = channels;
     this.sub = new Subscription();
-    TaskUtils.runAsync(task -> sub.run());
+    Schedulers.async().run(sub);
   }
 
   @Override
@@ -130,7 +130,7 @@ public class Redis extends Messenger implements IRedis {
           }
 
           // Reschedule for 5 seconds
-          TaskUtils.delayAsync(task -> run(), 100);
+          Schedulers.async().runLater(this, 100L);
         }
       }
     }
@@ -139,7 +139,7 @@ public class Redis extends Messenger implements IRedis {
     public void onMessage(final String channel, final String msg) {
       try {
         Redis.this.consumeMessage(channel, msg);
-      } catch (Exception ex) {
+      } catch (final Exception ex) {
         ex.printStackTrace();
       }
     }

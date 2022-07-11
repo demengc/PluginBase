@@ -25,7 +25,7 @@
 package dev.demeng.pluginbase.menu;
 
 import com.cryptomorin.xseries.messages.Titles;
-import dev.demeng.pluginbase.TaskUtils;
+import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.menu.layout.Menu;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,7 +118,7 @@ public class MenuManager implements Listener {
       final Menu menu = menus.get(inventoryUuid);
 
       if (menu != null && menu.onClose(event)) {
-        TaskUtils.delay(task -> menu.open(p), 1L);
+        Schedulers.sync().runLater(() -> menu.open(p), 1L);
         return;
       }
     }
