@@ -25,27 +25,23 @@
 
 package dev.demeng.pluginbase.games;
 
-import dev.demeng.pluginbase.Registerer;
+import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
-import java.util.HashSet;
-import java.util.Set;
+import dev.demeng.pluginbase.terminable.composite.CompositeTerminable;
+import dev.demeng.pluginbase.terminable.module.TerminableModule;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a phase of a minigame (ex. pre-game, the main phase, post-game).
- *
- * <p>All event listeners in the child class will be registered on start and unregistered on end.
- * All additional listeners for this specific state should be registered using
- * {@link #registerListener(Listener)}. Tasks added to {@link #tasks} will be cancelled when the
- * state ends.
+ * Represents a phase of a minigame (ex. pre-game, the main phase, post-game). All
+ * {@link dev.demeng.pluginbase.terminable.Terminable}s should be bound to the registry using
+ * {@link #bind(AutoCloseable)} or {@link #bindModule(TerminableModule)}, and will be terminated
+ * when the state ends.
  */
 @RequiredArgsConstructor
-public abstract class GameState implements Listener {
+public abstract class GameState {
 
   /**
    * If this state has begun.
@@ -60,16 +56,7 @@ public abstract class GameState implements Listener {
    */
   @Getter private long startTime;
 
-  /**
-   * The listeners to unregister when the state ends.
-   */
-  protected final Set<Listener> listeners = new HashSet<>();
-
-  /**
-   * The tasks to cancel when the state ends.
-   */
-  protected final Set<BukkitTask> tasks = new HashSet<>();
-
+  protected CompositeTerminable registry = CompositeTerminable.create();
   private final Object lock = new Object();
 
   /**
@@ -107,8 +94,14 @@ public abstract class GameState implements Listener {
 
     startTime = System.currentTimeMillis();
 
+    Schedulers.builder()
+        .async()
+        .after(10, TimeUnit.SECONDS)
+        .every(30, TimeUnit.SECONDS)
+        .run(registry::cleanup)
+        .bindWith(registry);
+
     try {
-      registerListener(this);
       onStart();
     } catch (final Exception ex) {
       throw new PluginErrorException(ex, "Exception during state start.", false);
@@ -151,25 +144,21 @@ public abstract class GameState implements Listener {
     }
 
     try {
-      listeners.forEach(HandlerList::unregisterAll);
-      listeners.clear();
-      tasks.forEach(BukkitTask::cancel);
-      tasks.clear();
-
+      registry.closeAndReportException();
       onEnd();
     } catch (final Exception ex) {
       throw new PluginErrorException(ex, "Exception during state end.", false);
     }
   }
 
-  /**
-   * Registers a listener and ensures that it is unregistered when the state ends.
-   *
-   * @param listener The listener to register
-   */
-  public void registerListener(@NotNull final Listener listener) {
-    Registerer.registerListener(listener);
-    listeners.add(listener);
+  @NotNull
+  public <T extends AutoCloseable> T bind(@NotNull final T terminable) {
+    return registry.bind(terminable);
+  }
+
+  @NotNull
+  public <T extends TerminableModule> T bindModule(@NotNull final T module) {
+    return registry.bindModule(module);
   }
 
   /**

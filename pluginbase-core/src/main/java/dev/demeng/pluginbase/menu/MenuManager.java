@@ -25,17 +25,18 @@
 package dev.demeng.pluginbase.menu;
 
 import com.cryptomorin.xseries.messages.Titles;
+import dev.demeng.pluginbase.Events;
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.menu.layout.Menu;
+import dev.demeng.pluginbase.terminable.TerminableConsumer;
+import dev.demeng.pluginbase.terminable.module.TerminableModule;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import lombok.Getter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -46,7 +47,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Internal listener for handling menu interactions.
  */
-public class MenuManager implements Listener {
+public class MenuManager implements TerminableModule {
 
   /**
    * A map of all menus created within the plugin, with the key being the UUID of the menu, and the
@@ -72,78 +73,57 @@ public class MenuManager implements Listener {
    */
   @NotNull @Getter private static final Map<UUID, Integer> openedPages = new HashMap<>();
 
-  /**
-   * Handles button interaction within menus.
-   *
-   * @param event The event
-   */
-  @EventHandler(priority = EventPriority.HIGH)
-  public void onInventoryClick(final InventoryClickEvent event) {
+  @Override
+  public void setup(@NotNull final TerminableConsumer consumer) {
 
-    if (event.getClickedInventory() == null) {
-      return;
-    }
+    Events.subscribe(InventoryClickEvent.class, EventPriority.HIGH)
+        .filter(event -> event.getClickedInventory() != null)
+        .handler(event -> {
+          final Player p = (Player) event.getWhoClicked();
+          final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
 
-    final Player p = (Player) event.getWhoClicked();
-    final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
+          if (inventoryUuid != null) {
+            event.setCancelled(true);
 
-    if (inventoryUuid != null) {
-      event.setCancelled(true);
+            if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+              return;
+            }
 
-      if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
-        return;
-      }
+            final Consumer<InventoryClickEvent> actions =
+                menus.get(inventoryUuid).getActions().get(event.getSlot());
 
-      final Consumer<InventoryClickEvent> actions =
-          menus.get(inventoryUuid).getActions().get(event.getSlot());
+            if (actions != null) {
+              actions.accept(event);
+            }
+          }
+        })
+        .bindWith(consumer);
 
-      if (actions != null) {
-        actions.accept(event);
-      }
-    }
-  }
+    Events.subscribe(InventoryCloseEvent.class, EventPriority.MONITOR)
+        .handler(event -> {
+          final Player p = (Player) event.getPlayer();
+          final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
 
-  /**
-   * Handles cleanup when a menu is closed.
-   *
-   * @param event The event
-   */
-  @EventHandler(priority = EventPriority.MONITOR)
-  public void onInventoryClose(final InventoryCloseEvent event) {
+          if (inventoryUuid != null) {
+            final Menu menu = menus.get(inventoryUuid);
 
-    final Player p = (Player) event.getPlayer();
-    final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
+            if (menu != null && menu.onClose(event)) {
+              Schedulers.sync().runLater(() -> menu.open(p), 1L);
+              return;
+            }
+          }
 
-    if (inventoryUuid != null) {
-      final Menu menu = menus.get(inventoryUuid);
+          cleanup(p);
+        })
+        .bindWith(consumer);
 
-      if (menu != null && menu.onClose(event)) {
-        Schedulers.sync().runLater(() -> menu.open(p), 1L);
-        return;
-      }
-    }
+    Events.subscribe(PlayerJoinEvent.class, EventPriority.MONITOR)
+        .handler(event -> Titles.clearTitle(event.getPlayer()))
+        .bindWith(consumer);
 
-    cleanup(p);
-  }
-
-  /**
-   * Handles title clearing when a player joins.
-   *
-   * @param event The event
-   */
-  @EventHandler(priority = EventPriority.MONITOR)
-  public void onPlayerJoin(final PlayerJoinEvent event) {
-    Titles.clearTitle(event.getPlayer());
-  }
-
-  /**
-   * Handles cleanup when a player leaves.
-   *
-   * @param event The event
-   */
-  @EventHandler(priority = EventPriority.MONITOR)
-  public void onPlayerQuit(final PlayerQuitEvent event) {
-    cleanup(event.getPlayer());
+    Events.subscribe(PlayerQuitEvent.class, EventPriority.MONITOR)
+        .handler(event -> cleanup(event.getPlayer()))
+        .bindWith(consumer);
   }
 
   private void cleanup(final Player p) {

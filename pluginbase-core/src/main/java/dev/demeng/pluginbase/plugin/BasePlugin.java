@@ -26,14 +26,23 @@ package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Common;
-import dev.demeng.pluginbase.Registerer;
+import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.ServerProperties;
+import dev.demeng.pluginbase.Services;
 import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.locale.Translator;
 import dev.demeng.pluginbase.menu.MenuManager;
+import dev.demeng.pluginbase.scheduler.BaseExecutors;
+import dev.demeng.pluginbase.terminable.TerminableConsumer;
+import dev.demeng.pluginbase.terminable.composite.CompositeTerminable;
+import dev.demeng.pluginbase.terminable.module.TerminableModule;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +52,12 @@ import org.jetbrains.annotations.Nullable;
  * you can also manually set the values in {@link BaseManager} should you wish to use your own
  * loading system.
  */
-public abstract class BasePlugin extends JavaPlugin {
+public abstract class BasePlugin extends JavaPlugin implements TerminableConsumer {
+
+  /**
+   * The backing terminable registry for this plugin.
+   */
+  private CompositeTerminable terminableRegistry;
 
   /**
    * The dependency engine for this plugin.
@@ -53,22 +67,27 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onLoad() {
     BaseManager.setPlugin(this);
+    this.terminableRegistry = CompositeTerminable.create();
     load();
   }
 
   @Override
   public final void onEnable() {
 
-    BaseManager.setAdventure(BukkitAudiences.create(this));
+    // schedule cleanup of the registry
+    Schedulers.builder()
+        .async()
+        .after(10, TimeUnit.SECONDS)
+        .every(30, TimeUnit.SECONDS)
+        .run(this.terminableRegistry::cleanup)
+        .bindWith(this.terminableRegistry);
 
-    if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
-      return;
-    }
+    BaseManager.setAdventure(BukkitAudiences.create(this));
 
     BaseManager.setTranslator(Translator.create());
     BaseManager.setCommandHandler(BukkitCommandHandler.create(this));
 
-    Registerer.registerListener(new MenuManager());
+    bindModule(new MenuManager());
 
     enable();
   }
@@ -76,16 +95,15 @@ public abstract class BasePlugin extends JavaPlugin {
   @Override
   public final void onDisable() {
 
+    disable();
+
     if (getAdventure() != null) {
       getAdventure().close();
       BaseManager.setAdventure(null);
     }
 
-    if (dependencyEngine != null && !dependencyEngine.getErrors().isEmpty()) {
-      return;
-    }
-
-    disable();
+    this.terminableRegistry.closeAndReportException();
+    BaseExecutors.shutdown();
 
     if (getCommandHandler() != null) {
       getCommandHandler().unregisterAllCommands();
@@ -144,6 +162,86 @@ public abstract class BasePlugin extends JavaPlugin {
     }
 
     return true;
+  }
+
+  @NotNull
+  @Override
+  public <T extends AutoCloseable> T bind(@NotNull final T terminable) {
+    return this.terminableRegistry.bind(terminable);
+  }
+
+  @NotNull
+  @Override
+  public <T extends TerminableModule> T bindModule(@NotNull final T module) {
+    return this.terminableRegistry.bindModule(module);
+  }
+
+  /**
+   * Register a listener with the server.
+   *
+   * <p>{@link dev.demeng.pluginbase.Events} should be used instead of this method in most
+   * cases.</p>
+   *
+   * @param listener the listener to register
+   * @param <T>      the listener class type
+   * @return the listener
+   */
+  @NotNull
+  public <T extends Listener> T registerListener(@NotNull final T listener) {
+    Objects.requireNonNull(listener, "listener");
+    getServer().getPluginManager().registerEvents(listener, this);
+    return listener;
+  }
+
+  /**
+   * Gets a service provided by the ServiceManager.
+   *
+   * @param service The service class
+   * @param <T>     The class type
+   * @return The service
+   */
+  @NotNull
+  public <T> T getService(@NotNull final Class<T> service) {
+    return Services.load(service);
+  }
+
+  /**
+   * Provides a service to the ServiceManager, bound to this plugin.
+   *
+   * @param clazz    The service class
+   * @param instance The instance
+   * @param priority The priority to register the service at
+   * @param <T>      The service class type
+   * @return The instance
+   */
+  @NotNull
+  public <T> T provideService(@NotNull final Class<T> clazz, @NotNull final T instance,
+      @NotNull final ServicePriority priority) {
+    return Services.provide(clazz, instance, this, priority);
+  }
+
+  /**
+   * Provides a service to the ServiceManager, bound to this plugin at
+   * {@link ServicePriority#Normal}.
+   *
+   * @param clazz    The service class
+   * @param instance The instance
+   * @param <T>      The service class type
+   * @return The instance
+   */
+  @NotNull
+  public <T> T provideService(@NotNull final Class<T> clazz, @NotNull final T instance) {
+    return provideService(clazz, instance, ServicePriority.Normal);
+  }
+
+  /**
+   * Gets if a given plugin is enabled.
+   *
+   * @param name The name of the plugin
+   * @return If the plugin is enabled
+   */
+  public boolean isPluginPresent(@NotNull final String name) {
+    return getServer().getPluginManager().getPlugin(name) != null;
   }
 
   /**

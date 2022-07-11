@@ -22,27 +22,44 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase;
+package dev.demeng.pluginbase.event.functional.single;
 
+import dev.demeng.pluginbase.event.SingleSubscription;
 import dev.demeng.pluginbase.plugin.BaseManager;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BiConsumer;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Utility class for quickly registering commands, listeners, and more.
- */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class Registerer {
+class SingleHandlerListImpl<T extends Event> implements SingleHandlerList<T> {
 
-  /**
-   * Registers a listener.
-   *
-   * @param listener The listener to register
-   */
-  public static void registerListener(@NotNull final Listener listener) {
-    Bukkit.getPluginManager().registerEvents(listener, BaseManager.getPlugin());
+  private final SingleSubscriptionBuilderImpl<T> builder;
+  private final List<BiConsumer<SingleSubscription<T>, ? super T>> handlers = new ArrayList<>(1);
+
+  SingleHandlerListImpl(@NotNull final SingleSubscriptionBuilderImpl<T> builder) {
+    this.builder = builder;
+  }
+
+  @NotNull
+  @Override
+  public SingleHandlerList<T> biConsumer(
+      @NotNull final BiConsumer<SingleSubscription<T>, ? super T> handler) {
+    Objects.requireNonNull(handler, "handler");
+    this.handlers.add(handler);
+    return this;
+  }
+
+  @NotNull
+  @Override
+  public SingleSubscription<T> register() {
+    if (this.handlers.isEmpty()) {
+      throw new IllegalStateException("No handlers have been registered");
+    }
+
+    final BaseEventListener<T> listener = new BaseEventListener<>(this.builder, this.handlers);
+    listener.register(BaseManager.getPlugin());
+    return listener;
   }
 }
