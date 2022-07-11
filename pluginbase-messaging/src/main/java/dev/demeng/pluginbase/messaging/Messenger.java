@@ -2,8 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021-2022 Demeng Chen
- * Copyright (c) lucko (Luck) <luck@lucko.me>
- * Copyright (c) LuckPerms/LuckPerms contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,12 +31,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import dev.demeng.pluginbase.exceptions.BaseException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
+import net.jodah.expiringmap.ExpirationPolicy;
+import net.jodah.expiringmap.ExpiringMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,8 +54,10 @@ public abstract class Messenger {
   private static final String CONTENT_KEY = "content";
 
   private final List<BiConsumer<String, Message>> listeners = new ArrayList<>();
-  //TODO Expire
-  private final Set<UUID> receivedMessages = new HashSet<>();
+  private final Map<UUID, Long> receivedMessages = ExpiringMap.builder()
+      .expiration(1, TimeUnit.HOURS)
+      .expirationPolicy(ExpirationPolicy.CREATED)
+      .build();
 
   /**
    * Sends a message.
@@ -209,9 +211,11 @@ public abstract class Messenger {
 
     final UUID id = UUID.fromString(idElement.getAsString());
 
-    if (!this.receivedMessages.add(id)) {
+    if (receivedMessages.containsKey(id)) {
       return null;
     }
+
+    receivedMessages.put(id, System.currentTimeMillis());
 
     final JsonElement typeElement = json.get(TYPE_KEY);
 
