@@ -44,10 +44,10 @@ public class PluginErrorException extends RuntimeException {
   }
 
   public PluginErrorException(
-      @Nullable final Exception ex,
+      @Nullable final Throwable t,
       @NotNull final String description,
       final boolean disable,
       final Player... players) {
-    Common.error(ex, description, disable, players);
+    Common.error(t, description, disable, players);
   }
 }
