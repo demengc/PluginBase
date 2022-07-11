@@ -82,8 +82,14 @@ public class Redis extends Messenger implements IRedis {
   @Override
   public void close() {
     this.closing = true;
-    this.sub.unsubscribe();
-    this.jedisPool.destroy();
+
+    if (this.sub != null) {
+      this.sub.unsubscribe();
+    }
+
+    if (this.jedisPool != null) {
+      this.jedisPool.destroy();
+    }
   }
 
   @Override
@@ -131,7 +137,11 @@ public class Redis extends Messenger implements IRedis {
 
     @Override
     public void onMessage(final String channel, final String msg) {
-      Redis.this.consumeMessage(channel, msg);
+      try {
+        Redis.this.consumeMessage(channel, msg);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
   }
 }
