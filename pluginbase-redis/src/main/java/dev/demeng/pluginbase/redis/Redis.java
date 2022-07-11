@@ -52,7 +52,7 @@ public class Redis extends Messenger implements IRedis {
    * @param credentials The credentials
    * @param channels    The channels to subscribe
    */
-  public Redis(@NotNull RedisCredentials credentials, String... channels) {
+  public Redis(@NotNull final RedisCredentials credentials, final String... channels) {
 
     if (credentials.getUser() == null) {
       this.jedisPool = new JedisPool(new JedisPoolConfig(), credentials.getHost(),
@@ -71,10 +71,10 @@ public class Redis extends Messenger implements IRedis {
   }
 
   @Override
-  public void sendMessage(@NotNull String channel, @NotNull String encoded) {
-    try (Jedis jedis = this.jedisPool.getResource()) {
+  public void sendMessage(@NotNull final String channel, @NotNull final String encoded) {
+    try (final Jedis jedis = this.jedisPool.getResource()) {
       jedis.publish(channel, encoded);
-    } catch (Exception ex) {
+    } catch (final Exception ex) {
       ex.printStackTrace();
     }
   }
@@ -99,7 +99,7 @@ public class Redis extends Messenger implements IRedis {
       boolean first = true;
 
       while (!Redis.this.closing && !Thread.interrupted() && !Redis.this.jedisPool.isClosed()) {
-        try (Jedis jedis = Redis.this.getJedis()) {
+        try (final Jedis jedis = Redis.this.getJedis()) {
           if (first) {
             first = false;
           } else {
@@ -110,7 +110,7 @@ public class Redis extends Messenger implements IRedis {
             jedis.subscribe(this, channels); // blocking call
           }
 
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
           if (Redis.this.closing) {
             return;
           }
@@ -120,7 +120,7 @@ public class Redis extends Messenger implements IRedis {
 
           try {
             unsubscribe();
-          } catch (Exception ignored) {
+          } catch (final Exception ignored) {
           }
 
           // Reschedule for 5 seconds
@@ -130,7 +130,7 @@ public class Redis extends Messenger implements IRedis {
     }
 
     @Override
-    public void onMessage(String channel, String msg) {
+    public void onMessage(final String channel, final String msg) {
       Redis.this.consumeMessage(channel, msg);
     }
   }

@@ -63,11 +63,11 @@ public final class RedisCredentials {
   private final boolean ssl;
 
   private RedisCredentials(
-      @NotNull String host,
-      int port,
-      @Nullable String user,
-      @Nullable String password,
-      boolean ssl) {
+      @NotNull final String host,
+      final int port,
+      @Nullable final String user,
+      @Nullable final String password,
+      final boolean ssl) {
     this.host = host;
     this.port = port;
 

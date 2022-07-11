@@ -74,7 +74,7 @@ public abstract class Messenger {
    * @param id      The unique ID of the message (NOT the player UUID)
    * @param message The message
    */
-  public void sendMessage(@NotNull String channel, @NotNull UUID id, @NotNull Message message) {
+  public void sendMessage(@NotNull final String channel, @NotNull final UUID id, @NotNull final Message message) {
     sendMessage(channel, encodeMessage(id, message));
   }
 
@@ -84,7 +84,7 @@ public abstract class Messenger {
    * @param channel The channel to send the message in
    * @param message The message
    */
-  public void sendMessage(@NotNull String channel, @NotNull Message message) {
+  public void sendMessage(@NotNull final String channel, @NotNull final Message message) {
     sendMessage(channel, UUID.randomUUID(), message);
   }
 
@@ -94,8 +94,8 @@ public abstract class Messenger {
    * @param channel The message channel
    * @param message The message
    */
-  public void consumeMessage(@NotNull String channel, @NotNull Message message) {
-    for (BiConsumer<String, Message> consumer : listeners) {
+  public void consumeMessage(@NotNull final String channel, @NotNull final Message message) {
+    for (final BiConsumer<String, Message> consumer : listeners) {
       consumer.accept(channel, message);
     }
   }
@@ -106,7 +106,7 @@ public abstract class Messenger {
    * @param channel The message channel
    * @param encoded The encoded message
    */
-  public void consumeMessage(@NotNull String channel, @NotNull String encoded) {
+  public void consumeMessage(@NotNull final String channel, @NotNull final String encoded) {
 
     final Message decoded = decodeMessage(encoded);
 
@@ -124,13 +124,13 @@ public abstract class Messenger {
    * @return The message type's class
    */
   @NotNull
-  protected Optional<Class<? extends Message>> getTypeClass(@NotNull String type) {
+  protected Optional<Class<? extends Message>> getTypeClass(@NotNull final String type) {
 
     final Class<?> clazz;
 
     try {
       clazz = Class.forName(type);
-    } catch (ClassNotFoundException ex) {
+    } catch (final ClassNotFoundException ex) {
       return Optional.empty();
     }
 
@@ -146,7 +146,7 @@ public abstract class Messenger {
    *
    * @param consumer The consumer of the channel name and message
    */
-  public void addListener(@NotNull BiConsumer<String, Message> consumer) {
+  public void addListener(@NotNull final BiConsumer<String, Message> consumer) {
     listeners.add(consumer);
   }
 
@@ -155,7 +155,7 @@ public abstract class Messenger {
    *
    * @param consumer The consumer of the channel name and message
    */
-  public void removeListener(@NotNull BiConsumer<String, Message> consumer) {
+  public void removeListener(@NotNull final BiConsumer<String, Message> consumer) {
     listeners.remove(consumer);
   }
 
@@ -175,8 +175,8 @@ public abstract class Messenger {
    */
   @NotNull
   protected String encodeMessage(
-      @NotNull UUID id,
-      @NotNull Message message) {
+      @NotNull final UUID id,
+      @NotNull final Message message) {
 
     final JsonObject json = new JsonObject();
     json.addProperty(ID_KEY, id.toString());
@@ -193,13 +193,13 @@ public abstract class Messenger {
    * @return The decoded message
    */
   @Nullable
-  protected Message decodeMessage(@NotNull String encoded) {
+  protected Message decodeMessage(@NotNull final String encoded) {
 
     final JsonObject json;
 
     try {
       json = GSON.fromJson(encoded, JsonObject.class);
-    } catch (JsonParseException ex) {
+    } catch (final JsonParseException ex) {
       throw new BaseException("Unable to decode message: " + encoded, ex);
     }
 
