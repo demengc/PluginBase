@@ -129,8 +129,12 @@ public class Redis extends Messenger implements IRedis {
           } catch (final Exception ignored) {
           }
 
-          // Reschedule for 5 seconds
-          Schedulers.async().runLater(this, 100L);
+          // Sleep for 5 seconds to prevent massive spam in console.
+          try {
+            Thread.sleep(5000);
+          } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+          }
         }
       }
     }
