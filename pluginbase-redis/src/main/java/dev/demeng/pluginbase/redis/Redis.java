@@ -72,7 +72,7 @@ public class Redis extends Messenger implements IRedis {
 
   @Override
   public void sendMessage(@NotNull final String channel, @NotNull final String encoded) {
-    try (final Jedis jedis = this.jedisPool.getResource()) {
+    try (final Jedis jedis = getJedis()) {
       jedis.publish(channel, encoded);
     } catch (final Exception ex) {
       ex.printStackTrace();
