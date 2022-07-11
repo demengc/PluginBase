@@ -51,13 +51,13 @@ final class BaseAsyncExecutor extends AbstractExecutorService implements Schedul
   BaseAsyncExecutor() {
     this.taskService = Executors.newCachedThreadPool(new ThreadFactoryBuilder()
         .setDaemon(true)
-        .setNameFormat("helper-scheduler-%d")
+        .setNameFormat("pluginbase-scheduler-%d")
         .build()
     );
     this.timerExecutionService = Executors.newSingleThreadScheduledExecutor(
         new ThreadFactoryBuilder()
             .setDaemon(true)
-            .setNameFormat("helper-scheduler-timer")
+            .setNameFormat("pluginbase-scheduler-timer")
             .build()
     );
   }

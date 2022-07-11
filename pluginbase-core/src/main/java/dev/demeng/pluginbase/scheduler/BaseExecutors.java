@@ -41,14 +41,14 @@ public final class BaseExecutors {
 
   private static final Executor SYNC_BUKKIT = new BukkitSyncExecutor();
   private static final Executor ASYNC_BUKKIT = new BukkitAsyncExecutor();
-  private static final BaseAsyncExecutor ASYNC_HELPER = new BaseAsyncExecutor();
+  private static final BaseAsyncExecutor ASYNC_BASE = new BaseAsyncExecutor();
 
   public static Executor sync() {
     return SYNC_BUKKIT;
   }
 
-  public static ScheduledExecutorService asyncHelper() {
-    return ASYNC_HELPER;
+  public static ScheduledExecutorService asyncBase() {
+    return ASYNC_BASE;
   }
 
   public static Executor asyncBukkit() {
@@ -56,7 +56,7 @@ public final class BaseExecutors {
   }
 
   public static void shutdown() {
-    ASYNC_HELPER.cancelRepeatingTasks();
+    ASYNC_BASE.cancelRepeatingTasks();
   }
 
   private static final class BukkitSyncExecutor implements Executor {

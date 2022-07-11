@@ -114,7 +114,7 @@ final class BasePromise<V> implements Promise<V> {
   }
 
   private void executeAsync(@NotNull final Runnable runnable) {
-    BaseExecutors.asyncHelper().execute(runnable);
+    BaseExecutors.asyncBase().execute(runnable);
   }
 
   private void executeDelayedSync(@NotNull final Runnable runnable, final long delayTicks) {
@@ -151,7 +151,7 @@ final class BasePromise<V> implements Promise<V> {
     if (delay <= 0) {
       executeAsync(runnable);
     } else {
-      BaseExecutors.asyncHelper().schedule(SchedulerTaskException.wrap(runnable), delay, unit);
+      BaseExecutors.asyncBase().schedule(SchedulerTaskException.wrap(runnable), delay, unit);
     }
   }
 

@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -132,7 +133,7 @@ public final class Schedulers {
     public Task runRepeating(@NotNull final Consumer<Task> consumer, final long delayTicks,
         final long intervalTicks) {
       Objects.requireNonNull(consumer, "consumer");
-      final HelperTask task = new HelperTask(consumer);
+      final BaseTask task = new BaseTask(consumer);
       task.runTaskTimer(BaseManager.getPlugin(), delayTicks, intervalTicks);
       return task;
     }
@@ -151,7 +152,7 @@ public final class Schedulers {
 
     @Override
     public void execute(final Runnable runnable) {
-      BaseExecutors.asyncHelper().execute(runnable);
+      BaseExecutors.asyncBase().execute(runnable);
     }
 
     @NotNull
@@ -165,7 +166,7 @@ public final class Schedulers {
     public Task runRepeating(@NotNull final Consumer<Task> consumer, final long delayTicks,
         final long intervalTicks) {
       Objects.requireNonNull(consumer, "consumer");
-      final HelperTask task = new HelperTask(consumer);
+      final BaseTask task = new BaseTask(consumer);
       task.runTaskTimerAsynchronously(BaseManager.getPlugin(), delayTicks, intervalTicks);
       return task;
     }
@@ -176,20 +177,17 @@ public final class Schedulers {
         @NotNull final TimeUnit delayUnit, final long interval,
         @NotNull final TimeUnit intervalUnit) {
       Objects.requireNonNull(consumer, "consumer");
-      return new HelperAsyncTask(consumer, delay, delayUnit, interval, intervalUnit);
+      return new BaseAsyncTask(consumer, delay, delayUnit, interval, intervalUnit);
     }
   }
 
-  private static class HelperTask extends BukkitRunnable implements Task, Delegate<Consumer<Task>> {
+  @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+  private static class BaseTask extends BukkitRunnable implements Task, Delegate<Consumer<Task>> {
 
     private final Consumer<Task> backingTask;
 
     private final AtomicInteger counter = new AtomicInteger(0);
     private final AtomicBoolean cancelled = new AtomicBoolean(false);
-
-    private HelperTask(final Consumer<Task> backingTask) {
-      this.backingTask = backingTask;
-    }
 
     @Override
     public void run() {
@@ -237,7 +235,7 @@ public final class Schedulers {
     }
   }
 
-  private static class HelperAsyncTask implements Runnable, Task, Delegate<Consumer<Task>> {
+  private static class BaseAsyncTask implements Runnable, Task, Delegate<Consumer<Task>> {
 
     private final Consumer<Task> backingTask;
     private final ScheduledFuture<?> future;
@@ -245,11 +243,11 @@ public final class Schedulers {
     private final AtomicInteger counter = new AtomicInteger(0);
     private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
-    private HelperAsyncTask(final Consumer<Task> backingTask, final long delay,
+    private BaseAsyncTask(final Consumer<Task> backingTask, final long delay,
         final TimeUnit delayUnit,
         final long interval, final TimeUnit intervalUnit) {
       this.backingTask = backingTask;
-      this.future = BaseExecutors.asyncHelper()
+      this.future = BaseExecutors.asyncBase()
           .scheduleAtFixedRate(this, delayUnit.toNanos(delay), intervalUnit.toNanos(interval),
               TimeUnit.NANOSECONDS);
     }
