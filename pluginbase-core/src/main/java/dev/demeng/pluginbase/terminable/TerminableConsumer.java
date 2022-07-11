@@ -24,65 +24,36 @@
 
 package dev.demeng.pluginbase.terminable;
 
+import dev.demeng.pluginbase.terminable.module.TerminableModule;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * An extension of {@link AutoCloseable}.
+ * Accepts {@link AutoCloseable}s (and by inheritance {@link Terminable}s), as well as
+ * {@link TerminableModule}s.
  */
 @FunctionalInterface
-public interface Terminable extends AutoCloseable {
-
-  Terminable EMPTY = () -> {
-  };
+public interface TerminableConsumer {
 
   /**
-   * Closes this resource.
-   */
-  @Override
-  void close() throws Exception;
-
-  /**
-   * Gets if the object represented by this instance is already permanently closed.
+   * Binds with the given terminable.
    *
-   * @return true if this terminable is closed permanently
+   * @param terminable the terminable to bind with
+   * @param <T>        the terminable type
+   * @return the same terminable
    */
-  default boolean isClosed() {
-    return false;
-  }
+  @NotNull <T extends AutoCloseable> T bind(@NotNull T terminable);
 
   /**
-   * Silently closes this resource, and returns the exception if one is thrown.
+   * Binds with the given terminable module.
    *
-   * @return the exception is one is thrown
+   * @param module the module to bind with
+   * @param <T>    the module type
+   * @return the same module
    */
-  @Nullable
-  default Exception closeSilently() {
-    try {
-      close();
-      return null;
-    } catch (final Exception e) {
-      return e;
-    }
+  @NotNull
+  default <T extends TerminableModule> T bindModule(@NotNull final T module) {
+    module.setup(this);
+    return module;
   }
 
-  /**
-   * Closes this resource, and prints the exception if one is thrown.
-   */
-  default void closeAndReportException() {
-    try {
-      close();
-    } catch (final Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  /**
-   * Binds this terminable with a terminable consumer
-   *
-   * @param consumer the terminable consumer
-   */
-  default void bindWith(@NotNull final TerminableConsumer consumer) {
-    consumer.bind(this);
-  }
 }
