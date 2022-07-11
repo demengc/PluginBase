@@ -50,12 +50,12 @@
               </artifactSet>
               <relocations>
                 <relocation>
-                  <pattern>redis.clients.util</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.messaging.lib.jedisutil</shadedPattern>
+                  <pattern>redis.clients.jedis</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.redis.lib.jedis</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.apache.commons.pool</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.messaging.lib.commonspool</shadedPattern>
+                  <shadedPattern>dev.demeng.pluginbase.redis.lib.commonspool</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
