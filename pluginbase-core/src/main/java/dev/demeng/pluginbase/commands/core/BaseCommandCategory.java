@@ -129,21 +129,32 @@ final class BaseCommandCategory implements CommandCategory {
     }
   }
 
+  /**
+   * Category permission: They have access to the category if they have access to any of its
+   * commands or other categories.
+   */
   private class CategoryPermission implements CommandPermission {
 
     @Override
     public boolean canExecute(@NotNull final CommandActor actor) {
+
       for (final ExecutableCommand command : commands.values()) {
         if (command.getPermission().canExecute(actor)) {
           return true;
         }
       }
+
       for (final CommandCategory category : categories.values()) {
         if (category.getPermission().canExecute(actor)) {
           return true;
         }
       }
-      return defaultAction == null || defaultAction.hasPermission(actor);
+
+      if (defaultAction == null) {
+        return false;
+      }
+
+      return defaultAction.hasPermission(actor);
     }
   }
 
