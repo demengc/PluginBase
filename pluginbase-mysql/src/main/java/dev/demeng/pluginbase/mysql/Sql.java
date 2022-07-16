@@ -143,8 +143,8 @@ public class Sql implements ISql {
   @Override
   public void execute(@Language("MySQL") @NotNull final String statement,
       @NotNull final SqlConsumer<PreparedStatement> preparer) {
-    try (final Connection c = this.getConnection(); final PreparedStatement s = c.prepareStatement(
-        statement)) {
+    try (final Connection c = this.getConnection();
+        final PreparedStatement s = c.prepareStatement(statement)) {
       preparer.accept(s);
       s.execute();
     } catch (final SQLException ex) {
@@ -156,8 +156,8 @@ public class Sql implements ISql {
   public <R> @NotNull Optional<R> query(@Language("MySQL") @NotNull final String query,
       @NotNull final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) {
-    try (final Connection c = this.getConnection(); final PreparedStatement s = c.prepareStatement(
-        query)) {
+    try (final Connection c = this.getConnection();
+        final PreparedStatement s = c.prepareStatement(query)) {
       preparer.accept(s);
       try (final ResultSet r = s.executeQuery()) {
         return Optional.ofNullable(handler.apply(r));
@@ -180,8 +180,8 @@ public class Sql implements ISql {
       return;
     }
 
-    try (final Connection c = this.getConnection(); final PreparedStatement s = c.prepareStatement(
-        builder.getStatement())) {
+    try (final Connection c = this.getConnection();
+        final PreparedStatement s = c.prepareStatement(builder.getStatement())) {
       for (final SqlConsumer<PreparedStatement> handlers : builder.getHandlers()) {
         handlers.accept(s);
         s.addBatch();
