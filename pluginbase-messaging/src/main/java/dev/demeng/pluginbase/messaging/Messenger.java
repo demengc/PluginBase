@@ -111,7 +111,9 @@ public abstract class Messenger {
    */
   public void consumeMessage(@NotNull final String channel, @NotNull final String encoded) {
 
+    System.out.println("Encoded:" + encoded);
     final Message decoded = decodeMessage(encoded);
+    System.out.println("Decoded:" + decoded);
 
     if (decoded == null) {
       return;
@@ -137,7 +139,7 @@ public abstract class Messenger {
       return Optional.empty();
     }
 
-    if (!clazz.isAssignableFrom(Message.class)) {
+    if (!Message.class.isAssignableFrom(clazz)) {
       return Optional.empty();
     }
 
@@ -215,6 +217,7 @@ public abstract class Messenger {
     final UUID id = UUID.fromString(idElement.getAsString());
 
     if (receivedMessages.containsKey(id)) {
+      System.out.println("already received");
       return null;
     }
 
@@ -229,6 +232,7 @@ public abstract class Messenger {
     final Optional<Class<? extends Message>> type = getTypeClass(typeElement.getAsString());
 
     if (!type.isPresent()) {
+      System.out.println("type not present: " + typeElement.getAsString());
       return null;
     }
 
@@ -239,6 +243,7 @@ public abstract class Messenger {
     }
 
     final String content = contentElement.getAsString();
+    System.out.println("content: " + content);
     return Message.decodeRaw(type.get(), content);
   }
 }
