@@ -165,6 +165,16 @@ public final class TextUtils {
     return BaseManager.getTranslator().get(key, locale);
   }
 
+  @NotNull
+  public static String tl(@Nullable final String key, @Nullable final CommandSender sender) {
+    return localized(key, sender);
+  }
+
+  @NotNull
+  public static String tl(@Nullable final String key, @Nullable final Locale locale) {
+    return localized(key, locale);
+  }
+
   // ---------------------------------------------------------------------------------
   // FORMATTING
   // ---------------------------------------------------------------------------------
