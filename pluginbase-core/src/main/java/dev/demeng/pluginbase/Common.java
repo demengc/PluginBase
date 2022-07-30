@@ -25,6 +25,7 @@
 package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.google.common.primitives.Ints;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import dev.demeng.pluginbase.text.TextUtils;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.function.IntConsumer;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -48,7 +50,7 @@ public final class Common {
    * If the server software the plugin is running on is Spigot or a fork of Spigot. Used internally
    * for some Spigot-only features or optimizations.
    */
-  public static final boolean SPIGOT = Validate.checkClass("net.md_5.bungee.api.ChatColor") != null;
+  public static final boolean SPIGOT = checkClass("net.md_5.bungee.api.ChatColor") != null;
 
   /**
    * The error message for players when an internal error occurs.
@@ -111,6 +113,21 @@ public final class Common {
   // ---------------------------------------------------------------------------------
   // MISC
   // ---------------------------------------------------------------------------------
+
+  /**
+   * Simple method to check if a class exists.
+   *
+   * @param className The class's package and name (Example: dev.demeng.pluginbase.Validate)
+   * @return The actual class if the class exists, null otherwise
+   */
+  @Nullable
+  public static Class<?> checkClass(@NotNull final String className) {
+    try {
+      return Class.forName(className, false, Validate.class.getClassLoader());
+    } catch (final ClassNotFoundException ex) {
+      return null;
+    }
+  }
 
   /**
    * Formats a decimal into a human-friendly string that rounds the double to 2 decimal places.
@@ -223,7 +240,7 @@ public final class Common {
   public static void forEachInt(final String str, final IntConsumer consumer)
       throws IllegalArgumentException {
 
-    final Integer singleNum = Validate.checkInt(str);
+    final Integer singleNum = Ints.tryParse(str);
 
     // Single integer.
     if (singleNum != null) {
@@ -246,8 +263,8 @@ public final class Common {
     final String[] rangeArr = str.split("-");
 
     if (rangeArr.length == 2) {
-      final Integer start = Validate.checkInt(rangeArr[0]);
-      final Integer end = Validate.checkInt(rangeArr[1]);
+      final Integer start = Ints.tryParse(rangeArr[0]);
+      final Integer end = Ints.tryParse(rangeArr[1]);
 
       if (start != null && end != null) {
         for (int i = start; i <= end; i++) {
