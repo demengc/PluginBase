@@ -130,17 +130,21 @@ public final class Text {
    *
    * @param key    The key of the message
    * @param sender The sender to get the locale of
+   * @param args   Arguments for positioned placeholders ({n})
    * @return The localized message, or key if unable to resolve
    * @see #getLocale(CommandSender)
    */
   @NotNull
-  public static String localized(@Nullable final String key, @Nullable final CommandSender sender) {
+  public static String localized(
+      @Nullable final String key,
+      @Nullable final CommandSender sender,
+      @NotNull final Object... args) {
 
     if (key == null) {
       return "";
     }
 
-    return BaseManager.getTranslator().get(key, getLocale(sender));
+    return MessageFormat.format(BaseManager.getTranslator().get(key, getLocale(sender)), args);
   }
 
   /**
@@ -149,10 +153,14 @@ public final class Text {
    *
    * @param key    The key of the message
    * @param locale The locale
+   * @param args   Arguments for positioned placeholders ({n})
    * @return The localized message, or key if unable to resolve
    */
   @NotNull
-  public static String localized(@Nullable final String key, @Nullable final Locale locale) {
+  public static String localized(
+      @Nullable final String key,
+      @Nullable final Locale locale,
+      @NotNull final Object... args) {
 
     if (key == null) {
       return "";
@@ -162,7 +170,7 @@ public final class Text {
       return localized(key, BaseManager.getTranslator().getLocale());
     }
 
-    return BaseManager.getTranslator().get(key, locale);
+    return MessageFormat.format(BaseManager.getTranslator().get(key, locale), args);
   }
 
   @NotNull
