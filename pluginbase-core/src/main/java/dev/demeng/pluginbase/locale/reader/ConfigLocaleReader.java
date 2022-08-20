@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
  * (.properties). This should typically only be used if you want to have a singular locale file,
  * such as a "messages.yml".
  *
- * @see dev.demeng.pluginbase.locale.Translator#add(LocaleReader) 
+ * @see dev.demeng.pluginbase.locale.Translator#add(LocaleReader)
  */
 @RequiredArgsConstructor
 public class ConfigLocaleReader implements LocaleReader {
@@ -45,12 +45,12 @@ public class ConfigLocaleReader implements LocaleReader {
   @Getter @NotNull private final Locale locale;
 
   @Override
-  public boolean containsKey(String key) {
+  public boolean containsKey(final String key) {
     return config.contains(key);
   }
 
   @Override
-  public String get(String key) {
+  public String get(final String key) {
     return config.getString(key);
   }
 }
