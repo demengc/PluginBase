@@ -15,7 +15,6 @@
     <module>pluginbase-mysql</module>
     <module>pluginbase-mongo</module>
     <module>pluginbase-games</module>
-    <module>pluginbase-messaging</module>
     <module>pluginbase-redis</module>
   </modules>
 

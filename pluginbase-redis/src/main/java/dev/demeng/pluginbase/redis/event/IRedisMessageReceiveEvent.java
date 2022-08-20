@@ -2,8 +2,6 @@
  * MIT License
  *
  * Copyright (c) 2021-2022 Demeng Chen
- * Copyright (c) lucko (Luck) <luck@lucko.me>
- * Copyright (c) lucko/helper contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +22,51 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.redis;
+package dev.demeng.pluginbase.redis.event;
 
-import dev.demeng.pluginbase.terminable.Terminable;
+import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
-import redis.clients.jedis.JedisPool;
 
 /**
- * Represents an individual redis instance, created by the library.
+ * The interface of a Redis message receive event.
  */
-public interface IRedis extends Terminable {
+public interface IRedisMessageReceiveEvent {
 
   /**
-   * Gets the JedisPool instance backing the Redis instance.
+   * Gets the ID of the sending server.
    *
-   * @return The JedisPool instance
+   * @return The ID of the sending server
    */
-  @NotNull
-  JedisPool getJedisPool();
+  @NotNull String getSenderId();
+
+  /**
+   * Gets the channel of the message.
+   *
+   * @return THe channel name
+   */
+  @NotNull String getChannel();
+
+  /**
+   * Gets the raw string message.
+   *
+   * @return The raw string message
+   */
+  @NotNull String getMessage();
+
+  /**
+   * Gets the timestamp of the message
+   *
+   * @return The timestamp of the message
+   */
+  long getTimestamp();
+
+  /**
+   * Gets the object from the received message
+   *
+   * @param objectClass Object class
+   * @param <T>         Object type
+   * @return Parsed object, or null if it cannot be parsed
+   */
+  @SuppressWarnings("Make sure the recieved message can really be converted to provided type!")
+  @NotNull <T> Optional<T> getMessageObject(@NotNull Class<T> objectClass);
 }
