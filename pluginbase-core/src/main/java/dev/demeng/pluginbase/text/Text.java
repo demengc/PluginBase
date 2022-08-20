@@ -53,7 +53,7 @@ import org.jetbrains.annotations.Nullable;
  * Message-related utilities, including console and chat messages.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class TextUtils {
+public final class Text {
 
   /**
    * The message value that will cause the message to not be sent. Ignores case.
@@ -246,7 +246,7 @@ public final class TextUtils {
       return Collections.emptyList();
     }
 
-    return strList.stream().map(TextUtils::colorize).collect(Collectors.toList());
+    return strList.stream().map(Text::colorize).collect(Collectors.toList());
   }
 
   /**
@@ -354,7 +354,7 @@ public final class TextUtils {
       return Collections.emptyList();
     }
 
-    return strList.stream().map(TextUtils::strip).collect(Collectors.toList());
+    return strList.stream().map(Text::strip).collect(Collectors.toList());
   }
 
   /**
@@ -665,7 +665,7 @@ public final class TextUtils {
       @NotNull final Player p,
       @Nullable final String title,
       @Nullable final String subtitle) {
-    Titles.sendTitle(p, TextUtils.colorize(title), TextUtils.colorize(subtitle));
+    Titles.sendTitle(p, Text.colorize(title), Text.colorize(subtitle));
   }
 
   /**
@@ -684,8 +684,8 @@ public final class TextUtils {
       @Nullable final String subtitle,
       final int fadeIn, final int stay, final int fadeOut) {
     Titles.sendTitle(p, fadeIn, stay, fadeOut,
-        TextUtils.colorize(title),
-        TextUtils.colorize(subtitle));
+        Text.colorize(title),
+        Text.colorize(subtitle));
   }
 
   /**

@@ -31,7 +31,7 @@ import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
 import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
-import dev.demeng.pluginbase.text.TextUtils;
+import dev.demeng.pluginbase.text.Text;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -79,7 +79,7 @@ public abstract class Menu implements IMenu {
    * @param title The menu title, colorized internally
    */
   protected Menu(final int size, @NotNull final String title) {
-    this.inventory = Bukkit.createInventory(null, size, TextUtils.colorize(title));
+    this.inventory = Bukkit.createInventory(null, size, Text.colorize(title));
     MenuManager.getMenus().put(getUuid(), this);
   }
 

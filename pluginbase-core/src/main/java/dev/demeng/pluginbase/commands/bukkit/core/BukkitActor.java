@@ -31,7 +31,7 @@ import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotConsoleException
 import dev.demeng.pluginbase.commands.bukkit.exception.SenderNotPlayerException;
 import dev.demeng.pluginbase.commands.util.Preconditions;
 import dev.demeng.pluginbase.plugin.BaseManager;
-import dev.demeng.pluginbase.text.TextUtils;
+import dev.demeng.pluginbase.text.Text;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.UUID;
@@ -123,13 +123,13 @@ public final class BukkitActor implements BukkitCommandActor {
   @Override
   public void reply(@NotNull final String message) {
     Preconditions.notNull(message, "message");
-    TextUtils.tell(sender, message);
+    Text.tell(sender, message);
   }
 
   @Override
   public void error(@NotNull final String message) {
     Preconditions.notNull(message, "message");
-    TextUtils.tell(sender, "&c" + message);
+    Text.tell(sender, "&c" + message);
   }
 
   @Override
@@ -139,6 +139,6 @@ public final class BukkitActor implements BukkitCommandActor {
 
   @Override
   public @NotNull Locale getLocale() {
-    return TextUtils.getLocale(sender);
+    return Text.getLocale(sender);
   }
 }

@@ -28,7 +28,7 @@ package dev.demeng.pluginbase.redis;
 
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.messaging.Messenger;
-import dev.demeng.pluginbase.text.TextUtils;
+import dev.demeng.pluginbase.text.Text;
 import java.util.logging.Level;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -109,7 +109,7 @@ public class Redis extends Messenger implements IRedis {
           if (first) {
             first = false;
           } else {
-            TextUtils.log("Redis pub/sub connection re-established.");
+            Text.log("Redis pub/sub connection re-established.");
           }
 
           if (Redis.this.channels != null) {
@@ -121,7 +121,7 @@ public class Redis extends Messenger implements IRedis {
             return;
           }
 
-          TextUtils.log(Level.WARNING,
+          Text.log(Level.WARNING,
               "Redis pub-sub connection dropped, attempting to re-open connection...");
 
           try {

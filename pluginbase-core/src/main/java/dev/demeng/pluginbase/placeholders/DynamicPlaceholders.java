@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase.placeholders;
 
-import dev.demeng.pluginbase.text.TextUtils;
+import dev.demeng.pluginbase.text.Text;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -107,10 +107,10 @@ public interface DynamicPlaceholders {
     final ItemMeta meta = replaced.getItemMeta();
     Objects.requireNonNull(meta, "Item meta is null");
 
-    meta.setDisplayName(TextUtils.colorize(setPlaceholders(meta.getDisplayName())));
+    meta.setDisplayName(Text.colorize(setPlaceholders(meta.getDisplayName())));
 
     if (meta.getLore() != null && !meta.getLore().isEmpty()) {
-      meta.setLore(TextUtils.colorize(replace(meta.getLore())));
+      meta.setLore(Text.colorize(replace(meta.getLore())));
     }
 
     replaced.setItemMeta(meta);
