@@ -32,13 +32,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.Reader;
 import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides static instances of {@link Gson}.
  */
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GsonProvider {
 
   private static final Gson STANDARD_GSON = new GsonBuilder()
