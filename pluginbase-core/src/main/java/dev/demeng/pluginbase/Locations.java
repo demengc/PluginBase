@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NotNull;
  * Utilities for {@link org.bukkit.Location}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class LocationUtils {
+public final class Locations {
 
   /**
    * Rounds a location to the center of a block.

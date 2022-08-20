@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * Various utilities for playing sound effects.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class SoundUtils {
+public final class Sounds {
 
   /**
    * The prefix that the util will search for, used to determine if the plugin should play a vanilla
