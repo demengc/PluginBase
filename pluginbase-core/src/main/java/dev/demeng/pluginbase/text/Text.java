@@ -174,13 +174,19 @@ public final class Text {
   }
 
   @NotNull
-  public static String tl(@Nullable final String key, @Nullable final CommandSender sender) {
-    return localized(key, sender);
+  public static String tl(
+      @Nullable final String key,
+      @Nullable final CommandSender sender,
+      @NotNull final Object... args) {
+    return localized(key, sender, args);
   }
 
   @NotNull
-  public static String tl(@Nullable final String key, @Nullable final Locale locale) {
-    return localized(key, locale);
+  public static String tl(
+      @Nullable final String key,
+      @Nullable final Locale locale,
+      @NotNull final Object... args) {
+    return localized(key, locale, args);
   }
 
   // ---------------------------------------------------------------------------------
