@@ -57,7 +57,7 @@ public final class Common {
    */
   public static final String PLAYERS_ERROR_MESSAGE = "&6An internal error has occurred in "
       + Common.getName()
-      + ". Further details have been printed in console.";
+      + ". Check the console for more information.";
 
   private static final String STR_DECIMAL_FORMAT = "%.2f";
 
@@ -216,9 +216,9 @@ public final class Common {
     }
 
     Text.coloredConsole("&4" + Text.CONSOLE_LINE);
-    Text.coloredConsole("&cAn internal error has occurred in " + Common.getName() + "!");
-    Text.coloredConsole("&cContact the plugin author if you cannot fix this error.");
+    Text.coloredConsole("&cAn internal error has occurred in " + Common.getName() + ".");
     Text.coloredConsole("&cDescription: &6" + description);
+    Text.coloredConsole("&cContact the plugin author if you cannot fix this issue.");
     Text.coloredConsole("&4" + Text.CONSOLE_LINE);
 
     Arrays.stream(players).filter(Player.class::isInstance)
