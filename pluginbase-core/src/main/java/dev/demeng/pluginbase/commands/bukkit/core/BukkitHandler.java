@@ -165,8 +165,11 @@ public final class BukkitHandler extends BaseCommandHandler implements BukkitCom
       getAutoCompleter().registerParameterSuggestions(Player.class, playerSuggestionProvider);
     }
     getAutoCompleter().registerSuggestion("players", playerSuggestionProvider);
+    //noinspection Convert2MethodRef
     getAutoCompleter()
-        .registerSuggestion("worlds", SuggestionProvider.map(Bukkit::getWorlds, World::getName))
+        // Cannot be a method reference since WorldInfo does not exist in older versions.
+        .registerSuggestion("worlds",
+            SuggestionProvider.map(Bukkit::getWorlds, world -> world.getName()))
         .registerParameterSuggestions(Player.class, "players")
         .registerParameterSuggestions(World.class, "worlds")
         .registerSuggestionFactory(SelectorSuggestionFactory.INSTANCE);
