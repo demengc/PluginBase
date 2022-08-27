@@ -30,7 +30,9 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.locale.Locales;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -372,10 +374,10 @@ public final class Text {
   }
 
   /**
-   * Capitalizes the first character of the given string.
+   * Makes the first character uppercase and the rest lowercase.
    *
    * @param str The string
-   * @return The string with the first character capitalized
+   * @return The string with the first letter in upper case and the rest in lower case
    */
   @NotNull
   public static String capitalizeFirst(@NotNull final String str) {
@@ -384,7 +386,30 @@ public final class Text {
       return str;
     }
 
-    return ("" + str.charAt(0)).toUpperCase() + str.substring(1);
+    return Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase();
+  }
+
+  /**
+   * Makes a string Title Case.
+   *
+   * @param str       The string
+   * @param delimeter The delimeter to use for splitting the string
+   * @return The string in Title Case
+   */
+  @NotNull
+  public static String titleCase(@NotNull final String str, @NotNull final String delimeter) {
+
+    final StringBuilder builder = new StringBuilder();
+    final Iterator<String> iterator = Arrays.stream(str.split(delimeter)).iterator();
+
+    while (iterator.hasNext()) {
+      builder.append(capitalizeFirst(iterator.next().toLowerCase()));
+      if (iterator.hasNext()) {
+        builder.append(" ");
+      }
+    }
+
+    return builder.toString();
   }
 
   // ---------------------------------------------------------------------------------
