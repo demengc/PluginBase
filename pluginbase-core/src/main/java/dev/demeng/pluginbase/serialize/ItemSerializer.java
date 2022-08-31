@@ -26,6 +26,7 @@ package dev.demeng.pluginbase.serialize;
 
 import com.cryptomorin.xseries.XItemStack;
 import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
+import dev.demeng.pluginbase.text.Text;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -66,7 +67,7 @@ public class ItemSerializer {
       @Nullable final DynamicPlaceholders placeholders) {
     return placeholders == null
         ? deserialize(section)
-        : XItemStack.deserialize(section, placeholders.toFunction());
+        : XItemStack.deserialize(section, str -> Text.colorize(placeholders.replace(str)));
   }
 
   /**
@@ -77,6 +78,6 @@ public class ItemSerializer {
    */
   @NotNull
   public static ItemStack deserialize(@NotNull final ConfigurationSection section) {
-    return XItemStack.deserialize(section);
+    return XItemStack.deserialize(section, Text::colorize);
   }
 }
