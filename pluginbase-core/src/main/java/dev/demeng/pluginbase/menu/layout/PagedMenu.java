@@ -29,6 +29,7 @@ import dev.demeng.pluginbase.exceptions.BaseException;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
+import dev.demeng.pluginbase.serialize.ItemSerializer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -282,28 +283,32 @@ public abstract class PagedMenu implements IMenu {
       return new Settings() {
         @Override
         public @NotNull MenuButton getPreviousButton() {
-          return MenuButton
-              .create(Objects.requireNonNull(section.getConfigurationSection("previous-page")),
-                  null);
+          return MenuButton.create(Objects.requireNonNull(
+              section.getConfigurationSection("previous-page"),
+              "'Previous page' button is null"), null);
         }
 
         @Override
         public @NotNull MenuButton getDummyPreviousButton() {
-          return MenuButton.create(getPreviousButton().getSlot(), Objects.requireNonNull(
-              section.getConfigurationSection("previous-page.no-more-pages")), null);
+          return MenuButton.create(getPreviousButton().getSlot(),
+              ItemSerializer.deserialize(Objects.requireNonNull(
+                  section.getConfigurationSection("previous-page.no-more-pages"),
+                  "'No more previous pages' button is null")), null);
         }
 
         @Override
         public @NotNull MenuButton getNextButton() {
-          return MenuButton
-              .create(Objects.requireNonNull(section.getConfigurationSection("next-page")),
-                  null);
+          return MenuButton.create(Objects.requireNonNull(
+              section.getConfigurationSection("next-page"),
+              "'Next page' button is null"), null);
         }
 
         @Override
         public @NotNull MenuButton getDummyNextButton() {
-          return MenuButton.create(getNextButton().getSlot(), Objects.requireNonNull(
-              section.getConfigurationSection("next-page.no-more-pages")), null);
+          return MenuButton.create(getNextButton().getSlot(),
+              ItemSerializer.deserialize(Objects.requireNonNull(
+                  section.getConfigurationSection("next-page.no-more-pages"),
+                  "'No more next pages' button is null")), null);
         }
 
         @Override
