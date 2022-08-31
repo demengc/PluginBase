@@ -123,7 +123,11 @@ public final class BukkitActor implements BukkitCommandActor {
   @Override
   public void reply(@NotNull final String message) {
     Preconditions.notNull(message, "message");
-    Text.tell(sender, message);
+    if (BaseManager.getBaseSettings().colorScheme() != null) {
+      Text.tell(sender, BaseManager.getBaseSettings().colorScheme().getSecondary() + message);
+    } else {
+      Text.tell(sender, message);
+    }
   }
 
   @Override
