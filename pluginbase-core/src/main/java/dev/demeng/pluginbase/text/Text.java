@@ -206,7 +206,19 @@ public final class Text {
   }
 
   /**
-   * Convert plain string with color codes into a colorized message. Supports HEX colors in the
+   * Gets either {@link #CHAT_LINE} or {@link #CONSOLE_LINE}, depending on if the
+   * {@link CommandSender} is a player or console.
+   *
+   * @param sender The command sender
+   * @return The separation line
+   */
+  @NotNull
+  public static String line(@NotNull final CommandSender sender) {
+    return sender instanceof Player ? CHAT_LINE : CONSOLE_LINE;
+  }
+
+  /**
+   * Converts plain string with color codes into a colorized message. Supports HEX colors in the
    * format of {@code <#HEX>}. 1.16+ HEX support requires the server software to be Spigot, or a
    * fork of Spigot.
    *
