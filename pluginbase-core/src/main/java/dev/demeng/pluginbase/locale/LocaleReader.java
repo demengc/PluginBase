@@ -39,7 +39,7 @@ public interface LocaleReader {
    * @param key Key to check for
    * @return {@code true} if this reader has a mapping for the key
    */
-  boolean containsKey(String key);
+  boolean containsKey(@NotNull final String key);
 
   /**
    * Returns the mapping value for this key. It is recommended that this only return values if
@@ -48,14 +48,23 @@ public interface LocaleReader {
    * @param key Key to fetch for
    * @return The string value
    */
-  String get(String key);
+  String get(@NotNull final String key);
+
+  /**
+   * Returns the mapping value for this key. It is recommended that this only return values if
+   * {@link #containsKey(String)} is true, otherwise throwing an exception to avoid confusion.
+   *
+   * @param key Key to fetch for
+   * @return The string array value
+   */
+  String[] getArray(@NotNull final String key);
 
   /**
    * Returns the locale of by this reader
    *
    * @return The reader's locale
    */
-  Locale getLocale();
+  @NotNull Locale getLocale();
 
   /**
    * Wraps a {@link ResourceBundle} in a {@link LocaleReader}.

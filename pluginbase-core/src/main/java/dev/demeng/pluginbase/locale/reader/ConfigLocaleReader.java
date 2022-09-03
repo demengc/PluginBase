@@ -45,12 +45,17 @@ public class ConfigLocaleReader implements LocaleReader {
   @Getter @NotNull private final Locale locale;
 
   @Override
-  public boolean containsKey(final String key) {
+  public boolean containsKey(@NotNull final String key) {
     return config.contains(key);
   }
 
   @Override
-  public String get(final String key) {
+  public String get(@NotNull final String key) {
     return config.getString(key);
+  }
+
+  @Override
+  public String[] getArray(@NotNull final String key) {
+    return config.getStringList(key).toArray(new String[0]);
   }
 }

@@ -27,6 +27,7 @@ import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a {@link LocaleReader} that fetches its values from a {@link ResourceBundle}.
@@ -40,17 +41,22 @@ final class ResourceBundleLocaleReader implements LocaleReader {
   }
 
   @Override
-  public boolean containsKey(final String key) {
+  public boolean containsKey(final @NotNull String key) {
     return resourceBundle.containsKey(key);
   }
 
   @Override
-  public String get(final String key) {
+  public String get(final @NotNull String key) {
     return resourceBundle.getString(key);
   }
 
   @Override
-  public Locale getLocale() {
+  public String[] getArray(final @NotNull String key) {
+    return resourceBundle.getStringArray(key);
+  }
+
+  @Override
+  public @NotNull Locale getLocale() {
     return resourceBundle.getLocale();
   }
 }
