@@ -75,8 +75,10 @@ public class Sql implements ISql {
    * @param jdbcUrl     The JDBC URL, or null for the default URL
    * @param credentials The database credentials
    */
-  public Sql(final @NotNull String driverClass, final @Nullable String jdbcUrl,
-      final @NotNull SqlCredentials credentials) {
+  public Sql(
+      @NotNull final String driverClass,
+      @Nullable final String jdbcUrl,
+      @NotNull final SqlCredentials credentials) {
 
     final HikariConfig hikari = new HikariConfig();
 
