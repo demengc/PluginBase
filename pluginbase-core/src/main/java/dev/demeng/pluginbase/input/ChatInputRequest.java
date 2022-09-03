@@ -203,7 +203,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
         .addConversationAbandonedListener(e -> {
 
           if (e.getCanceller() instanceof InactivityConversationCanceller) {
-            Text.tell(p, timeoutMessage);
+            Text.tell(p, "&c" + timeoutMessage);
           }
 
           Text.clearTitle(p);
@@ -260,7 +260,7 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
       }
 
     } else if (retryMessage != null) {
-      return Text.colorize(Text.getPrefix() + retryMessage);
+      return Text.colorize(Text.getPrefix() + "&c" + retryMessage);
     }
 
     return "";
