@@ -25,8 +25,9 @@
 package dev.demeng.pluginbase.serialize;
 
 import com.cryptomorin.xseries.XItemStack;
-import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.text.Text;
+import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -57,17 +58,16 @@ public class ItemSerializer {
   /**
    * Deserializes the configuration section into an item stack.
    *
-   * @param section      The configuration section to deserialize
-   * @param placeholders The placeholders to set
+   * @param section    The configuration section to deserialize
+   * @param translator The translator for strings in the item
    * @return The deserialized item stack
    */
   @NotNull
   public static ItemStack deserialize(
       @NotNull final ConfigurationSection section,
-      @Nullable final DynamicPlaceholders placeholders) {
-    return placeholders == null
-        ? deserialize(section)
-        : XItemStack.deserialize(section, str -> Text.colorize(placeholders.replace(str)));
+      @Nullable final UnaryOperator<String> translator) {
+    return XItemStack.deserialize(section,
+        str -> Text.colorize(Common.applyOperator(str, translator)));
   }
 
   /**

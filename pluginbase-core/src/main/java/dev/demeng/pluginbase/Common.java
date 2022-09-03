@@ -30,13 +30,21 @@ import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import dev.demeng.pluginbase.text.Text;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.IntConsumer;
+import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,6 +121,64 @@ public final class Common {
   // ---------------------------------------------------------------------------------
   // MISC
   // ---------------------------------------------------------------------------------
+
+  @NotNull
+  public static String applyOperator(
+      @Nullable final String str,
+      @Nullable final UnaryOperator<String> operator) {
+
+    if (str == null || operator == null) {
+      return Common.getOrDefault(str, "");
+    }
+
+    return operator.apply(str);
+  }
+
+  @NotNull
+  public static List<String> applyOperator(
+      @Nullable final List<String> list,
+      @Nullable final UnaryOperator<String> operator) {
+
+    if (list == null || operator == null) {
+      return Common.getOrDefault(list, Collections.emptyList());
+    }
+
+    final List<String> applied = new LinkedList<>();
+
+    for (final String str : list) {
+      applied.add(operator.apply(str));
+    }
+
+    return applied;
+  }
+
+  @NotNull
+  public static ItemStack applyOperator(
+      @Nullable final ItemStack stack,
+      @Nullable final UnaryOperator<String> operator) {
+
+    if (stack == null || stack.getType() == Material.AIR) {
+      return new ItemStack(Material.AIR);
+    }
+
+    if (operator == null) {
+      return stack;
+    }
+
+    final ItemStack replaced = new ItemStack(stack);
+    final ItemMeta meta = replaced.getItemMeta();
+    Objects.requireNonNull(meta, "Item meta is null");
+
+    meta.setDisplayName(Text.colorize(applyOperator(meta.getDisplayName(), operator)));
+
+    if (meta.getLore() != null && !meta.getLore().isEmpty()) {
+      meta.setLore(Text.colorize(applyOperator(meta.getLore(), operator)));
+    }
+
+    replaced.setItemMeta(meta);
+
+    return replaced;
+  }
 
   /**
    * Simple method to check if a class exists.

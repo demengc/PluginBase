@@ -25,9 +25,9 @@
 package dev.demeng.pluginbase.menu.model;
 
 import dev.demeng.pluginbase.menu.layout.Menu;
-import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -77,15 +77,15 @@ public class MenuButton {
    * {@code slot}. See {@link ItemSerializer} for the format of item stacks. The slot will always be
    * subtracted by 1.
    *
-   * @param section      The configuration section containing the button information
-   * @param placeholders The placeholders for the item builder
-   * @param consumer     The consumer for the button
+   * @param section    The configuration section containing the button information
+   * @param translator The translator for strings in the item
+   * @param consumer   The consumer for the button
    * @return The button from config
    */
   @NotNull
   public static MenuButton create(
       @NotNull final ConfigurationSection section,
-      @Nullable final DynamicPlaceholders placeholders,
+      @Nullable final UnaryOperator<String> translator,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
 
     int slot = section.getInt("slot", 0);
@@ -94,7 +94,7 @@ public class MenuButton {
       slot--;
     }
 
-    return create(slot, ItemSerializer.deserialize(section, placeholders), consumer);
+    return create(slot, ItemSerializer.deserialize(section, translator), consumer);
   }
 
   /**
@@ -118,19 +118,19 @@ public class MenuButton {
    * configuration section may have. Unlike {@link #create(ConfigurationSection, Consumer)}, the
    * slot is not subtracted 1. See {@link ItemSerializer} for the format of item stacks.
    *
-   * @param slot         The slot of the button
-   * @param section      The configuration section containing the button information
-   * @param placeholders The placeholders for the item builder
-   * @param consumer     The consumer for the button
+   * @param slot       The slot of the button
+   * @param section    The configuration section containing the button information
+   * @param translator The translator for strings in the tiem
+   * @param consumer   The consumer for the button
    * @return The button from config
    */
   @NotNull
   public static MenuButton create(
       final int slot,
       @NotNull final ConfigurationSection section,
-      @Nullable final DynamicPlaceholders placeholders,
+      @Nullable final UnaryOperator<String> translator,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
-    return create(slot, ItemSerializer.deserialize(section, placeholders), consumer);
+    return create(slot, ItemSerializer.deserialize(section, translator), consumer);
   }
 
   /**

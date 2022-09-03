@@ -29,13 +29,13 @@ import dev.demeng.pluginbase.item.ItemBuilder;
 import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
-import dev.demeng.pluginbase.placeholders.DynamicPlaceholders;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
 import dev.demeng.pluginbase.text.Text;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -222,12 +222,12 @@ public abstract class Menu implements IMenu {
   /**
    * Applies all menu fillers that are declared in a configuration section.
    *
-   * @param section      The configuration containing the fillers to set
-   * @param placeholders The placeholders to use for custom fillers
+   * @param section    The configuration containing the fillers to set
+   * @param translator The translator for strings in the item
    */
   public void applyFillersFromConfig(
       @NotNull final ConfigurationSection section,
-      @Nullable final DynamicPlaceholders placeholders) {
+      @Nullable final UnaryOperator<String> translator) {
 
     for (final String fillerType : section.getKeys(false)) {
 
@@ -249,7 +249,7 @@ public abstract class Menu implements IMenu {
           break;
 
         case "custom":
-          applyCustomFillerFromConfig(section.getConfigurationSection("custom"), placeholders);
+          applyCustomFillerFromConfig(section.getConfigurationSection("custom"), translator);
           break;
 
         default:
@@ -294,7 +294,7 @@ public abstract class Menu implements IMenu {
 
   private void applyCustomFillerFromConfig(
       final ConfigurationSection customSection,
-      final DynamicPlaceholders placeholders) {
+      final UnaryOperator<String> translator) {
 
     if (customSection == null) {
       return;
@@ -313,7 +313,7 @@ public abstract class Menu implements IMenu {
           final ItemStack current = inventory.getItem(slot - 1);
 
           if (current == null || current.getType() == Material.AIR) {
-            addButton(slot - 1, ItemSerializer.deserialize(slotSection, placeholders), null);
+            addButton(slot - 1, ItemSerializer.deserialize(slotSection, translator), null);
           }
         });
 
