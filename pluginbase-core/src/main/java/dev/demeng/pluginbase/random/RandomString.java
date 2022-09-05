@@ -24,8 +24,7 @@
 
 package dev.demeng.pluginbase.random;
 
-import java.security.SecureRandom;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -39,55 +38,30 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RandomString {
 
-  private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      + "abcdefghijklmnopqrstuvwxyz"
-      + "0123456789"
-      + "-_";
-
-  private static final Random RANDOM = new Random();
-  private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+  public static final char[] ALPHABET_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+  public static final char[] ALPHABET_LOWER = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+  public static final char[] NUMBERS = "0123456789".toCharArray();
+  public static final char[] ALPHANUMERIC_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+  public static final char[] ALPHANUMERIC_LOWER = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+  public static final char[] ALPHANUMERIC_MIXED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
   /**
    * Generates a new "unique" string identifier with the specified length.
    *
-   * @param random The instance of {@link Random} to use
    * @param length The length of the ID
    * @return The generated ID
    */
   @NotNull
-  public static String generateId(@NotNull final Random random, final int length) {
+  public static String generate(
+      final int length,
+      final char[] chars) {
 
     final StringBuilder sb = new StringBuilder(length);
 
     for (int n = 0; n < length; n++) {
-      sb.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
+      sb.append(chars[(ThreadLocalRandom.current().nextInt(chars.length))]);
     }
 
     return sb.toString();
-  }
-
-  /**
-   * Generates a new "unique" string identifier with the specified length INSECURELY. If this ID
-   * should be kept secret, use {@link #generateIdSecure(int)}.
-   *
-   * @param length The length of the ID
-   * @return The generated ID
-   */
-  @NotNull
-  public static String generateId(final int length) {
-    return generateId(RANDOM, length);
-  }
-
-  /**
-   * Generates a new "unique" string identifier with the specified length securely using
-   * {@link SecureRandom}. Note that although this makes the ID more secure, it is slower than
-   * {@link #generateId(int)}.
-   *
-   * @param length The length of the ID
-   * @return The generated ID
-   */
-  @NotNull
-  public static String generateIdSecure(final int length) {
-    return generateId(SECURE_RANDOM, length);
   }
 }
