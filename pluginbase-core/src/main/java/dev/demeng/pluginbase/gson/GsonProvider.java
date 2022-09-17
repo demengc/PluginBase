@@ -80,19 +80,23 @@ public final class GsonProvider {
     return PARSER.parse(s).getAsJsonObject();
   }
 
-  public static void writeObject(@NotNull final Appendable writer, @NotNull final JsonObject object) {
+  public static void writeObject(@NotNull final Appendable writer,
+      @NotNull final JsonObject object) {
     standard().toJson(object, writer);
   }
 
-  public static void writeObjectPretty(@NotNull final Appendable writer, @NotNull final JsonObject object) {
+  public static void writeObjectPretty(@NotNull final Appendable writer,
+      @NotNull final JsonObject object) {
     prettyPrinting().toJson(object, writer);
   }
 
-  public static void writeElement(@NotNull final Appendable writer, @NotNull final JsonElement element) {
+  public static void writeElement(@NotNull final Appendable writer,
+      @NotNull final JsonElement element) {
     standard().toJson(element, writer);
   }
 
-  public static void writeElementPretty(@NotNull final Appendable writer, @NotNull final JsonElement element) {
+  public static void writeElementPretty(@NotNull final Appendable writer,
+      @NotNull final JsonElement element) {
     prettyPrinting().toJson(element, writer);
   }
 
