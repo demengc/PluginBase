@@ -24,8 +24,6 @@
  */
 package dev.demeng.pluginbase.locale;
 
-import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
-
 import dev.demeng.pluginbase.exceptions.BaseException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.io.File;
@@ -58,7 +56,6 @@ final class SimpleTranslator implements Translator {
   }
 
   public void addResourceBundleFromFolder(@NotNull final String resourceBundle) {
-    notNull(resourceBundle, "resource bundle");
 
     final File folder = BaseManager.getPlugin().getDataFolder().toPath().resolve(LOCALES_FOLDER)
         .toFile();
@@ -86,8 +83,6 @@ final class SimpleTranslator implements Translator {
 
   @Override
   public @NotNull String get(@NotNull final String key, @NotNull final Locale locale) {
-    notNull(key, "key");
-    notNull(locale, "locale");
     for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(locale, EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return registeredBundle.get(key);
@@ -116,7 +111,6 @@ final class SimpleTranslator implements Translator {
 
   @Override
   public void setLocale(@NotNull final Locale locale) {
-    notNull(locale, "locale");
     this.locale = locale;
   }
 
@@ -125,9 +119,6 @@ final class SimpleTranslator implements Translator {
       @NotNull final ClassLoader loader,
       @NotNull final String resourceBundle,
       @NotNull final Locale... locales) {
-    notNull(loader, "loader");
-    notNull(resourceBundle, "resource bundle");
-    notNull(locales, "locales");
     for (final Locale l : locales) {
       try {
         final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
@@ -141,8 +132,6 @@ final class SimpleTranslator implements Translator {
   @Override
   public void addResourceBundle(@NotNull final ClassLoader loader,
       @NotNull final String resourceBundle) {
-    notNull(loader, "loader");
-    notNull(resourceBundle, "resource bundle");
     for (final Locale l : Locales.getLocales()) {
       try {
         final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
@@ -160,7 +149,6 @@ final class SimpleTranslator implements Translator {
 
   @Override
   public void add(@NotNull final ResourceBundle resourceBundle) {
-    notNull(resourceBundle, "resource bundle");
     add(LocaleReader.wrap(resourceBundle));
   }
 }

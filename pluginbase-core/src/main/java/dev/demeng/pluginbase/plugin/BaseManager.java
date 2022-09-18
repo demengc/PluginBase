@@ -25,7 +25,6 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
-import dev.demeng.pluginbase.commands.CommandHandler;
 import dev.demeng.pluginbase.exceptions.BaseException;
 import dev.demeng.pluginbase.locale.Translator;
 import lombok.AccessLevel;
@@ -51,11 +50,6 @@ public final class BaseManager {
    * The translator used for handling localized messages.
    */
   @NotNull @Getter @Setter private static Translator translator;
-
-  /**
-   * The command handler for the plugin. Should be set when your plugin enables.
-   */
-  @NotNull @Getter @Setter private static CommandHandler commandHandler;
 
   /**
    * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.

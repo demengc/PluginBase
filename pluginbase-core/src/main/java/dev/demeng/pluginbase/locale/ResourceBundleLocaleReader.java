@@ -23,8 +23,6 @@
  */
 package dev.demeng.pluginbase.locale;
 
-import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
-
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +34,8 @@ final class ResourceBundleLocaleReader implements LocaleReader {
 
   private final ResourceBundle resourceBundle;
 
-  public ResourceBundleLocaleReader(final ResourceBundle resourceBundle) {
-    this.resourceBundle = notNull(resourceBundle, "resource bundle");
+  public ResourceBundleLocaleReader(@NotNull final ResourceBundle resourceBundle) {
+    this.resourceBundle = resourceBundle;
   }
 
   @Override

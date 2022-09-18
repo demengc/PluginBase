@@ -23,8 +23,6 @@
  */
 package dev.demeng.pluginbase.locale;
 
-import static dev.demeng.pluginbase.commands.util.Preconditions.notNull;
-
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
@@ -85,7 +83,6 @@ public final class Locales {
    * @return The locale, or null if not found.
    */
   public static Locale get(@NotNull final String language) {
-    notNull(language, "language");
     return LOCALES.get(language);
   }
 

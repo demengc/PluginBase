@@ -29,8 +29,6 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.Services;
-import dev.demeng.pluginbase.commands.CommandHandler;
-import dev.demeng.pluginbase.commands.bukkit.BukkitCommandHandler;
 import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.locale.Translator;
 import dev.demeng.pluginbase.menu.MenuManager;
@@ -85,7 +83,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
     BaseManager.setAdventure(BukkitAudiences.create(this));
 
     BaseManager.setTranslator(Translator.create());
-    BaseManager.setCommandHandler(BukkitCommandHandler.create(this));
 
     bindModule(new MenuManager());
 
@@ -104,10 +101,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
 
     this.terminableRegistry.closeAndReportException();
     BaseExecutors.shutdown();
-
-    if (getCommandHandler() != null) {
-      getCommandHandler().unregisterAllCommands();
-    }
 
     ServerProperties.clearCache();
     BaseManager.setPlugin(null);
@@ -242,16 +235,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    */
   public boolean isPluginPresent(@NotNull final String name) {
     return getServer().getPluginManager().getPlugin(name) != null;
-  }
-
-  /**
-   * Gets the command handler for the plugin.
-   *
-   * @return The command handler for the plugin
-   */
-  @NotNull
-  public CommandHandler getCommandHandler() {
-    return BaseManager.getCommandHandler();
   }
 
   /**
