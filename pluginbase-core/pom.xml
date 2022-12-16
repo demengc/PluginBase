@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.32.0-SNAPSHOT</version>
+    <version>1.32.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
@@ -111,14 +111,14 @@
     <dependency>
       <groupId>com.github.cryptomorin</groupId>
       <artifactId>XSeries</artifactId>
-      <version>9.0.0</version>
+      <version>9.2.0</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-api</artifactId>
-      <version>4.11.0</version>
+      <version>4.12.0</version>
       <scope>compile</scope>
       <optional>true</optional>
       <exclusions>
@@ -148,7 +148,7 @@
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-text-minimessage</artifactId>
-      <version>4.11.0</version>
+      <version>4.12.0</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
