@@ -53,9 +53,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Sql implements ISql {
 
+  public static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
+  public static final String MYSQL_LEGACY_DRIVER = "com.mysql.jdbc.Driver";
+
   public static final String DEFAULT_JDBC_URL_HEAD = "jdbc:mysql://{host}:{port}/{database}";
   public static final String DEFAULT_JDBC_URL_TAIL = "?autoReconnect=true&useSSL=false";
-
   public static final String DEFAULT_JDBC_URL = DEFAULT_JDBC_URL_HEAD + DEFAULT_JDBC_URL_TAIL;
 
   private static final AtomicInteger POOL_COUNTER = new AtomicInteger(0);
@@ -78,7 +80,7 @@ public class Sql implements ISql {
    * @param credentials The database credentials
    */
   public Sql(
-      @NotNull final String driverClass,
+      @Nullable final String driverClass,
       @Nullable final String jdbcUrl,
       @NotNull final SqlCredentials credentials) {
 
@@ -86,7 +88,7 @@ public class Sql implements ISql {
 
     hikari.setPoolName(Common.getName() + "-" + POOL_COUNTER.getAndIncrement());
 
-    hikari.setDriverClassName(driverClass);
+    hikari.setDriverClassName(Common.getOrDefault(driverClass, MYSQL_DRIVER));
     hikari.setJdbcUrl(
         Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL).replace("{host}", credentials.getHost())
             .replace("{port}", "" + credentials.getPort())
