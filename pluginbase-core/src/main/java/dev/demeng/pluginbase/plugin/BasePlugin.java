@@ -80,9 +80,8 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
         .run(this.terminableRegistry::cleanup)
         .bindWith(this.terminableRegistry);
 
-    BaseManager.setAdventure(BukkitAudiences.create(this));
-
     BaseManager.setTranslator(Translator.create());
+    BaseManager.setAdventure(BukkitAudiences.create(this));
 
     bindModule(new MenuManager());
 
@@ -235,6 +234,15 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    */
   public boolean isPluginPresent(@NotNull final String name) {
     return getServer().getPluginManager().getPlugin(name) != null;
+  }
+
+  /**
+   * Gets the translator.
+   *
+   * @return The translator
+   */
+  public Translator getTranslator() {
+    return BaseManager.getTranslator();
   }
 
   /**
