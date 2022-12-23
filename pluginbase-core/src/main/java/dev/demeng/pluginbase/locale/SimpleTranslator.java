@@ -41,7 +41,6 @@ import org.jetbrains.annotations.NotNull;
 final class SimpleTranslator implements Translator {
 
   private static final String DEFAULT_RESOURCE_BUNDLE = "pluginbase";
-  private static final String LOCALES_FOLDER = "locales";
   private static final LinkedList<LocaleReader> EMPTY_LIST = new LinkedList<>();
 
   private final Map<Locale, LinkedList<LocaleReader>> registeredBundles = new HashMap<>();
@@ -55,9 +54,10 @@ final class SimpleTranslator implements Translator {
     addResourceBundle(DEFAULT_RESOURCE_BUNDLE);
   }
 
+  @Override
   public void addResourceBundleFromFolder(@NotNull final String resourceBundle) {
 
-    final File folder = BaseManager.getPlugin().getDataFolder().toPath().resolve(LOCALES_FOLDER)
+    final File folder = BaseManager.getPlugin().getDataFolder().toPath().resolve("locales")
         .toFile();
 
     if (!folder.exists()) {

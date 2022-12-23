@@ -76,6 +76,23 @@ public interface Translator {
   void add(@NotNull ResourceBundle resourceBundle);
 
   /**
+   * Adds the given resource bundle from "/locales" in the plugin data folder. This will only
+   * register for the given {@link Locale}s.
+   * <p>
+   * For example, if you have the following files:
+   * <ul>
+   *     <li>foo_en_US.properties</li>
+   *     <li>foo_fr.properties</li>
+   *     <li>foo_de.properties</li>
+   * </ul>
+   * The resource bundle will be "foo", and locales will be
+   * each {@link Locales#ENGLISH}, {@link Locales#FRENCH} and {@link Locales#GERMAN}.
+   *
+   * @param resourceBundle Resource bundle to register
+   */
+  void addResourceBundleFromFolder(@NotNull final String resourceBundle);
+
+  /**
    * Adds the given resource bundle. This will only register for the given {@link Locale}s.
    * <p>
    * For example, if you have the following files:
