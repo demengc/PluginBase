@@ -53,8 +53,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Sql implements ISql {
 
-  private static final String DEFAULT_JDBC_URL =
-      "jdbc:mysql://{host}:{port}/{database}" + "?autoReconnect=true&useSSL=false";
+  public static final String DEFAULT_JDBC_URL_HEAD = "jdbc:mysql://{host}:{port}/{database}";
+  public static final String DEFAULT_JDBC_URL_TAIL = "?autoReconnect=true&useSSL=false";
+
+  public static final String DEFAULT_JDBC_URL = DEFAULT_JDBC_URL_HEAD + DEFAULT_JDBC_URL_TAIL;
 
   private static final AtomicInteger POOL_COUNTER = new AtomicInteger(0);
 
