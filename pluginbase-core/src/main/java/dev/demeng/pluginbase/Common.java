@@ -131,7 +131,7 @@ public final class Common {
    * @return The parsed integer, or null if the string is not a valid integer
    */
   @Nullable
-  public Integer checkInt(@NotNull final String str) {
+  public static Integer checkInt(@NotNull final String str) {
     return Ints.tryParse(str);
   }
 
@@ -142,7 +142,7 @@ public final class Common {
    * @return The parsed float, or null if the string is not a valid float
    */
   @Nullable
-  public Float checkFloat(@NotNull final String str) {
+  public static Float checkFloat(@NotNull final String str) {
     return Floats.tryParse(str);
   }
 
@@ -154,7 +154,7 @@ public final class Common {
    * @return The parsed long, or null if the string is not a valid long
    */
   @Nullable
-  public Long checkLong(@NotNull final String str) {
+  public static Long checkLong(@NotNull final String str) {
     return Longs.tryParse(str);
   }
 
@@ -165,7 +165,7 @@ public final class Common {
    * @return The parsed double, or null if the string is not a valid double
    */
   @Nullable
-  public Double checkDouble(@NotNull final String str) {
+  public static Double checkDouble(@NotNull final String str) {
     return Doubles.tryParse(str);
   }
 
