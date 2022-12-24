@@ -25,7 +25,10 @@
 package dev.demeng.pluginbase;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import dev.demeng.pluginbase.text.Text;
@@ -38,7 +41,6 @@ import java.util.function.IntConsumer;
 import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -119,6 +121,55 @@ public final class Common {
   }
 
   // ---------------------------------------------------------------------------------
+  // NUMBER PARSING
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Attempts to parse a string into an integer.
+   *
+   * @param str The string to parse
+   * @return The parsed integer, or null if the string is not a valid integer
+   */
+  @Nullable
+  public Integer checkInt(@NotNull final String str) {
+    return Ints.tryParse(str);
+  }
+
+  /**
+   * Attempts to parse a string into a float.
+   *
+   * @param str The string to parse
+   * @return The parsed float, or null if the string is not a valid float
+   */
+  @Nullable
+  public Float checkFloat(@NotNull final String str) {
+    return Floats.tryParse(str);
+  }
+
+
+  /**
+   * Attempts to parse a string into a long.
+   *
+   * @param str The string to parse
+   * @return The parsed long, or null if the string is not a valid long
+   */
+  @Nullable
+  public Long checkLong(@NotNull final String str) {
+    return Longs.tryParse(str);
+  }
+
+  /**
+   * Attempts to parse a string into a double.
+   *
+   * @param str The string to parse
+   * @return The parsed double, or null if the string is not a valid double
+   */
+  @Nullable
+  public Double checkDouble(@NotNull final String str) {
+    return Doubles.tryParse(str);
+  }
+
+  // ---------------------------------------------------------------------------------
   // MISC
   // ---------------------------------------------------------------------------------
 
@@ -189,7 +240,7 @@ public final class Common {
   @Nullable
   public static Class<?> checkClass(@NotNull final String className) {
     try {
-      return Class.forName(className, false, Validate.class.getClassLoader());
+      return Class.forName(className, false, Common.class.getClassLoader());
     } catch (final ClassNotFoundException ex) {
       return null;
     }
