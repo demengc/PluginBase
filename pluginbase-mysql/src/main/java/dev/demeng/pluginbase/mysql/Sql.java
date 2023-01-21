@@ -89,8 +89,8 @@ public class Sql implements ISql {
     hikari.setPoolName(Common.getName() + "-" + POOL_COUNTER.getAndIncrement());
 
     hikari.setDriverClassName(Common.getOrDefault(driverClass, MYSQL_DRIVER));
-    hikari.setJdbcUrl(
-        Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL).replace("{host}", credentials.getHost())
+    hikari.setJdbcUrl(Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL)
+            .replace("{host}", credentials.getHost())
             .replace("{port}", "" + credentials.getPort())
             .replace("{database}", credentials.getDatabase()));
 
