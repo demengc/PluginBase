@@ -26,15 +26,14 @@
 
 package dev.demeng.pluginbase;
 
+import com.google.common.collect.ImmutableMap;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.Date;
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -62,30 +61,23 @@ public final class Time {
   public static final ThreadLocal<DateFormat> DATE_FORMAT = ThreadLocal.withInitial(
       () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateFormat()));
 
-  private static final Map<ChronoUnit, String> UNITS_PATTERNS;
-  private static final ChronoUnit[] UNITS;
-  private static final String PATTERN_STRING;
-  private static final Pattern PATTERN;
+  private static final Map<ChronoUnit, String> UNITS_PATTERNS = ImmutableMap.<ChronoUnit, String>builder()
+      .put(ChronoUnit.YEARS, "y(?:ear)?s?")
+      .put(ChronoUnit.MONTHS, "mo(?:nth)?s?")
+      .put(ChronoUnit.WEEKS, "w(?:eek)?s?")
+      .put(ChronoUnit.DAYS, "d(?:ay)?s?")
+      .put(ChronoUnit.HOURS, "h(?:our|r)?s?")
+      .put(ChronoUnit.MINUTES, "m(?:inute|in)?s?")
+      .put(ChronoUnit.SECONDS, "(?:s(?:econd|ec)?s?)?")
+      .build();
 
-  static {
-    final Map<ChronoUnit, String> patterns = new EnumMap<>(ChronoUnit.class);
-    patterns.put(ChronoUnit.YEARS, "y(?:ear)?s?");
-    patterns.put(ChronoUnit.MONTHS, "mo(?:nth)?s?");
-    patterns.put(ChronoUnit.WEEKS, "w(?:eek)?s?");
-    patterns.put(ChronoUnit.DAYS, "d(?:ay)?s?");
-    patterns.put(ChronoUnit.HOURS, "h(?:our|r)?s?");
-    patterns.put(ChronoUnit.MINUTES, "m(?:inute|in)?s?");
-    patterns.put(ChronoUnit.SECONDS, "(?:s(?:econd|ec)?s?)?");
-    UNITS_PATTERNS = Collections.unmodifiableMap(patterns);
+  private static final ChronoUnit[] UNITS = UNITS_PATTERNS.keySet().toArray(new ChronoUnit[0]);
 
-    UNITS = UNITS_PATTERNS.keySet().toArray(new ChronoUnit[0]);
+  private static final String PATTERN_STRING = UNITS_PATTERNS.values().stream()
+      .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
+      .collect(Collectors.joining());
 
-    PATTERN_STRING = UNITS_PATTERNS.values().stream()
-        .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
-        .collect(Collectors.joining());
-
-    PATTERN = Pattern.compile(PATTERN_STRING, Pattern.CASE_INSENSITIVE);
-  }
+  private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 
   /**
    * Formats the date and time using {@link #DATE_TIME_FORMAT}.
