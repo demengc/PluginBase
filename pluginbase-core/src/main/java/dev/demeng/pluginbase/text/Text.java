@@ -63,10 +63,10 @@ public final class Text {
   private static final String IGNORE_MESSAGE_VALUE = "ignore";
 
   /**
-   * The prefix to look for in messages to determine if the advanced parser should be used. Any
-   * messages that do not contain this prefix will be parsed normally.
+   * The prefix to look for in messages to determine if MiniMessage should be used. Any messages
+   * that do not contain this prefix will be parsed normally.
    */
-  private static final String ADVANCED_PREFIX = "advanced:";
+  private static final String MINI_PREFIX = "mini:";
 
   /**
    * Pattern to match our HEX color format for MC 1.16+.
@@ -310,14 +310,14 @@ public final class Text {
   }
 
   /**
-   * Parses the string using the advanced Adventure and MiniMessage library. Format:
-   * https://docs.adventure.kyori.net/minimessage.html#format
+   * Parses the string using the MiniMessage library. Format:
+   * https://docs.advntr.dev/minimessage/format.html
    *
    * @param str The raw string
    * @return The result component for the string, or empty if the provided string is null
    */
   @NotNull
-  public static Component parseAdvanced(@Nullable final String str) {
+  public static Component parseMini(@Nullable final String str) {
 
     if (str == null) {
       return Component.empty();
@@ -327,16 +327,16 @@ public final class Text {
   }
 
   /**
-   * Parses the string using the advanced Adventure and MiniMessage library, and then uses the
-   * legacy Bukkit Component Serializer to return a String rather than a Compnent. Format:
-   * https://docs.adventure.kyori.net/minimessage.html#format
+   * Parses the string using the MiniMessage library, and then uses the legacy Bukkit Component
+   * Serializer to return a String rather than a Component. Format:
+   * https://docs.advntr.dev/minimessage/format.html
    *
    * @param str The raw string(s)
    * @return The serialized component for the string, or empty if the provided string is null
    */
   @NotNull
-  public static String legacyParseAdvanced(@Nullable final String str) {
-    return legacySerialize(parseAdvanced(str));
+  public static String legacyParseMini(@Nullable final String str) {
+    return legacySerialize(parseMini(str));
   }
 
   /**
@@ -345,7 +345,7 @@ public final class Text {
    *
    * @param component The component to serialize
    * @return The serialized component
-   * @see #legacyParseAdvanced(String)
+   * @see #legacyParseMini(String)
    */
   @NotNull
   public static String legacySerialize(@NotNull final Component component) {
@@ -504,7 +504,7 @@ public final class Text {
       return;
     }
 
-    if (!attemptTellAdvanced(sender, str)) {
+    if (!attemptTellMini(sender, str)) {
       sender.sendMessage(format(str));
     }
   }
@@ -534,7 +534,7 @@ public final class Text {
       return;
     }
 
-    if (!attemptTellAdvanced(sender, message)) {
+    if (!attemptTellMini(sender, message)) {
       sender.sendMessage(format(message));
     }
   }
@@ -552,7 +552,7 @@ public final class Text {
       return;
     }
 
-    if (!attemptTellAdvanced(sender, str)) {
+    if (!attemptTellMini(sender, str)) {
       sender.sendMessage(colorize(str));
     }
   }
@@ -582,7 +582,7 @@ public final class Text {
       return;
     }
 
-    if (!attemptTellAdvanced(sender, message)) {
+    if (!attemptTellMini(sender, message)) {
       sender.sendMessage(colorize(message));
     }
   }
@@ -592,9 +592,9 @@ public final class Text {
    *
    * @param player    The player who should receive the component
    * @param component The component to send
-   * @see #parseAdvanced(String)
+   * @see #parseMini(String)
    */
-  public static void tellAdvanced(
+  public static void tellComponent(
       @NotNull final Player player,
       @NotNull final Component component) {
     BaseManager.getAdventure().player(player).sendMessage(component);
@@ -753,17 +753,17 @@ public final class Text {
   // ---------------------------------------------------------------------------------
 
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-  private static boolean attemptTellAdvanced(final CommandSender sender, final String str) {
+  private static boolean attemptTellMini(final CommandSender sender, final String str) {
 
     if (!(sender instanceof Player)) {
       return false;
     }
 
-    if (!str.startsWith(ADVANCED_PREFIX)) {
+    if (!str.startsWith(MINI_PREFIX)) {
       return false;
     }
 
-    tellAdvanced((Player) sender, parseAdvanced(str));
+    tellComponent((Player) sender, parseMini(str));
     return true;
   }
 }
