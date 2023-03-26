@@ -108,8 +108,23 @@ public abstract class Menu implements IMenu {
    * @param stack   The stack of the button
    * @param actions The actions of the button
    */
-  public void addButton(final int slot, @NotNull final ItemStack stack,
+  public void addButton(
+      final int slot,
+      @NotNull final ItemStack stack,
       @Nullable final Consumer<InventoryClickEvent> actions) {
+    addButton(MenuButton.create(slot, stack, actions));
+  }
+
+  /**
+   * Creates and adds a new button to the menu. The first empty slot will be used.
+   *
+   * @param stack   The stack of the button
+   * @param actions The actions of the button
+   */
+  public void addButton(
+      @NotNull final ItemStack stack,
+      @Nullable final Consumer<InventoryClickEvent> actions) {
+    final int slot = inventory.firstEmpty();
     addButton(MenuButton.create(slot, stack, actions));
   }
 
