@@ -763,7 +763,7 @@ public final class Text {
       return false;
     }
 
-    tellComponent((Player) sender, parseMini(str));
+    tellComponent((Player) sender, parseMini(str.replaceFirst(MINI_PREFIX, "")));
     return true;
   }
 }
