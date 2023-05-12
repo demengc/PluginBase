@@ -10,7 +10,7 @@
     <version>1.32.2-SNAPSHOT</version>
   </parent>
 
-  <artifactId>pluginbase-mysql</artifactId>
+  <artifactId>pluginbase-sql</artifactId>
 
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
@@ -45,11 +45,11 @@
               <relocations>
                 <relocation>
                   <pattern>com.zaxxer.hikari</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.mysql.lib.hikari</shadedPattern>
+                  <shadedPattern>dev.demeng.pluginbase.sql.lib.hikari</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>be.bendem.sqlstreams</pattern>
-                  <shadedPattern>dev.demeng.pluginbase.mysql.lib.sqlstreams</shadedPattern>
+                  <shadedPattern>dev.demeng.pluginbase.sql.lib.sqlstreams</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>

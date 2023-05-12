@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.mysql;
+package dev.demeng.pluginbase.sql;
 
 import be.bendem.sqlstreams.util.SqlConsumer;
 import java.sql.PreparedStatement;
@@ -55,9 +55,10 @@ public class BatchBuilder {
   @NotNull @Getter private final
   LinkedList<SqlConsumer<PreparedStatement>> handlers = new LinkedList<>();
 
+
   public BatchBuilder(
       @NotNull final Sql owner,
-      @NotNull @Language("MySQL") final String statement) {
+      @NotNull @Language("SQL")  final String statement) {
     this.owner = owner;
     this.statement = statement;
   }

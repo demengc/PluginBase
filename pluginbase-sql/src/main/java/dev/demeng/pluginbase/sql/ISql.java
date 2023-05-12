@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.mysql;
+package dev.demeng.pluginbase.sql;
 
 import be.bendem.sqlstreams.SqlStream;
 import be.bendem.sqlstreams.util.SqlConsumer;
@@ -76,7 +76,7 @@ public interface ISql extends Terminable {
    * @see #execute(String) to perform this action synchronously
    */
   @NotNull
-  default Promise<Void> executeAsync(@Language("MySQL") @NotNull final String statement) {
+  default Promise<Void> executeAsync(@Language("SQL") @NotNull final String statement) {
     return Promise.supplyingAsync(
         Delegates.runnableToSupplier(() -> this.execute(statement)));
   }
@@ -89,7 +89,7 @@ public interface ISql extends Terminable {
    * @param statement The statement to be executed
    * @see #executeAsync(String) to perform the same action asynchronously
    */
-  default void execute(@Language("MySQL") @NotNull final String statement) {
+  default void execute(@Language("SQL") @NotNull final String statement) {
     this.execute(statement, stmt -> {
     });
   }
@@ -106,7 +106,7 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default Promise<Void> executeAsync(
-      @Language("MySQL") @NotNull final String statement,
+      @Language("SQL") @NotNull final String statement,
       @NotNull final SqlConsumer<PreparedStatement> preparer) {
     return Promise.supplyingAsync(
         Delegates.runnableToSupplier(() -> this.execute(statement, preparer)));
@@ -122,7 +122,7 @@ public interface ISql extends Terminable {
    * @see #executeAsync(String, SqlConsumer) to perform this action asynchronously
    */
   void execute(
-      @Language("MySQL") @NotNull String statement,
+      @Language("SQL") @NotNull String statement,
       @NotNull SqlConsumer<PreparedStatement> preparer);
 
   /**
@@ -142,7 +142,7 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default <R> Promise<Optional<R>> queryAsync(
-      @Language("MySQL") @NotNull final String query,
+      @Language("SQL") @NotNull final String query,
       @NotNull final SqlFunction<ResultSet, R> handler) {
     return Promise.supplyingAsync(() -> this.query(query, handler));
   }
@@ -164,7 +164,7 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default <R> Optional<R> query(
-      @Language("MySQL") @NotNull final String query,
+      @Language("SQL") @NotNull final String query,
       @NotNull final SqlFunction<ResultSet, R> handler) {
     return this.query(query, stmt -> {
     }, handler);
@@ -188,7 +188,7 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default <R> Promise<Optional<R>> queryAsync(
-      @Language("MySQL") @NotNull final String query,
+      @Language("SQL") @NotNull final String query,
       @NotNull final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) {
     return Promise.supplyingAsync(() -> this.query(query, preparer, handler));
@@ -210,7 +210,7 @@ public interface ISql extends Terminable {
    * @return The results of the database query
    * @see #queryAsync(String, SqlFunction) to perform this query asynchronously
    */
-  @NotNull <R> Optional<R> query(@Language("MySQL") @NotNull String query,
+  @NotNull <R> Optional<R> query(@Language("SQL") @NotNull String query,
       @NotNull SqlConsumer<PreparedStatement> preparer, @NotNull SqlFunction<ResultSet, R> handler);
 
   /**
@@ -255,5 +255,5 @@ public interface ISql extends Terminable {
    * @return a BatchBuilder
    */
   @NotNull
-  BatchBuilder batch(@Language("MySQL") @NotNull String statement);
+  BatchBuilder batch(@Language("SQL") @NotNull String statement);
 }

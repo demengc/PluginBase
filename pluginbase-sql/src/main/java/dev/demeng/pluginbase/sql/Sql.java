@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.mysql;
+package dev.demeng.pluginbase.sql;
 
 import be.bendem.sqlstreams.SqlStream;
 import be.bendem.sqlstreams.util.SqlConsumer;
@@ -90,9 +90,9 @@ public class Sql implements ISql {
 
     hikari.setDriverClassName(Common.getOrDefault(driverClass, MYSQL_DRIVER));
     hikari.setJdbcUrl(Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL)
-            .replace("{host}", credentials.getHost())
-            .replace("{port}", "" + credentials.getPort())
-            .replace("{database}", credentials.getDatabase()));
+        .replace("{host}", credentials.getHost())
+        .replace("{port}", "" + credentials.getPort())
+        .replace("{database}", credentials.getDatabase()));
 
     hikari.setUsername(credentials.getUser());
     hikari.setPassword(credentials.getPassword());
@@ -147,7 +147,7 @@ public class Sql implements ISql {
   }
 
   @Override
-  public void execute(@Language("MySQL") @NotNull final String statement,
+  public void execute(@Language("SQL") @NotNull final String statement,
       @NotNull final SqlConsumer<PreparedStatement> preparer) {
     try (final Connection c = this.getConnection();
         final PreparedStatement s = c.prepareStatement(statement)) {
@@ -159,7 +159,7 @@ public class Sql implements ISql {
   }
 
   @Override
-  public <R> @NotNull Optional<R> query(@Language("MySQL") @NotNull final String query,
+  public <R> @NotNull Optional<R> query(@Language("SQL") @NotNull final String query,
       @NotNull final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) {
     try (final Connection c = this.getConnection();
@@ -199,7 +199,7 @@ public class Sql implements ISql {
   }
 
   @Override
-  public @NotNull BatchBuilder batch(@Language("MySQL") @NotNull final String statement) {
+  public @NotNull BatchBuilder batch(@Language("SQL") @NotNull final String statement) {
     return new BatchBuilder(this, statement);
   }
 

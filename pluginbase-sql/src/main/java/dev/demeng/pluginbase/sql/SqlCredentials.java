@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package dev.demeng.pluginbase.mysql;
+package dev.demeng.pluginbase.sql;
 
 import lombok.Data;
 import org.bukkit.configuration.ConfigurationSection;

@@ -12,7 +12,7 @@
 
   <modules>
     <module>pluginbase-core</module>
-    <module>pluginbase-mysql</module>
+    <module>pluginbase-sql</module>
     <module>pluginbase-mongo</module>
     <module>pluginbase-games</module>
     <module>pluginbase-redis</module>
