@@ -6,7 +6,7 @@
 
   <groupId>dev.demeng</groupId>
   <artifactId>pluginbase</artifactId>
-  <version>1.32.3-SNAPSHOT</version>
+  <version>1.32.4-SNAPSHOT</version>
 
   <name>PluginBase</name>
 
@@ -131,7 +131,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.19.4-R0.1-SNAPSHOT</version>
+      <version>1.20.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
