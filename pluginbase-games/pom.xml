@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.32.4-SNAPSHOT</version>
+    <version>1.32.5-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-games</artifactId>
@@ -52,7 +52,7 @@
     <dependency>
       <groupId>dev.demeng</groupId>
       <artifactId>pluginbase-core</artifactId>
-      <version>1.32.4-SNAPSHOT</version>
+      <version>1.32.5-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
