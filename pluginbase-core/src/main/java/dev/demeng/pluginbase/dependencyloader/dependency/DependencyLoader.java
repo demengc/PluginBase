@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Demeng Chen
+ * Copyright (c) 2024 Demeng Chen
  * Copyright (c) 2021-2022 Justin Heflin
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2022 Demeng Chen
+ * Copyright (c) 2024 Demeng Chen
  * Copyright (c) lucko (Luck) <luck@lucko.me>
  * Copyright (c) lucko/helper contributors
  *
