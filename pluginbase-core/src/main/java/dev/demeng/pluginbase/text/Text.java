@@ -175,6 +175,20 @@ public final class Text {
     return MessageFormat.format(BaseManager.getTranslator().get(key, locale), args);
   }
 
+  /**
+   * Gets the localized string with the given key using the default locale.
+   *
+   * @param key  The key of the message
+   * @param args Arguments for positioned placeholders ({n})
+   * @return The localized message, or key if unable to resolve
+   */
+  @NotNull
+  public static String localizedDef(
+      @Nullable final String key,
+      @NotNull final Object... args) {
+    return localized(key, (Locale) null, args);
+  }
+
   @NotNull
   public static String tl(
       @Nullable final String key,
