@@ -113,10 +113,15 @@ public class ScheduledStateSeries extends GameState {
    * @param nextStates The next states to add
    */
   public void addNext(@NotNull final GameState... nextStates) {
-    int i = 1;
-    for (final GameState state : nextStates) {
-      states.add(currentIndex + i, state);
-      i++;
+    if (states.isEmpty() || currentIndex == states.size() - 1) {
+      states.addAll(Arrays.asList(nextStates));
+    } else {
+      int addIndex = currentIndex + 1;
+      for (GameState state : nextStates) {
+        addIndex = Math.min(addIndex, states.size());
+        states.add(addIndex, state);
+        addIndex++;
+      }
     }
   }
 
