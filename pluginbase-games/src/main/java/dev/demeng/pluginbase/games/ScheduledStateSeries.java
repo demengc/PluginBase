@@ -27,8 +27,8 @@ package dev.demeng.pluginbase.games;
 
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.scheduler.Task;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -43,7 +43,7 @@ public class ScheduledStateSeries extends GameState {
   /**
    * The list of states in this state series.
    */
-  @NotNull @Getter protected final List<GameState> states;
+  @NotNull @Getter protected final List<GameState> states = new ArrayList<>();
   private final long interval;
 
   protected int currentIndex = 0;
@@ -56,7 +56,7 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(@NotNull final List<GameState> states) {
     this.interval = 1;
-    this.states = states;
+    this.states.addAll(states);
   }
 
   /**
@@ -66,7 +66,7 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(@NotNull final GameState... states) {
     this.interval = 1;
-    this.states = Arrays.stream(states).collect(Collectors.toList());
+    this.states.addAll(Arrays.stream(states).collect(Collectors.toList()));
   }
 
   /**
@@ -74,7 +74,6 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries() {
     this.interval = 1;
-    this.states = Collections.emptyList();
   }
 
   /**
@@ -85,7 +84,7 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(final long interval, @NotNull final List<GameState> states) {
     this.interval = interval;
-    this.states = states;
+    this.states.addAll(states);
   }
 
   /**
@@ -96,7 +95,7 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(final long interval, @NotNull final GameState... states) {
     this.interval = interval;
-    this.states = Arrays.stream(states).collect(Collectors.toList());
+    this.states.addAll(Arrays.stream(states).collect(Collectors.toList()));
   }
 
   /**
@@ -106,7 +105,6 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(final long interval) {
     this.interval = interval;
-    this.states = Collections.emptyList();
   }
 
   /**
