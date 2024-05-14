@@ -74,6 +74,11 @@ public final class Text {
   public static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
   /**
+   * Pattern to match our localized placeholders.
+   */
+  public static final Pattern LOCALIZED_PLACEHOLDER_PATTERN = Pattern.compile("#\\{([^}]+)}");
+
+  /**
    * Separation line for players (in-game chat).
    */
   public static final String CHAT_LINE = "&m-----------------------------------------------------";
@@ -203,6 +208,66 @@ public final class Text {
       @Nullable final Locale locale,
       @NotNull final Object... args) {
     return localized(key, locale, args);
+  }
+
+  /**
+   * Localizes the placeholders in the string using the sender's locale. Note that the same
+   * arguments are used for EVERY placeholder.
+   *
+   * @param str    The string to localize
+   * @param locale The locale to use
+   * @param args   The arguments to replace in the localized string
+   * @return The localized string
+   */
+  @NotNull
+  public static String localizePlaceholders(
+      @Nullable final String str,
+      @Nullable final Locale locale,
+      @NotNull final Object... args) {
+
+    if (str == null) {
+      return "";
+    }
+
+    if (locale == null) {
+      return localizePlaceholders(str, BaseManager.getTranslator().getLocale(), args);
+    }
+
+    final Matcher matcher = LOCALIZED_PLACEHOLDER_PATTERN.matcher(str);
+    final StringBuffer result = new StringBuffer();
+
+    while (matcher.find()) {
+      final String key = matcher.group(1);
+      final String localizedKey = Text.localized(key, locale, args);
+      matcher.appendReplacement(result, localizedKey);
+    }
+
+    matcher.appendTail(result);
+
+    return result.toString();
+  }
+
+  @NotNull
+  public static String localizePlaceholders(
+      @Nullable final String str,
+      @Nullable final CommandSender sender,
+      @NotNull final Object... args) {
+    return localizePlaceholders(str, getLocale(sender), args);
+  }
+
+  /**
+   * Localizes the placeholders in the string using the default locale. Note that the same arguments
+   * are used for EVERY placeholder.
+   *
+   * @param str  The string to localize
+   * @param args The arguments to replace in the localized string
+   * @return The localized string
+   */
+  @NotNull
+  public static String localizePlaceholdersDef(
+      @Nullable final String str,
+      @NotNull final Object... args) {
+    return localizePlaceholders(str, BaseManager.getTranslator().getLocale(), args);
   }
 
   // ---------------------------------------------------------------------------------
