@@ -26,10 +26,13 @@ package dev.demeng.pluginbase.serialize;
 
 import com.cryptomorin.xseries.XItemStack;
 import dev.demeng.pluginbase.Common;
+import dev.demeng.pluginbase.plugin.BaseManager;
 import dev.demeng.pluginbase.text.Text;
+import java.util.Locale;
 import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -58,16 +61,16 @@ public class ItemSerializer {
   /**
    * Deserializes the configuration section into an item stack.
    *
-   * @param section    The configuration section to deserialize
-   * @param translator The translator for strings in the item
+   * @param section     The configuration section to deserialize
+   * @param transformer The transformer for strings in the item
    * @return The deserialized item stack
    */
   @NotNull
   public static ItemStack deserialize(
       @NotNull final ConfigurationSection section,
-      @Nullable final UnaryOperator<String> translator) {
+      @Nullable final UnaryOperator<String> transformer) {
     return XItemStack.deserialize(section,
-        str -> Text.colorize(Common.applyOperator(str, translator)));
+        str -> Text.colorize(Common.applyOperator(str, transformer)));
   }
 
   /**
@@ -79,5 +82,62 @@ public class ItemSerializer {
   @NotNull
   public static ItemStack deserialize(@NotNull final ConfigurationSection section) {
     return XItemStack.deserialize(section, Text::colorize);
+  }
+
+  /**
+   * Deserializes the configuration section into an item stack with localization.
+   *
+   * @param section     The configuration section to deserialize
+   * @param locale      The locale to use for localization
+   * @param transformer The transformer for strings in the item
+   * @return The deserialized item stack
+   */
+  @NotNull
+  public static ItemStack deserializeLocalized(
+      @NotNull final ConfigurationSection section,
+      @Nullable final Locale locale,
+      @Nullable final UnaryOperator<String> transformer) {
+
+    if (locale == null) {
+      return deserializeLocalized(section, BaseManager.getTranslator().getLocale(), transformer);
+    }
+
+    return XItemStack.deserialize(section,
+        str -> Text.colorize(
+            Common.applyOperator(Text.localizePlaceholders(str, locale), transformer)));
+  }
+
+  @NotNull
+  public static ItemStack deserializeLocalized(
+      @NotNull final ConfigurationSection section,
+      @Nullable final Locale locale) {
+    return deserializeLocalized(section, locale, Text::colorize);
+  }
+
+  @NotNull
+  public static ItemStack deserializeLocalized(
+      @NotNull final ConfigurationSection section,
+      @NotNull final CommandSender sender,
+      @Nullable final UnaryOperator<String> transformer) {
+    return deserializeLocalized(section, Text.getLocale(sender), transformer);
+  }
+
+  @NotNull
+  public static ItemStack deserializeLocalized(
+      @NotNull final ConfigurationSection section,
+      @NotNull final CommandSender sender) {
+    return deserializeLocalized(section, Text.getLocale(sender), Text::colorize);
+  }
+
+  @NotNull
+  public static ItemStack deserializeLocalizedDef(
+      @NotNull final ConfigurationSection section,
+      @Nullable final UnaryOperator<String> transformer) {
+    return deserializeLocalized(section, (Locale) null, transformer);
+  }
+
+  @NotNull
+  public static ItemStack deserializeLocalizedDef(@NotNull final ConfigurationSection section) {
+    return deserializeLocalized(section, (Locale) null, Text::colorize);
   }
 }
