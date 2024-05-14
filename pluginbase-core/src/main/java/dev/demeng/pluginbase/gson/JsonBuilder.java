@@ -55,7 +55,7 @@ public final class JsonBuilder {
    * @param copy   if the object should be deep copied, or just referenced.
    * @return a new builder
    */
-  public static JsonObjectBuilder object(JsonObject object, boolean copy) {
+  public static JsonObjectBuilder object(final JsonObject object, final boolean copy) {
     Objects.requireNonNull(object, "object");
 
     if (copy) {
@@ -73,7 +73,7 @@ public final class JsonBuilder {
    * @param object the object to base the new builder upon
    * @return a new builder
    */
-  public static JsonObjectBuilder object(JsonObject object) {
+  public static JsonObjectBuilder object(final JsonObject object) {
     Objects.requireNonNull(object, "object");
     return object(object, false);
   }
@@ -96,7 +96,7 @@ public final class JsonBuilder {
    * @param copy  if the array should be deep copied, or just referenced.
    * @return a new builder
    */
-  public static JsonArrayBuilder array(JsonArray array, boolean copy) {
+  public static JsonArrayBuilder array(final JsonArray array, final boolean copy) {
     Objects.requireNonNull(array, "array");
 
     if (copy) {
@@ -114,7 +114,7 @@ public final class JsonBuilder {
    * @param array the array to base the new builder upon
    * @return a new builder
    */
-  public static JsonArrayBuilder array(JsonArray array) {
+  public static JsonArrayBuilder array(final JsonArray array) {
     Objects.requireNonNull(array, "array");
     return array(array, false);
   }
@@ -136,7 +136,7 @@ public final class JsonBuilder {
    * @param value the value
    * @return a json primitive for the value
    */
-  public static JsonElement primitive(@Nullable String value) {
+  public static JsonElement primitive(@Nullable final String value) {
     return value == null ? nullValue() : new JsonPrimitive(value);
   }
 
@@ -148,7 +148,7 @@ public final class JsonBuilder {
    * @param value the value
    * @return a json primitive for the value
    */
-  public static JsonElement primitive(@Nullable Number value) {
+  public static JsonElement primitive(@Nullable final Number value) {
     return value == null ? nullValue() : new JsonPrimitive(value);
   }
 
@@ -160,7 +160,7 @@ public final class JsonBuilder {
    * @param value the value
    * @return a json primitive for the value
    */
-  public static JsonElement primitive(@Nullable Boolean value) {
+  public static JsonElement primitive(@Nullable final Boolean value) {
     return value == null ? nullValue() : new JsonPrimitive(value);
   }
 
@@ -172,7 +172,7 @@ public final class JsonBuilder {
    * @param value the value
    * @return a json primitive for the value
    */
-  public static JsonElement primitive(@Nullable Character value) {
+  public static JsonElement primitive(@Nullable final Character value) {
     return value == null ? nullValue() : new JsonPrimitive(value);
   }
 
@@ -194,7 +194,7 @@ public final class JsonBuilder {
    * @return a json primitive for the value
    * @throws NullPointerException if value is null
    */
-  public static JsonPrimitive primitiveNonNull(String value) {
+  public static JsonPrimitive primitiveNonNull(final String value) {
     Objects.requireNonNull(value, "value");
     return new JsonPrimitive(value);
   }
@@ -208,7 +208,7 @@ public final class JsonBuilder {
    * @return a json primitive for the value
    * @throws NullPointerException if value is null
    */
-  public static JsonPrimitive primitiveNonNull(Number value) {
+  public static JsonPrimitive primitiveNonNull(final Number value) {
     Objects.requireNonNull(value, "value");
     return new JsonPrimitive(value);
   }
@@ -222,7 +222,7 @@ public final class JsonBuilder {
    * @return a json primitive for the value
    * @throws NullPointerException if value is null
    */
-  public static JsonPrimitive primitiveNonNull(Boolean value) {
+  public static JsonPrimitive primitiveNonNull(final Boolean value) {
     Objects.requireNonNull(value, "value");
     return new JsonPrimitive(value);
   }
@@ -236,7 +236,7 @@ public final class JsonBuilder {
    * @return a json primitive for the value
    * @throws NullPointerException if value is null
    */
-  public static JsonPrimitive primitiveNonNull(Character value) {
+  public static JsonPrimitive primitiveNonNull(final Character value) {
     Objects.requireNonNull(value, "value");
     return new JsonPrimitive(value);
   }
@@ -250,7 +250,7 @@ public final class JsonBuilder {
    * @return a new collector
    */
   public static <T> Collector<T, JsonObjectBuilder, JsonObject> collectToObject(
-      Function<? super T, String> keyMapper, Function<? super T, JsonElement> valueMapper) {
+      final Function<? super T, String> keyMapper, final Function<? super T, JsonElement> valueMapper) {
     return Collector.of(
         JsonBuilder::object,
         (r, t) -> r.add(keyMapper.apply(t), valueMapper.apply(t)),
@@ -267,7 +267,7 @@ public final class JsonBuilder {
    * @return a new collector
    */
   public static <T> Collector<T, JsonArrayBuilder, JsonArray> collectToArray(
-      Function<? super T, JsonElement> valueMapper) {
+      final Function<? super T, JsonElement> valueMapper) {
     return Collector.of(
         JsonBuilder::array,
         (r, t) -> r.add(valueMapper.apply(t)),
@@ -297,64 +297,64 @@ public final class JsonBuilder {
       Consumer<Map.Entry<String, JsonElement>> {
 
     @Override
-    default void accept(Map.Entry<String, JsonElement> entry) {
+    default void accept(final Map.Entry<String, JsonElement> entry) {
       Objects.requireNonNull(entry, "entry");
       add(entry.getKey(), entry.getValue());
     }
 
     @Override
-    default void accept(String property, JsonElement value) {
+    default void accept(final String property, final JsonElement value) {
       add(property, value);
     }
 
     JsonObjectBuilder add(String property, @Nullable JsonElement value, boolean copy);
 
-    default JsonObjectBuilder add(String property, @Nullable JsonElement value) {
+    default JsonObjectBuilder add(final String property, @Nullable final JsonElement value) {
       return add(property, value, false);
     }
 
-    default JsonObjectBuilder add(String property, @Nullable String value) {
+    default JsonObjectBuilder add(final String property, @Nullable final String value) {
       return add(property, primitive(value));
     }
 
-    default JsonObjectBuilder add(String property, @Nullable Number value) {
+    default JsonObjectBuilder add(final String property, @Nullable final Number value) {
       return add(property, primitive(value));
     }
 
-    default JsonObjectBuilder add(String property, @Nullable Boolean value) {
+    default JsonObjectBuilder add(final String property, @Nullable final Boolean value) {
       return add(property, primitive(value));
     }
 
-    default JsonObjectBuilder add(String property, @Nullable Character value) {
+    default JsonObjectBuilder add(final String property, @Nullable final Character value) {
       return add(property, primitive(value));
     }
 
     JsonObjectBuilder addIfAbsent(String property, @Nullable JsonElement value, boolean copy);
 
-    default JsonObjectBuilder addIfAbsent(String property, @Nullable JsonElement value) {
+    default JsonObjectBuilder addIfAbsent(final String property, @Nullable final JsonElement value) {
       return addIfAbsent(property, value, false);
     }
 
-    default JsonObjectBuilder addIfAbsent(String property, @Nullable String value) {
+    default JsonObjectBuilder addIfAbsent(final String property, @Nullable final String value) {
       return addIfAbsent(property, primitive(value));
     }
 
-    default JsonObjectBuilder addIfAbsent(String property, @Nullable Number value) {
+    default JsonObjectBuilder addIfAbsent(final String property, @Nullable final Number value) {
       return addIfAbsent(property, primitive(value));
     }
 
-    default JsonObjectBuilder addIfAbsent(String property, @Nullable Boolean value) {
+    default JsonObjectBuilder addIfAbsent(final String property, @Nullable final Boolean value) {
       return addIfAbsent(property, primitive(value));
     }
 
-    default JsonObjectBuilder addIfAbsent(String property, @Nullable Character value) {
+    default JsonObjectBuilder addIfAbsent(final String property, @Nullable final Character value) {
       return addIfAbsent(property, primitive(value));
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAll(
-        Iterable<Map.Entry<String, T>> iterable, boolean deepCopy) {
+        final Iterable<Map.Entry<String, T>> iterable, final boolean deepCopy) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, T> e : iterable) {
+      for (final Map.Entry<String, T> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -364,12 +364,12 @@ public final class JsonBuilder {
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAll(
-        Iterable<Map.Entry<String, T>> iterable) {
+        final Iterable<Map.Entry<String, T>> iterable) {
       return addAll(iterable, false);
     }
 
-    default <T extends JsonElement> JsonObjectBuilder addAll(Stream<Map.Entry<String, T>> stream,
-        boolean deepCopy) {
+    default <T extends JsonElement> JsonObjectBuilder addAll(final Stream<Map.Entry<String, T>> stream,
+        final boolean deepCopy) {
       Objects.requireNonNull(stream, "stream");
       stream.forEach(e -> {
         if (e == null || e.getKey() == null) {
@@ -380,22 +380,22 @@ public final class JsonBuilder {
       return this;
     }
 
-    default <T extends JsonElement> JsonObjectBuilder addAll(Stream<Map.Entry<String, T>> stream) {
+    default <T extends JsonElement> JsonObjectBuilder addAll(final Stream<Map.Entry<String, T>> stream) {
       return addAll(stream, false);
     }
 
-    default JsonObjectBuilder addAll(JsonObject object, boolean deepCopy) {
+    default JsonObjectBuilder addAll(final JsonObject object, final boolean deepCopy) {
       Objects.requireNonNull(object, "object");
       return addAll(object.entrySet(), deepCopy);
     }
 
-    default JsonObjectBuilder addAll(JsonObject object) {
+    default JsonObjectBuilder addAll(final JsonObject object) {
       return addAll(object, false);
     }
 
-    default JsonObjectBuilder addAllStrings(Iterable<Map.Entry<String, String>> iterable) {
+    default JsonObjectBuilder addAllStrings(final Iterable<Map.Entry<String, String>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, String> e : iterable) {
+      for (final Map.Entry<String, String> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -405,9 +405,9 @@ public final class JsonBuilder {
     }
 
     default <T extends Number> JsonObjectBuilder addAllNumbers(
-        Iterable<Map.Entry<String, T>> iterable) {
+        final Iterable<Map.Entry<String, T>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, T> e : iterable) {
+      for (final Map.Entry<String, T> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -416,9 +416,9 @@ public final class JsonBuilder {
       return this;
     }
 
-    default JsonObjectBuilder addAllBooleans(Iterable<Map.Entry<String, Boolean>> iterable) {
+    default JsonObjectBuilder addAllBooleans(final Iterable<Map.Entry<String, Boolean>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, Boolean> e : iterable) {
+      for (final Map.Entry<String, Boolean> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -427,9 +427,9 @@ public final class JsonBuilder {
       return this;
     }
 
-    default JsonObjectBuilder addAllCharacters(Iterable<Map.Entry<String, Character>> iterable) {
+    default JsonObjectBuilder addAllCharacters(final Iterable<Map.Entry<String, Character>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, Character> e : iterable) {
+      for (final Map.Entry<String, Character> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -439,9 +439,9 @@ public final class JsonBuilder {
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
-        Iterable<Map.Entry<String, T>> iterable, boolean deepCopy) {
+        final Iterable<Map.Entry<String, T>> iterable, final boolean deepCopy) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, T> e : iterable) {
+      for (final Map.Entry<String, T> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -451,12 +451,12 @@ public final class JsonBuilder {
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
-        Iterable<Map.Entry<String, T>> iterable) {
+        final Iterable<Map.Entry<String, T>> iterable) {
       return addAllIfAbsent(iterable, false);
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
-        Stream<Map.Entry<String, T>> stream, boolean deepCopy) {
+        final Stream<Map.Entry<String, T>> stream, final boolean deepCopy) {
       Objects.requireNonNull(stream, "stream");
       stream.forEach(e -> {
         if (e == null || e.getKey() == null) {
@@ -468,22 +468,22 @@ public final class JsonBuilder {
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
-        Stream<Map.Entry<String, T>> stream) {
+        final Stream<Map.Entry<String, T>> stream) {
       return addAllIfAbsent(stream, false);
     }
 
-    default JsonObjectBuilder addAllIfAbsent(JsonObject object, boolean deepCopy) {
+    default JsonObjectBuilder addAllIfAbsent(final JsonObject object, final boolean deepCopy) {
       Objects.requireNonNull(object, "object");
       return addAllIfAbsent(object.entrySet(), deepCopy);
     }
 
-    default JsonObjectBuilder addAllIfAbsent(JsonObject object) {
+    default JsonObjectBuilder addAllIfAbsent(final JsonObject object) {
       return addAllIfAbsent(object, false);
     }
 
-    default JsonObjectBuilder addAllStringsIfAbsent(Iterable<Map.Entry<String, String>> iterable) {
+    default JsonObjectBuilder addAllStringsIfAbsent(final Iterable<Map.Entry<String, String>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, String> e : iterable) {
+      for (final Map.Entry<String, String> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -493,9 +493,9 @@ public final class JsonBuilder {
     }
 
     default <T extends Number> JsonObjectBuilder addAllNumbersIfAbsent(
-        Iterable<Map.Entry<String, T>> iterable) {
+        final Iterable<Map.Entry<String, T>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, T> e : iterable) {
+      for (final Map.Entry<String, T> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -505,9 +505,9 @@ public final class JsonBuilder {
     }
 
     default JsonObjectBuilder addAllBooleansIfAbsent(
-        Iterable<Map.Entry<String, Boolean>> iterable) {
+        final Iterable<Map.Entry<String, Boolean>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, Boolean> e : iterable) {
+      for (final Map.Entry<String, Boolean> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -517,9 +517,9 @@ public final class JsonBuilder {
     }
 
     default JsonObjectBuilder addAllCharactersIfAbsent(
-        Iterable<Map.Entry<String, Character>> iterable) {
+        final Iterable<Map.Entry<String, Character>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Map.Entry<String, Character> e : iterable) {
+      for (final Map.Entry<String, Character> e : iterable) {
         if (e == null || e.getKey() == null) {
           continue;
         }
@@ -538,81 +538,81 @@ public final class JsonBuilder {
   public interface JsonArrayBuilder extends Consumer<JsonElement> {
 
     @Override
-    default void accept(JsonElement value) {
+    default void accept(final JsonElement value) {
       add(value);
     }
 
     JsonArrayBuilder add(@Nullable JsonElement value, boolean copy);
 
-    default JsonArrayBuilder add(@Nullable JsonElement value) {
+    default JsonArrayBuilder add(@Nullable final JsonElement value) {
       return add(value, false);
     }
 
-    default JsonArrayBuilder add(@Nullable String value) {
+    default JsonArrayBuilder add(@Nullable final String value) {
       return add(primitive(value));
     }
 
-    default JsonArrayBuilder add(@Nullable Number value) {
+    default JsonArrayBuilder add(@Nullable final Number value) {
       return add(primitive(value));
     }
 
-    default JsonArrayBuilder add(@Nullable Boolean value) {
+    default JsonArrayBuilder add(@Nullable final Boolean value) {
       return add(primitive(value));
     }
 
-    default JsonArrayBuilder add(@Nullable Character value) {
+    default JsonArrayBuilder add(@Nullable final Character value) {
       return add(primitive(value));
     }
 
-    default <T extends JsonElement> JsonArrayBuilder addAll(Iterable<T> iterable, boolean copy) {
+    default <T extends JsonElement> JsonArrayBuilder addAll(final Iterable<T> iterable, final boolean copy) {
       Objects.requireNonNull(iterable, "iterable");
-      for (T e : iterable) {
+      for (final T e : iterable) {
         add(e, copy);
       }
       return this;
     }
 
-    default <T extends JsonElement> JsonArrayBuilder addAll(Iterable<T> iterable) {
+    default <T extends JsonElement> JsonArrayBuilder addAll(final Iterable<T> iterable) {
       return addAll(iterable, false);
     }
 
-    default <T extends JsonElement> JsonArrayBuilder addAll(Stream<T> stream, boolean copy) {
+    default <T extends JsonElement> JsonArrayBuilder addAll(final Stream<T> stream, final boolean copy) {
       Objects.requireNonNull(stream, "iterable");
       stream.forEach(e -> add(e, copy));
       return this;
     }
 
-    default <T extends JsonElement> JsonArrayBuilder addAll(Stream<T> stream) {
+    default <T extends JsonElement> JsonArrayBuilder addAll(final Stream<T> stream) {
       return addAll(stream, false);
     }
 
-    default JsonArrayBuilder addStrings(Iterable<String> iterable) {
+    default JsonArrayBuilder addStrings(final Iterable<String> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (String e : iterable) {
+      for (final String e : iterable) {
         add(e);
       }
       return this;
     }
 
-    default <T extends Number> JsonArrayBuilder addNumbers(Iterable<T> iterable) {
+    default <T extends Number> JsonArrayBuilder addNumbers(final Iterable<T> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (T e : iterable) {
+      for (final T e : iterable) {
         add(e);
       }
       return this;
     }
 
-    default JsonArrayBuilder addBooleans(Iterable<Boolean> iterable) {
+    default JsonArrayBuilder addBooleans(final Iterable<Boolean> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Boolean e : iterable) {
+      for (final Boolean e : iterable) {
         add(e);
       }
       return this;
     }
 
-    default JsonArrayBuilder addCharacters(Iterable<Character> iterable) {
+    default JsonArrayBuilder addCharacters(final Iterable<Character> iterable) {
       Objects.requireNonNull(iterable, "iterable");
-      for (Character e : iterable) {
+      for (final Character e : iterable) {
         add(e);
       }
       return this;
@@ -626,12 +626,12 @@ public final class JsonBuilder {
 
     private final JsonObject handle;
 
-    private JsonObjectBuilderImpl(JsonObject handle) {
+    private JsonObjectBuilderImpl(final JsonObject handle) {
       this.handle = handle;
     }
 
     @Override
-    public JsonObjectBuilder add(String property, @Nullable JsonElement value, boolean copy) {
+    public JsonObjectBuilder add(final String property, @Nullable JsonElement value, final boolean copy) {
       Objects.requireNonNull(property, "property");
       if (value == null) {
         value = nullValue();
@@ -648,8 +648,8 @@ public final class JsonBuilder {
     }
 
     @Override
-    public JsonObjectBuilder addIfAbsent(String property, @Nullable JsonElement value,
-        boolean copy) {
+    public JsonObjectBuilder addIfAbsent(final String property, @Nullable final JsonElement value,
+        final boolean copy) {
       Objects.requireNonNull(property, "property");
       if (this.handle.has(property)) {
         return this;
@@ -667,12 +667,12 @@ public final class JsonBuilder {
 
     private final JsonArray handle;
 
-    private JsonArrayBuilderImpl(JsonArray handle) {
+    private JsonArrayBuilderImpl(final JsonArray handle) {
       this.handle = handle;
     }
 
     @Override
-    public JsonArrayBuilder add(@Nullable JsonElement value, boolean copy) {
+    public JsonArrayBuilder add(@Nullable JsonElement value, final boolean copy) {
       if (value == null) {
         value = nullValue();
       }

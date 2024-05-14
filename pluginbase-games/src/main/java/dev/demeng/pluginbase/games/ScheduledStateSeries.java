@@ -117,7 +117,7 @@ public class ScheduledStateSeries extends GameState {
       states.addAll(Arrays.asList(nextStates));
     } else {
       int addIndex = currentIndex + 1;
-      for (GameState state : nextStates) {
+      for (final GameState state : nextStates) {
         addIndex = Math.min(addIndex, states.size());
         states.add(addIndex, state);
         addIndex++;

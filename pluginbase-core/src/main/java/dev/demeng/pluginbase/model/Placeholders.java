@@ -15,7 +15,7 @@ public class Placeholders implements DynamicPlaceholders {
   private final UnaryOperator<String> placeholderReplacer;
 
   @Override
-  public @NotNull String setPlaceholders(@NotNull String str) {
+  public @NotNull String setPlaceholders(@NotNull final String str) {
     return placeholderReplacer.apply(str);
   }
 }
