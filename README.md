@@ -131,6 +131,9 @@ the repository.
 A special thank you to [lucko](https://github.com/lucko/helper) for creating helper, a major part of
 this library. Your contributions have been invaluable to this project.
 
+Another special thank you to [CryptoMorin](https://github.com/CryptoMorin/XSeries) for creating
+XSeries, a library that enables PluginBase's cross-version compatibility.
+
 ## Support
 
 If you need help or have any questions, you can create an issue in this repository or find me on
