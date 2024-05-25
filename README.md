@@ -123,14 +123,13 @@ create a pull request.
 
 ## License
 
-This project is licensed under the MIT License. For more details, refer to the LICENSE.md file in
+This project is licensed under the MIT License. For more details, refer to the LICENSE.txt file in
 the repository.
 
 ## Special Thanks
 
 A special thank you to [lucko](https://github.com/lucko/helper) for creating helper, a major part of
-this
-library. Your contributions have been invaluable to this project.
+this library. Your contributions have been invaluable to this project.
 
 ## Support
 
