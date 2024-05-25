@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.item;
 
+import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XMaterial;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -325,13 +326,17 @@ public class ItemBuilder {
    */
   public ItemBuilder glow(final boolean glow) {
 
-    if (glow) {
-      enchant(Enchantment.DURABILITY, 1);
-      flags(ItemFlag.HIDE_ENCHANTS);
+    final Enchantment enchant = XEnchantment.UNBREAKING.getEnchant();
 
-    } else {
-      stack.removeEnchantment(Enchantment.DURABILITY);
-      updateMeta(meta -> meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS));
+    if (enchant != null) {
+      if (glow) {
+        enchant(XEnchantment.UNBREAKING.getEnchant(), 1);
+        flags(ItemFlag.HIDE_ENCHANTS);
+
+      } else {
+        stack.removeEnchantment(XEnchantment.UNBREAKING.getEnchant());
+        updateMeta(meta -> meta.removeItemFlags(ItemFlag.HIDE_ENCHANTS));
+      }
     }
 
     return this;
