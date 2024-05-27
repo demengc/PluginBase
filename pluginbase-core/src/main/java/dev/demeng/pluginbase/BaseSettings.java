@@ -46,6 +46,17 @@ public interface BaseSettings {
   }
 
   /**
+   * Whether the prefix should be included on each line of chat messages. If this is enabled, the
+   * plugin will split strings containing "\n" into individual lines, add the prefix to each line,
+   * and then return the string recombined with the "\n" delimiter.
+   *
+   * @return Whether the prefix should be included on each line
+   */
+  default boolean includePrefixOnEachLine() {
+    return true;
+  }
+
+  /**
    * The color scheme of the plugin.
    *
    * @return The color scheme

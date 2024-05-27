@@ -304,6 +304,10 @@ public final class Text {
       return "";
     }
 
+    if (BaseManager.getBaseSettings().includePrefixOnEachLine()) {
+      return colorize(getPrefix() + str).replace("\n", "\n" + getPrefix());
+    }
+
     return colorize(getPrefix() + str);
   }
 
