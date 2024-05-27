@@ -305,7 +305,7 @@ public final class Text {
     }
 
     if (BaseManager.getBaseSettings().includePrefixOnEachLine()) {
-      return colorize(getPrefix() + str).replace("\n", "\n" + getPrefix());
+      return colorize((getPrefix() + str).replace("\n", "\n" + getPrefix()));
     }
 
     return colorize(getPrefix() + str);
