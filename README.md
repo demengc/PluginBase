@@ -4,10 +4,8 @@ PluginBase is an extensive library designed to streamline the creation of Spigot
 library provides a solid foundation to build upon, making plugin development more efficient and
 manageable.
 
-The majority of my public Spigot plugins (
-[CommandButtons](https://github.com/demengc/CommandButtons),
-[RankGrant+](https://github.com/demengc/RankGrantPlus),
-[UltraRepair](https://github.com/demengc/UltraRepair),
+The majority of my public Spigot
+plugins ([CommandButtons](https://github.com/demengc/CommandButtons), [RankGrant+](https://github.com/demengc/RankGrantPlus), [UltraRepair](https://github.com/demengc/UltraRepair),
 etc.) and private projects are using PluginBase!
 
 ## Modules
@@ -70,6 +68,7 @@ build file. An example for the `pluginbase-core` module has been provided below.
 ### Maven (pom.xml)
 
 ```xml
+
 <repositories>
   <repository>
     <id>jitpack.io</id>
@@ -79,6 +78,7 @@ build file. An example for the `pluginbase-core` module has been provided below.
 ```
 
 ```xml
+
 <dependencies>
   <dependency>
     <groupId>com.github.demengc.PluginBase</groupId>
