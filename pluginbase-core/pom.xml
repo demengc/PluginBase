@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.32.11-SNAPSHOT</version>
+    <version>1.32.12-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
@@ -111,7 +111,7 @@
     <dependency>
       <groupId>com.github.cryptomorin</groupId>
       <artifactId>XSeries</artifactId>
-      <version>11.1.0</version>
+      <version>11.2.0</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
