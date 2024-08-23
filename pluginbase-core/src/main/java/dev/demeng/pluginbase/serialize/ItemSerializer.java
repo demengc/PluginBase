@@ -90,13 +90,15 @@ public class ItemSerializer {
    * @param section     The configuration section to deserialize
    * @param locale      The locale to use for localization
    * @param transformer The transformer for strings in the item
+   * @param args        The arguments to replace in the localized string
    * @return The deserialized item stack
    */
   @NotNull
   public static ItemStack deserializeLocalized(
       @NotNull final ConfigurationSection section,
       @Nullable final Locale locale,
-      @Nullable final UnaryOperator<String> transformer) {
+      @Nullable final UnaryOperator<String> transformer,
+      @NotNull final Object... args) {
 
     if (locale == null) {
       return deserializeLocalized(section, BaseManager.getTranslator().getLocale(), transformer);
@@ -104,40 +106,46 @@ public class ItemSerializer {
 
     return XItemStack.deserialize(section,
         str -> Text.colorize(
-            Common.applyOperator(Text.localizePlaceholders(str, locale), transformer)));
+            Common.applyOperator(Text.localizePlaceholders(str, locale, args), transformer)));
   }
 
   @NotNull
   public static ItemStack deserializeLocalized(
       @NotNull final ConfigurationSection section,
-      @Nullable final Locale locale) {
-    return deserializeLocalized(section, locale, Text::colorize);
+      @Nullable final Locale locale,
+      @NotNull final Object... args) {
+    return deserializeLocalized(section, locale, Text::colorize, args);
   }
 
   @NotNull
   public static ItemStack deserializeLocalized(
       @NotNull final ConfigurationSection section,
       @NotNull final CommandSender sender,
-      @Nullable final UnaryOperator<String> transformer) {
-    return deserializeLocalized(section, Text.getLocale(sender), transformer);
+      @Nullable final UnaryOperator<String> transformer,
+      @NotNull final Object... args) {
+    return deserializeLocalized(section, Text.getLocale(sender), transformer, args);
   }
 
   @NotNull
   public static ItemStack deserializeLocalized(
       @NotNull final ConfigurationSection section,
-      @NotNull final CommandSender sender) {
-    return deserializeLocalized(section, Text.getLocale(sender), Text::colorize);
+      @NotNull final CommandSender sender,
+      @NotNull final Object... args) {
+    return deserializeLocalized(section, Text.getLocale(sender), Text::colorize, args);
   }
 
   @NotNull
   public static ItemStack deserializeLocalizedDef(
       @NotNull final ConfigurationSection section,
-      @Nullable final UnaryOperator<String> transformer) {
-    return deserializeLocalized(section, (Locale) null, transformer);
+      @Nullable final UnaryOperator<String> transformer,
+      @NotNull final Object... args) {
+    return deserializeLocalized(section, (Locale) null, transformer, args);
   }
 
   @NotNull
-  public static ItemStack deserializeLocalizedDef(@NotNull final ConfigurationSection section) {
-    return deserializeLocalized(section, (Locale) null, Text::colorize);
+  public static ItemStack deserializeLocalizedDef(
+      @NotNull final ConfigurationSection section,
+      @NotNull final Object... args) {
+    return deserializeLocalized(section, (Locale) null, Text::colorize, args);
   }
 }
