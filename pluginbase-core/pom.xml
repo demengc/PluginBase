@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.32.13-SNAPSHOT</version>
+    <version>1.32.14-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
@@ -111,7 +111,7 @@
     <dependency>
       <groupId>com.github.cryptomorin</groupId>
       <artifactId>XSeries</artifactId>
-      <version>11.2.0.1</version>
+      <version>11.2.1</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
@@ -131,7 +131,7 @@
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-platform-bukkit</artifactId>
-      <version>4.3.3-SNAPSHOT</version>
+      <version>4.3.4</version>
       <scope>compile</scope>
       <optional>true</optional>
       <exclusions>
