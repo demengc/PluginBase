@@ -2,6 +2,7 @@
  * MIT License
  *
  * Copyright (c) 2021 Revxrsal
+ * Copyright (c) 2024 Demeng Chen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +42,24 @@ public interface Translator {
   static @NotNull Translator create() {
     return new SimpleTranslator();
   }
+
+  /**
+   * Returns whether this translator contains a localized message for the given key, using the
+   * current {@link #getLocale()}.
+   *
+   * @param key Key to check for
+   * @return {@code true} if this translator has a localized message for the key
+   */
+  boolean containsKey(@NotNull String key);
+
+  /**
+   * Returns whether this translator contains a localized message for the given key.
+   *
+   * @param key    Key to check for
+   * @param locale Locale to check in
+   * @return {@code true} if this translator has a localized message for the key
+   */
+  boolean containsKey(@NotNull String key, @NotNull Locale locale);
 
   /**
    * Returns the message that corresponds to the given key, using the current {@link #getLocale()}.

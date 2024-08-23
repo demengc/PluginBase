@@ -76,6 +76,25 @@ final class SimpleTranslator implements Translator {
     addResourceBundle(new URLClassLoader(urls), resourceBundle);
   }
 
+  @Override public boolean containsKey(@NotNull String key) {
+    for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(this.locale,
+        EMPTY_LIST)) {
+      if (registeredBundle.containsKey(key)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override public boolean containsKey(@NotNull String key, @NotNull Locale locale) {
+    for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(locale, EMPTY_LIST)) {
+      if (registeredBundle.containsKey(key)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @Override
   public @NotNull String get(@NotNull final String key) {
     return get(key, locale);
