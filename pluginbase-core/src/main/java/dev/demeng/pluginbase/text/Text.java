@@ -507,6 +507,22 @@ public final class Text {
     return builder.toString();
   }
 
+  /**
+   * Creates a list of lines from a string line-broken with \n.
+   *
+   * @param str The string to split
+   * @return The list of lines
+   */
+  @NotNull
+  public static List<String> toList(@Nullable final String str) {
+
+    if (str == null) {
+      return Collections.emptyList();
+    }
+
+    return Arrays.asList(str.split("\n"));
+  }
+
   // ---------------------------------------------------------------------------------
   // CONSOLE MESSAGES
   // ---------------------------------------------------------------------------------
