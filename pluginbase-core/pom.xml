@@ -7,7 +7,7 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.33.1-SNAPSHOT</version>
+    <version>1.33.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
@@ -63,7 +63,6 @@
                 <filter>
                   <artifact>*:*</artifact>
                   <excludes>
-                    <exclude>com/cryptomorin/xseries/XEntity*</exclude>
                     <exclude>com/cryptomorin/xseries/SkullCacheListener*</exclude>
                     <exclude>com/cryptomorin/xseries/NoteBlockMusic*</exclude>
                   </excludes>
