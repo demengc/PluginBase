@@ -43,6 +43,10 @@
               <minimizeJar>false</minimizeJar>
               <relocations>
                 <relocation>
+                  <pattern>revxrsal.commands</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.lib.lamp</shadedPattern>
+                </relocation>
+                <relocation>
                   <pattern>com.cryptomorin.xseries</pattern>
                   <shadedPattern>dev.demeng.pluginbase.lib.xseries</shadedPattern>
                 </relocation>
@@ -57,6 +61,18 @@
                 <relocation>
                   <pattern>net.kyori.examination</pattern>
                   <shadedPattern>dev.demeng.pluginbase.lib.examination</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>net.kyori.option</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.lib.option</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google.auto.service</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.lib.autoservice</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.jspecify.annotations</pattern>
+                  <shadedPattern>dev.demeng.pluginbase.lib.jspecify</shadedPattern>
                 </relocation>
               </relocations>
               <filters>
@@ -100,6 +116,27 @@
       <artifactId>authlib</artifactId>
       <version>6.0.54</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.github.revxrsal</groupId>
+      <artifactId>lamp.common</artifactId>
+      <version>4.0.0-rc.14</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.github.revxrsal</groupId>
+      <artifactId>lamp.bukkit</artifactId>
+      <version>4.0.0-rc.14</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.github.revxrsal</groupId>
+      <artifactId>lamp.brigadier</artifactId>
+      <version>4.0.0-rc.14</version>
+      <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.github.cryptomorin</groupId>
