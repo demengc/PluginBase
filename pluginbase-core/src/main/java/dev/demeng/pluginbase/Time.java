@@ -52,14 +52,16 @@ public final class Time {
   /**
    * The date format used for dates and times combined.
    */
-  public static final ThreadLocal<DateFormat> DATE_TIME_FORMAT = ThreadLocal.withInitial(
-      () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateTimeFormat()));
+  public static final ThreadLocal<DateFormat> DATE_TIME_FORMAT =
+      ThreadLocal.withInitial(() -> new SimpleDateFormat(
+          BaseManager.getBaseSettings().dateTimeFormat()));
 
   /**
    * The date format used for dates.
    */
-  public static final ThreadLocal<DateFormat> DATE_FORMAT = ThreadLocal.withInitial(
-      () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateFormat()));
+  public static final ThreadLocal<DateFormat> DATE_FORMAT =
+      ThreadLocal.withInitial(() -> new SimpleDateFormat(
+          BaseManager.getBaseSettings().dateFormat()));
 
   private static final Map<ChronoUnit, String> UNITS_PATTERNS = ImmutableMap.<ChronoUnit, String>builder()
       .put(ChronoUnit.YEARS, "y(?:ear)?s?")
@@ -86,7 +88,8 @@ public final class Time {
    * @return The formatted date and time
    */
   public static String formatDateTime(final long time) {
-    return DATE_TIME_FORMAT.get().format(time);
+    final String pattern = BaseManager.getBaseSettings().dateTimeFormat();
+    return refreshFormat(DATE_TIME_FORMAT, pattern).format(time);
   }
 
   /**
@@ -96,7 +99,8 @@ public final class Time {
    * @return The formatted date
    */
   public static String formatDate(final long time) {
-    return DATE_FORMAT.get().format(time);
+    final String pattern = BaseManager.getBaseSettings().dateFormat();
+    return refreshFormat(DATE_FORMAT, pattern).format(time);
   }
 
   /**
@@ -192,6 +196,25 @@ public final class Time {
       throw new IllegalArgumentException(
           "Unit " + unit + " is out of bounds: " + value + " exceeds " + limit);
     }
+  }
+
+  private static SimpleDateFormat refreshFormat(
+      final ThreadLocal<DateFormat> formatHolder,
+      final String pattern) {
+
+    final DateFormat dateFormat = formatHolder.get();
+
+    if (!(dateFormat instanceof SimpleDateFormat)) {
+      throw new IllegalStateException("Expected ThreadLocal to hold SimpleDateFormat");
+    }
+
+    final SimpleDateFormat format = (SimpleDateFormat) dateFormat;
+
+    if (!format.toPattern().equals(pattern)) {
+      format.applyPattern(pattern);
+    }
+
+    return format;
   }
 
   /**
