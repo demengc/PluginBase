@@ -161,7 +161,6 @@ public abstract class PagedMenu implements IMenu {
   public void open(final Player... players) {
     for (final Player player : players) {
       pages.get(0).open(player);
-      MenuManager.getOpenedPagedMenus().put(player.getUniqueId(), uuid);
       MenuManager.getOpenedPages().put(player.getUniqueId(), 0);
     }
   }
@@ -175,7 +174,6 @@ public abstract class PagedMenu implements IMenu {
   public void open(final int index, final Player... players) {
     for (final Player player : players) {
       pages.get(index).open(player);
-      MenuManager.getOpenedPagedMenus().put(player.getUniqueId(), uuid);
       MenuManager.getOpenedPages().put(player.getUniqueId(), index);
     }
   }
