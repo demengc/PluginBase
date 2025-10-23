@@ -234,7 +234,7 @@ public final class Text {
     }
 
     final Matcher matcher = LOCALIZED_PLACEHOLDER_PATTERN.matcher(str);
-    final StringBuffer result = new StringBuffer();
+    final StringBuilder result = new StringBuilder();
 
     while (matcher.find()) {
       final String key = matcher.group(1);
@@ -394,7 +394,7 @@ public final class Text {
 
   /**
    * Parses the string using the MiniMessage library. Format:
-   * https://docs.advntr.dev/minimessage/format.html
+   * <a href="https://docs.advntr.dev/minimessage/format.html">...</a>
    *
    * @param str The raw string
    * @return The result component for the string, or empty if the provided string is null
@@ -412,7 +412,7 @@ public final class Text {
   /**
    * Parses the string using the MiniMessage library, and then uses the legacy Bukkit Component
    * Serializer to return a String rather than a Component. Format:
-   * https://docs.advntr.dev/minimessage/format.html
+   * <a href="https://docs.advntr.dev/minimessage/format.html">...</a>
    *
    * @param str The raw string(s)
    * @return The serialized component for the string, or empty if the provided string is null
@@ -609,9 +609,9 @@ public final class Text {
   }
 
   /**
-   * Sends a {@link #localized(String, CommandSender)}, colored, and prefixed message to the command
-   * sender. Any key equaling null or any message equaling to {@link #IGNORE_MESSAGE_VALUE} (ignore
-   * case) will be ignored.
+   * Sends a {@link #localized(String, CommandSender, Object...)}, colored, and prefixed message to
+   * the command sender. Any key equaling null or any message equaling to
+   * {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
    * @param key    The key of the localized string

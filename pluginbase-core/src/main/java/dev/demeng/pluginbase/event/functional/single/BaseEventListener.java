@@ -62,8 +62,7 @@ class BaseEventListener<T extends Event> implements SingleSubscription<T>, Event
   private final AtomicLong callCount = new AtomicLong(0);
   private final AtomicBoolean active = new AtomicBoolean(true);
 
-  @SuppressWarnings("unchecked")
-  BaseEventListener(final SingleSubscriptionBuilderImpl<T> builder,
+  @SuppressWarnings("unchecked") BaseEventListener(final SingleSubscriptionBuilderImpl<T> builder,
       final List<BiConsumer<SingleSubscription<T>, ? super T>> handlers) {
     this.eventClass = builder.eventClass;
     this.priority = builder.priority;

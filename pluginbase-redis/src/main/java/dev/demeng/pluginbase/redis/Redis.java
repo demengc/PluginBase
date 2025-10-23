@@ -280,7 +280,7 @@ public class Redis implements IRedis {
 
       final Optional<MessageTransferObject> mto = MessageTransferObject.fromJson(message);
 
-      if (!mto.isPresent()) {
+      if (mto.isEmpty()) {
         Text.log(Level.WARNING,
             "Failed to read Redis message from channel '" + channel + "': " + message);
         return;

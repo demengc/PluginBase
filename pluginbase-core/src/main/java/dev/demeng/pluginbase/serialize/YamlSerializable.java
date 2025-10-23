@@ -99,7 +99,6 @@ public interface YamlSerializable {
     final Method deserializeMethod;
 
     try {
-      //noinspection JavaReflectionMemberAccess
       deserializeMethod = clazz.getDeclaredMethod("deserialize", ConfigurationSection.class);
       deserializeMethod.setAccessible(true);
     } catch (final Exception ex) {

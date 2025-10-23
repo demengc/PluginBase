@@ -72,7 +72,7 @@ public final class Services {
     if (registration == null) {
       return Optional.empty();
     }
-    return Optional.ofNullable(registration.getProvider());
+    return Optional.of(registration.getProvider());
   }
 
   /**

@@ -45,7 +45,6 @@ public interface Cycle<E> {
    */
   @Nonnull
   static <E> Cycle<E> of(@Nonnull final List<E> objects) {
-    //noinspection deprecation
     return new CycleImpl<>(objects);
   }
 

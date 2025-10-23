@@ -58,7 +58,7 @@ public class BatchBuilder {
 
   public BatchBuilder(
       @NotNull final Sql owner,
-      @NotNull @Language("SQL")  final String statement) {
+      @NotNull @Language("SQL") final String statement) {
     this.owner = owner;
     this.statement = statement;
   }

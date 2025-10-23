@@ -67,8 +67,8 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
   private final AtomicLong callCount = new AtomicLong(0);
   private final AtomicBoolean active = new AtomicBoolean(true);
 
-  @SuppressWarnings("unchecked")
-  BaseMergedEventListener(final MergedSubscriptionBuilderImpl<T> builder,
+  @SuppressWarnings("unchecked") BaseMergedEventListener(
+      final MergedSubscriptionBuilderImpl<T> builder,
       final List<BiConsumer<MergedSubscription<T>, ? super T>> handlers) {
     this.handledClass = builder.handledClass;
     this.mappings = ImmutableMap.copyOf(builder.mappings);

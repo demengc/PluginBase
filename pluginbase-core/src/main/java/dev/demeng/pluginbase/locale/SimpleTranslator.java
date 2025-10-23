@@ -76,7 +76,7 @@ final class SimpleTranslator implements Translator {
     addResourceBundle(new URLClassLoader(urls), resourceBundle);
   }
 
-  @Override public boolean containsKey(@NotNull String key) {
+  @Override public boolean containsKey(@NotNull final String key) {
     for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(this.locale,
         EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
@@ -86,7 +86,7 @@ final class SimpleTranslator implements Translator {
     return false;
   }
 
-  @Override public boolean containsKey(@NotNull String key, @NotNull Locale locale) {
+  @Override public boolean containsKey(@NotNull final String key, @NotNull final Locale locale) {
     for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(locale, EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return true;

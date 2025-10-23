@@ -30,7 +30,6 @@ import dev.demeng.pluginbase.scheduler.Task;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -66,7 +65,7 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(@NotNull final GameState... states) {
     this.interval = 1;
-    this.states.addAll(Arrays.stream(states).collect(Collectors.toList()));
+    this.states.addAll(Arrays.stream(states).toList());
   }
 
   /**
@@ -95,7 +94,7 @@ public class ScheduledStateSeries extends GameState {
    */
   public ScheduledStateSeries(final long interval, @NotNull final GameState... states) {
     this.interval = interval;
-    this.states.addAll(Arrays.stream(states).collect(Collectors.toList()));
+    this.states.addAll(Arrays.stream(states).toList());
   }
 
   /**

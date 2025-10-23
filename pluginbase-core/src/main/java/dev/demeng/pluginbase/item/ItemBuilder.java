@@ -512,7 +512,7 @@ public class ItemBuilder {
     }
 
     final Optional<XMaterial> matchOptional = XMaterial.matchXMaterial(strMaterial);
-    if (!matchOptional.isPresent()) {
+    if (matchOptional.isEmpty()) {
       return Optional.empty();
     }
 

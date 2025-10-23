@@ -291,7 +291,7 @@ public final class Time {
         }
       }
 
-      if (output.length() == 0) {
+      if (output.isEmpty()) {
         return "0" + (UNITS[UNITS.length - 1].toString(concise, 0));
       }
       return output.substring(1);

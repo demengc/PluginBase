@@ -39,7 +39,8 @@ public final class BucketFactory {
     return new SetSuppliedBucket<>(size, strategy, setSupplier);
   }
 
-  public static <E> Bucket<E> newHashSetBucket(final int size, final PartitioningStrategy<E> strategy) {
+  public static <E> Bucket<E> newHashSetBucket(final int size,
+      final PartitioningStrategy<E> strategy) {
     return new HashSetBucket<>(size, strategy);
   }
 
@@ -48,7 +49,8 @@ public final class BucketFactory {
     return new SynchronizedHashSetBucket<>(size, strategy);
   }
 
-  public static <E> Bucket<E> newConcurrentBucket(final int size, final PartitioningStrategy<E> strategy) {
+  public static <E> Bucket<E> newConcurrentBucket(final int size,
+      final PartitioningStrategy<E> strategy) {
     return new ConcurrentBucket<>(size, strategy);
   }
 

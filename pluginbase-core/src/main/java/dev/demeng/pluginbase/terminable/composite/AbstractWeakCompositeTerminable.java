@@ -43,7 +43,7 @@ public class AbstractWeakCompositeTerminable implements CompositeTerminable {
   }
 
   @Override
-  public CompositeTerminable with(AutoCloseable autoCloseable) {
+  public CompositeTerminable with(final AutoCloseable autoCloseable) {
     Objects.requireNonNull(autoCloseable, "autoCloseable");
     this.closeables.push(new WeakReference<>(autoCloseable));
     return this;
@@ -51,16 +51,16 @@ public class AbstractWeakCompositeTerminable implements CompositeTerminable {
 
   @Override
   public void close() throws CompositeClosingException {
-    List<Exception> caught = new ArrayList<>();
+    final List<Exception> caught = new ArrayList<>();
     for (WeakReference<AutoCloseable> ref; (ref = this.closeables.poll()) != null; ) {
-      AutoCloseable ac = ref.get();
+      final AutoCloseable ac = ref.get();
       if (ac == null) {
         continue;
       }
 
       try {
         ac.close();
-      } catch (Exception e) {
+      } catch (final Exception e) {
         caught.add(e);
       }
     }
@@ -79,7 +79,7 @@ public class AbstractWeakCompositeTerminable implements CompositeTerminable {
   @Override
   public void cleanup() {
     this.closeables.removeIf(ref -> {
-      AutoCloseable ac = ref.get();
+      final AutoCloseable ac = ref.get();
       return ac == null || (ac instanceof Terminable && ((Terminable) ac).isClosed());
     });
   }
