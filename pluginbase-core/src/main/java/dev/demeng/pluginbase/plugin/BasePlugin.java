@@ -25,11 +25,9 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
-import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.Services;
-import dev.demeng.pluginbase.dependencyloader.DependencyEngine;
 import dev.demeng.pluginbase.locale.Translator;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.scheduler.BaseExecutors;
@@ -56,11 +54,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    * The backing terminable registry for this plugin.
    */
   private CompositeTerminable terminableRegistry;
-
-  /**
-   * The dependency engine for this plugin.
-   */
-  @Nullable private DependencyEngine dependencyEngine;
 
   @Override
   public final void onLoad() {
@@ -124,36 +117,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    */
   protected void disable() {
     // Override if needed, otherwise nothing will be executed.
-  }
-
-  /**
-   * Loads the dependency engine for the plugin. Call on {@link #load()} only if needed.
-   *
-   * @return True if successful, false otherwise
-   */
-  protected boolean loadDependencyEngine() {
-
-    dependencyEngine = DependencyEngine
-        .createNew(getDataFolder().toPath().resolve("dependencies"));
-
-    dependencyEngine
-        .addDependenciesFromClass(getClass())
-        .loadDependencies()
-        .exceptionally(ex -> {
-          dependencyEngine.getErrors().add(ex);
-          return null;
-        })
-        .join();
-
-    if (!dependencyEngine.getErrors().isEmpty()) {
-      for (final Throwable t : dependencyEngine.getErrors()) {
-        Common.error(t, "Failed to download dependencies.", false);
-      }
-
-      return false;
-    }
-
-    return true;
   }
 
   @NotNull
