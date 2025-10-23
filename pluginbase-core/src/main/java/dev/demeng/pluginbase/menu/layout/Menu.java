@@ -80,7 +80,6 @@ public abstract class Menu implements IMenu {
    */
   protected Menu(final int size, @NotNull final String title) {
     this.inventory = Bukkit.createInventory(null, size, Text.colorize(title));
-    MenuManager.getMenus().put(getUuid(), this);
   }
 
   /**
@@ -341,6 +340,7 @@ public abstract class Menu implements IMenu {
 
   @Override
   public void open(final Player... players) {
+    MenuManager.getMenus().put(getUuid(), this);
     for (final Player player : players) {
       player.openInventory(inventory);
       MenuManager.getOpenedMenus().put(player.getUniqueId(), uuid);

@@ -43,6 +43,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal listener for handling menu interactions.
@@ -113,7 +114,7 @@ public class MenuManager implements TerminableModule {
             }
           }
 
-          cleanup(p);
+          cleanup(p, inventoryUuid);
         })
         .bindWith(consumer);
 
@@ -127,8 +128,17 @@ public class MenuManager implements TerminableModule {
   }
 
   private void cleanup(final Player p) {
-    final UUID uuid = p.getUniqueId();
-    openedMenus.remove(uuid);
-    openedPages.remove(uuid);
+    cleanup(p, openedMenus.get(p.getUniqueId()));
+  }
+
+  private void cleanup(final Player p, @Nullable final UUID menuUuid) {
+    final UUID playerUuid = p.getUniqueId();
+    openedMenus.remove(playerUuid);
+    openedPagedMenus.remove(playerUuid);
+    openedPages.remove(playerUuid);
+
+    if (menuUuid != null && !openedMenus.containsValue(menuUuid)) {
+      menus.remove(menuUuid);
+    }
   }
 }
