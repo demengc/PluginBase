@@ -7,14 +7,14 @@
   <parent>
     <artifactId>pluginbase</artifactId>
     <groupId>dev.demeng</groupId>
-    <version>1.33.2-SNAPSHOT</version>
+    <version>1.34.2-SNAPSHOT</version>
   </parent>
 
   <artifactId>pluginbase-core</artifactId>
 
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
   </properties>
 
   <build>
@@ -22,7 +22,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.14.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -31,7 +31,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -97,27 +97,21 @@
   <dependencies>
     <dependency>
       <groupId>com.mojang</groupId>
-      <artifactId>brigadier</artifactId>
-      <version>1.0.18</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.mojang</groupId>
       <artifactId>authlib</artifactId>
-      <version>1.5.25</version>
+      <version>6.0.54</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.cryptomorin</groupId>
       <artifactId>XSeries</artifactId>
-      <version>12.1.0</version>
+      <version>13.5.1</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-api</artifactId>
-      <version>4.17.0</version>
+      <version>4.25.0</version>
       <scope>compile</scope>
       <optional>true</optional>
       <exclusions>
@@ -130,7 +124,7 @@
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-platform-bukkit</artifactId>
-      <version>4.3.4</version>
+      <version>4.4.1</version>
       <scope>compile</scope>
       <optional>true</optional>
       <exclusions>
@@ -147,14 +141,14 @@
     <dependency>
       <groupId>net.kyori</groupId>
       <artifactId>adventure-text-minimessage</artifactId>
-      <version>4.17.0</version>
+      <version>4.25.0</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>net.jodah</groupId>
       <artifactId>expiringmap</artifactId>
-      <version>0.5.10</version>
+      <version>0.5.11</version>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>

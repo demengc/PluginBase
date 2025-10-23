@@ -6,7 +6,7 @@
 
   <groupId>dev.demeng</groupId>
   <artifactId>pluginbase</artifactId>
-  <version>1.33.2-SNAPSHOT</version>
+  <version>1.34.2-SNAPSHOT</version>
 
   <name>PluginBase</name>
 
@@ -21,7 +21,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <java.version>1.8</java.version>
+    <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <sonar.projectKey>Demeng7215_PluginBase</sonar.projectKey>
     <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
@@ -34,7 +34,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.14.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -43,7 +43,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -60,7 +60,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.3.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -73,7 +73,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.2</version>
+        <version>3.12.0</version>
         <configuration>
           <doclint>none</doclint>
         </configuration>
@@ -133,19 +133,19 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.21.4-R0.1-SNAPSHOT</version>
+      <version>1.21.10-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>26.0.1</version>
+      <version>26.0.2</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.36</version>
+      <version>1.18.42</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
