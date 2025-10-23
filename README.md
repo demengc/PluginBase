@@ -16,7 +16,6 @@ The main module containing the core functionality of PluginBase. A rough, incomp
 features is as follows:
 
 - Schedulers (async/sync runnables, delayed/repeated tasks, etc.)
-- Runtime dependency loading
 - Text utilities (i.e. colorizing strings with HEX and Adventure support, centered messages,
   components,
   etc.)
