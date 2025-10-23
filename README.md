@@ -50,14 +50,8 @@ A simple module that allows for easy connections to MongoDB databases.
 
 ### pluginbase-redis
 
-A module that faciliates cross-server communication using Redis publish-subscribe messaging. Capable
+A module that facilitates cross-server communication using Redis publish-subscribe messaging. Capable
 of handling objects.
-
-### PluginBase-Lamp
-
-Though technically a separate project, PluginBase-Lamp is an advanced command library that is
-frequently used alongside PluginBase. PluginBase-Lamp is available
-at https://github.com/demengc/PluginBase-Lamp.
 
 ## Getting Started
 
