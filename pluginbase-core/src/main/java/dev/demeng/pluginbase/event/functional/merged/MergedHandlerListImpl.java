@@ -57,8 +57,8 @@ class MergedHandlerListImpl<T> implements MergedHandlerList<T> {
       throw new IllegalStateException("No handlers have been registered");
     }
 
-    final BaseMergedEventListener<T> listener = new BaseMergedEventListener<>(this.builder,
-        this.handlers);
+    final BaseMergedEventListener<T> listener =
+        new BaseMergedEventListener<>(this.builder, this.handlers);
     listener.register(BaseManager.getPlugin());
     return listener;
   }

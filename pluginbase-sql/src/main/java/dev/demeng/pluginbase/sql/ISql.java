@@ -48,28 +48,31 @@ public interface ISql extends Terminable {
    *
    * @return The hikari instance
    */
-  @NotNull HikariDataSource getHikari();
+  @NotNull
+  HikariDataSource getHikari();
 
   /**
    * Gets a connection from the datasource.
    *
-   * <p>The connection should be returned once it has been used.</p>
+   * <p>The connection should be returned once it has been used.
    *
    * @return A connection
    */
-  @NotNull Connection getConnection() throws SQLException;
+  @NotNull
+  Connection getConnection() throws SQLException;
 
   /**
    * Gets a {@link SqlStream} instance for this {@link ISql}.
    *
    * @return An instance of the stream library for this connection
    */
-  @NotNull SqlStream stream();
+  @NotNull
+  SqlStream stream();
 
   /**
    * Executes a database statement with no preparation.
    *
-   * <p>This will be executed on an asynchronous thread.</p>
+   * <p>This will be executed on an asynchronous thread.
    *
    * @param statement The statement to be executed
    * @return A Promise of an asynchronous database execution
@@ -77,30 +80,28 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default Promise<Void> executeAsync(@Language("SQL") @NotNull final String statement) {
-    return Promise.supplyingAsync(
-        Delegates.runnableToSupplier(() -> this.execute(statement)));
+    return Promise.supplyingAsync(Delegates.runnableToSupplier(() -> this.execute(statement)));
   }
 
   /**
    * Executes a database statement with no preparation.
    *
-   * <p>This will be executed on whichever thread it's called from.</p>
+   * <p>This will be executed on whichever thread it's called from.
    *
    * @param statement The statement to be executed
    * @see #executeAsync(String) to perform the same action asynchronously
    */
   default void execute(@Language("SQL") @NotNull final String statement) {
-    this.execute(statement, stmt -> {
-    });
+    this.execute(statement, stmt -> {});
   }
 
   /**
    * Executes a database statement with preparation.
    *
-   * <p>This will be executed on an asynchronous thread.</p>
+   * <p>This will be executed on an asynchronous thread.
    *
    * @param statement The statement to be executed
-   * @param preparer  The preparation used for this statement
+   * @param preparer The preparation used for this statement
    * @return A Promise of an asynchronous database execution
    * @see #executeAsync(String, SqlConsumer) to perform this action synchronously
    */
@@ -115,28 +116,26 @@ public interface ISql extends Terminable {
   /**
    * Executes a database statement with preparation.
    *
-   * <p>This will be executed on whichever thread it's called from.</p>
+   * <p>This will be executed on whichever thread it's called from.
    *
    * @param statement The statement to be executed
-   * @param preparer  The preparation used for this statement
+   * @param preparer The preparation used for this statement
    * @see #executeAsync(String, SqlConsumer) to perform this action asynchronously
    */
   void execute(
-      @Language("SQL") @NotNull String statement,
-      @NotNull SqlConsumer<PreparedStatement> preparer);
+      @Language("SQL") @NotNull String statement, @NotNull SqlConsumer<PreparedStatement> preparer);
 
   /**
    * Executes a database query with no preparation.
    *
-   * <p>This will be executed on an asynchronous thread.</p>
+   * <p>This will be executed on an asynchronous thread.
    *
-   * <p>In the case of a {@link SQLException} or in the case of
-   * no data being returned, or the handler evaluating to null, this method will return an
-   * {@link Optional#empty()} object.</p>
+   * <p>In the case of a {@link SQLException} or in the case of no data being returned, or the
+   * handler evaluating to null, this method will return an {@link Optional#empty()} object.
    *
-   * @param query   The query to be executed
+   * @param query The query to be executed
    * @param handler The handler for the data returned by the query
-   * @param <R>     The returned type
+   * @param <R> The returned type
    * @return A Promise of an asynchronous database query
    * @see #query(String, SqlFunction) to perform this query synchronously
    */
@@ -150,15 +149,14 @@ public interface ISql extends Terminable {
   /**
    * Executes a database query with no preparation.
    *
-   * <p>This will be executed on whichever thread it's called from.</p>
+   * <p>This will be executed on whichever thread it's called from.
    *
-   * <p>In the case of a {@link SQLException} or in the case of
-   * no data being returned, or the handler evaluating to null, this method will return an
-   * {@link Optional#empty()} object.</p>
+   * <p>In the case of a {@link SQLException} or in the case of no data being returned, or the
+   * handler evaluating to null, this method will return an {@link Optional#empty()} object.
    *
-   * @param query   The query to be executed
+   * @param query The query to be executed
    * @param handler The handler for the data returned by the query
-   * @param <R>     The returned type
+   * @param <R> The returned type
    * @return The results of the database query
    * @see #queryAsync(String, SqlFunction) to perform this query asynchronously
    */
@@ -166,23 +164,21 @@ public interface ISql extends Terminable {
   default <R> Optional<R> query(
       @Language("SQL") @NotNull final String query,
       @NotNull final SqlFunction<ResultSet, R> handler) {
-    return this.query(query, stmt -> {
-    }, handler);
+    return this.query(query, stmt -> {}, handler);
   }
 
   /**
    * Executes a database query with preparation.
    *
-   * <p>This will be executed on an asynchronous thread.</p>
+   * <p>This will be executed on an asynchronous thread.
    *
-   * <p>In the case of a {@link SQLException} or in the case of
-   * no data being returned, or the handler evaluating to null, this method will return an
-   * {@link Optional#empty()} object.</p>
+   * <p>In the case of a {@link SQLException} or in the case of no data being returned, or the
+   * handler evaluating to null, this method will return an {@link Optional#empty()} object.
    *
-   * @param query    The query to be executed
+   * @param query The query to be executed
    * @param preparer The preparation used for this statement
-   * @param handler  The handler for the data returned by the query
-   * @param <R>      The returned type
+   * @param handler The handler for the data returned by the query
+   * @param <R> The returned type
    * @return A Promise of an asynchronous database query
    * @see #query(String, SqlFunction) to perform this query synchronously
    */
@@ -197,31 +193,32 @@ public interface ISql extends Terminable {
   /**
    * Executes a database query with preparation.
    *
-   * <p>This will be executed on whichever thread it's called from.</p>
+   * <p>This will be executed on whichever thread it's called from.
    *
-   * <p>In the case of a {@link SQLException} or in the case of
-   * no data being returned, or the handler evaluating to null, this method will return an
-   * {@link Optional#empty()} object.</p>
+   * <p>In the case of a {@link SQLException} or in the case of no data being returned, or the
+   * handler evaluating to null, this method will return an {@link Optional#empty()} object.
    *
-   * @param query    The query to be executed
+   * @param query The query to be executed
    * @param preparer The preparation used for this statement
-   * @param handler  The handler for the data returned by the query
-   * @param <R>      The returned type
+   * @param handler The handler for the data returned by the query
+   * @param <R> The returned type
    * @return The results of the database query
    * @see #queryAsync(String, SqlFunction) to perform this query asynchronously
    */
-  @NotNull <R> Optional<R> query(@Language("SQL") @NotNull String query,
-      @NotNull SqlConsumer<PreparedStatement> preparer, @NotNull SqlFunction<ResultSet, R> handler);
+  @NotNull
+  <R> Optional<R> query(
+      @Language("SQL") @NotNull String query,
+      @NotNull SqlConsumer<PreparedStatement> preparer,
+      @NotNull SqlFunction<ResultSet, R> handler);
 
   /**
    * Executes a batched database execution.
    *
-   * <p>This will be executed on an asynchronous thread.</p>
+   * <p>This will be executed on an asynchronous thread.
    *
-   * <p>Note that proper implementations of this method should determine
-   * if the provided {@link BatchBuilder} is actually worth of being a batched statement. For
-   * instance, a BatchBuilder with only one handler can safely be referred to
-   * {@link #executeAsync(String, SqlConsumer)}</p>
+   * <p>Note that proper implementations of this method should determine if the provided {@link
+   * BatchBuilder} is actually worth of being a batched statement. For instance, a BatchBuilder with
+   * only one handler can safely be referred to {@link #executeAsync(String, SqlConsumer)}
    *
    * @param builder The builder to be used.
    * @return A Promise of an asynchronous batched database execution
@@ -229,19 +226,17 @@ public interface ISql extends Terminable {
    */
   @NotNull
   default Promise<Void> executeBatchAsync(@NotNull final BatchBuilder builder) {
-    return Promise.supplyingAsync(
-        Delegates.runnableToSupplier(() -> this.executeBatch(builder)));
+    return Promise.supplyingAsync(Delegates.runnableToSupplier(() -> this.executeBatch(builder)));
   }
 
   /**
    * Executes a batched database execution.
    *
-   * <p>This will be executed on whichever thread it's called from.</p>
+   * <p>This will be executed on whichever thread it's called from.
    *
-   * <p>Note that proper implementations of this method should determine
-   * if the provided {@link BatchBuilder} is actually worth of being a batched statement. For
-   * instance, a BatchBuilder with only one handler can safely be referred to
-   * {@link #execute(String, SqlConsumer)}</p>
+   * <p>Note that proper implementations of this method should determine if the provided {@link
+   * BatchBuilder} is actually worth of being a batched statement. For instance, a BatchBuilder with
+   * only one handler can safely be referred to {@link #execute(String, SqlConsumer)}
    *
    * @param builder The builder to be used.
    * @see #executeBatchAsync(BatchBuilder) to perform this action asynchronously

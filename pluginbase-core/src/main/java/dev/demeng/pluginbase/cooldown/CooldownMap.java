@@ -46,10 +46,11 @@ public class CooldownMap<T> {
 
   private CooldownMap(final Cooldown base) {
     this.base = base;
-    this.cache = ExpiringMap.builder()
-        .expiration(base.getDuration() + 10000L, TimeUnit.MILLISECONDS)
-        .expirationPolicy(ExpirationPolicy.ACCESSED)
-        .build();
+    this.cache =
+        ExpiringMap.builder()
+            .expiration(base.getDuration() + 10000L, TimeUnit.MILLISECONDS)
+            .expirationPolicy(ExpirationPolicy.ACCESSED)
+            .build();
   }
 
   /**
@@ -67,8 +68,7 @@ public class CooldownMap<T> {
    * Gets the internal cooldown instance associated with the given key.
    *
    * <p>The inline Cooldown methods in this class should be used to access the functionality of the
-   * cooldown as opposed to calling the methods directly via the instance returned by this
-   * method.</p>
+   * cooldown as opposed to calling the methods directly via the instance returned by this method.
    *
    * @param key The key
    * @return A cooldown instance

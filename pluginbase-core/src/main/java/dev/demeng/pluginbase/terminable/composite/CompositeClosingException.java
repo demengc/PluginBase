@@ -27,9 +27,7 @@ package dev.demeng.pluginbase.terminable.composite;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Exception thrown to propagate exceptions thrown by {@link CompositeTerminable#close()}.
- */
+/** Exception thrown to propagate exceptions thrown by {@link CompositeTerminable#close()}. */
 public class CompositeClosingException extends Exception {
 
   private final List<? extends Throwable> causes;
@@ -52,5 +50,4 @@ public class CompositeClosingException extends Exception {
       cause.printStackTrace();
     }
   }
-
 }

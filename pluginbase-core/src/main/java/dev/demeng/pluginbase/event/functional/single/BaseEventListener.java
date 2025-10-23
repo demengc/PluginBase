@@ -44,8 +44,7 @@ import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-class BaseEventListener<T extends Event> implements SingleSubscription<T>, EventExecutor,
-    Listener {
+class BaseEventListener<T extends Event> implements SingleSubscription<T>, EventExecutor, Listener {
 
   private final Class<T> eventClass;
   private final EventPriority priority;
@@ -62,7 +61,9 @@ class BaseEventListener<T extends Event> implements SingleSubscription<T>, Event
   private final AtomicLong callCount = new AtomicLong(0);
   private final AtomicBoolean active = new AtomicBoolean(true);
 
-  @SuppressWarnings("unchecked") BaseEventListener(final SingleSubscriptionBuilderImpl<T> builder,
+  @SuppressWarnings("unchecked")
+  BaseEventListener(
+      final SingleSubscriptionBuilderImpl<T> builder,
       final List<BiConsumer<SingleSubscription<T>, ? super T>> handlers) {
     this.eventClass = builder.eventClass;
     this.priority = builder.priority;
@@ -70,12 +71,12 @@ class BaseEventListener<T extends Event> implements SingleSubscription<T>, Event
     this.handleSubclasses = builder.handleSubclasses;
 
     this.filters = builder.filters.toArray(new Predicate[builder.filters.size()]);
-    this.preExpiryTests = builder.preExpiryTests.toArray(
-        new BiPredicate[builder.preExpiryTests.size()]);
-    this.midExpiryTests = builder.midExpiryTests.toArray(
-        new BiPredicate[builder.midExpiryTests.size()]);
-    this.postExpiryTests = builder.postExpiryTests.toArray(
-        new BiPredicate[builder.postExpiryTests.size()]);
+    this.preExpiryTests =
+        builder.preExpiryTests.toArray(new BiPredicate[builder.preExpiryTests.size()]);
+    this.midExpiryTests =
+        builder.midExpiryTests.toArray(new BiPredicate[builder.midExpiryTests.size()]);
+    this.postExpiryTests =
+        builder.postExpiryTests.toArray(new BiPredicate[builder.postExpiryTests.size()]);
     this.handlers = handlers.toArray(new BiConsumer[handlers.size()]);
   }
 
@@ -202,8 +203,8 @@ class BaseEventListener<T extends Event> implements SingleSubscription<T>, Event
   }
 
   @SuppressWarnings("JavaReflectionMemberAccess")
-  private static void unregisterListener(final Class<? extends Event> eventClass,
-      final Listener listener) {
+  private static void unregisterListener(
+      final Class<? extends Event> eventClass, final Listener listener) {
     try {
       // unfortunately we can't cache this reflect call, as the method is static
       final Method getHandlerListMethod = eventClass.getMethod("getHandlerList");

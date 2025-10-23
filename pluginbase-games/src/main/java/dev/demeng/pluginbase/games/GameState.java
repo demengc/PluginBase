@@ -35,22 +35,20 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a phase of a minigame (ex. pre-game, the main phase, post-game). All
- * {@link dev.demeng.pluginbase.terminable.Terminable}s should be bound to the registry using
- * {@link #bind(AutoCloseable)} or {@link #bindModule(TerminableModule)}, and will be terminated
- * when the state ends.
+ * Represents a phase of a minigame (ex. pre-game, the main phase, post-game). All {@link
+ * dev.demeng.pluginbase.terminable.Terminable}s should be bound to the registry using {@link
+ * #bind(AutoCloseable)} or {@link #bindModule(TerminableModule)}, and will be terminated when the
+ * state ends.
  */
 @RequiredArgsConstructor
 public abstract class GameState {
 
-  /**
-   * If this state has begun.
-   */
+  /** If this state has begun. */
   @Getter private boolean started;
-  /**
-   * If this state has ended.
-   */
+
+  /** If this state has ended. */
   @Getter private boolean ended;
+
   /**
    * The timestamp in milliseconds since Unix epoch of when the state started, or 0 if not started.
    */
@@ -59,29 +57,19 @@ public abstract class GameState {
   protected CompositeTerminable registry = CompositeTerminable.create();
   private final Object lock = new Object();
 
-  /**
-   * Called when the state starts.
-   */
+  /** Called when the state starts. */
   protected abstract void onStart();
 
-  /**
-   * Called at every interval from state start to end.
-   */
+  /** Called at every interval from state start to end. */
   protected abstract void onUpdate();
 
-  /**
-   * Called when the state ends.
-   */
+  /** Called when the state ends. */
   protected abstract void onEnd();
 
-  /**
-   * The duration of the state, in milliseconds.
-   */
+  /** The duration of the state, in milliseconds. */
   protected abstract long getDuration();
 
-  /**
-   * Starts the state.
-   */
+  /** Starts the state. */
   public void start() {
 
     synchronized (lock) {
@@ -108,9 +96,7 @@ public abstract class GameState {
     }
   }
 
-  /**
-   * Updates the state.
-   */
+  /** Updates the state. */
   public void update() {
     synchronized (lock) {
       if (!started || ended) {
@@ -130,9 +116,7 @@ public abstract class GameState {
     }
   }
 
-  /**
-   * Ends the state.
-   */
+  /** Ends the state. */
   public void end() {
 
     synchronized (lock) {

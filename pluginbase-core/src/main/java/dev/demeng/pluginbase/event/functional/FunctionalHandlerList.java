@@ -62,5 +62,4 @@ public interface FunctionalHandlerList<T, R> {
    */
   @NotNull
   R register();
-
 }

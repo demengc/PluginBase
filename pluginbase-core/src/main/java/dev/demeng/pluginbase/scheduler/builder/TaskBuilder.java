@@ -30,8 +30,8 @@ import java.util.concurrent.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Functional builder providing chained access to the functionality in
- * {@link dev.demeng.pluginbase.scheduler.Scheduler};
+ * Functional builder providing chained access to the functionality in {@link
+ * dev.demeng.pluginbase.scheduler.Scheduler};
  */
 public interface TaskBuilder {
 
@@ -79,9 +79,7 @@ public interface TaskBuilder {
   @NotNull
   TaskBuilder.ThreadContextual async();
 
-  /**
-   * The next builder in the task chain, which already has a defined task context.
-   */
+  /** The next builder in the task chain, which already has a defined task context. */
   interface ThreadContextual {
 
     /**
@@ -108,7 +106,7 @@ public interface TaskBuilder {
      * the chain.
      *
      * @param duration the duration to delay execution by
-     * @param unit     the units of the duration
+     * @param unit the units of the duration
      * @return a delayed builder
      */
     @NotNull
@@ -129,7 +127,7 @@ public interface TaskBuilder {
      * interval, and returns the next builder in the chain.
      *
      * @param duration the duration to delay execution by
-     * @param unit     the units of the duration
+     * @param unit the units of the duration
      * @return a delayed builder
      */
     @NotNull
@@ -150,23 +148,20 @@ public interface TaskBuilder {
      * and returns the next builder in the chain.
      *
      * @param duration the duration to wait between executions
-     * @param unit     the units of the duration
+     * @param unit the units of the duration
      * @return a delayed builder
      */
     @NotNull
     ContextualTaskBuilder every(long duration, @NotNull TimeUnit unit);
-
   }
 
   /**
    * The next builder in the task chain, which already has a defined delay context.
    *
-   * <p>This interface extends {@link ContextualPromiseBuilder} to allow for
-   * delayed, non-repeating tasks.</p>
+   * <p>This interface extends {@link ContextualPromiseBuilder} to allow for delayed, non-repeating
+   * tasks.
    */
-  interface Delayed extends ContextualPromiseBuilder {
-
-  }
+  interface Delayed extends ContextualPromiseBuilder {}
 
   interface DelayedTick extends Delayed {
 
@@ -179,7 +174,6 @@ public interface TaskBuilder {
      */
     @NotNull
     ContextualTaskBuilder every(long ticks);
-
   }
 
   interface DelayedTime extends Delayed {
@@ -189,7 +183,7 @@ public interface TaskBuilder {
      * in the chain.
      *
      * @param duration the duration to wait between executions
-     * @param unit     the units of the duration
+     * @param unit the units of the duration
      * @return a delayed builder
      */
     @NotNull

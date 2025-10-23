@@ -27,18 +27,13 @@ package dev.demeng.pluginbase.terminable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * An extension of {@link AutoCloseable}.
- */
+/** An extension of {@link AutoCloseable}. */
 @FunctionalInterface
 public interface Terminable extends AutoCloseable {
 
-  Terminable EMPTY = () -> {
-  };
+  Terminable EMPTY = () -> {};
 
-  /**
-   * Closes this resource.
-   */
+  /** Closes this resource. */
   @Override
   void close() throws Exception;
 
@@ -66,9 +61,7 @@ public interface Terminable extends AutoCloseable {
     }
   }
 
-  /**
-   * Closes this resource, and prints the exception if one is thrown.
-   */
+  /** Closes this resource, and prints the exception if one is thrown. */
   default void closeAndReportException() {
     try {
       close();

@@ -39,18 +39,16 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-/**
- * Builder utilities for creating GSON Objects/Arrays.
- */
+/** Builder utilities for creating GSON Objects/Arrays. */
 public final class JsonBuilder {
 
   /**
    * Creates a new object builder
    *
-   * <p>If copy is not true, the passed object will be mutated by the builder methods.</p>
+   * <p>If copy is not true, the passed object will be mutated by the builder methods.
    *
    * @param object the object to base the new builder upon
-   * @param copy   if the object should be deep copied, or just referenced.
+   * @param copy if the object should be deep copied, or just referenced.
    * @return a new builder
    */
   public static JsonObjectBuilder object(final JsonObject object, final boolean copy) {
@@ -66,7 +64,7 @@ public final class JsonBuilder {
   /**
    * Creates a new object builder, without copying the passed object.
    *
-   * <p>Equivalent to calling {@link #object(JsonObject, boolean)} with copy = false.</p>
+   * <p>Equivalent to calling {@link #object(JsonObject, boolean)} with copy = false.
    *
    * @param object the object to base the new builder upon
    * @return a new builder
@@ -88,10 +86,10 @@ public final class JsonBuilder {
   /**
    * Creates a new array builder
    *
-   * <p>If copy is not true, the passed array will be mutated by the builder methods.</p>
+   * <p>If copy is not true, the passed array will be mutated by the builder methods.
    *
    * @param array the array to base the new builder upon
-   * @param copy  if the array should be deep copied, or just referenced.
+   * @param copy if the array should be deep copied, or just referenced.
    * @return a new builder
    */
   public static JsonArrayBuilder array(final JsonArray array, final boolean copy) {
@@ -107,7 +105,7 @@ public final class JsonBuilder {
   /**
    * Creates a new array builder, without copying the passed array.
    *
-   * <p>Equivalent to calling {@link #array(JsonArray, boolean)} with copy = false.</p>
+   * <p>Equivalent to calling {@link #array(JsonArray, boolean)} with copy = false.
    *
    * @param array the array to base the new builder upon
    * @return a new builder
@@ -129,7 +127,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, {@link #nullValue()} is returned.</p>
+   * <p>If the value is null, {@link #nullValue()} is returned.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -141,7 +139,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, {@link #nullValue()} is returned.</p>
+   * <p>If the value is null, {@link #nullValue()} is returned.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -153,7 +151,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, {@link #nullValue()} is returned.</p>
+   * <p>If the value is null, {@link #nullValue()} is returned.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -165,7 +163,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, {@link #nullValue()} is returned.</p>
+   * <p>If the value is null, {@link #nullValue()} is returned.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -186,7 +184,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, a {@link NullPointerException} will be thrown.</p>
+   * <p>If the value is null, a {@link NullPointerException} will be thrown.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -200,7 +198,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, a {@link NullPointerException} will be thrown.</p>
+   * <p>If the value is null, a {@link NullPointerException} will be thrown.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -214,7 +212,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, a {@link NullPointerException} will be thrown.</p>
+   * <p>If the value is null, a {@link NullPointerException} will be thrown.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -228,7 +226,7 @@ public final class JsonBuilder {
   /**
    * Creates a JsonPrimitive from the given value.
    *
-   * <p>If the value is null, a {@link NullPointerException} will be thrown.</p>
+   * <p>If the value is null, a {@link NullPointerException} will be thrown.
    *
    * @param value the value
    * @return a json primitive for the value
@@ -242,9 +240,9 @@ public final class JsonBuilder {
   /**
    * Returns a collector which forms a JsonObject using the key and value mappers
    *
-   * @param keyMapper   the function to map from T to {@link String}
+   * @param keyMapper the function to map from T to {@link String}
    * @param valueMapper the function to map from T to {@link JsonElement}
-   * @param <T>         the type
+   * @param <T> the type
    * @return a new collector
    */
   public static <T> Collector<T, JsonObjectBuilder, JsonObject> collectToObject(
@@ -254,15 +252,14 @@ public final class JsonBuilder {
         JsonBuilder::object,
         (r, t) -> r.add(keyMapper.apply(t), valueMapper.apply(t)),
         (l, r) -> l.addAll(r.build()),
-        JsonObjectBuilder::build
-    );
+        JsonObjectBuilder::build);
   }
 
   /**
    * Returns a collector which forms a JsonArray using the value mapper
    *
    * @param valueMapper the function to map from T to {@link JsonElement}
-   * @param <T>         the type
+   * @param <T> the type
    * @return a new collector
    */
   public static <T> Collector<T, JsonArrayBuilder, JsonArray> collectToArray(
@@ -271,8 +268,7 @@ public final class JsonBuilder {
         JsonBuilder::array,
         (r, t) -> r.add(valueMapper.apply(t)),
         (l, r) -> l.addAll(r.build()),
-        JsonArrayBuilder::build
-    );
+        JsonArrayBuilder::build);
   }
 
   /**
@@ -285,15 +281,12 @@ public final class JsonBuilder {
         JsonBuilder::array,
         JsonArrayBuilder::add,
         (l, r) -> l.addAll(r.build()),
-        JsonArrayBuilder::build
-    );
+        JsonArrayBuilder::build);
   }
 
-  /**
-   * A {@link JsonObject} builder utility
-   */
-  public interface JsonObjectBuilder extends BiConsumer<String, JsonElement>,
-      Consumer<Map.Entry<String, JsonElement>> {
+  /** A {@link JsonObject} builder utility */
+  public interface JsonObjectBuilder
+      extends BiConsumer<String, JsonElement>, Consumer<Map.Entry<String, JsonElement>> {
 
     @Override
     default void accept(final Map.Entry<String, JsonElement> entry) {
@@ -330,8 +323,8 @@ public final class JsonBuilder {
 
     JsonObjectBuilder addIfAbsent(String property, @Nullable JsonElement value, boolean copy);
 
-    default JsonObjectBuilder addIfAbsent(final String property,
-        @Nullable final JsonElement value) {
+    default JsonObjectBuilder addIfAbsent(
+        final String property, @Nullable final JsonElement value) {
       return addIfAbsent(property, value, false);
     }
 
@@ -369,15 +362,15 @@ public final class JsonBuilder {
     }
 
     default <T extends JsonElement> JsonObjectBuilder addAll(
-        final Stream<Map.Entry<String, T>> stream,
-        final boolean deepCopy) {
+        final Stream<Map.Entry<String, T>> stream, final boolean deepCopy) {
       Objects.requireNonNull(stream, "stream");
-      stream.forEach(e -> {
-        if (e == null || e.getKey() == null) {
-          return;
-        }
-        add(e.getKey(), e.getValue(), deepCopy);
-      });
+      stream.forEach(
+          e -> {
+            if (e == null || e.getKey() == null) {
+              return;
+            }
+            add(e.getKey(), e.getValue(), deepCopy);
+          });
       return this;
     }
 
@@ -461,12 +454,13 @@ public final class JsonBuilder {
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
         final Stream<Map.Entry<String, T>> stream, final boolean deepCopy) {
       Objects.requireNonNull(stream, "stream");
-      stream.forEach(e -> {
-        if (e == null || e.getKey() == null) {
-          return;
-        }
-        addIfAbsent(e.getKey(), e.getValue(), deepCopy);
-      });
+      stream.forEach(
+          e -> {
+            if (e == null || e.getKey() == null) {
+              return;
+            }
+            addIfAbsent(e.getKey(), e.getValue(), deepCopy);
+          });
       return this;
     }
 
@@ -533,12 +527,9 @@ public final class JsonBuilder {
     }
 
     JsonObject build();
-
   }
 
-  /**
-   * A {@link JsonArray} builder utility
-   */
+  /** A {@link JsonArray} builder utility */
   public interface JsonArrayBuilder extends Consumer<JsonElement> {
 
     @Override
@@ -568,8 +559,8 @@ public final class JsonBuilder {
       return add(primitive(value));
     }
 
-    default <T extends JsonElement> JsonArrayBuilder addAll(final Iterable<T> iterable,
-        final boolean copy) {
+    default <T extends JsonElement> JsonArrayBuilder addAll(
+        final Iterable<T> iterable, final boolean copy) {
       Objects.requireNonNull(iterable, "iterable");
       for (final T e : iterable) {
         add(e, copy);
@@ -581,8 +572,8 @@ public final class JsonBuilder {
       return addAll(iterable, false);
     }
 
-    default <T extends JsonElement> JsonArrayBuilder addAll(final Stream<T> stream,
-        final boolean copy) {
+    default <T extends JsonElement> JsonArrayBuilder addAll(
+        final Stream<T> stream, final boolean copy) {
       Objects.requireNonNull(stream, "iterable");
       stream.forEach(e -> add(e, copy));
       return this;
@@ -625,7 +616,6 @@ public final class JsonBuilder {
     }
 
     JsonArray build();
-
   }
 
   private static final class JsonObjectBuilderImpl implements JsonObjectBuilder {
@@ -637,8 +627,8 @@ public final class JsonBuilder {
     }
 
     @Override
-    public JsonObjectBuilder add(final String property, @Nullable JsonElement value,
-        final boolean copy) {
+    public JsonObjectBuilder add(
+        final String property, @Nullable JsonElement value, final boolean copy) {
       Objects.requireNonNull(property, "property");
       if (value == null) {
         value = nullValue();
@@ -655,8 +645,8 @@ public final class JsonBuilder {
     }
 
     @Override
-    public JsonObjectBuilder addIfAbsent(final String property, @Nullable final JsonElement value,
-        final boolean copy) {
+    public JsonObjectBuilder addIfAbsent(
+        final String property, @Nullable final JsonElement value, final boolean copy) {
       Objects.requireNonNull(property, "property");
       if (this.handle.has(property)) {
         return this;
@@ -704,5 +694,4 @@ public final class JsonBuilder {
   private JsonBuilder() {
     throw new UnsupportedOperationException("This class cannot be instantiated");
   }
-
 }

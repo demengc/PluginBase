@@ -30,9 +30,7 @@ import dev.demeng.pluginbase.terminable.Terminable;
 import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.JedisPool;
 
-/**
- * Represents an individual redis instance, created by the library.
- */
+/** Represents an individual redis instance, created by the library. */
 public interface IRedis extends Terminable {
 
   /**

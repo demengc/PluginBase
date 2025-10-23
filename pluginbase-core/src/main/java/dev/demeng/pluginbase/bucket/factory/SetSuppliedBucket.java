@@ -33,8 +33,8 @@ class SetSuppliedBucket<E> extends AbstractBucket<E> {
 
   private final Supplier<Set<E>> setSupplier;
 
-  SetSuppliedBucket(final int size, final PartitioningStrategy<E> strategy,
-      final Supplier<Set<E>> setSupplier) {
+  SetSuppliedBucket(
+      final int size, final PartitioningStrategy<E> strategy, final Supplier<Set<E>> setSupplier) {
     super(size, strategy);
     this.setSupplier = setSupplier;
   }

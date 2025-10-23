@@ -33,9 +33,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Various utilities for playing sound effects.
- */
+/** Various utilities for playing sound effects. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Sounds {
 
@@ -48,15 +46,14 @@ public final class Sounds {
   /**
    * Play a sound to a player.
    *
-   * @param player    The player that should hear the sound
+   * @param player The player that should hear the sound
    * @param soundName The name of the sound, either the enum name for vanilla sounds, or a custom
-   *                  sound name prefixed with {@link #CUSTOM_PREFIX}
-   * @param volume    The volume of the sound
-   * @param pitch     The pitch of the sound
+   *     sound name prefixed with {@link #CUSTOM_PREFIX}
+   * @param volume The volume of the sound
+   * @param pitch The pitch of the sound
    */
-  public static void playToPlayer(@NotNull final Player player, final String soundName,
-      final float volume,
-      final float pitch) {
+  public static void playToPlayer(
+      @NotNull final Player player, final String soundName, final float volume, final float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
       return;
@@ -82,11 +79,11 @@ public final class Sounds {
   /**
    * Plays the sound in the configuration section to the player.
    *
-   * @param player  The player that will hear the sound
+   * @param player The player that will hear the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToPlayer(@NotNull final Player player,
-      @NotNull final ConfigurationSection section) {
+  public static void playToPlayer(
+      @NotNull final Player player, @NotNull final ConfigurationSection section) {
     playToPlayer(
         player,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -97,15 +94,14 @@ public final class Sounds {
   /**
    * Play a sound to a location.
    *
-   * @param loc       The location the sound will be played
+   * @param loc The location the sound will be played
    * @param soundName The name of the sound, either the enum name for vanilla sounds, or a custom
-   *                  sound name prefixed with {@link #CUSTOM_PREFIX}
-   * @param volume    The volume of the sound
-   * @param pitch     The pitch of the sound
+   *     sound name prefixed with {@link #CUSTOM_PREFIX}
+   * @param volume The volume of the sound
+   * @param pitch The pitch of the sound
    */
-  public static void playToLocation(@NotNull final Location loc, final String soundName,
-      final float volume,
-      final float pitch) {
+  public static void playToLocation(
+      @NotNull final Location loc, final String soundName, final float volume, final float pitch) {
 
     if (soundName == null || soundName.equalsIgnoreCase("none")) {
       return;
@@ -131,11 +127,11 @@ public final class Sounds {
   /**
    * Plays the sound in the configuration section to the location.
    *
-   * @param loc     The location to play the sound
+   * @param loc The location to play the sound
    * @param section The configuration section containing the sound
    */
-  public static void playToLocation(@NotNull final Location loc,
-      @NotNull final ConfigurationSection section) {
+  public static void playToLocation(
+      @NotNull final Location loc, @NotNull final ConfigurationSection section) {
     playToLocation(
         loc,
         Objects.requireNonNull(section.getString("sound"), "Sound to play is null"),
@@ -147,11 +143,13 @@ public final class Sounds {
    * Plays a vanilla sound to a player.
    *
    * @param player The player that will hear the sound
-   * @param sound  The vanilla sound to play
+   * @param sound The vanilla sound to play
    * @param volume The volume of the sound
-   * @param pitch  The pitch of the sound
+   * @param pitch The pitch of the sound
    */
-  public static void playVanillaToPlayer(@NotNull final Player player, @NotNull final Sound sound,
+  public static void playVanillaToPlayer(
+      @NotNull final Player player,
+      @NotNull final Sound sound,
       final float volume,
       final float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
@@ -161,11 +159,13 @@ public final class Sounds {
    * Plays a custom sound to a player.
    *
    * @param player The player that will hear the sound
-   * @param sound  The custom sound to play
+   * @param sound The custom sound to play
    * @param volume The volume of the sound
-   * @param pitch  The pitch of the sound
+   * @param pitch The pitch of the sound
    */
-  public static void playCustomToPlayer(@NotNull final Player player, @NotNull final String sound,
+  public static void playCustomToPlayer(
+      @NotNull final Player player,
+      @NotNull final String sound,
       final float volume,
       final float pitch) {
     player.playSound(player.getLocation(), sound, volume, pitch);
@@ -174,26 +174,32 @@ public final class Sounds {
   /**
    * Plays a vanilla sound to a location.
    *
-   * @param loc    The location where the sound will be played
-   * @param sound  The vanilla sound to play
+   * @param loc The location where the sound will be played
+   * @param sound The vanilla sound to play
    * @param volume The volume of the sound
-   * @param pitch  The pitch of the sound
+   * @param pitch The pitch of the sound
    */
-  public static void playVanillaToLocation(@NotNull final Location loc, @NotNull final Sound sound,
-      final float volume, final float pitch) {
+  public static void playVanillaToLocation(
+      @NotNull final Location loc,
+      @NotNull final Sound sound,
+      final float volume,
+      final float pitch) {
     Objects.requireNonNull(loc.getWorld(), "World is null").playSound(loc, sound, volume, pitch);
   }
 
   /**
    * Plays a custom sound to a location.
    *
-   * @param loc    The location where the sound will be played
-   * @param sound  The custom sound to play
+   * @param loc The location where the sound will be played
+   * @param sound The custom sound to play
    * @param volume The volume of the sound
-   * @param pitch  The pitch of the sound
+   * @param pitch The pitch of the sound
    */
-  public static void playCustomToLocation(@NotNull final Location loc, @NotNull final String sound,
-      final float volume, final float pitch) {
+  public static void playCustomToLocation(
+      @NotNull final Location loc,
+      @NotNull final String sound,
+      final float volume,
+      final float pitch) {
     Objects.requireNonNull(loc.getWorld(), "World is null").playSound(loc, sound, volume, pitch);
   }
 }

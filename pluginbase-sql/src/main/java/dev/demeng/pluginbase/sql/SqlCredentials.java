@@ -28,35 +28,23 @@ import lombok.Data;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The POJO containing the credentials to an SQL database.
- */
+/** The POJO containing the credentials to an SQL database. */
 @Data(staticConstructor = "of")
 public final class SqlCredentials {
 
-  /**
-   * The host (IP) of the database. Local host is supported.
-   */
+  /** The host (IP) of the database. Local host is supported. */
   @NotNull private final String host;
 
-  /**
-   * The port to the database, typically 3306.
-   */
+  /** The port to the database, typically 3306. */
   private final int port;
 
-  /**
-   * The name of the database.
-   */
+  /** The name of the database. */
   @NotNull private final String database;
 
-  /**
-   * The username to the database.
-   */
+  /** The username to the database. */
   @NotNull private final String user;
 
-  /**
-   * The password to the database.
-   */
+  /** The password to the database. */
   @NotNull private final String password;
 
   /**

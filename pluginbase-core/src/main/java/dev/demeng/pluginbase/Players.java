@@ -38,9 +38,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Utility for operations involving multiple players.
- */
+/** Utility for operations involving multiple players. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Players {
 
@@ -92,15 +90,14 @@ public final class Players {
   /**
    * Applies an action to all players within a given radius of a point.
    *
-   * @param center   The point
-   * @param radius   The radius
+   * @param center The point
+   * @param radius The radius
    * @param consumer The action to apply
    */
   public static void forEachInRange(
       @NotNull final Location center,
       final double radius,
-      @NotNull final Consumer<Player> consumer
-  ) {
+      @NotNull final Consumer<Player> consumer) {
     streamInRange(center, radius).forEach(consumer);
   }
 }

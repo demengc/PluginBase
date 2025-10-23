@@ -44,9 +44,7 @@ public class YamlConfig {
    */
   private static final String VERSION_KEY = "config-version";
 
-  /**
-   * The system file of the config.
-   */
+  /** The system file of the config. */
   @Getter private final File file;
 
   /**
@@ -60,10 +58,9 @@ public class YamlConfig {
    *
    * @param name The name of the config, ending in .yml
    * @throws InvalidConfigurationException If there was a formatting/parsing error in the config
-   * @throws IOException                   If the file could not be created and/or loaded
+   * @throws IOException If the file could not be created and/or loaded
    */
-  public YamlConfig(final String name)
-      throws InvalidConfigurationException, IOException {
+  public YamlConfig(final String name) throws InvalidConfigurationException, IOException {
 
     final String completeName = name.endsWith(".yml") ? name : name + ".yml";
 
@@ -84,7 +81,7 @@ public class YamlConfig {
    * Reloads the configuration file.
    *
    * @throws InvalidConfigurationException If there was a formatting/parsing error in the config
-   * @throws IOException                   If the file could not be reloaded
+   * @throws IOException If the file could not be reloaded
    */
   public void reload() throws InvalidConfigurationException, IOException {
     config.load(file);

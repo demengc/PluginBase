@@ -34,9 +34,7 @@ import java.util.Properties;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * Utility for getting information from server.properties.
- */
+/** Utility for getting information from server.properties. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ServerProperties {
 
@@ -70,9 +68,7 @@ public final class ServerProperties {
     }
   }
 
-  /**
-   * Clears the properties cache.
-   */
+  /** Clears the properties cache. */
   public static void clearCache() {
     cache.clear();
   }

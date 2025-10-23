@@ -37,9 +37,7 @@ import java.util.function.Supplier;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * A collection of utility methods for delegating Java 8 functions.
- */
+/** A collection of utility methods for delegating Java 8 functions. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Delegates {
 
@@ -94,8 +92,8 @@ public final class Delegates {
     }
   }
 
-  private static final class RunnableToConsumer<T> extends AbstractDelegate<Runnable> implements
-      Consumer<T> {
+  private static final class RunnableToConsumer<T> extends AbstractDelegate<Runnable>
+      implements Consumer<T> {
 
     RunnableToConsumer(final Runnable delegate) {
       super(delegate);
@@ -107,8 +105,8 @@ public final class Delegates {
     }
   }
 
-  private static final class CallableToSupplier<T> extends AbstractDelegate<Callable<T>> implements
-      Supplier<T> {
+  private static final class CallableToSupplier<T> extends AbstractDelegate<Callable<T>>
+      implements Supplier<T> {
 
     CallableToSupplier(final Callable<T> delegate) {
       super(delegate);
@@ -126,8 +124,8 @@ public final class Delegates {
     }
   }
 
-  private static final class RunnableToSupplier<T> extends AbstractDelegate<Runnable> implements
-      Supplier<T> {
+  private static final class RunnableToSupplier<T> extends AbstractDelegate<Runnable>
+      implements Supplier<T> {
 
     RunnableToSupplier(final Runnable delegate) {
       super(delegate);
@@ -140,8 +138,8 @@ public final class Delegates {
     }
   }
 
-  private static final class ConsumerToBiConsumerFirst<T, U> extends
-      AbstractDelegate<Consumer<T>> implements BiConsumer<T, U> {
+  private static final class ConsumerToBiConsumerFirst<T, U> extends AbstractDelegate<Consumer<T>>
+      implements BiConsumer<T, U> {
 
     ConsumerToBiConsumerFirst(final Consumer<T> delegate) {
       super(delegate);
@@ -153,8 +151,8 @@ public final class Delegates {
     }
   }
 
-  private static final class ConsumerToBiConsumerSecond<T, U> extends
-      AbstractDelegate<Consumer<U>> implements BiConsumer<T, U> {
+  private static final class ConsumerToBiConsumerSecond<T, U> extends AbstractDelegate<Consumer<U>>
+      implements BiConsumer<T, U> {
 
     ConsumerToBiConsumerSecond(final Consumer<U> delegate) {
       super(delegate);
@@ -166,8 +164,8 @@ public final class Delegates {
     }
   }
 
-  private static final class PredicateToBiPredicateFirst<T, U> extends
-      AbstractDelegate<Predicate<T>> implements BiPredicate<T, U> {
+  private static final class PredicateToBiPredicateFirst<T, U>
+      extends AbstractDelegate<Predicate<T>> implements BiPredicate<T, U> {
 
     PredicateToBiPredicateFirst(final Predicate<T> delegate) {
       super(delegate);
@@ -179,8 +177,8 @@ public final class Delegates {
     }
   }
 
-  private static final class PredicateToBiPredicateSecond<T, U> extends
-      AbstractDelegate<Predicate<U>> implements BiPredicate<T, U> {
+  private static final class PredicateToBiPredicateSecond<T, U>
+      extends AbstractDelegate<Predicate<U>> implements BiPredicate<T, U> {
 
     PredicateToBiPredicateSecond(final Predicate<U> delegate) {
       super(delegate);
@@ -192,8 +190,8 @@ public final class Delegates {
     }
   }
 
-  private static final class ConsumerToFunction<T, R> extends
-      AbstractDelegate<Consumer<T>> implements Function<T, R> {
+  private static final class ConsumerToFunction<T, R> extends AbstractDelegate<Consumer<T>>
+      implements Function<T, R> {
 
     ConsumerToFunction(final Consumer<T> delegate) {
       super(delegate);
@@ -206,8 +204,8 @@ public final class Delegates {
     }
   }
 
-  private static final class RunnableToFunction<T, R> extends AbstractDelegate<Runnable> implements
-      Function<T, R> {
+  private static final class RunnableToFunction<T, R> extends AbstractDelegate<Runnable>
+      implements Function<T, R> {
 
     RunnableToFunction(final Runnable delegate) {
       super(delegate);

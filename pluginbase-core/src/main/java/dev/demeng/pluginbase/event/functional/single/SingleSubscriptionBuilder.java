@@ -50,7 +50,7 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
    * Makes a HandlerBuilder for a given event
    *
    * @param eventClass the class of the event
-   * @param <T>        the event type
+   * @param <T> the event type
    * @return a {@link SingleSubscriptionBuilder} to construct the event handler
    * @throws NullPointerException if eventClass is null
    */
@@ -64,15 +64,14 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
    * Makes a HandlerBuilder for a given event
    *
    * @param eventClass the class of the event
-   * @param priority   the priority to listen at
-   * @param <T>        the event type
+   * @param priority the priority to listen at
+   * @param <T> the event type
    * @return a {@link SingleSubscriptionBuilder} to construct the event handler
    * @throws NullPointerException if eventClass or priority is null
    */
   @NotNull
   static <T extends Event> SingleSubscriptionBuilder<T> newBuilder(
-      @NotNull final Class<T> eventClass,
-      @NotNull final EventPriority priority) {
+      @NotNull final Class<T> eventClass, @NotNull final EventPriority priority) {
     Objects.requireNonNull(eventClass, "eventClass");
     Objects.requireNonNull(priority, "priority");
     return new SingleSubscriptionBuilderImpl<>(eventClass, priority);
@@ -83,14 +82,16 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
   @NotNull
   @Override
   default SingleSubscriptionBuilder<T> expireIf(@NotNull final Predicate<T> predicate) {
-    return expireIf(Delegates.predicateToBiPredicateSecond(predicate), ExpiryTestStage.PRE,
+    return expireIf(
+        Delegates.predicateToBiPredicateSecond(predicate),
+        ExpiryTestStage.PRE,
         ExpiryTestStage.POST_HANDLE);
   }
 
   @NotNull
   @Override
-  default SingleSubscriptionBuilder<T> expireAfter(final long duration,
-      @NotNull final TimeUnit unit) {
+  default SingleSubscriptionBuilder<T> expireAfter(
+      final long duration, @NotNull final TimeUnit unit) {
     Objects.requireNonNull(unit, "unit");
     Preconditions.checkArgument(duration >= 1, "duration < 1");
     final long expiry = Math.addExact(System.currentTimeMillis(), unit.toMillis(duration));
@@ -101,7 +102,9 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
   @Override
   default SingleSubscriptionBuilder<T> expireAfter(final long maxCalls) {
     Preconditions.checkArgument(maxCalls >= 1, "maxCalls < 1");
-    return expireIf((handler, event) -> handler.getCallCounter() >= maxCalls, ExpiryTestStage.PRE,
+    return expireIf(
+        (handler, event) -> handler.getCallCounter() >= maxCalls,
+        ExpiryTestStage.PRE,
         ExpiryTestStage.POST_HANDLE);
   }
 
@@ -112,18 +115,19 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
   /**
    * Add a expiry predicate.
    *
-   * @param predicate  the expiry test
+   * @param predicate the expiry test
    * @param testPoints when to test the expiry predicate
    * @return ths builder instance
    */
   @NotNull
-  SingleSubscriptionBuilder<T> expireIf(@NotNull BiPredicate<SingleSubscription<T>, T> predicate,
+  SingleSubscriptionBuilder<T> expireIf(
+      @NotNull BiPredicate<SingleSubscription<T>, T> predicate,
       @NotNull ExpiryTestStage... testPoints);
 
   /**
    * Sets the exception consumer for the handler.
    *
-   * <p> If an exception is thrown in the handler, it is passed to this consumer to be swallowed.
+   * <p>If an exception is thrown in the handler, it is passed to this consumer to be swallowed.
    *
    * @param consumer the consumer
    * @return the builder instance
@@ -173,5 +177,4 @@ public interface SingleSubscriptionBuilder<T extends Event> extends Subscription
       @NotNull final BiConsumer<SingleSubscription<T>, ? super T> handler) {
     return handlers().biConsumer(handler).register();
   }
-
 }

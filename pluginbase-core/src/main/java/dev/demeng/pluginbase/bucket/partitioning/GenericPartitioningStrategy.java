@@ -57,5 +57,4 @@ public interface GenericPartitioningStrategy extends PartitioningStrategy<Object
   default int allocate(final Object object, final Bucket<Object> bucket) {
     return allocate(bucket);
   }
-
 }

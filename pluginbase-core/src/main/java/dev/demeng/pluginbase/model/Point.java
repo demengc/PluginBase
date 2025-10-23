@@ -32,9 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * An immutable and serializable Location object, including the yaw and pitch.
- */
+/** An immutable and serializable Location object, including the yaw and pitch. */
 @Data(staticConstructor = "of")
 public class Point implements YamlSerializable {
 
@@ -47,8 +45,13 @@ public class Point implements YamlSerializable {
 
   @NotNull
   public static Point of(@NotNull final Location loc) {
-    return of(Objects.requireNonNull(loc.getWorld()).getName(), loc.getX(), loc.getY(), loc.getZ(),
-        loc.getYaw(), loc.getPitch());
+    return of(
+        Objects.requireNonNull(loc.getWorld()).getName(),
+        loc.getX(),
+        loc.getY(),
+        loc.getZ(),
+        loc.getYaw(),
+        loc.getPitch());
   }
 
   @Override
@@ -63,9 +66,13 @@ public class Point implements YamlSerializable {
 
   @NotNull
   public static Point deserialize(@NotNull final ConfigurationSection section) {
-    return of(Objects.requireNonNull(section.getString("world")),
-        section.getDouble("x"), section.getDouble("y"), section.getDouble("z"),
-        (float) section.getDouble("yaw"), (float) section.getDouble("pitch"));
+    return of(
+        Objects.requireNonNull(section.getString("world")),
+        section.getDouble("x"),
+        section.getDouble("y"),
+        section.getDouble("z"),
+        (float) section.getDouble("yaw"),
+        (float) section.getDouble("pitch"));
   }
 
   /**

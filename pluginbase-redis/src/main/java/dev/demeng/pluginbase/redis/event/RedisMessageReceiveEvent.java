@@ -33,22 +33,16 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Synchronous event called when a Redis message is received by the server.
- */
+/** Synchronous event called when a Redis message is received by the server. */
 @RequiredArgsConstructor
 public class RedisMessageReceiveEvent extends Event implements IRedisMessageReceiveEvent {
 
   @NotNull private static final HandlerList HANDLERS = new HandlerList();
 
-  /**
-   * Name of the channel the message came from.
-   */
+  /** Name of the channel the message came from. */
   @Getter @NotNull private final String channel;
 
-  /**
-   * MessageTransferObject containing message's data.
-   */
+  /** MessageTransferObject containing message's data. */
   @NotNull private final MessageTransferObject messageTransferObject;
 
   @Override

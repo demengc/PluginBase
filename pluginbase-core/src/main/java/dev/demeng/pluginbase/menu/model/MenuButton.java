@@ -53,15 +53,14 @@ public class MenuButton {
   /**
    * Creates a new menu button.
    *
-   * @param slot     The slot the button should show up in. Must be less than the inventory size
-   *                 minus 1. Note that inventory slots start at 0. In single-page menus, this
-   *                 button will be ignored and not be placed inside the menu if the slot is
-   *                 negative. In paged menus, this slot must be set to -1. If it is higher, the
-   *                 button will be placed in the specified slot on the first page. If it is lower,
-   *                 the button will not be placed
-   * @param stack    The item stack of the button
+   * @param slot The slot the button should show up in. Must be less than the inventory size minus
+   *     1. Note that inventory slots start at 0. In single-page menus, this button will be ignored
+   *     and not be placed inside the menu if the slot is negative. In paged menus, this slot must
+   *     be set to -1. If it is higher, the button will be placed in the specified slot on the first
+   *     page. If it is lower, the button will not be placed
+   * @param stack The item stack of the button
    * @param consumer The consumer for the {@link InventoryClickEvent}, which will be accepted when
-   *                 this button is clicked
+   *     this button is clicked
    * @return The button
    */
   @NotNull
@@ -77,9 +76,9 @@ public class MenuButton {
    * {@code slot}. See {@link ItemSerializer} for the format of item stacks. The slot will always be
    * subtracted by 1.
    *
-   * @param section    The configuration section containing the button information
+   * @param section The configuration section containing the button information
    * @param translator The translator for strings in the item
-   * @param consumer   The consumer for the button
+   * @param consumer The consumer for the button
    * @return The button from config
    */
   @NotNull
@@ -102,7 +101,7 @@ public class MenuButton {
    * {@code slot}. See {@link ItemSerializer} for the format of item stacks. The slot will always be
    * subtracted by 1.
    *
-   * @param section  The configuration section containing the button information
+   * @param section The configuration section containing the button information
    * @param consumer The consumer for the button
    * @return The button from config
    */
@@ -118,10 +117,10 @@ public class MenuButton {
    * configuration section may have. Unlike {@link #create(ConfigurationSection, Consumer)}, the
    * slot is not subtracted 1. See {@link ItemSerializer} for the format of item stacks.
    *
-   * @param slot       The slot of the button
-   * @param section    The configuration section containing the button information
+   * @param slot The slot of the button
+   * @param section The configuration section containing the button information
    * @param translator The translator for strings in the tiem
-   * @param consumer   The consumer for the button
+   * @param consumer The consumer for the button
    * @return The button from config
    */
   @NotNull
@@ -138,8 +137,8 @@ public class MenuButton {
    * configuration section may have. Unlike {@link #create(ConfigurationSection, Consumer)}, the
    * slot is not subtracted 1. See {@link ItemSerializer} for the format of item stacks.
    *
-   * @param slot     The slot of the button
-   * @param section  The configuration section containing the button information
+   * @param slot The slot of the button
+   * @param section The configuration section containing the button information
    * @param consumer The consumer for the button
    * @return The button from config
    */

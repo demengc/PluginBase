@@ -24,9 +24,7 @@
 
 package dev.demeng.pluginbase.exceptions;
 
-/**
- * A general exception caused by an event handler.
- */
+/** A general exception caused by an event handler. */
 public class EventHandlerException extends BaseException {
 
   public EventHandlerException(final Throwable cause, final Object event) {

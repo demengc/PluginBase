@@ -43,41 +43,37 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Utilities for time/duration parsing and formatting.
- */
+/** Utilities for time/duration parsing and formatting. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Time {
 
-  /**
-   * The date format used for dates and times combined.
-   */
+  /** The date format used for dates and times combined. */
   public static final ThreadLocal<DateFormat> DATE_TIME_FORMAT =
-      ThreadLocal.withInitial(() -> new SimpleDateFormat(
-          BaseManager.getBaseSettings().dateTimeFormat()));
+      ThreadLocal.withInitial(
+          () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateTimeFormat()));
 
-  /**
-   * The date format used for dates.
-   */
+  /** The date format used for dates. */
   public static final ThreadLocal<DateFormat> DATE_FORMAT =
-      ThreadLocal.withInitial(() -> new SimpleDateFormat(
-          BaseManager.getBaseSettings().dateFormat()));
+      ThreadLocal.withInitial(
+          () -> new SimpleDateFormat(BaseManager.getBaseSettings().dateFormat()));
 
-  private static final Map<ChronoUnit, String> UNITS_PATTERNS = ImmutableMap.<ChronoUnit, String>builder()
-      .put(ChronoUnit.YEARS, "y(?:ear)?s?")
-      .put(ChronoUnit.MONTHS, "mo(?:nth)?s?")
-      .put(ChronoUnit.WEEKS, "w(?:eek)?s?")
-      .put(ChronoUnit.DAYS, "d(?:ay)?s?")
-      .put(ChronoUnit.HOURS, "h(?:our|r)?s?")
-      .put(ChronoUnit.MINUTES, "m(?:inute|in)?s?")
-      .put(ChronoUnit.SECONDS, "(?:s(?:econd|ec)?s?)?")
-      .build();
+  private static final Map<ChronoUnit, String> UNITS_PATTERNS =
+      ImmutableMap.<ChronoUnit, String>builder()
+          .put(ChronoUnit.YEARS, "y(?:ear)?s?")
+          .put(ChronoUnit.MONTHS, "mo(?:nth)?s?")
+          .put(ChronoUnit.WEEKS, "w(?:eek)?s?")
+          .put(ChronoUnit.DAYS, "d(?:ay)?s?")
+          .put(ChronoUnit.HOURS, "h(?:our|r)?s?")
+          .put(ChronoUnit.MINUTES, "m(?:inute|in)?s?")
+          .put(ChronoUnit.SECONDS, "(?:s(?:econd|ec)?s?)?")
+          .build();
 
   private static final ChronoUnit[] UNITS = UNITS_PATTERNS.keySet().toArray(new ChronoUnit[0]);
 
-  private static final String PATTERN_STRING = UNITS_PATTERNS.values().stream()
-      .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
-      .collect(Collectors.joining());
+  private static final String PATTERN_STRING =
+      UNITS_PATTERNS.values().stream()
+          .map(pattern -> "(?:(\\d+)\\s*" + pattern + "[,\\s]*)?")
+          .collect(Collectors.joining());
 
   private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING, Pattern.CASE_INSENSITIVE);
 
@@ -164,7 +160,7 @@ public final class Time {
    * Formats the duration using the selected formatter.
    *
    * @param formatter The formatter to use
-   * @param duration  The duration to format
+   * @param duration The duration to format
    * @return The formatted duration
    */
   public static String formatDuration(final DurationFormatter formatter, final long duration) {
@@ -199,8 +195,7 @@ public final class Time {
   }
 
   private static SimpleDateFormat refreshFormat(
-      final ThreadLocal<DateFormat> formatHolder,
-      final String pattern) {
+      final ThreadLocal<DateFormat> formatHolder, final String pattern) {
 
     final DateFormat dateFormat = formatHolder.get();
 
@@ -217,33 +212,26 @@ public final class Time {
     return format;
   }
 
-  /**
-   * The duration formatters.
-   */
+  /** The duration formatters. */
   public enum DurationFormatter {
 
-    /**
-     * The long format: 3 weeks 2 days 1 hour.
-     */
+    /** The long format: 3 weeks 2 days 1 hour. */
     LONG(false, Integer.MAX_VALUE),
-    /**
-     * The concise format: 3w 2d 1h.
-     */
+    /** The concise format: 3w 2d 1h. */
     CONCISE(true, Integer.MAX_VALUE),
-    /**
-     * The concise, but low accuracy (maximum 3 time units) format.
-     */
+    /** The concise, but low accuracy (maximum 3 time units) format. */
     CONCISE_LOW_ACCURACY(true, 3);
 
-    private static final Unit[] UNITS = new Unit[]{
-        new Unit(ChronoUnit.YEARS),
-        new Unit(ChronoUnit.MONTHS),
-        new Unit(ChronoUnit.WEEKS),
-        new Unit(ChronoUnit.DAYS),
-        new Unit(ChronoUnit.HOURS),
-        new Unit(ChronoUnit.MINUTES),
-        new Unit(ChronoUnit.SECONDS)
-    };
+    private static final Unit[] UNITS =
+        new Unit[] {
+          new Unit(ChronoUnit.YEARS),
+          new Unit(ChronoUnit.MONTHS),
+          new Unit(ChronoUnit.WEEKS),
+          new Unit(ChronoUnit.DAYS),
+          new Unit(ChronoUnit.HOURS),
+          new Unit(ChronoUnit.MINUTES),
+          new Unit(ChronoUnit.SECONDS)
+        };
 
     private final int accuracy;
     private final boolean concise;
@@ -269,12 +257,12 @@ public final class Time {
      * format, displaying up to the specified number of {@code elements}.
      *
      * @param duration The duration
-     * @param concise  If the output should be concisely formatted
+     * @param concise If the output should be concisely formatted
      * @param elements The maximum number of elements to display
      * @return the formatted string
      */
-    public static String format(final Duration duration, final boolean concise,
-        final int elements) {
+    public static String format(
+        final Duration duration, final boolean concise, final int elements) {
       long seconds = duration.getSeconds();
       final StringBuilder output = new StringBuilder();
       int outputSize = 0;
@@ -302,7 +290,7 @@ public final class Time {
      * format, displaying all possible elements.
      *
      * @param duration The duration
-     * @param concise  If the output should be concisely formatted
+     * @param concise If the output should be concisely formatted
      * @return The formatted string
      */
     public static String format(final Duration duration, final boolean concise) {

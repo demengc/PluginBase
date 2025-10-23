@@ -31,9 +31,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A cooldown lasting a specified amount of time.
- */
+/** A cooldown lasting a specified amount of time. */
 public class Cooldown {
 
   // When the last test occurred.
@@ -60,7 +58,7 @@ public class Cooldown {
    * Creates a cooldown lasting a specified amount of time.
    *
    * @param amount The amount of time
-   * @param unit   The unit of time
+   * @param unit The unit of time
    * @return The new Cooldown
    */
   @NotNull
@@ -71,7 +69,7 @@ public class Cooldown {
   /**
    * Returns true if the cooldown is not active, and then resets the timer.
    *
-   * <p>If the cooldown is currently active, the timer is <strong>not</strong> reset.</p>
+   * <p>If the cooldown is currently active, the timer is <strong>not</strong> reset.
    *
    * @return true if the cooldown is not active
    */
@@ -103,9 +101,7 @@ public class Cooldown {
     return System.currentTimeMillis() - getLastTested().orElse(0);
   }
 
-  /**
-   * Resets the cooldown.
-   */
+  /** Resets the cooldown. */
   public void reset() {
     setLastTested(System.currentTimeMillis());
   }
@@ -113,7 +109,7 @@ public class Cooldown {
   /**
    * Gets the time in milliseconds until the cooldown will become inactive.
    *
-   * <p>If the cooldown is not active, this method returns <code>0</code>.</p>
+   * <p>If the cooldown is not active, this method returns <code>0</code>.
    *
    * @return The time in millis until the cooldown will expire
    */
@@ -125,7 +121,7 @@ public class Cooldown {
   /**
    * Gets the time until the cooldown will become inactive.
    *
-   * <p>If the cooldown is not active, this method returns <code>0</code>.</p>
+   * <p>If the cooldown is not active, this method returns <code>0</code>.
    *
    * @param unit The unit to return in
    * @return The time until the cooldown will expire
@@ -147,8 +143,8 @@ public class Cooldown {
   /**
    * Sets the time in milliseconds when this cooldown was last tested.
    *
-   * <p>Note: this should only be used when re-constructing a cooldown
-   * instance. Use {@link #test()} otherwise.</p>
+   * <p>Note: this should only be used when re-constructing a cooldown instance. Use {@link #test()}
+   * otherwise.
    *
    * @param time The time
    */

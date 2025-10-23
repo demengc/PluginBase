@@ -30,7 +30,7 @@ import dev.demeng.pluginbase.terminable.Terminable;
 /**
  * A tool to synchronize code with the main server thread.
  *
- * <p>It is highly recommended to use this interface with try-with-resource blocks.</p>
+ * <p>It is highly recommended to use this interface with try-with-resource blocks.
  *
  * @see dev.demeng.pluginbase.promise.ThreadContext#SYNC
  */
@@ -39,7 +39,7 @@ public interface ServerThreadLock extends Terminable {
   /**
    * Blocks the current thread until a {@link ServerThreadLock} can be obtained.
    *
-   * <p>Will attempt to return immediately if the calling thread is the main thread itself.</p>
+   * <p>Will attempt to return immediately if the calling thread is the main thread itself.
    *
    * @return a lock
    */
@@ -47,9 +47,7 @@ public interface ServerThreadLock extends Terminable {
     return new ServerThreadLockImpl();
   }
 
-  /**
-   * Closes the lock, and allows the main thread to continue
-   */
+  /** Closes the lock, and allows the main thread to continue */
   @Override
   void close();
 }

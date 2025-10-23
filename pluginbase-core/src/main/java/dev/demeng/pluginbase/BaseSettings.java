@@ -87,25 +87,17 @@ public interface BaseSettings {
     return "MMMM dd yyyy";
   }
 
-  /**
-   * A 3-color color scheme for messages or other text.
-   */
+  /** A 3-color color scheme for messages or other text. */
   @Data
   class ColorScheme {
 
-    /**
-     * The primarily color, used as &p.
-     */
+    /** The primarily color, used as &p. */
     @NotNull private final String primary;
 
-    /**
-     * The secondary color, used as &s.
-     */
+    /** The secondary color, used as &s. */
     @NotNull private final String secondary;
 
-    /**
-     * The tertiary color, used as &t.
-     */
+    /** The tertiary color, used as &t. */
     @NotNull private final String tertiary;
 
     /**

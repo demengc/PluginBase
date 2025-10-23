@@ -50,9 +50,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Commonly used methods and utilities.
- */
+/** Commonly used methods and utilities. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Common {
 
@@ -62,12 +60,11 @@ public final class Common {
    */
   public static final boolean SPIGOT = checkClass("net.md_5.bungee.api.ChatColor") != null;
 
-  /**
-   * The error message for players when an internal error occurs.
-   */
-  public static final String PLAYERS_ERROR_MESSAGE = "&6An internal error has occurred in "
-      + Common.getName()
-      + ". Check the console for more information.";
+  /** The error message for players when an internal error occurs. */
+  public static final String PLAYERS_ERROR_MESSAGE =
+      "&6An internal error has occurred in "
+          + Common.getName()
+          + ". Check the console for more information.";
 
   private static final String STR_DECIMAL_FORMAT = "%.2f";
 
@@ -146,7 +143,6 @@ public final class Common {
     return Floats.tryParse(str);
   }
 
-
   /**
    * Attempts to parse a string into a long.
    *
@@ -175,8 +171,7 @@ public final class Common {
 
   @NotNull
   public static String applyOperator(
-      @Nullable final String str,
-      @Nullable final UnaryOperator<String> operator) {
+      @Nullable final String str, @Nullable final UnaryOperator<String> operator) {
 
     if (str == null || operator == null) {
       return Common.getOrDefault(str, "");
@@ -187,8 +182,7 @@ public final class Common {
 
   @NotNull
   public static List<String> applyOperator(
-      @Nullable final List<String> list,
-      @Nullable final UnaryOperator<String> operator) {
+      @Nullable final List<String> list, @Nullable final UnaryOperator<String> operator) {
 
     if (list == null || operator == null) {
       return Common.getOrDefault(list, Collections.emptyList());
@@ -205,8 +199,7 @@ public final class Common {
 
   @NotNull
   public static ItemStack applyOperator(
-      @Nullable final ItemStack stack,
-      @Nullable final UnaryOperator<String> operator) {
+      @Nullable final ItemStack stack, @Nullable final UnaryOperator<String> operator) {
 
     if (stack == null || stack.getType() == Material.AIR) {
       return new ItemStack(Material.AIR);
@@ -260,9 +253,9 @@ public final class Common {
   /**
    * Returns the nullable value if not null, or the default value if it is null.
    *
-   * @param <T>      The object type being checked and returned
+   * @param <T> The object type being checked and returned
    * @param nullable The nullable value
-   * @param def      The default value
+   * @param def The default value
    * @return The nullable if not null, default otherwise
    */
   @NotNull
@@ -271,21 +264,17 @@ public final class Common {
   }
 
   /**
-   * Returns the nullable value if not null, or throws a runtime exception with error if it is
-   * null.
+   * Returns the nullable value if not null, or throws a runtime exception with error if it is null.
    *
-   * @param <T>         The object type being checked and returned
-   * @param nullable    The nullable value
+   * @param <T> The object type being checked and returned
+   * @param nullable The nullable value
    * @param description The error description if the value is null
-   * @param disable     If the plugin should disable if the value is null
+   * @param disable If the plugin should disable if the value is null
    * @return The nullable if not null
    */
   @NotNull
   public static <T> T getOrError(
-      @Nullable final T nullable,
-      @NotNull final String description,
-      final boolean disable
-  ) {
+      @Nullable final T nullable, @NotNull final String description, final boolean disable) {
 
     if (nullable == null) {
       throw new PluginErrorException(description, disable);
@@ -298,15 +287,13 @@ public final class Common {
    * Checks if the specified command sender has the permission node. If the permission node is null,
    * empty, or equal to "none", the method will return true.
    *
-   * @param sender     The command sender to check
+   * @param sender The command sender to check
    * @param permission The permission to check
    * @return True if the command sender has the permission, false otherwise
    */
   @SuppressWarnings("BooleanMethodIsAlwaysInverted")
   public static boolean hasPermission(
-      @NotNull final CommandSender sender,
-      @Nullable final String permission
-  ) {
+      @NotNull final CommandSender sender, @Nullable final String permission) {
     return permission == null
         || permission.isEmpty()
         || permission.equalsIgnoreCase("none")
@@ -316,17 +303,16 @@ public final class Common {
   /**
    * Reports an error in the plugin.
    *
-   * @param throwable   The throwable
+   * @param throwable The throwable
    * @param description A brief description of the error
-   * @param disable     If the plugin should be disabled
-   * @param players     Any players associated with this error, a message will be sent to them
+   * @param disable If the plugin should be disabled
+   * @param players Any players associated with this error, a message will be sent to them
    */
   public static void error(
       @Nullable final Throwable throwable,
       @NotNull final String description,
       final boolean disable,
-      @NotNull final CommandSender... players
-  ) {
+      @NotNull final CommandSender... players) {
 
     if (throwable != null) {
       throwable.printStackTrace();
@@ -338,7 +324,8 @@ public final class Common {
     Text.coloredConsole("&cContact the plugin author if you cannot fix this issue.");
     Text.coloredConsole("&4" + Text.CONSOLE_LINE);
 
-    Arrays.stream(players).filter(Player.class::isInstance)
+    Arrays.stream(players)
+        .filter(Player.class::isInstance)
         .forEach(p -> Text.coloredTell(p, PLAYERS_ERROR_MESSAGE));
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseManager.getPlugin())) {
@@ -350,7 +337,7 @@ public final class Common {
    * Parses a string sequence of integers and accepts a consumer for each integer. The sequence can
    * either be a single integer (1), a range of integers (1-10), or a list of integers (1,2,3).
    *
-   * @param str      The integer sequence to parse
+   * @param str The integer sequence to parse
    * @param consumer The consumer to accept for each integer
    * @throws IllegalArgumentException If the sequenece is invalid
    */

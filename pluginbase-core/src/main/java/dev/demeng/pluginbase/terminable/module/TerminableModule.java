@@ -48,5 +48,4 @@ public interface TerminableModule {
   default void bindModuleWith(@NotNull final TerminableConsumer consumer) {
     consumer.bindModule(this);
   }
-
 }

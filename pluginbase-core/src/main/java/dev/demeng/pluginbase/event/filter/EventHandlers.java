@@ -30,9 +30,7 @@ import lombok.NoArgsConstructor;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Defines standard event predicates for use in functional event handlers.
- */
+/** Defines standard event predicates for use in functional event handlers. */
 @SuppressWarnings("unchecked")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EventHandlers {

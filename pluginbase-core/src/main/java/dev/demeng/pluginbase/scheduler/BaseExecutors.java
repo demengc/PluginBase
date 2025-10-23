@@ -33,9 +33,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 
-/**
- * Provides common {@link Executor} instances.
- */
+/** Provides common {@link Executor} instances. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BaseExecutors {
 
@@ -63,8 +61,8 @@ public final class BaseExecutors {
 
     @Override
     public void execute(final Runnable runnable) {
-      Bukkit.getScheduler().scheduleSyncDelayedTask(BaseManager.getPlugin(),
-          SchedulerTaskException.wrap(runnable));
+      Bukkit.getScheduler()
+          .scheduleSyncDelayedTask(BaseManager.getPlugin(), SchedulerTaskException.wrap(runnable));
     }
   }
 
@@ -72,8 +70,8 @@ public final class BaseExecutors {
 
     @Override
     public void execute(final Runnable runnable) {
-      Bukkit.getScheduler().runTaskAsynchronously(BaseManager.getPlugin(),
-          SchedulerTaskException.wrap(runnable));
+      Bukkit.getScheduler()
+          .runTaskAsynchronously(BaseManager.getPlugin(), SchedulerTaskException.wrap(runnable));
     }
   }
 

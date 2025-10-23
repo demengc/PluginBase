@@ -109,8 +109,8 @@ class TaskBuilderImpl implements TaskBuilder {
     @NotNull
     @Override
     public ContextualTaskBuilder every(final long duration, @NotNull final TimeUnit unit) {
-      return new ContextualTaskBuilderTimeImpl(this.context, 0, TimeUnit.NANOSECONDS, duration,
-          unit);
+      return new ContextualTaskBuilderTimeImpl(
+          this.context, 0, TimeUnit.NANOSECONDS, duration, unit);
     }
   }
 
@@ -173,8 +173,8 @@ class TaskBuilderImpl implements TaskBuilder {
     @NotNull
     @Override
     public ContextualTaskBuilder every(final long duration, final TimeUnit unit) {
-      return new ContextualTaskBuilderTimeImpl(this.context, this.delay, this.delayUnit, duration,
-          unit);
+      return new ContextualTaskBuilderTimeImpl(
+          this.context, this.delay, this.delayUnit, duration, unit);
     }
   }
 

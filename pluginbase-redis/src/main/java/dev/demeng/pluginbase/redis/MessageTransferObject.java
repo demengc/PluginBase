@@ -45,15 +45,13 @@ public class MessageTransferObject {
   /**
    * Wraps the given object to a {@link MessageTransferObject} object.
    *
-   * @param serverId  Identifier of the sending server
-   * @param obj       Object that should be wrapped
+   * @param serverId Identifier of the sending server
+   * @param obj Object that should be wrapped
    * @param timestamp Timestamp of the message
    * @return The serialized object wrapped into a {@link MessageTransferObject}
    */
   public static MessageTransferObject of(
-      @NotNull final String serverId,
-      @NotNull final Object obj,
-      final long timestamp) {
+      @NotNull final String serverId, @NotNull final Object obj, final long timestamp) {
     return new MessageTransferObject(serverId, GsonProvider.standard().toJson(obj), timestamp);
   }
 
@@ -91,7 +89,7 @@ public class MessageTransferObject {
    * Parses the message string to provided object type.
    *
    * @param objectType Class of the object
-   * @param <T>        Type of the object
+   * @param <T> Type of the object
    * @return Parsed object or null if object cannot be parsed
    */
   @NotNull

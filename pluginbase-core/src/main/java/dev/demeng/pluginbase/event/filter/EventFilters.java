@@ -24,7 +24,6 @@
 
 package dev.demeng.pluginbase.event.filter;
 
-
 import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -35,35 +34,37 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Defines standard event predicates for use in functional event handlers.
- */
+/** Defines standard event predicates for use in functional event handlers. */
 @SuppressWarnings("unchecked")
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EventFilters {
 
   private static final Predicate<? extends Cancellable> IGNORE_CANCELLED = e -> !e.isCancelled();
-  private static final Predicate<? extends Cancellable> IGNORE_UNCANCELLED = Cancellable::isCancelled;
-  private static final Predicate<? extends PlayerLoginEvent> IGNORE_DISALLOWED_LOGIN = e ->
-      e.getResult() == PlayerLoginEvent.Result.ALLOWED;
-  private static final Predicate<? extends AsyncPlayerPreLoginEvent> IGNORE_DISALLOWED_PRE_LOGIN = e ->
-      e.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED;
+  private static final Predicate<? extends Cancellable> IGNORE_UNCANCELLED =
+      Cancellable::isCancelled;
+  private static final Predicate<? extends PlayerLoginEvent> IGNORE_DISALLOWED_LOGIN =
+      e -> e.getResult() == PlayerLoginEvent.Result.ALLOWED;
+  private static final Predicate<? extends AsyncPlayerPreLoginEvent> IGNORE_DISALLOWED_PRE_LOGIN =
+      e -> e.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED;
 
-  private static final Predicate<? extends PlayerMoveEvent> IGNORE_SAME_BLOCK = e ->
-      e.getFrom().getBlockX() != e.getTo().getBlockX() ||
-          e.getFrom().getBlockZ() != e.getTo().getBlockZ() ||
-          e.getFrom().getBlockY() != e.getTo().getBlockY() ||
-          !e.getFrom().getWorld().equals(e.getTo().getWorld());
+  private static final Predicate<? extends PlayerMoveEvent> IGNORE_SAME_BLOCK =
+      e ->
+          e.getFrom().getBlockX() != e.getTo().getBlockX()
+              || e.getFrom().getBlockZ() != e.getTo().getBlockZ()
+              || e.getFrom().getBlockY() != e.getTo().getBlockY()
+              || !e.getFrom().getWorld().equals(e.getTo().getWorld());
 
-  private static final Predicate<? extends PlayerMoveEvent> IGNORE_SAME_BLOCK_AND_Y = e ->
-      e.getFrom().getBlockX() != e.getTo().getBlockX() ||
-          e.getFrom().getBlockZ() != e.getTo().getBlockZ() ||
-          !e.getFrom().getWorld().equals(e.getTo().getWorld());
+  private static final Predicate<? extends PlayerMoveEvent> IGNORE_SAME_BLOCK_AND_Y =
+      e ->
+          e.getFrom().getBlockX() != e.getTo().getBlockX()
+              || e.getFrom().getBlockZ() != e.getTo().getBlockZ()
+              || !e.getFrom().getWorld().equals(e.getTo().getWorld());
 
-  private static final Predicate<? extends PlayerMoveEvent> IGNORE_SAME_CHUNK = e ->
-      (e.getFrom().getBlockX() >> 4) != (e.getTo().getBlockX() >> 4) ||
-          (e.getFrom().getBlockZ() >> 4) != (e.getTo().getBlockZ() >> 4) ||
-          !e.getFrom().getWorld().equals(e.getTo().getWorld());
+  private static final Predicate<? extends PlayerMoveEvent> IGNORE_SAME_CHUNK =
+      e ->
+          (e.getFrom().getBlockX() >> 4) != (e.getTo().getBlockX() >> 4)
+              || (e.getFrom().getBlockZ() >> 4) != (e.getTo().getBlockZ() >> 4)
+              || !e.getFrom().getWorld().equals(e.getTo().getWorld());
 
   /**
    * Returns a predicate which only returns true if the event isn't cancelled
@@ -147,7 +148,7 @@ public final class EventFilters {
    * Returns a predicate which only returns true if the player has the given permission
    *
    * @param permission the permission
-   * @param <T>        the event type
+   * @param <T> the event type
    * @return a predicate which only returns true if the player has the given permission
    */
   @NotNull

@@ -41,24 +41,16 @@ import javax.annotation.Nonnull;
  */
 public abstract class AbstractBucket<E> extends AbstractSet<E> implements Bucket<E> {
 
-  /**
-   * The function used to partition objects
-   */
+  /** The function used to partition objects */
   protected final PartitioningStrategy<E> strategy;
 
-  /**
-   * The number of partitions in this bucket
-   */
+  /** The number of partitions in this bucket */
   protected final int size;
 
-  /**
-   * The content in the bucket
-   */
+  /** The content in the bucket */
   protected final Set<E> content;
 
-  /**
-   * The partitions in the bucket
-   */
+  /** The partitions in the bucket */
   protected final ImmutableList<Set<E>> partitions;
 
   /**
@@ -66,9 +58,7 @@ public abstract class AbstractBucket<E> extends AbstractSet<E> implements Bucket
    */
   protected final ImmutableList<BucketPartition<E>> partitionView;
 
-  /**
-   * A cycle of the partitions in this bucket
-   */
+  /** A cycle of the partitions in this bucket */
   private final Cycle<BucketPartition<E>> partitionCycle;
 
   protected AbstractBucket(final int size, final PartitioningStrategy<E> strategy) {
@@ -181,11 +171,10 @@ public abstract class AbstractBucket<E> extends AbstractSet<E> implements Bucket
     return this.content.contains(o);
   }
 
-
   /**
    * Class used to wrap the result of {@link Bucket}'s {@link #iterator()} method.
-   * <p>
-   * This wrapping overrides the #remove method, and ensures that when removed, elements are also
+   *
+   * <p>This wrapping overrides the #remove method, and ensures that when removed, elements are also
    * removed from their backing partition.
    */
   private final class BucketIterator implements Iterator<E> {
@@ -228,8 +217,8 @@ public abstract class AbstractBucket<E> extends AbstractSet<E> implements Bucket
 
   /**
    * Class used to wrap the backing sets returned by {@link #getPartition(int)}.
-   * <p>
-   * This wrapping prevents add operations, and propagates calls with remove objects back to the
+   *
+   * <p>This wrapping prevents add operations, and propagates calls with remove objects back to the
    * parent bucket.
    */
   private final class SetView extends AbstractSet<E> implements BucketPartition<E> {
@@ -352,5 +341,4 @@ public abstract class AbstractBucket<E> extends AbstractSet<E> implements Bucket
       this.delegate.forEachRemaining(action);
     }
   }
-
 }

@@ -28,9 +28,7 @@ package dev.demeng.pluginbase.redis.event;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The interface of a Redis message receive event.
- */
+/** The interface of a Redis message receive event. */
 public interface IRedisMessageReceiveEvent {
 
   /**
@@ -38,21 +36,24 @@ public interface IRedisMessageReceiveEvent {
    *
    * @return The ID of the sending server
    */
-  @NotNull String getSenderId();
+  @NotNull
+  String getSenderId();
 
   /**
    * Gets the channel of the message.
    *
    * @return THe channel name
    */
-  @NotNull String getChannel();
+  @NotNull
+  String getChannel();
 
   /**
    * Gets the raw string message.
    *
    * @return The raw string message
    */
-  @NotNull String getMessage();
+  @NotNull
+  String getMessage();
 
   /**
    * Gets the timestamp of the message
@@ -65,9 +66,10 @@ public interface IRedisMessageReceiveEvent {
    * Gets the object from the received message
    *
    * @param objectClass Object class
-   * @param <T>         Object type
+   * @param <T> Object type
    * @return Parsed object, or null if it cannot be parsed
    */
   @SuppressWarnings("Make sure the recieved message can really be converted to provided type!")
-  @NotNull <T> Optional<T> getMessageObject(@NotNull Class<T> objectClass);
+  @NotNull
+  <T> Optional<T> getMessageObject(@NotNull Class<T> objectClass);
 }

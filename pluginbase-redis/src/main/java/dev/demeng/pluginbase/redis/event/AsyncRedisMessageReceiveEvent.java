@@ -32,26 +32,19 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Asynchronous event called when a Redis message is received by the server.
- */
+/** Asynchronous event called when a Redis message is received by the server. */
 public class AsyncRedisMessageReceiveEvent extends Event implements IRedisMessageReceiveEvent {
 
   @NotNull private static final HandlerList HANDLERS = new HandlerList();
 
-  /**
-   * Name of the channel the message came from.
-   */
+  /** Name of the channel the message came from. */
   @Getter @NotNull private final String channel;
 
-  /**
-   * MessageTransferObject containing message's data.
-   */
+  /** MessageTransferObject containing message's data. */
   @NotNull private final MessageTransferObject messageTransferObject;
 
   public AsyncRedisMessageReceiveEvent(
-      @NotNull final String channel,
-      @NotNull final MessageTransferObject mto) {
+      @NotNull final String channel, @NotNull final MessageTransferObject mto) {
     super(true);
     this.channel = channel;
     this.messageTransferObject = mto;

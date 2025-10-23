@@ -62,5 +62,4 @@ public interface BucketPartition<E> extends Set<E> {
   default boolean addAll(final Collection<? extends E> c) {
     throw new UnsupportedOperationException();
   }
-
 }

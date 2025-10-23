@@ -31,15 +31,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * An extension of RuntimeException that calls
- * {@link Common#error(Throwable, String, boolean, CommandSender...)}.
+ * An extension of RuntimeException that calls {@link Common#error(Throwable, String, boolean,
+ * CommandSender...)}.
  */
 public class PluginErrorException extends RuntimeException {
 
   public PluginErrorException(
-      @NotNull final String description,
-      final boolean disable,
-      final Player... players) {
+      @NotNull final String description, final boolean disable, final Player... players) {
     Common.error(this, description, disable, players);
   }
 

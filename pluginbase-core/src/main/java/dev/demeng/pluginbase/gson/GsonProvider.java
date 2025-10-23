@@ -36,22 +36,15 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Provides static instances of {@link Gson}.
- */
+/** Provides static instances of {@link Gson}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GsonProvider {
 
-  private static final Gson STANDARD_GSON = new GsonBuilder()
-      .serializeNulls()
-      .disableHtmlEscaping()
-      .create();
+  private static final Gson STANDARD_GSON =
+      new GsonBuilder().serializeNulls().disableHtmlEscaping().create();
 
-  private static final Gson PRETTY_PRINT_GSON = new GsonBuilder()
-      .serializeNulls()
-      .disableHtmlEscaping()
-      .setPrettyPrinting()
-      .create();
+  private static final Gson PRETTY_PRINT_GSON =
+      new GsonBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting().create();
 
   private static final JsonParser PARSER = new JsonParser();
 
@@ -80,23 +73,23 @@ public final class GsonProvider {
     return PARSER.parse(s).getAsJsonObject();
   }
 
-  public static void writeObject(@NotNull final Appendable writer,
-      @NotNull final JsonObject object) {
+  public static void writeObject(
+      @NotNull final Appendable writer, @NotNull final JsonObject object) {
     standard().toJson(object, writer);
   }
 
-  public static void writeObjectPretty(@NotNull final Appendable writer,
-      @NotNull final JsonObject object) {
+  public static void writeObjectPretty(
+      @NotNull final Appendable writer, @NotNull final JsonObject object) {
     prettyPrinting().toJson(object, writer);
   }
 
-  public static void writeElement(@NotNull final Appendable writer,
-      @NotNull final JsonElement element) {
+  public static void writeElement(
+      @NotNull final Appendable writer, @NotNull final JsonElement element) {
     standard().toJson(element, writer);
   }
 
-  public static void writeElementPretty(@NotNull final Appendable writer,
-      @NotNull final JsonElement element) {
+  public static void writeElementPretty(
+      @NotNull final Appendable writer, @NotNull final JsonElement element) {
     prettyPrinting().toJson(element, writer);
   }
 

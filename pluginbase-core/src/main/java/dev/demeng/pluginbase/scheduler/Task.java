@@ -27,9 +27,7 @@ package dev.demeng.pluginbase.scheduler;
 
 import dev.demeng.pluginbase.terminable.Terminable;
 
-/**
- * Represents a scheduled repeating task.
- */
+/** Represents a scheduled repeating task. */
 public interface Task extends Terminable {
 
   /**
@@ -54,9 +52,7 @@ public interface Task extends Terminable {
    */
   int getBukkitId();
 
-  /**
-   * {@link #stop() Stops} the task.
-   */
+  /** {@link #stop() Stops} the task. */
   @Override
   default void close() {
     stop();

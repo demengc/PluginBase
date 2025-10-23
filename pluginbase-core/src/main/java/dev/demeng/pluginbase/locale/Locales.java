@@ -32,8 +32,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * An enum-like class for packing all the available locales in Lamp.
- * <p>
- * Due to the fact that {@link Locale} does not define all locales, additional ones are added.
+ *
+ * <p>Due to the fact that {@link Locale} does not define all locales, additional ones are added.
  */
 public final class Locales {
 
@@ -74,9 +74,8 @@ public final class Locales {
 
   /**
    * Returns the locale that matches the given language.
-   * <p>
-   * get("en") -> ENGLISH
-   * <br>
+   *
+   * <p>get("en") -> ENGLISH <br>
    * get("fr") -> FRENCH
    *
    * @param language Language to get locale for

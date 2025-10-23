@@ -64,7 +64,8 @@ public interface LocaleReader {
    *
    * @return The reader's locale
    */
-  @NotNull Locale getLocale();
+  @NotNull
+  Locale getLocale();
 
   /**
    * Wraps a {@link ResourceBundle} in a {@link LocaleReader}.

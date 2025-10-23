@@ -39,10 +39,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ScheduledStateSeries extends GameState {
 
-  /**
-   * The list of states in this state series.
-   */
+  /** The list of states in this state series. */
   @NotNull @Getter protected final List<GameState> states = new ArrayList<>();
+
   private final long interval;
 
   protected int currentIndex = 0;
@@ -68,9 +67,7 @@ public class ScheduledStateSeries extends GameState {
     this.states.addAll(Arrays.stream(states).toList());
   }
 
-  /**
-   * Creates a new empty state series.
-   */
+  /** Creates a new empty state series. */
   public ScheduledStateSeries() {
     this.interval = 1;
   }
@@ -79,7 +76,7 @@ public class ScheduledStateSeries extends GameState {
    * Creates a new state series.
    *
    * @param interval The update interval, in ticks
-   * @param states   The states to add
+   * @param states The states to add
    */
   public ScheduledStateSeries(final long interval, @NotNull final List<GameState> states) {
     this.interval = interval;
@@ -90,7 +87,7 @@ public class ScheduledStateSeries extends GameState {
    * Creates a new state series.
    *
    * @param interval The update interval, in ticks
-   * @param states   The states to add
+   * @param states The states to add
    */
   public ScheduledStateSeries(final long interval, @NotNull final GameState... states) {
     this.interval = interval;

@@ -35,9 +35,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Simple utility for checking for resource updates on SpigotMC.
- */
+/** Simple utility for checking for resource updates on SpigotMC. */
 public class UpdateChecker {
 
   @Getter private final int resourceId;
@@ -64,9 +62,8 @@ public class UpdateChecker {
   }
 
   /**
-   * Notifies the console or a player about a new update. Calling this method if the
-   * {@link #getResult()} is anything other than {@link UpdateChecker.Result#OUTDATED} will do
-   * nothing.
+   * Notifies the console or a player about a new update. Calling this method if the {@link
+   * #getResult()} is anything other than {@link UpdateChecker.Result#OUTDATED} will do nothing.
    *
    * @param sender The console or player to notify, defaults to console if null
    */
@@ -77,8 +74,7 @@ public class UpdateChecker {
     }
 
     final CommandSender cs = Common.getOrDefault(sender, Bukkit.getConsoleSender());
-    final String line = cs instanceof ConsoleCommandSender
-        ? Text.CONSOLE_LINE : Text.CHAT_LINE;
+    final String line = cs instanceof ConsoleCommandSender ? Text.CONSOLE_LINE : Text.CHAT_LINE;
 
     Text.coloredTell(cs, "&2" + line);
     Text.coloredTell(cs, "&aA new update for " + Common.getName() + " is available!");
@@ -90,8 +86,9 @@ public class UpdateChecker {
 
   private String retrieveVersionFromSpigot() {
 
-    try (final InputStream inputStream = new URL(
-        "https://api.spigotmc.org/legacy/update.php?resource=" + resourceId).openStream();
+    try (final InputStream inputStream =
+            new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId)
+                .openStream();
         final Scanner scanner = new Scanner(inputStream)) {
 
       if (scanner.hasNext()) {
@@ -105,21 +102,13 @@ public class UpdateChecker {
     return null;
   }
 
-  /**
-   * The result of an update check.
-   */
+  /** The result of an update check. */
   public enum Result {
-    /**
-     * The plugin version matches the one on the resource.
-     */
+    /** The plugin version matches the one on the resource. */
     UP_TO_DATE,
-    /**
-     * The plugin version does not match the one on the resource.
-     */
+    /** The plugin version does not match the one on the resource. */
     OUTDATED,
-    /**
-     * There was an error whilst checking for updates.
-     */
+    /** There was an error whilst checking for updates. */
     ERROR
   }
 }

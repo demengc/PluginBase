@@ -35,9 +35,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A functional event listening utility.
- */
+/** A functional event listening utility. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Events {
 
@@ -45,7 +43,7 @@ public final class Events {
    * Makes a SingleSubscriptionBuilder for a given event
    *
    * @param eventClass the class of the event
-   * @param <T>        the event type
+   * @param <T> the event type
    * @return a {@link SingleSubscriptionBuilder} to construct the event handler
    * @throws NullPointerException if eventClass is null
    */
@@ -59,8 +57,8 @@ public final class Events {
    * Makes a SingleSubscriptionBuilder for a given event
    *
    * @param eventClass the class of the event
-   * @param priority   the priority to listen at
-   * @param <T>        the event type
+   * @param priority the priority to listen at
+   * @param <T> the event type
    * @return a {@link SingleSubscriptionBuilder} to construct the event handler
    * @throws NullPointerException if eventClass or priority is null
    */
@@ -74,7 +72,7 @@ public final class Events {
    * Makes a MergedSubscriptionBuilder for a given super type
    *
    * @param handledClass the super type of the event handler
-   * @param <T>          the super type class
+   * @param <T> the super type class
    * @return a {@link MergedSubscriptionBuilder} to construct the event handler
    */
   @NotNull
@@ -86,7 +84,7 @@ public final class Events {
    * Makes a MergedSubscriptionBuilder for a given super type
    *
    * @param type the super type of the event handler
-   * @param <T>  the super type class
+   * @param <T> the super type class
    * @return a {@link MergedSubscriptionBuilder} to construct the event handler
    */
   @NotNull
@@ -97,33 +95,33 @@ public final class Events {
   /**
    * Makes a MergedSubscriptionBuilder for a super event class
    *
-   * @param superClass   the abstract super event class
+   * @param superClass the abstract super event class
    * @param eventClasses the event classes to be bound to
-   * @param <S>          the super class type
+   * @param <S> the super class type
    * @return a {@link MergedSubscriptionBuilder} to construct the event handler
    */
   @NotNull
   @SafeVarargs
   public static <S extends Event> MergedSubscriptionBuilder<S> merge(
-      @NotNull final Class<S> superClass,
-      @NotNull final Class<? extends S>... eventClasses) {
+      @NotNull final Class<S> superClass, @NotNull final Class<? extends S>... eventClasses) {
     return MergedSubscriptionBuilder.newBuilder(superClass, eventClasses);
   }
 
   /**
    * Makes a MergedSubscriptionBuilder for a super event class
    *
-   * @param superClass   the abstract super event class
-   * @param priority     the priority to listen at
+   * @param superClass the abstract super event class
+   * @param priority the priority to listen at
    * @param eventClasses the event classes to be bound to
-   * @param <S>          the super class type
+   * @param <S> the super class type
    * @return a {@link MergedSubscriptionBuilder} to construct the event handler
    */
   @NotNull
   @SafeVarargs
   public static <S extends Event> MergedSubscriptionBuilder<S> merge(
       @NotNull final Class<S> superClass,
-      @NotNull final EventPriority priority, @NotNull final Class<? extends S>... eventClasses) {
+      @NotNull final EventPriority priority,
+      @NotNull final Class<? extends S>... eventClasses) {
     return MergedSubscriptionBuilder.newBuilder(superClass, priority, eventClasses);
   }
 

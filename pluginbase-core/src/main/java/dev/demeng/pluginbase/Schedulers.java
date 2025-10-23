@@ -48,9 +48,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Provides common instances of {@link Scheduler}.
- */
+/** Provides common instances of {@link Scheduler}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Schedulers {
 
@@ -130,8 +128,8 @@ public final class Schedulers {
 
     @NotNull
     @Override
-    public Task runRepeating(@NotNull final Consumer<Task> consumer, final long delayTicks,
-        final long intervalTicks) {
+    public Task runRepeating(
+        @NotNull final Consumer<Task> consumer, final long delayTicks, final long intervalTicks) {
       Objects.requireNonNull(consumer, "consumer");
       final BaseTask task = new BaseTask(consumer);
       task.runTaskTimer(BaseManager.getPlugin(), delayTicks, intervalTicks);
@@ -140,11 +138,14 @@ public final class Schedulers {
 
     @NotNull
     @Override
-    public Task runRepeating(@NotNull final Consumer<Task> consumer, final long delay,
-        @NotNull final TimeUnit delayUnit, final long interval,
+    public Task runRepeating(
+        @NotNull final Consumer<Task> consumer,
+        final long delay,
+        @NotNull final TimeUnit delayUnit,
+        final long interval,
         @NotNull final TimeUnit intervalUnit) {
-      return runRepeating(consumer, Ticks.from(delay, delayUnit),
-          Ticks.from(interval, intervalUnit));
+      return runRepeating(
+          consumer, Ticks.from(delay, delayUnit), Ticks.from(interval, intervalUnit));
     }
   }
 
@@ -163,8 +164,8 @@ public final class Schedulers {
 
     @NotNull
     @Override
-    public Task runRepeating(@NotNull final Consumer<Task> consumer, final long delayTicks,
-        final long intervalTicks) {
+    public Task runRepeating(
+        @NotNull final Consumer<Task> consumer, final long delayTicks, final long intervalTicks) {
       Objects.requireNonNull(consumer, "consumer");
       final BaseTask task = new BaseTask(consumer);
       task.runTaskTimerAsynchronously(BaseManager.getPlugin(), delayTicks, intervalTicks);
@@ -173,8 +174,11 @@ public final class Schedulers {
 
     @NotNull
     @Override
-    public Task runRepeating(@NotNull final Consumer<Task> consumer, final long delay,
-        @NotNull final TimeUnit delayUnit, final long interval,
+    public Task runRepeating(
+        @NotNull final Consumer<Task> consumer,
+        final long delay,
+        @NotNull final TimeUnit delayUnit,
+        final long interval,
         @NotNull final TimeUnit intervalUnit) {
       Objects.requireNonNull(consumer, "consumer");
       return new BaseAsyncTask(consumer, delay, delayUnit, interval, intervalUnit);
@@ -200,8 +204,8 @@ public final class Schedulers {
         this.backingTask.accept(this);
         this.counter.incrementAndGet();
       } catch (final Throwable e) {
-        Common.error(new SchedulerTaskException(e),
-            "Error whilst executing scheduler task.", false);
+        Common.error(
+            new SchedulerTaskException(e), "Error whilst executing scheduler task.", false);
       }
 
       if (this.cancelled.get()) {
@@ -243,13 +247,20 @@ public final class Schedulers {
     private final AtomicInteger counter = new AtomicInteger(0);
     private final AtomicBoolean cancelled = new AtomicBoolean(false);
 
-    private BaseAsyncTask(final Consumer<Task> backingTask, final long delay,
+    private BaseAsyncTask(
+        final Consumer<Task> backingTask,
+        final long delay,
         final TimeUnit delayUnit,
-        final long interval, final TimeUnit intervalUnit) {
+        final long interval,
+        final TimeUnit intervalUnit) {
       this.backingTask = backingTask;
-      this.future = BaseExecutors.asyncBase()
-          .scheduleAtFixedRate(this, delayUnit.toNanos(delay), intervalUnit.toNanos(interval),
-              TimeUnit.NANOSECONDS);
+      this.future =
+          BaseExecutors.asyncBase()
+              .scheduleAtFixedRate(
+                  this,
+                  delayUnit.toNanos(delay),
+                  intervalUnit.toNanos(interval),
+                  TimeUnit.NANOSECONDS);
     }
 
     @Override
@@ -262,8 +273,8 @@ public final class Schedulers {
         this.backingTask.accept(this);
         this.counter.incrementAndGet();
       } catch (final Throwable e) {
-        Common.error(new SchedulerTaskException(e),
-            "Error whilst executing scheduler task.", false);
+        Common.error(
+            new SchedulerTaskException(e), "Error whilst executing scheduler task.", false);
       }
     }
 

@@ -31,35 +31,23 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * The POJO containing the credentials to a Redis instance.
- */
+/** The POJO containing the credentials to a Redis instance. */
 @Data(staticConstructor = "of")
 public final class RedisCredentials {
 
-  /**
-   * The host (IP) of the instance. Local host is supported.
-   */
+  /** The host (IP) of the instance. Local host is supported. */
   @NotNull private final String host;
 
-  /**
-   * The port to the instance, typically 6379.
-   */
+  /** The port to the instance, typically 6379. */
   private final int port;
 
-  /**
-   * The username of the instance. Null if empty.
-   */
+  /** The username of the instance. Null if empty. */
   @Nullable private final String user;
 
-  /**
-   * The password to the instance. Null if empty.
-   */
+  /** The password to the instance. Null if empty. */
   @Nullable private final String password;
 
-  /**
-   * If SSL should be enabled.
-   */
+  /** If SSL should be enabled. */
   private final boolean ssl;
 
   private RedisCredentials(

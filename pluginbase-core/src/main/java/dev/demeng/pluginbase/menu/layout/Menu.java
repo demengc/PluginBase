@@ -47,35 +47,29 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * A GUI menu (custom inventory) that will be displayed to a player.
- */
+/** A GUI menu (custom inventory) that will be displayed to a player. */
 public abstract class Menu implements IMenu {
 
-  /**
-   * The unique ID of this menu.
-   */
+  /** The unique ID of this menu. */
   @NotNull @Getter private final UUID uuid = UUID.randomUUID();
 
-  /**
-   * The {@link Inventory} related to this menu.
-   */
+  /** The {@link Inventory} related to this menu. */
   @NotNull @Getter private final Inventory inventory;
 
   /**
    * A map of all the actions for the menu buttons, with the key being the slot number, and the
    * value being the consumer for the click event if the slot clicked matches the key.
    */
-  @NotNull @Getter private final Map<Integer, Consumer<InventoryClickEvent>> actions
-      = new HashMap<>();
+  @NotNull @Getter
+  private final Map<Integer, Consumer<InventoryClickEvent>> actions = new HashMap<>();
 
   private static final String EMPTY_NAME = "&0";
 
   /**
    * Creates a new menu with the specified size and inventory title.
    *
-   * @param size  The size of the menu, in slots; must be greater than or equal to 9 and less than
-   *              or equal to 54, and a multiple of 9
+   * @param size The size of the menu, in slots; must be greater than or equal to 9 and less than or
+   *     equal to 54, and a multiple of 9
    * @param title The menu title, colorized internally
    */
   protected Menu(final int size, @NotNull final String title) {
@@ -103,8 +97,8 @@ public abstract class Menu implements IMenu {
   /**
    * Creates and adds a new button to the menu.
    *
-   * @param slot    The slot of the button
-   * @param stack   The stack of the button
+   * @param slot The slot of the button
+   * @param stack The stack of the button
    * @param actions The actions of the button
    */
   public void addButton(
@@ -117,12 +111,11 @@ public abstract class Menu implements IMenu {
   /**
    * Creates and adds a new button to the menu. The first empty slot will be used.
    *
-   * @param stack   The stack of the button
+   * @param stack The stack of the button
    * @param actions The actions of the button
    */
   public void addButton(
-      @NotNull final ItemStack stack,
-      @Nullable final Consumer<InventoryClickEvent> actions) {
+      @NotNull final ItemStack stack, @Nullable final Consumer<InventoryClickEvent> actions) {
     final int slot = inventory.firstEmpty();
     addButton(MenuButton.create(slot, stack, actions));
   }
@@ -141,8 +134,7 @@ public abstract class Menu implements IMenu {
     for (int slot = 0; slot < inventory.getSize(); slot++) {
       final ItemStack current = inventory.getItem(slot);
       if (current == null || current.getType() == Material.AIR) {
-        addButton(MenuButton.create(slot,
-            ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
+        addButton(MenuButton.create(slot, ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
       }
     }
   }
@@ -150,13 +142,15 @@ public abstract class Menu implements IMenu {
   /**
    * Applies a row filler, which sets all empty slots in a row with the dummy button.
    *
-   * @param row   The row to fill (top to bottom)
+   * @param row The row to fill (top to bottom)
    * @param stack The fill material
    */
   public void setRow(final int row, @Nullable final ItemStack stack) {
 
-    if (stack == null || stack.getType() == Material.AIR
-        || row <= 0 || row > inventory.getSize() / 9) {
+    if (stack == null
+        || stack.getType() == Material.AIR
+        || row <= 0
+        || row > inventory.getSize() / 9) {
       return;
     }
 
@@ -166,9 +160,7 @@ public abstract class Menu implements IMenu {
       final ItemStack current = inventory.getItem(slot);
 
       if (current == null || current.getType() == Material.AIR) {
-        addButton(
-            MenuButton.create(slot,
-                ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
+        addButton(MenuButton.create(slot, ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
       }
     }
   }
@@ -177,7 +169,7 @@ public abstract class Menu implements IMenu {
    * Applies a column filler, which sets all empty slots in a column with the dummy button.
    *
    * @param column The column to fill (left to right)
-   * @param stack  The fill material
+   * @param stack The fill material
    */
   public void setColumn(final int column, @Nullable final ItemStack stack) {
 
@@ -191,9 +183,7 @@ public abstract class Menu implements IMenu {
       final ItemStack current = inventory.getItem(slot);
 
       if (current == null || current.getType() == Material.AIR) {
-        addButton(
-            MenuButton.create(slot,
-                ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
+        addButton(MenuButton.create(slot, ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
       }
     }
   }
@@ -216,9 +206,7 @@ public abstract class Menu implements IMenu {
         final ItemStack current = inventory.getItem(i);
 
         if (current == null || current.getType() == Material.AIR) {
-          addButton(
-              MenuButton.create(i,
-                  ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
+          addButton(MenuButton.create(i, ItemBuilder.create(stack).name(EMPTY_NAME).get(), null));
         }
       }
     }
@@ -236,7 +224,7 @@ public abstract class Menu implements IMenu {
   /**
    * Applies all menu fillers that are declared in a configuration section.
    *
-   * @param section    The configuration containing the fillers to set
+   * @param section The configuration containing the fillers to set
    * @param translator The translator for strings in the item
    */
   public void applyFillersFromConfig(
@@ -280,8 +268,8 @@ public abstract class Menu implements IMenu {
 
     for (final String strRow : rowSection.getKeys(false)) {
       try {
-        Common.forEachInt(strRow, row ->
-            setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow))));
+        Common.forEachInt(
+            strRow, row -> setRow(row, ItemBuilder.getMaterial(rowSection.getString(strRow))));
       } catch (final IllegalArgumentException ex) {
         Common.error(ex, "Failed to apply row filler.", false);
         return;
@@ -297,8 +285,10 @@ public abstract class Menu implements IMenu {
 
     for (final String strColumn : columnSection.getKeys(false)) {
       try {
-        Common.forEachInt(strColumn, column ->
-            setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn))));
+        Common.forEachInt(
+            strColumn,
+            column ->
+                setColumn(column, ItemBuilder.getMaterial(columnSection.getString(strColumn))));
       } catch (final IllegalArgumentException ex) {
         Common.error(ex, "Failed to apply column filler.", false);
         return;
@@ -307,8 +297,7 @@ public abstract class Menu implements IMenu {
   }
 
   private void applyCustomFillerFromConfig(
-      final ConfigurationSection customSection,
-      final UnaryOperator<String> translator) {
+      final ConfigurationSection customSection, final UnaryOperator<String> translator) {
 
     if (customSection == null) {
       return;
@@ -317,19 +306,22 @@ public abstract class Menu implements IMenu {
     for (final String strSlot : customSection.getKeys(false)) {
 
       try {
-        Common.forEachInt(strSlot, slot -> {
-          final ConfigurationSection slotSection = customSection.getConfigurationSection(strSlot);
+        Common.forEachInt(
+            strSlot,
+            slot -> {
+              final ConfigurationSection slotSection =
+                  customSection.getConfigurationSection(strSlot);
 
-          if (slotSection == null) {
-            return;
-          }
+              if (slotSection == null) {
+                return;
+              }
 
-          final ItemStack current = inventory.getItem(slot - 1);
+              final ItemStack current = inventory.getItem(slot - 1);
 
-          if (current == null || current.getType() == Material.AIR) {
-            addButton(slot - 1, ItemSerializer.deserialize(slotSection, translator), null);
-          }
-        });
+              if (current == null || current.getType() == Material.AIR) {
+                addButton(slot - 1, ItemSerializer.deserialize(slotSection, translator), null);
+              }
+            });
 
       } catch (final IllegalArgumentException ex) {
         Common.error(ex, "Failed to apply custom filler.", false);

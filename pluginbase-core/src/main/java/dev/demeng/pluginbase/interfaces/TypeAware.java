@@ -36,5 +36,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface TypeAware<T> {
 
-  @NotNull TypeToken<T> getType();
+  @NotNull
+  TypeToken<T> getType();
 }

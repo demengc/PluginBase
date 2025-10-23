@@ -33,9 +33,9 @@ import javax.annotation.Nonnull;
  * A bucket is an extension of {@link Set}, which allows contained elements to be separated into
  * parts by a {@link PartitioningStrategy}.
  *
- * <p>The performance of {@link Bucket} should be largely similar to the performance
- * of the underlying {@link Set}. Elements are stored twice - once in a set containing all elements
- * in the bucket, and again in a set representing each partition.</p>
+ * <p>The performance of {@link Bucket} should be largely similar to the performance of the
+ * underlying {@link Set}. Elements are stored twice - once in a set containing all elements in the
+ * bucket, and again in a set representing each partition.
  *
  * @param <E> the element type
  */
@@ -54,7 +54,7 @@ public interface Bucket<E> extends Set<E> {
    * @param i the partition index
    * @return the partition
    * @throws IndexOutOfBoundsException if the index is out of range (<tt>index &lt; 0 || index &gt;=
-   *                                   getPartitionCount()</tt>)
+   *     getPartitionCount()</tt>)
    */
   @Nonnull
   BucketPartition<E> getPartition(int i);
@@ -70,14 +70,13 @@ public interface Bucket<E> extends Set<E> {
   /**
    * Returns a cycle instance unique to this bucket.
    *
-   * <p>This method is provided as a utility for operating deterministically on
-   * all elements within the bucket over a period of time.</p>
+   * <p>This method is provided as a utility for operating deterministically on all elements within
+   * the bucket over a period of time.
    *
-   * <p>The same cycle instance is returned for each bucket.</p>
+   * <p>The same cycle instance is returned for each bucket.
    *
    * @return a cycle of partitions
    */
   @Nonnull
   Cycle<BucketPartition<E>> asCycle();
-
 }

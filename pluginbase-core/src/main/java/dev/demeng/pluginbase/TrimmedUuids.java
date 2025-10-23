@@ -28,9 +28,7 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-/**
- * Utility for converting to and from trimmed UUIDs.
- */
+/** Utility for converting to and from trimmed UUIDs. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TrimmedUuids {
 
@@ -63,8 +61,7 @@ public final class TrimmedUuids {
     try {
       return new UUID(
           Long.parseUnsignedLong(string.substring(0, 16), 16),
-          Long.parseUnsignedLong(string.substring(16), 16)
-      );
+          Long.parseUnsignedLong(string.substring(16), 16));
     } catch (final NumberFormatException ex) {
       throw new IllegalArgumentException("Invalid UUID string: " + string, ex);
     }

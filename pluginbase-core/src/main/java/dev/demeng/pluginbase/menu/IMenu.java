@@ -28,9 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * An interface containing common methods between the different menu layouts.
- */
+/** An interface containing common methods between the different menu layouts. */
 public interface IMenu {
 
   /**

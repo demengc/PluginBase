@@ -38,27 +38,17 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BatchBuilder {
 
-  /**
-   * The {@link Sql} that owns this batch builder.
-   */
+  /** The {@link Sql} that owns this batch builder. */
   @NotNull private final Sql owner;
 
-
-  /**
-   * The statement to be executed.
-   */
+  /** The statement to be executed. */
   @NotNull @Getter private final String statement;
 
-  /**
-   * A linked list of PreparedStatement handlers.
-   */
-  @NotNull @Getter private final
-  LinkedList<SqlConsumer<PreparedStatement>> handlers = new LinkedList<>();
+  /** A linked list of PreparedStatement handlers. */
+  @NotNull @Getter
+  private final LinkedList<SqlConsumer<PreparedStatement>> handlers = new LinkedList<>();
 
-
-  public BatchBuilder(
-      @NotNull final Sql owner,
-      @NotNull @Language("SQL") final String statement) {
+  public BatchBuilder(@NotNull final Sql owner, @NotNull @Language("SQL") final String statement) {
     this.owner = owner;
     this.statement = statement;
   }

@@ -34,9 +34,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A general exception caused by a scheduler task.
- */
+/** A general exception caused by a scheduler task. */
 public class SchedulerTaskException extends BaseException {
 
   public SchedulerTaskException(@NotNull final Throwable cause) {
@@ -44,8 +42,8 @@ public class SchedulerTaskException extends BaseException {
   }
 
   /**
-   * Wraps a runnable into a runnable that catches its own exceptions and logs them using
-   * {@link Common#error(Throwable, String, boolean, CommandSender...)}.
+   * Wraps a runnable into a runnable that catches its own exceptions and logs them using {@link
+   * Common#error(Throwable, String, boolean, CommandSender...)}.
    *
    * @param runnable The runnable
    * @return The wrapped runnable
@@ -65,8 +63,8 @@ public class SchedulerTaskException extends BaseException {
       try {
         this.delegate.run();
       } catch (final Throwable t) {
-        Common.error(new SchedulerTaskException(t),
-            "Error whilst executing scheduler task.", false);
+        Common.error(
+            new SchedulerTaskException(t), "Error whilst executing scheduler task.", false);
       }
     }
   }

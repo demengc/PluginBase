@@ -28,9 +28,7 @@ import dev.demeng.pluginbase.bucket.Bucket;
 import dev.demeng.pluginbase.bucket.BucketPartition;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Some standard partitioning strategies for use in {@link Bucket}s.
- */
+/** Some standard partitioning strategies for use in {@link Bucket}s. */
 public final class PartitioningStrategies {
 
   public static <T> PartitioningStrategy<T> random() {
@@ -99,5 +97,4 @@ public final class PartitioningStrategies {
   private PartitioningStrategies() {
     throw new UnsupportedOperationException("This class cannot be instantiated");
   }
-
 }

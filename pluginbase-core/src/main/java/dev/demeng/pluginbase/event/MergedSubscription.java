@@ -50,5 +50,4 @@ public interface MergedSubscription<T> extends Subscription {
    */
   @NotNull
   Set<Class<? extends Event>> getEventClasses();
-
 }

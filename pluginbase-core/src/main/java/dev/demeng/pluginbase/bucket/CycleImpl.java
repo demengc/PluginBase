@@ -31,19 +31,13 @@ import javax.annotation.Nonnull;
 
 final class CycleImpl<E> implements Cycle<E> {
 
-  /**
-   * The list that backs this instance
-   */
+  /** The list that backs this instance */
   private final List<E> objects;
 
-  /**
-   * The number of elements in the cycle
-   */
+  /** The number of elements in the cycle */
   private final int size;
 
-  /**
-   * The current position of the cursor
-   */
+  /** The current position of the cursor */
   private final AtomicInteger cursor = new AtomicInteger(0);
 
   CycleImpl(@Nonnull final List<E> objects) {
@@ -81,24 +75,28 @@ final class CycleImpl<E> implements Cycle<E> {
   @Nonnull
   @Override
   public E next() {
-    return this.objects.get(this.cursor.updateAndGet(i -> {
-      final int n = i + 1;
-      if (n >= this.size) {
-        return 0;
-      }
-      return n;
-    }));
+    return this.objects.get(
+        this.cursor.updateAndGet(
+            i -> {
+              final int n = i + 1;
+              if (n >= this.size) {
+                return 0;
+              }
+              return n;
+            }));
   }
 
   @Nonnull
   @Override
   public E previous() {
-    return this.objects.get(this.cursor.updateAndGet(i -> {
-      if (i == 0) {
-        return this.size - 1;
-      }
-      return i - 1;
-    }));
+    return this.objects.get(
+        this.cursor.updateAndGet(
+            i -> {
+              if (i == 0) {
+                return this.size - 1;
+              }
+              return i - 1;
+            }));
   }
 
   @Override

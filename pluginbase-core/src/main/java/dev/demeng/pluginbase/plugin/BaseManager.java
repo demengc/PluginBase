@@ -37,8 +37,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A manager containing all other managers associated with the library, as well as the
- * {@link JavaPlugin} the library is working with.
+ * A manager containing all other managers associated with the library, as well as the {@link
+ * JavaPlugin} the library is working with.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BaseManager {
@@ -46,21 +46,14 @@ public final class BaseManager {
   private static JavaPlugin plugin = null;
   private static Thread mainThread = null;
 
-  /**
-   * The translator used for handling localized messages.
-   */
+  /** The translator used for handling localized messages. */
   @NotNull @Getter @Setter private static Translator translator;
 
-  /**
-   * The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables.
-   */
+  /** The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables. */
   @Getter @Setter private static BukkitAudiences adventure;
 
-  /**
-   * The settings the library should use.
-   */
-  @NotNull @Getter @Setter private static BaseSettings baseSettings = new BaseSettings() {
-  };
+  /** The settings the library should use. */
+  @NotNull @Getter @Setter private static BaseSettings baseSettings = new BaseSettings() {};
 
   /**
    * Gets a never-null instance of the {@link JavaPlugin} the library is currently working with.

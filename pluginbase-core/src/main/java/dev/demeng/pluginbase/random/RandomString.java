@@ -41,9 +41,12 @@ public final class RandomString {
   public static final char[] ALPHABET_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
   public static final char[] ALPHABET_LOWER = "abcdefghijklmnopqrstuvwxyz".toCharArray();
   public static final char[] NUMBERS = "0123456789".toCharArray();
-  public static final char[] ALPHANUMERIC_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
-  public static final char[] ALPHANUMERIC_LOWER = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
-  public static final char[] ALPHANUMERIC_MIXED = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+  public static final char[] ALPHANUMERIC_UPPER =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
+  public static final char[] ALPHANUMERIC_LOWER =
+      "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+  public static final char[] ALPHANUMERIC_MIXED =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
   /**
    * Generates a new "unique" string identifier with the specified length.
@@ -52,9 +55,7 @@ public final class RandomString {
    * @return The generated ID
    */
   @NotNull
-  public static String generate(
-      final int length,
-      final char[] chars) {
+  public static String generate(final int length, final char[] chars) {
 
     final StringBuilder sb = new StringBuilder(length);
 

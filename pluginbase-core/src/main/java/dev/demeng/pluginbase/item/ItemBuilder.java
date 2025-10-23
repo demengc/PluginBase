@@ -55,17 +55,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * A utility for quickly creating {@link ItemStack}s.
- */
+/** A utility for quickly creating {@link ItemStack}s. */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemBuilder {
 
   private static final Material DEFAULT_MATERIAL = Material.STONE;
 
-  /**
-   * The current item stack.
-   */
+  /** The current item stack. */
   @NotNull private final ItemStack stack;
 
   // ---------------------------------------------------------------------------------
@@ -87,15 +83,13 @@ public class ItemBuilder {
    * Creates a new builder from a material, amount, and damage.
    *
    * @param material The material of the stack, replaced with STONE if null
-   * @param amount   The amount of the stack
-   * @param damage   The damage (a.k.a. the durability) of the stack
+   * @param amount The amount of the stack
+   * @param damage The damage (a.k.a. the durability) of the stack
    * @return The builder
    */
   @NotNull
   public static ItemBuilder create(
-      @Nullable final Material material,
-      final int amount,
-      final short damage) {
+      @Nullable final Material material, final int amount, final short damage) {
     //noinspection deprecation
     return create(new ItemStack(Common.getOrDefault(material, DEFAULT_MATERIAL), amount, damage));
   }
@@ -104,7 +98,7 @@ public class ItemBuilder {
    * Creates a new builder from a material and an amount.
    *
    * @param material The material of the stack, replaced with STONE if null
-   * @param amount   The amount of the stack
+   * @param amount The amount of the stack
    * @return The builder
    */
   @NotNull
@@ -165,12 +159,12 @@ public class ItemBuilder {
    * Adds an enchantment with customizable safety.
    *
    * @param enchant The enchantment to add
-   * @param level   The level of the enchantment
-   * @param safe    If the enchantment should be safe
+   * @param level The level of the enchantment
+   * @param safe If the enchantment should be safe
    * @return this
    */
-  public ItemBuilder enchant(@NotNull final Enchantment enchant, final int level,
-      final boolean safe) {
+  public ItemBuilder enchant(
+      @NotNull final Enchantment enchant, final int level, final boolean safe) {
     updateMeta(meta -> meta.addEnchant(enchant, level, !safe));
     return this;
   }
@@ -179,7 +173,7 @@ public class ItemBuilder {
    * Adds a safe enchantment.
    *
    * @param enchant The enchantment to add
-   * @param level   The level of the enchantment
+   * @param level The level of the enchantment
    * @return this
    */
   public ItemBuilder enchant(@NotNull final Enchantment enchant, final int level) {
@@ -216,11 +210,12 @@ public class ItemBuilder {
    */
   public ItemBuilder clearEnchants() {
 
-    updateMeta(meta -> {
-      for (final Enchantment enchant : meta.getEnchants().keySet()) {
-        meta.removeEnchant(enchant);
-      }
-    });
+    updateMeta(
+        meta -> {
+          for (final Enchantment enchant : meta.getEnchants().keySet()) {
+            meta.removeEnchant(enchant);
+          }
+        });
 
     return this;
   }
@@ -254,12 +249,13 @@ public class ItemBuilder {
    */
   public ItemBuilder addLore(@NotNull final String line) {
 
-    updateMeta(meta -> {
-      final List<String> lore = new ArrayList<>(
-          Common.getOrDefault(meta.getLore(), Collections.emptyList()));
-      lore.add(Text.colorize(line));
-      meta.setLore(lore);
-    });
+    updateMeta(
+        meta -> {
+          final List<String> lore =
+              new ArrayList<>(Common.getOrDefault(meta.getLore(), Collections.emptyList()));
+          lore.add(Text.colorize(line));
+          meta.setLore(lore);
+        });
 
     return this;
   }
@@ -303,11 +299,12 @@ public class ItemBuilder {
    */
   public ItemBuilder clearFlags() {
 
-    updateMeta(meta -> {
-      for (final ItemFlag flag : meta.getItemFlags()) {
-        meta.removeItemFlags(flag);
-      }
-    });
+    updateMeta(
+        meta -> {
+          for (final ItemFlag flag : meta.getItemFlags()) {
+            meta.removeItemFlags(flag);
+          }
+        });
 
     return this;
   }
@@ -557,14 +554,13 @@ public class ItemBuilder {
    * returning stone like {@link #getMaterial(String)}.
    *
    * @param strMaterial The string material to parse
-   * @param def         The default material if the provided material is invalid or unsupported
+   * @param def The default material if the provided material is invalid or unsupported
    * @return A standard item stack with no meta, or the default stack if invalid/unsupported
    * @see #getMaterial(String)
    */
   @NotNull
   public static ItemStack getMaterialOrDef(
-      @Nullable final String strMaterial,
-      @NotNull final ItemStack def) {
+      @Nullable final String strMaterial, @NotNull final ItemStack def) {
 
     if (strMaterial == null) {
       return def;

@@ -45,9 +45,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Internal listener for handling menu interactions.
- */
+/** Internal listener for handling menu interactions. */
 public class MenuManager implements TerminableModule {
 
   /**
@@ -73,43 +71,45 @@ public class MenuManager implements TerminableModule {
 
     Events.subscribe(InventoryClickEvent.class, EventPriority.HIGH)
         .filter(event -> event.getClickedInventory() != null)
-        .handler(event -> {
-          final Player p = (Player) event.getWhoClicked();
-          final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
+        .handler(
+            event -> {
+              final Player p = (Player) event.getWhoClicked();
+              final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
 
-          if (inventoryUuid != null) {
-            event.setCancelled(true);
+              if (inventoryUuid != null) {
+                event.setCancelled(true);
 
-            if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
-              return;
-            }
+                if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+                  return;
+                }
 
-            final Consumer<InventoryClickEvent> actions =
-                menus.get(inventoryUuid).getActions().get(event.getSlot());
+                final Consumer<InventoryClickEvent> actions =
+                    menus.get(inventoryUuid).getActions().get(event.getSlot());
 
-            if (actions != null) {
-              actions.accept(event);
-            }
-          }
-        })
+                if (actions != null) {
+                  actions.accept(event);
+                }
+              }
+            })
         .bindWith(consumer);
 
     Events.subscribe(InventoryCloseEvent.class, EventPriority.MONITOR)
-        .handler(event -> {
-          final Player p = (Player) event.getPlayer();
-          final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
+        .handler(
+            event -> {
+              final Player p = (Player) event.getPlayer();
+              final UUID inventoryUuid = openedMenus.get(p.getUniqueId());
 
-          if (inventoryUuid != null) {
-            final Menu menu = menus.get(inventoryUuid);
+              if (inventoryUuid != null) {
+                final Menu menu = menus.get(inventoryUuid);
 
-            if (menu != null && menu.onClose(event)) {
-              Schedulers.sync().runLater(() -> menu.open(p), 1L);
-              return;
-            }
-          }
+                if (menu != null && menu.onClose(event)) {
+                  Schedulers.sync().runLater(() -> menu.open(p), 1L);
+                  return;
+                }
+              }
 
-          cleanup(p, inventoryUuid);
-        })
+              cleanup(p, inventoryUuid);
+            })
         .bindWith(consumer);
 
     Events.subscribe(PlayerJoinEvent.class, EventPriority.MONITOR)

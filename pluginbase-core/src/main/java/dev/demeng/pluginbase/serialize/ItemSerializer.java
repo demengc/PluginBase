@@ -53,15 +53,14 @@ public class ItemSerializer {
    * @param section The section the item stack will be serialized into
    */
   public static void serialize(
-      @NotNull final ItemStack stack,
-      @NotNull final ConfigurationSection section) {
+      @NotNull final ItemStack stack, @NotNull final ConfigurationSection section) {
     XItemStack.serialize(stack, section);
   }
 
   /**
    * Deserializes the configuration section into an item stack.
    *
-   * @param section     The configuration section to deserialize
+   * @param section The configuration section to deserialize
    * @param transformer The transformer for strings in the item
    * @return The deserialized item stack
    */
@@ -69,8 +68,8 @@ public class ItemSerializer {
   public static ItemStack deserialize(
       @NotNull final ConfigurationSection section,
       @Nullable final UnaryOperator<String> transformer) {
-    return XItemStack.deserialize(section,
-        str -> Text.colorize(Common.applyOperator(str, transformer)));
+    return XItemStack.deserialize(
+        section, str -> Text.colorize(Common.applyOperator(str, transformer)));
   }
 
   /**
@@ -87,8 +86,8 @@ public class ItemSerializer {
   /**
    * Deserializes the configuration section into an item stack with localization.
    *
-   * @param section     The configuration section to deserialize
-   * @param locale      The locale to use for localization
+   * @param section The configuration section to deserialize
+   * @param locale The locale to use for localization
    * @param transformer The transformer for strings in the item
    * @return The deserialized item stack
    */
@@ -102,15 +101,16 @@ public class ItemSerializer {
       return deserializeLocalized(section, BaseManager.getTranslator().getLocale(), transformer);
     }
 
-    return XItemStack.deserialize(section,
-        str -> Text.colorize(
-            Common.applyOperator(Text.localizePlaceholders(str, locale), transformer)));
+    return XItemStack.deserialize(
+        section,
+        str ->
+            Text.colorize(
+                Common.applyOperator(Text.localizePlaceholders(str, locale), transformer)));
   }
 
   @NotNull
   public static ItemStack deserializeLocalized(
-      @NotNull final ConfigurationSection section,
-      @Nullable final Locale locale) {
+      @NotNull final ConfigurationSection section, @Nullable final Locale locale) {
     return deserializeLocalized(section, locale, Text::colorize);
   }
 
@@ -124,8 +124,7 @@ public class ItemSerializer {
 
   @NotNull
   public static ItemStack deserializeLocalized(
-      @NotNull final ConfigurationSection section,
-      @NotNull final CommandSender sender) {
+      @NotNull final ConfigurationSection section, @NotNull final CommandSender sender) {
     return deserializeLocalized(section, Text.getLocale(sender), Text::colorize);
   }
 

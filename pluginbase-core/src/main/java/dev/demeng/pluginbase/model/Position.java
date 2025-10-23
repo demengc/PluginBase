@@ -32,9 +32,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * An immutable and serializable Location object without the yaw or pitch.
- */
+/** An immutable and serializable Location object without the yaw or pitch. */
 @Data(staticConstructor = "of")
 public class Position implements YamlSerializable {
 
@@ -58,8 +56,11 @@ public class Position implements YamlSerializable {
 
   @NotNull
   public static Position deserialize(@NotNull final ConfigurationSection section) {
-    return of(Objects.requireNonNull(section.getString("world")),
-        section.getDouble("x"), section.getDouble("y"), section.getDouble("z"));
+    return of(
+        Objects.requireNonNull(section.getString("world")),
+        section.getDouble("x"),
+        section.getDouble("y"),
+        section.getDouble("z"));
   }
 
   /**

@@ -33,8 +33,8 @@ import java.util.function.Consumer;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-public interface SingleHandlerList<T extends Event> extends
-    FunctionalHandlerList<T, SingleSubscription<T>> {
+public interface SingleHandlerList<T extends Event>
+    extends FunctionalHandlerList<T, SingleSubscription<T>> {
 
   @NotNull
   @Override

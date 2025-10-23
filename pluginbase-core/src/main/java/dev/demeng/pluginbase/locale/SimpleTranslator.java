@@ -57,8 +57,8 @@ final class SimpleTranslator implements Translator {
   @Override
   public void addResourceBundleFromFolder(@NotNull final String resourceBundle) {
 
-    final File folder = BaseManager.getPlugin().getDataFolder().toPath().resolve("locales")
-        .toFile();
+    final File folder =
+        BaseManager.getPlugin().getDataFolder().toPath().resolve("locales").toFile();
 
     if (!folder.exists()) {
       return;
@@ -67,18 +67,19 @@ final class SimpleTranslator implements Translator {
     final URL[] urls;
 
     try {
-      urls = new URL[]{folder.toURI().toURL()};
+      urls = new URL[] {folder.toURI().toURL()};
     } catch (final MalformedURLException ex) {
-      throw new BaseException("Could not load resource bundle from filesystem: " + resourceBundle,
-          ex);
+      throw new BaseException(
+          "Could not load resource bundle from filesystem: " + resourceBundle, ex);
     }
 
     addResourceBundle(new URLClassLoader(urls), resourceBundle);
   }
 
-  @Override public boolean containsKey(@NotNull final String key) {
-    for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(this.locale,
-        EMPTY_LIST)) {
+  @Override
+  public boolean containsKey(@NotNull final String key) {
+    for (final LocaleReader registeredBundle :
+        registeredBundles.getOrDefault(this.locale, EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return true;
       }
@@ -86,7 +87,8 @@ final class SimpleTranslator implements Translator {
     return false;
   }
 
-  @Override public boolean containsKey(@NotNull final String key, @NotNull final Locale locale) {
+  @Override
+  public boolean containsKey(@NotNull final String key, @NotNull final Locale locale) {
     for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(locale, EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return true;
@@ -107,8 +109,8 @@ final class SimpleTranslator implements Translator {
         return registeredBundle.get(key);
       }
     }
-    for (final LocaleReader registeredBundle : registeredBundles.getOrDefault(this.locale,
-        EMPTY_LIST)) {
+    for (final LocaleReader registeredBundle :
+        registeredBundles.getOrDefault(this.locale, EMPTY_LIST)) {
       if (registeredBundle.containsKey(key)) {
         return registeredBundle.get(key);
       }
@@ -118,8 +120,8 @@ final class SimpleTranslator implements Translator {
 
   @Override
   public void add(@NotNull final LocaleReader reader) {
-    final LinkedList<LocaleReader> list = registeredBundles.computeIfAbsent(reader.getLocale(),
-        v -> new LinkedList<>());
+    final LinkedList<LocaleReader> list =
+        registeredBundles.computeIfAbsent(reader.getLocale(), v -> new LinkedList<>());
     list.push(reader);
   }
 
@@ -140,8 +142,8 @@ final class SimpleTranslator implements Translator {
       @NotNull final Locale... locales) {
     for (final Locale l : locales) {
       try {
-        final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
-            UTF8Control.INSTANCE);
+        final ResourceBundle bundle =
+            ResourceBundle.getBundle(resourceBundle, l, loader, UTF8Control.INSTANCE);
         add(bundle);
       } catch (final MissingResourceException ignored) {
       }
@@ -149,12 +151,12 @@ final class SimpleTranslator implements Translator {
   }
 
   @Override
-  public void addResourceBundle(@NotNull final ClassLoader loader,
-      @NotNull final String resourceBundle) {
+  public void addResourceBundle(
+      @NotNull final ClassLoader loader, @NotNull final String resourceBundle) {
     for (final Locale l : Locales.getLocales()) {
       try {
-        final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, l, loader,
-            UTF8Control.INSTANCE);
+        final ResourceBundle bundle =
+            ResourceBundle.getBundle(resourceBundle, l, loader, UTF8Control.INSTANCE);
         add(bundle);
       } catch (final MissingResourceException ignored) {
       }

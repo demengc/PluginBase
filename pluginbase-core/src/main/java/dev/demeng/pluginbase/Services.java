@@ -36,9 +36,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Utility class for interacting with the Bukkit {@link org.bukkit.plugin.ServicesManager}.
- */
+/** Utility class for interacting with the Bukkit {@link org.bukkit.plugin.ServicesManager}. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Services {
 
@@ -47,28 +45,31 @@ public final class Services {
    * present.
    *
    * @param clazz the service class
-   * @param <T>   the service class type
+   * @param <T> the service class type
    * @return the service instance
    */
   @NotNull
   public static <T> T load(@NotNull final Class<T> clazz) {
     Objects.requireNonNull(clazz, "clazz");
-    return get(clazz).orElseThrow(() -> new IllegalStateException(
-        "No registration present for service '" + clazz.getName() + "'"));
+    return get(clazz)
+        .orElseThrow(
+            () ->
+                new IllegalStateException(
+                    "No registration present for service '" + clazz.getName() + "'"));
   }
 
   /**
    * Loads a service instance
    *
    * @param clazz the service class
-   * @param <T>   the service class type
+   * @param <T> the service class type
    * @return the service instance, as an optional
    */
   @NotNull
   public static <T> Optional<T> get(@NotNull final Class<T> clazz) {
     Objects.requireNonNull(clazz, "clazz");
-    final RegisteredServiceProvider<T> registration = Bukkit.getServicesManager()
-        .getRegistration(clazz);
+    final RegisteredServiceProvider<T> registration =
+        Bukkit.getServicesManager().getRegistration(clazz);
     if (registration == null) {
       return Optional.empty();
     }
@@ -78,15 +79,17 @@ public final class Services {
   /**
    * Provides a service.
    *
-   * @param clazz    the service class
+   * @param clazz the service class
    * @param instance the service instance
-   * @param plugin   the plugin to register the service to
+   * @param plugin the plugin to register the service to
    * @param priority the priority to register the service instance at
-   * @param <T>      the service class type
+   * @param <T> the service class type
    * @return the same service instance
    */
   @NotNull
-  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance,
+  public static <T> T provide(
+      @NotNull final Class<T> clazz,
+      @NotNull final T instance,
       @NotNull final Plugin plugin,
       @NotNull final ServicePriority priority) {
     Objects.requireNonNull(clazz, "clazz");
@@ -100,14 +103,16 @@ public final class Services {
   /**
    * Provides a service.
    *
-   * @param clazz    the service class
+   * @param clazz the service class
    * @param instance the service instance
    * @param priority the priority to register the service instance at
-   * @param <T>      the service class type
+   * @param <T> the service class type
    * @return the same service instance
    */
   @NotNull
-  public static <T> T provide(@NotNull final Class<T> clazz, @NotNull final T instance,
+  public static <T> T provide(
+      @NotNull final Class<T> clazz,
+      @NotNull final T instance,
       @NotNull final ServicePriority priority) {
     return provide(clazz, instance, BaseManager.getPlugin(), priority);
   }
@@ -115,9 +120,9 @@ public final class Services {
   /**
    * Provides a service.
    *
-   * @param clazz    the service class
+   * @param clazz the service class
    * @param instance the service instance
-   * @param <T>      the service class type
+   * @param <T> the service class type
    * @return the same service instance
    */
   @NotNull

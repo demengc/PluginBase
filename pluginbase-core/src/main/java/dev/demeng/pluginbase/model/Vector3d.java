@@ -33,9 +33,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * An immutable and serializable 3D vector.
- */
+/** An immutable and serializable 3D vector. */
 @Data(staticConstructor = "of")
 public class Vector3d implements YamlSerializable {
 

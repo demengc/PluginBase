@@ -49,17 +49,18 @@ final class BaseAsyncExecutor extends AbstractExecutorService implements Schedul
   private final Set<ScheduledFuture<?>> tasks = Collections.newSetFromMap(new WeakHashMap<>());
 
   BaseAsyncExecutor() {
-    this.taskService = Executors.newCachedThreadPool(new ThreadFactoryBuilder()
-        .setDaemon(true)
-        .setNameFormat("pluginbase-scheduler-%d")
-        .build()
-    );
-    this.timerExecutionService = Executors.newSingleThreadScheduledExecutor(
-        new ThreadFactoryBuilder()
-            .setDaemon(true)
-            .setNameFormat("pluginbase-scheduler-timer")
-            .build()
-    );
+    this.taskService =
+        Executors.newCachedThreadPool(
+            new ThreadFactoryBuilder()
+                .setDaemon(true)
+                .setNameFormat("pluginbase-scheduler-%d")
+                .build());
+    this.timerExecutionService =
+        Executors.newSingleThreadScheduledExecutor(
+            new ThreadFactoryBuilder()
+                .setDaemon(true)
+                .setNameFormat("pluginbase-scheduler-timer")
+                .build());
   }
 
   private ScheduledFuture<?> consumeTask(final ScheduledFuture<?> future) {
@@ -83,31 +84,30 @@ final class BaseAsyncExecutor extends AbstractExecutorService implements Schedul
   }
 
   @Override
-  public ScheduledFuture<?> schedule(final Runnable command, final long delay,
-      final TimeUnit unit) {
+  public ScheduledFuture<?> schedule(
+      final Runnable command, final long delay, final TimeUnit unit) {
     final Runnable delegate = SchedulerTaskException.wrap(command);
     return consumeTask(
         this.timerExecutionService.schedule(() -> this.taskService.execute(delegate), delay, unit));
   }
 
   @Override
-  public <V> ScheduledFuture<V> schedule(final Callable<V> callable, final long delay,
-      final TimeUnit unit) {
+  public <V> ScheduledFuture<V> schedule(
+      final Callable<V> callable, final long delay, final TimeUnit unit) {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public ScheduledFuture<?> scheduleAtFixedRate(final Runnable command, final long initialDelay,
-      final long period,
-      final TimeUnit unit) {
-    return consumeTask(this.timerExecutionService.scheduleAtFixedRate(
-        new FixedRateWorker(SchedulerTaskException.wrap(command)), initialDelay, period, unit));
+  public ScheduledFuture<?> scheduleAtFixedRate(
+      final Runnable command, final long initialDelay, final long period, final TimeUnit unit) {
+    return consumeTask(
+        this.timerExecutionService.scheduleAtFixedRate(
+            new FixedRateWorker(SchedulerTaskException.wrap(command)), initialDelay, period, unit));
   }
 
   @Override
-  public ScheduledFuture<?> scheduleWithFixedDelay(final Runnable command, final long initialDelay,
-      final long delay,
-      final TimeUnit unit) {
+  public ScheduledFuture<?> scheduleWithFixedDelay(
+      final Runnable command, final long initialDelay, final long delay, final TimeUnit unit) {
     return scheduleAtFixedRate(command, initialDelay, delay, unit);
   }
 
@@ -162,15 +162,16 @@ final class BaseAsyncExecutor extends AbstractExecutorService implements Schedul
         return;
       }
 
-      BaseAsyncExecutor.this.taskService.execute(() -> {
-        this.lock.lock();
-        try {
-          this.delegate.run();
-        } finally {
-          this.lock.unlock();
-          this.running.decrementAndGet();
-        }
-      });
+      BaseAsyncExecutor.this.taskService.execute(
+          () -> {
+            this.lock.lock();
+            try {
+              this.delegate.run();
+            } finally {
+              this.lock.unlock();
+              this.running.decrementAndGet();
+            }
+          });
     }
   }
 }

@@ -27,9 +27,7 @@ package dev.demeng.pluginbase.text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Some information about characters, used for the best centered messages possible.
- */
+/** Some information about characters, used for the best centered messages possible. */
 @RequiredArgsConstructor
 enum DefaultFontInfo {
   A('A', 5),

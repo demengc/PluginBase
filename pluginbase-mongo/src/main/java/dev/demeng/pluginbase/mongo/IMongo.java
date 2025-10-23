@@ -31,9 +31,7 @@ import com.mongodb.client.MongoDatabase;
 import dev.demeng.pluginbase.terminable.Terminable;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Represents an individual Mongo datasource, created by the library.
- */
+/** Represents an individual Mongo datasource, created by the library. */
 public interface IMongo extends Terminable {
 
   /**

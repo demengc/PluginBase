@@ -39,8 +39,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface SubscriptionBuilder<T> {
 
-  BiConsumer<Object, Throwable> DEFAULT_EXCEPTION_CONSUMER = (object, t) -> Common.error(
-      new EventHandlerException(t, object), "Error whilst handling event.", false);
+  BiConsumer<Object, Throwable> DEFAULT_EXCEPTION_CONSUMER =
+      (object, t) ->
+          Common.error(new EventHandlerException(t, object), "Error whilst handling event.", false);
 
   /**
    * Add a expiry predicate.
@@ -55,7 +56,7 @@ public interface SubscriptionBuilder<T> {
    * Sets the expiry time on the handler
    *
    * @param duration the duration until expiry
-   * @param unit     the unit for the duration
+   * @param unit the unit for the duration
    * @return the builder instance
    * @throws IllegalArgumentException if duration is not greater than or equal to 1
    */
@@ -65,8 +66,8 @@ public interface SubscriptionBuilder<T> {
   /**
    * Sets the number of calls until the handler will automatically be unregistered
    *
-   * <p>The call counter is only incremented if the event call passes all filters and if the
-   * handler completes without throwing an exception.
+   * <p>The call counter is only incremented if the event call passes all filters and if the handler
+   * completes without throwing an exception.
    *
    * @param maxCalls the number of times the handler will be called until being unregistered.
    * @return the builder instance
@@ -86,5 +87,4 @@ public interface SubscriptionBuilder<T> {
    */
   @NotNull
   SubscriptionBuilder<T> filter(@NotNull Predicate<T> predicate);
-
 }

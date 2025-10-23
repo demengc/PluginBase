@@ -108,5 +108,4 @@ class SingleSubscriptionBuilderImpl<T extends Event> implements SingleSubscripti
   public SingleHandlerList<T> handlers() {
     return new SingleHandlerListImpl<>(this);
   }
-
 }

@@ -28,9 +28,7 @@ package dev.demeng.pluginbase.exceptions;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A general exception caused by a {@link dev.demeng.pluginbase.promise.Promise} chain.
- */
+/** A general exception caused by a {@link dev.demeng.pluginbase.promise.Promise} chain. */
 public class PromiseChainException extends BaseException {
 
   public PromiseChainException(@NotNull final Throwable cause) {

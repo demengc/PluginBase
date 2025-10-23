@@ -37,9 +37,7 @@ public class AbstractCompositeTerminable implements CompositeTerminable {
   private final Deque<AutoCloseable> closeables = new ConcurrentLinkedDeque<>();
   private boolean closed = false;
 
-  protected AbstractCompositeTerminable() {
-
-  }
+  protected AbstractCompositeTerminable() {}
 
   @Override
   public CompositeTerminable with(final AutoCloseable autoCloseable) {
@@ -72,14 +70,15 @@ public class AbstractCompositeTerminable implements CompositeTerminable {
 
   @Override
   public void cleanup() {
-    this.closeables.removeIf(ac -> {
-      if (!(ac instanceof Terminable)) {
-        return false;
-      }
-      if (ac instanceof CompositeTerminable) {
-        ((CompositeTerminable) ac).cleanup();
-      }
-      return ((Terminable) ac).isClosed();
-    });
+    this.closeables.removeIf(
+        ac -> {
+          if (!(ac instanceof Terminable)) {
+            return false;
+          }
+          if (ac instanceof CompositeTerminable) {
+            ((CompositeTerminable) ac).cleanup();
+          }
+          return ((Terminable) ac).isClosed();
+        });
   }
 }

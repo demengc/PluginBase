@@ -28,12 +28,10 @@ package dev.demeng.pluginbase.promise;
 
 import dev.demeng.pluginbase.plugin.BaseManager;
 
-/**
- * Represents the two main types of {@link Thread} on the server.
- */
+/** Represents the two main types of {@link Thread} on the server. */
 public enum ThreadContext {
-
-  SYNC, ASYNC;
+  SYNC,
+  ASYNC;
 
   /**
    * Gets the thread context of the current thread.

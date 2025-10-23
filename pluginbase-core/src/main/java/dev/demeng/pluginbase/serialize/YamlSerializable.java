@@ -43,16 +43,15 @@ public interface YamlSerializable {
   /**
    * Deserializes a ConfigurationSection to a YamlSerializable object.
    *
-   * @param clazz   The YamlSerializable class
+   * @param clazz The YamlSerializable class
    * @param section The configuration section to deserialize
-   * @param <T>     The YamlSerializable type
+   * @param <T> The YamlSerializable type
    * @return The deserialized object
    * @throws IllegalStateException If the class does not have a deserialization method
    */
   @NotNull
   static <T extends YamlSerializable> T deserialize(
-      @NotNull final Class<T> clazz,
-      @NotNull final ConfigurationSection section) {
+      @NotNull final Class<T> clazz, @NotNull final ConfigurationSection section) {
 
     final Method deserializeMethod = getDeserializeMethod(clazz);
 
@@ -71,15 +70,14 @@ public interface YamlSerializable {
   /**
    * Deserializes a ConfigurationSection to a YamlSerializable object.
    *
-   * @param clazz   The YamlSerializable class
+   * @param clazz The YamlSerializable class
    * @param section The configuration section to deserialize
    * @return The deserialized object
    * @throws IllegalStateException If the clazz does not have a deserialization method
    */
   @NotNull
   static YamlSerializable deserializeRaw(
-      @NotNull final Class<?> clazz,
-      @NotNull final ConfigurationSection section) {
+      @NotNull final Class<?> clazz, @NotNull final ConfigurationSection section) {
     return deserialize(clazz.asSubclass(YamlSerializable.class), section);
   }
 

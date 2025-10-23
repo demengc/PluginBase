@@ -32,9 +32,7 @@ import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Represents an individual Mongo datasource, created by the library.
- */
+/** Represents an individual Mongo datasource, created by the library. */
 public class Mongo implements IMongo {
 
   @Getter @NotNull private final MongoClient client;

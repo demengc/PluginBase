@@ -28,20 +28,14 @@ import lombok.Data;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The POJO containing the credentials to a Mongo database.
- */
+/** The POJO containing the credentials to a Mongo database. */
 @Data(staticConstructor = "of")
 public final class MongoCredentials {
 
-  /**
-   * The connection URI for the database.
-   */
+  /** The connection URI for the database. */
   @NotNull private final String uri;
 
-  /**
-   * The name of the database.
-   */
+  /** The name of the database. */
   @NotNull private final String database;
 
   /**

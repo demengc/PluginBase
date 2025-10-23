@@ -36,17 +36,21 @@ import java.util.ResourceBundle;
 
 /**
  * Parses resource files using UTF-8 character encoding.
- * <p>
- * See <a href=https://stackoverflow.com/a/4660195>https://stackoverflow.com/a/4660195</a>.
+ *
+ * <p>See <a href=https://stackoverflow.com/a/4660195>https://stackoverflow.com/a/4660195</a>.
  */
 final class UTF8Control extends ResourceBundle.Control {
 
   public static final UTF8Control INSTANCE = new UTF8Control();
 
   @Override
-  public ResourceBundle newBundle(final String baseName, final Locale locale, final String format,
+  public ResourceBundle newBundle(
+      final String baseName,
+      final Locale locale,
+      final String format,
       final ClassLoader loader,
-      final boolean reload) throws IOException {
+      final boolean reload)
+      throws IOException {
     final String bundleName = toBundleName(baseName, locale);
     final String resourceName = toResourceName(bundleName, "properties");
     ResourceBundle bundle = null;

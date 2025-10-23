@@ -33,9 +33,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * An immutable and serializable Location object with integer values and no yaw nor pitch.
- */
+/** An immutable and serializable Location object with integer values and no yaw nor pitch. */
 @Data(staticConstructor = "of")
 public class BlockPosition implements YamlSerializable {
 
@@ -46,8 +44,11 @@ public class BlockPosition implements YamlSerializable {
 
   @NotNull
   public static BlockPosition of(@NotNull final Location loc) {
-    return of(Objects.requireNonNull(loc.getWorld()).getName(),
-        loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    return of(
+        Objects.requireNonNull(loc.getWorld()).getName(),
+        loc.getBlockX(),
+        loc.getBlockY(),
+        loc.getBlockZ());
   }
 
   @Override
@@ -60,8 +61,11 @@ public class BlockPosition implements YamlSerializable {
 
   @NotNull
   public static BlockPosition deserialize(@NotNull final ConfigurationSection section) {
-    return of(Objects.requireNonNull(section.getString("world")),
-        section.getInt("x"), section.getInt("y"), section.getInt("z"));
+    return of(
+        Objects.requireNonNull(section.getString("world")),
+        section.getInt("x"),
+        section.getInt("y"),
+        section.getInt("z"));
   }
 
   /**

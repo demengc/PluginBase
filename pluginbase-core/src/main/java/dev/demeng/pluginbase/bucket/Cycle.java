@@ -37,10 +37,10 @@ public interface Cycle<E> {
   /**
    * Creates a new cycle of elements.
    *
-   * <p>Changes to the supplying list are not reflected in the cycle.</p>
+   * <p>Changes to the supplying list are not reflected in the cycle.
    *
    * @param objects the objects to form the cycle from
-   * @param <E>     the element type
+   * @param <E> the element type
    * @return the cycle
    */
   @Nonnull
@@ -121,7 +121,7 @@ public interface Cycle<E> {
   /**
    * Gets the list currently backing this cycle
    *
-   * <p>The returned list is immutable.</p>
+   * <p>The returned list is immutable.
    *
    * @return the backing list
    */
@@ -131,11 +131,10 @@ public interface Cycle<E> {
   /**
    * Creates a copy of this cycle.
    *
-   * <p>The returned cycle will contain the same elements as this cycle, but
-   * its cursor will be reset to zero.</p>
+   * <p>The returned cycle will contain the same elements as this cycle, but its cursor will be
+   * reset to zero.
    *
    * @return a copy of this cycle
    */
   Cycle<E> copy();
-
 }

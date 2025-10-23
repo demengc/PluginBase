@@ -27,9 +27,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Represents a {@link LocaleReader} that fetches its values from a {@link ResourceBundle}.
- */
+/** Represents a {@link LocaleReader} that fetches its values from a {@link ResourceBundle}. */
 final class ResourceBundleLocaleReader implements LocaleReader {
 
   private final ResourceBundle resourceBundle;

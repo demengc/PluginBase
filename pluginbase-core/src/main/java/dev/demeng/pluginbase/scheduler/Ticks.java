@@ -30,9 +30,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Utility for converting between Minecraft game ticks and standard durations.
- */
+/** Utility for converting between Minecraft game ticks and standard durations. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Ticks {
 
@@ -47,10 +45,10 @@ public final class Ticks {
    * Converts a duration in a certain unit of time to ticks.
    *
    * <p><code>Ticks.from(duration)</code> returns the number of ticks <b>from</b> the given
-   * duration.</p>
+   * duration.
    *
    * @param duration the duration of time
-   * @param unit     the unit the duration is in
+   * @param unit the unit the duration is in
    * @return the number of ticks which represent the duration
    */
   public static long from(final long duration, @NotNull final TimeUnit unit) {
@@ -60,10 +58,10 @@ public final class Ticks {
   /**
    * Converts ticks to a duration in a certain unit of time.
    *
-   * <p><code>Ticks.to(ticks)</code> converts the number of ticks <b>to</b> a duration.</p>
+   * <p><code>Ticks.to(ticks)</code> converts the number of ticks <b>to</b> a duration.
    *
    * @param ticks the number of ticks
-   * @param unit  the unit to return the duration in
+   * @param unit the unit to return the duration in
    * @return a duration value in the given unit, representing the number of ticks
    */
   public static long to(final long ticks, @NotNull final TimeUnit unit) {

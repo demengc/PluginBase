@@ -55,7 +55,7 @@ public interface Translator {
   /**
    * Returns whether this translator contains a localized message for the given key.
    *
-   * @param key    Key to check for
+   * @param key Key to check for
    * @param locale Locale to check in
    * @return {@code true} if this translator has a localized message for the key
    */
@@ -68,17 +68,19 @@ public interface Translator {
    * @param key Message key to fetch with
    * @return The translated message, or the key if not found.
    */
-  @NotNull String get(@NotNull String key);
+  @NotNull
+  String get(@NotNull String key);
 
   /**
    * Returns the message that corresponds to the given key, using the given locale. If no such
    * message is found, the key will be returned.
    *
-   * @param key    Message key to fetch with
+   * @param key Message key to fetch with
    * @param locale Locale to get with
    * @return The translated message, or the key if not found.
    */
-  @NotNull String get(@NotNull String key, @NotNull Locale locale);
+  @NotNull
+  String get(@NotNull String key, @NotNull Locale locale);
 
   /**
    * Adds the given locale reader to this translator.
@@ -97,15 +99,17 @@ public interface Translator {
   /**
    * Adds the given resource bundle from "/locales" in the plugin data folder. This will only
    * register for the given {@link Locale}s.
-   * <p>
-   * For example, if you have the following files:
+   *
+   * <p>For example, if you have the following files:
+   *
    * <ul>
-   *     <li>foo_en_US.properties</li>
-   *     <li>foo_fr.properties</li>
-   *     <li>foo_de.properties</li>
+   *   <li>foo_en_US.properties
+   *   <li>foo_fr.properties
+   *   <li>foo_de.properties
    * </ul>
-   * The resource bundle will be "foo", and locales will be
-   * each {@link Locales#ENGLISH}, {@link Locales#FRENCH} and {@link Locales#GERMAN}.
+   *
+   * The resource bundle will be "foo", and locales will be each {@link Locales#ENGLISH}, {@link
+   * Locales#FRENCH} and {@link Locales#GERMAN}.
    *
    * @param resourceBundle Resource bundle to register
    */
@@ -113,48 +117,46 @@ public interface Translator {
 
   /**
    * Adds the given resource bundle. This will only register for the given {@link Locale}s.
-   * <p>
-   * For example, if you have the following files:
-   * <ul>
-   *     <li>foo_en_US.properties</li>
-   *     <li>foo_fr.properties</li>
-   *     <li>foo_de.properties</li>
-   * </ul>
-   * The resource bundle will be "foo", and locales will be
-   * each {@link Locales#ENGLISH}, {@link Locales#FRENCH} and {@link Locales#GERMAN}.
    *
-   * @param loader         Class loader for the bundle
+   * <p>For example, if you have the following files:
+   *
+   * <ul>
+   *   <li>foo_en_US.properties
+   *   <li>foo_fr.properties
+   *   <li>foo_de.properties
+   * </ul>
+   *
+   * The resource bundle will be "foo", and locales will be each {@link Locales#ENGLISH}, {@link
+   * Locales#FRENCH} and {@link Locales#GERMAN}.
+   *
+   * @param loader Class loader for the bundle
    * @param resourceBundle Resource bundle to register
-   * @param locales        Locales to register for
+   * @param locales Locales to register for
    */
   void addResourceBundle(
-      @NotNull ClassLoader loader,
-      @NotNull String resourceBundle,
-      @NotNull Locale... locales);
+      @NotNull ClassLoader loader, @NotNull String resourceBundle, @NotNull Locale... locales);
 
   /**
-   * Adds the given resource bundle. This will automatically check for all locales in
-   * {@link Locales}.
-   * <p>
-   * For example, if you have the following files:
-   * <ul>
-   *     <li>foo_en_US.properties</li>
-   *     <li>foo_fr.properties</li>
-   *     <li>foo_de.properties</li>
-   * </ul>
-   * The resource bundle will be "foo", and locales will be
-   * each {@link Locales#ENGLISH}, {@link Locales#FRENCH} and {@link Locales#GERMAN}.
+   * Adds the given resource bundle. This will automatically check for all locales in {@link
+   * Locales}.
    *
-   * @param loader         Class loader for the bundle
+   * <p>For example, if you have the following files:
+   *
+   * <ul>
+   *   <li>foo_en_US.properties
+   *   <li>foo_fr.properties
+   *   <li>foo_de.properties
+   * </ul>
+   *
+   * The resource bundle will be "foo", and locales will be each {@link Locales#ENGLISH}, {@link
+   * Locales#FRENCH} and {@link Locales#GERMAN}.
+   *
+   * @param loader Class loader for the bundle
    * @param resourceBundle Resource bundle to register
    */
-  void addResourceBundle(
-      @NotNull ClassLoader loader,
-      @NotNull String resourceBundle);
+  void addResourceBundle(@NotNull ClassLoader loader, @NotNull String resourceBundle);
 
-  /**
-   * Clears all currently registered locales.
-   */
+  /** Clears all currently registered locales. */
   void clear();
 
   /**
@@ -162,7 +164,8 @@ public interface Translator {
    *
    * @return The default locale
    */
-  @NotNull Locale getLocale();
+  @NotNull
+  Locale getLocale();
 
   /**
    * Sets the locale of this translator.
@@ -178,8 +181,7 @@ public interface Translator {
    * @see #addResourceBundle(ClassLoader, String, Locale...)
    */
   default void addResourceBundle(
-      @NotNull final String resourceBundle,
-      @NotNull final Locale... locales) {
+      @NotNull final String resourceBundle, @NotNull final Locale... locales) {
     addResourceBundle(getClass().getClassLoader(), resourceBundle, locales);
   }
 

@@ -76,7 +76,7 @@ public class Sql implements ISql {
    * Hikari data source and SQL stream.
    *
    * @param driverClass The driver class name (ex. com.mysql.cj.jdbc.Driver)
-   * @param jdbcUrl     The JDBC URL, or null for the default URL
+   * @param jdbcUrl The JDBC URL, or null for the default URL
    * @param credentials The database credentials
    */
   public Sql(
@@ -89,10 +89,11 @@ public class Sql implements ISql {
     hikari.setPoolName(Common.getName() + "-" + POOL_COUNTER.getAndIncrement());
 
     hikari.setDriverClassName(Common.getOrDefault(driverClass, MYSQL_DRIVER));
-    hikari.setJdbcUrl(Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL)
-        .replace("{host}", credentials.getHost())
-        .replace("{port}", "" + credentials.getPort())
-        .replace("{database}", credentials.getDatabase()));
+    hikari.setJdbcUrl(
+        Common.getOrDefault(jdbcUrl, DEFAULT_JDBC_URL)
+            .replace("{host}", credentials.getHost())
+            .replace("{port}", "" + credentials.getPort())
+            .replace("{database}", credentials.getDatabase()));
 
     hikari.setUsername(credentials.getUser());
     hikari.setPassword(credentials.getPassword());
@@ -147,7 +148,8 @@ public class Sql implements ISql {
   }
 
   @Override
-  public void execute(@Language("SQL") @NotNull final String statement,
+  public void execute(
+      @Language("SQL") @NotNull final String statement,
       @NotNull final SqlConsumer<PreparedStatement> preparer) {
     try (final Connection c = this.getConnection();
         final PreparedStatement s = c.prepareStatement(statement)) {
@@ -159,7 +161,8 @@ public class Sql implements ISql {
   }
 
   @Override
-  public <R> @NotNull Optional<R> query(@Language("SQL") @NotNull final String query,
+  public <R> @NotNull Optional<R> query(
+      @Language("SQL") @NotNull final String query,
       @NotNull final SqlConsumer<PreparedStatement> preparer,
       @NotNull final SqlFunction<ResultSet, R> handler) {
     try (final Connection c = this.getConnection();

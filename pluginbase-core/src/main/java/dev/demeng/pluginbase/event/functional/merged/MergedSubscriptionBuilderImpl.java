@@ -43,7 +43,8 @@ import org.jetbrains.annotations.NotNull;
 class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
 
   final TypeToken<T> handledClass;
-  final Map<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> mappings = new HashMap<>();
+  final Map<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> mappings =
+      new HashMap<>();
 
   BiConsumer<? super Event, Throwable> exceptionConsumer = DEFAULT_EXCEPTION_CONSUMER;
 
@@ -59,8 +60,7 @@ class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
   @NotNull
   @Override
   public <E extends Event> MergedSubscriptionBuilder<T> bindEvent(
-      @NotNull final Class<E> eventClass,
-      @NotNull final Function<E, T> function) {
+      @NotNull final Class<E> eventClass, @NotNull final Function<E, T> function) {
     return bindEvent(eventClass, EventPriority.NORMAL, function);
   }
 
@@ -68,7 +68,8 @@ class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
   @Override
   public <E extends Event> MergedSubscriptionBuilder<T> bindEvent(
       @NotNull final Class<E> eventClass,
-      @NotNull final EventPriority priority, @NotNull final Function<E, T> function) {
+      @NotNull final EventPriority priority,
+      @NotNull final Function<E, T> function) {
     Objects.requireNonNull(eventClass, "eventClass");
     Objects.requireNonNull(priority, "priority");
     Objects.requireNonNull(function, "function");
@@ -128,5 +129,4 @@ class MergedSubscriptionBuilderImpl<T> implements MergedSubscriptionBuilder<T> {
 
     return new MergedHandlerListImpl<>(this);
   }
-
 }

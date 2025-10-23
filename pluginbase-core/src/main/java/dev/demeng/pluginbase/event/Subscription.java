@@ -27,9 +27,7 @@ package dev.demeng.pluginbase.event;
 import dev.demeng.pluginbase.terminable.Terminable;
 import java.util.Collection;
 
-/**
- * Represents a subscription to a given (set of) event(s).
- */
+/** Represents a subscription to a given (set of) event(s). */
 public interface Subscription extends Terminable {
 
   /**
@@ -66,5 +64,4 @@ public interface Subscription extends Terminable {
    */
   @Deprecated
   Collection<Object> getFunctions();
-
 }

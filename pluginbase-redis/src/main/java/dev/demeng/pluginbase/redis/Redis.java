@@ -58,9 +58,9 @@ public class Redis implements IRedis {
   /**
    * Creates a new Redis manager.
    *
-   * @param serverId    Server's unique identifier
+   * @param serverId Server's unique identifier
    * @param credentials Redis server credentials
-   * @param channels    Channels to immediately subscribe to
+   * @param channels Channels to immediately subscribe to
    */
   public Redis(
       @NotNull final String serverId,
@@ -69,13 +69,24 @@ public class Redis implements IRedis {
     this.serverId = serverId;
 
     if (credentials.getUser() == null) {
-      this.jedisPool = new JedisPool(new JedisPoolConfig(), credentials.getHost(),
-          credentials.getPort(), Protocol.DEFAULT_TIMEOUT, credentials.getPassword(),
-          credentials.isSsl());
+      this.jedisPool =
+          new JedisPool(
+              new JedisPoolConfig(),
+              credentials.getHost(),
+              credentials.getPort(),
+              Protocol.DEFAULT_TIMEOUT,
+              credentials.getPassword(),
+              credentials.isSsl());
     } else {
-      this.jedisPool = new JedisPool(new JedisPoolConfig(), credentials.getHost(),
-          credentials.getPort(), Protocol.DEFAULT_TIMEOUT, credentials.getUser(),
-          credentials.getPassword(), credentials.isSsl());
+      this.jedisPool =
+          new JedisPool(
+              new JedisPoolConfig(),
+              credentials.getHost(),
+              credentials.getPort(),
+              Protocol.DEFAULT_TIMEOUT,
+              credentials.getUser(),
+              credentials.getPassword(),
+              credentials.isSsl());
     }
 
     if (channels.length > 0) {
@@ -139,35 +150,33 @@ public class Redis implements IRedis {
   }
 
   /**
-   * Publishes the object to the provided channel. For simple strings, use
-   * {@link #publishString(String, String)} instead.
+   * Publishes the object to the provided channel. For simple strings, use {@link
+   * #publishString(String, String)} instead.
    *
    * @param channel Channel to be published into
-   * @param obj     Object to be published
+   * @param obj Object to be published
    * @return True if successful, false if in closing state or failed to serialize
    */
   public boolean publishObject(@NotNull final String channel, @NotNull final Object obj) {
-    return this.executePublish(channel,
-        MessageTransferObject.of(this.serverId, obj, System.currentTimeMillis()));
+    return this.executePublish(
+        channel, MessageTransferObject.of(this.serverId, obj, System.currentTimeMillis()));
   }
 
-
   /**
-   * Publishes the object to the provided channel. To publish objects, use
-   * {@link #publishObject(String, Object)} instead.
+   * Publishes the object to the provided channel. To publish objects, use {@link
+   * #publishObject(String, Object)} instead.
    *
    * @param channel Channel to be published into
-   * @param str     String to be published
+   * @param str String to be published
    * @return True if successful, false if in closing state or failed to serialize
    */
   public boolean publishString(@NotNull final String channel, @NotNull final String str) {
-    return this.executePublish(channel,
-        MessageTransferObject.of(this.serverId, str, System.currentTimeMillis()));
+    return this.executePublish(
+        channel, MessageTransferObject.of(this.serverId, str, System.currentTimeMillis()));
   }
 
   private boolean executePublish(
-      @NotNull final String channel,
-      @NotNull final MessageTransferObject mto) {
+      @NotNull final String channel, @NotNull final MessageTransferObject mto) {
 
     if (this.closing) {
       return false;
@@ -179,20 +188,20 @@ public class Redis implements IRedis {
       return false;
     }
 
-    Schedulers.async().run(() -> {
-      try (final Jedis jedis = this.jedisPool.getResource()) {
-        jedis.publish(channel, messageJson);
-      } catch (final Exception ex) {
-        Common.error(ex, "Failed to publish Redis message.", false);
-      }
-    });
+    Schedulers.async()
+        .run(
+            () -> {
+              try (final Jedis jedis = this.jedisPool.getResource()) {
+                jedis.publish(channel, messageJson);
+              } catch (final Exception ex) {
+                Common.error(ex, "Failed to publish Redis message.", false);
+              }
+            });
 
     return true;
   }
 
-  /**
-   * Closes the Redis connection and unsubscribes to all channels.
-   */
+  /** Closes the Redis connection and unsubscribes to all channels. */
   public void close() {
 
     if (this.closing) {
@@ -246,7 +255,8 @@ public class Redis implements IRedis {
             jedis.subscribe(this, channels);
             Text.log("Subscribed to Redis channels: " + Arrays.toString(channels));
           } catch (final Exception ex) {
-            Text.log(Level.WARNING,
+            Text.log(
+                Level.WARNING,
                 "Failed to subcribe to Redis channels: " + Arrays.toString(channels));
           }
 
@@ -281,14 +291,18 @@ public class Redis implements IRedis {
       final Optional<MessageTransferObject> mto = MessageTransferObject.fromJson(message);
 
       if (mto.isEmpty()) {
-        Text.log(Level.WARNING,
+        Text.log(
+            Level.WARNING,
             "Failed to read Redis message from channel '" + channel + "': " + message);
         return;
       }
 
       Bukkit.getPluginManager().callEvent(new AsyncRedisMessageReceiveEvent(channel, mto.get()));
-      Schedulers.sync().run(() -> Bukkit.getPluginManager()
-          .callEvent(new RedisMessageReceiveEvent(channel, mto.get())));
+      Schedulers.sync()
+          .run(
+              () ->
+                  Bukkit.getPluginManager()
+                      .callEvent(new RedisMessageReceiveEvent(channel, mto.get())));
     }
   }
 }

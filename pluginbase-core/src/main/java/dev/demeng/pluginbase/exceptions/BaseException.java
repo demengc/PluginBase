@@ -26,9 +26,7 @@ package dev.demeng.pluginbase.exceptions;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A custom runtime exception, used for throwing runtime errors related to improper API usage.
- */
+/** A custom runtime exception, used for throwing runtime errors related to improper API usage. */
 public class BaseException extends RuntimeException {
 
   public BaseException(@NotNull final String message) {

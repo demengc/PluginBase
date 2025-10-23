@@ -36,9 +36,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface ContextualPromiseBuilder {
 
-  @NotNull <T> Promise<T> supply(@NotNull Supplier<T> supplier);
+  @NotNull
+  <T> Promise<T> supply(@NotNull Supplier<T> supplier);
 
-  @NotNull <T> Promise<T> call(@NotNull Callable<T> callable);
+  @NotNull
+  <T> Promise<T> call(@NotNull Callable<T> callable);
 
   @NotNull
   Promise<Void> run(@NotNull Runnable runnable);

@@ -67,7 +67,8 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
   private final AtomicLong callCount = new AtomicLong(0);
   private final AtomicBoolean active = new AtomicBoolean(true);
 
-  @SuppressWarnings("unchecked") BaseMergedEventListener(
+  @SuppressWarnings("unchecked")
+  BaseMergedEventListener(
       final MergedSubscriptionBuilderImpl<T> builder,
       final List<BiConsumer<MergedSubscription<T>, ? super T>> handlers) {
     this.handledClass = builder.handledClass;
@@ -75,19 +76,20 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
     this.exceptionConsumer = builder.exceptionConsumer;
 
     this.filters = builder.filters.toArray(new Predicate[builder.filters.size()]);
-    this.preExpiryTests = builder.preExpiryTests.toArray(
-        new BiPredicate[builder.preExpiryTests.size()]);
-    this.midExpiryTests = builder.midExpiryTests.toArray(
-        new BiPredicate[builder.midExpiryTests.size()]);
-    this.postExpiryTests = builder.postExpiryTests.toArray(
-        new BiPredicate[builder.postExpiryTests.size()]);
+    this.preExpiryTests =
+        builder.preExpiryTests.toArray(new BiPredicate[builder.preExpiryTests.size()]);
+    this.midExpiryTests =
+        builder.midExpiryTests.toArray(new BiPredicate[builder.midExpiryTests.size()]);
+    this.postExpiryTests =
+        builder.postExpiryTests.toArray(new BiPredicate[builder.postExpiryTests.size()]);
     this.handlers = handlers.toArray(new BiConsumer[handlers.size()]);
   }
 
   void register(final Plugin plugin) {
     final Map<Class<?>, EventPriority> registered = new IdentityHashMap<>();
 
-    for (final Map.Entry<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> ent : this.mappings.entrySet()) {
+    for (final Map.Entry<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> ent :
+        this.mappings.entrySet()) {
       final Class<? extends Event> type = ent.getKey();
       final Class<? extends Event> registrationType = getRegistrationClass(type);
 
@@ -96,7 +98,9 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
       if (existing != null) {
         if (existing != ent.getValue().getPriority()) {
           throw new RuntimeException(
-              "Unable to register the same event with different priorities: " + type + " --> "
+              "Unable to register the same event with different priorities: "
+                  + type
+                  + " --> "
                   + registrationType);
         }
         continue;
@@ -228,8 +232,8 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
     return this.mappings.keySet();
   }
 
-  private static void unregisterListener(final Class<? extends Event> eventClass,
-      final Listener listener) {
+  private static void unregisterListener(
+      final Class<? extends Event> eventClass, final Listener listener) {
     try {
       // unfortunately we can't cache this reflect call, as the method is static
       final Method getHandlerListMethod = eventClass.getMethod("getHandlerList");
@@ -245,7 +249,8 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
       clazz.getDeclaredMethod("getHandlerList");
       return clazz;
     } catch (final NoSuchMethodException var2) {
-      if (clazz.getSuperclass() != null && !clazz.getSuperclass().equals(Event.class)
+      if (clazz.getSuperclass() != null
+          && !clazz.getSuperclass().equals(Event.class)
           && Event.class.isAssignableFrom(clazz.getSuperclass())) {
         return getRegistrationClass(clazz.getSuperclass().asSubclass(Event.class));
       } else {

@@ -51,15 +51,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Message-related utilities, including console and chat messages.
- */
+/** Message-related utilities, including console and chat messages. */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Text {
 
-  /**
-   * The message value that will cause the message to not be sent. Ignores case.
-   */
+  /** The message value that will cause the message to not be sent. Ignores case. */
   private static final String IGNORE_MESSAGE_VALUE = "ignore";
 
   /**
@@ -68,24 +64,16 @@ public final class Text {
    */
   private static final String MINI_PREFIX = "mini:";
 
-  /**
-   * Pattern to match our HEX color format for MC 1.16+.
-   */
+  /** Pattern to match our HEX color format for MC 1.16+. */
   public static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
-  /**
-   * Pattern to match our localized placeholders.
-   */
+  /** Pattern to match our localized placeholders. */
   public static final Pattern LOCALIZED_PLACEHOLDER_PATTERN = Pattern.compile("#\\{([^}]+)}");
 
-  /**
-   * Separation line for players (in-game chat).
-   */
+  /** Separation line for players (in-game chat). */
   public static final String CHAT_LINE = "&m-----------------------------------------------------";
 
-  /**
-   * Separation line for console.
-   */
+  /** Separation line for console. */
   public static final String CONSOLE_LINE =
       "*-----------------------------------------------------*";
 
@@ -115,8 +103,8 @@ public final class Text {
       } catch (final NoSuchMethodError ex) {
         try {
           final Player.Spigot spigotPlayer = player.spigot();
-          playerLocale = (String) spigotPlayer.getClass().getDeclaredMethod("getLocale")
-              .invoke(spigotPlayer);
+          playerLocale =
+              (String) spigotPlayer.getClass().getDeclaredMethod("getLocale").invoke(spigotPlayer);
 
         } catch (final Exception ex1) {
           return BaseManager.getTranslator().getLocale();
@@ -132,12 +120,11 @@ public final class Text {
 
   /**
    * Gets the localized string with the given key using the provided sender's locale. Uses the
-   * default locale if the localized string could not be resolved with the provided sender's
-   * locale.
+   * default locale if the localized string could not be resolved with the provided sender's locale.
    *
-   * @param key    The key of the message
+   * @param key The key of the message
    * @param sender The sender to get the locale of
-   * @param args   Arguments for positioned placeholders ({n})
+   * @param args Arguments for positioned placeholders ({n})
    * @return The localized message, or key if unable to resolve
    * @see #getLocale(CommandSender)
    */
@@ -158,16 +145,14 @@ public final class Text {
    * Gets the localized string with the given key using the provided locale. Uses the default locale
    * if the localized string could not be resolved with the provided locale.
    *
-   * @param key    The key of the message
+   * @param key The key of the message
    * @param locale The locale
-   * @param args   Arguments for positioned placeholders ({n})
+   * @param args Arguments for positioned placeholders ({n})
    * @return The localized message, or key if unable to resolve
    */
   @NotNull
   public static String localized(
-      @Nullable final String key,
-      @Nullable final Locale locale,
-      @NotNull final Object... args) {
+      @Nullable final String key, @Nullable final Locale locale, @NotNull final Object... args) {
 
     if (key == null) {
       return "";
@@ -183,14 +168,12 @@ public final class Text {
   /**
    * Gets the localized string with the given key using the default locale.
    *
-   * @param key  The key of the message
+   * @param key The key of the message
    * @param args Arguments for positioned placeholders ({n})
    * @return The localized message, or key if unable to resolve
    */
   @NotNull
-  public static String localizedDef(
-      @Nullable final String key,
-      @NotNull final Object... args) {
+  public static String localizedDef(@Nullable final String key, @NotNull final Object... args) {
     return localized(key, (Locale) null, args);
   }
 
@@ -204,9 +187,7 @@ public final class Text {
 
   @NotNull
   public static String tl(
-      @Nullable final String key,
-      @Nullable final Locale locale,
-      @NotNull final Object... args) {
+      @Nullable final String key, @Nullable final Locale locale, @NotNull final Object... args) {
     return localized(key, locale, args);
   }
 
@@ -214,16 +195,14 @@ public final class Text {
    * Localizes the placeholders in the string using the sender's locale. Note that the same
    * arguments are used for EVERY placeholder.
    *
-   * @param str    The string to localize
+   * @param str The string to localize
    * @param locale The locale to use
-   * @param args   The arguments to replace in the localized string
+   * @param args The arguments to replace in the localized string
    * @return The localized string
    */
   @NotNull
   public static String localizePlaceholders(
-      @Nullable final String str,
-      @Nullable final Locale locale,
-      @NotNull final Object... args) {
+      @Nullable final String str, @Nullable final Locale locale, @NotNull final Object... args) {
 
     if (str == null) {
       return "";
@@ -259,14 +238,13 @@ public final class Text {
    * Localizes the placeholders in the string using the default locale. Note that the same arguments
    * are used for EVERY placeholder.
    *
-   * @param str  The string to localize
+   * @param str The string to localize
    * @param args The arguments to replace in the localized string
    * @return The localized string
    */
   @NotNull
   public static String localizePlaceholdersDef(
-      @Nullable final String str,
-      @NotNull final Object... args) {
+      @Nullable final String str, @NotNull final Object... args) {
     return localizePlaceholders(str, BaseManager.getTranslator().getLocale(), args);
   }
 
@@ -285,8 +263,8 @@ public final class Text {
   }
 
   /**
-   * Gets either {@link #CHAT_LINE} or {@link #CONSOLE_LINE}, depending on if the
-   * {@link CommandSender} is a player or console.
+   * Gets either {@link #CHAT_LINE} or {@link #CONSOLE_LINE}, depending on if the {@link
+   * CommandSender} is a player or console.
    *
    * @param sender The command sender
    * @return The separation line
@@ -315,9 +293,11 @@ public final class Text {
 
     final ColorScheme scheme = BaseManager.getBaseSettings().colorScheme();
     if (scheme != null) {
-      message = message.replace("&p", scheme.getPrimary())
-          .replace("&s", scheme.getSecondary())
-          .replace("&t", scheme.getTertiary());
+      message =
+          message
+              .replace("&p", scheme.getPrimary())
+              .replace("&s", scheme.getSecondary())
+              .replace("&t", scheme.getTertiary());
     }
 
     if (Common.SPIGOT && Common.isServerVersionAtLeast(16)) {
@@ -393,8 +373,8 @@ public final class Text {
   }
 
   /**
-   * Parses the string using the MiniMessage library. Format:
-   * <a href="https://docs.advntr.dev/minimessage/format.html">...</a>
+   * Parses the string using the MiniMessage library. Format: <a
+   * href="https://docs.advntr.dev/minimessage/format.html">...</a>
    *
    * @param str The raw string
    * @return The result component for the string, or empty if the provided string is null
@@ -411,8 +391,8 @@ public final class Text {
 
   /**
    * Parses the string using the MiniMessage library, and then uses the legacy Bukkit Component
-   * Serializer to return a String rather than a Component. Format:
-   * <a href="https://docs.advntr.dev/minimessage/format.html">...</a>
+   * Serializer to return a String rather than a Component. Format: <a
+   * href="https://docs.advntr.dev/minimessage/format.html">...</a>
    *
    * @param str The raw string(s)
    * @return The serialized component for the string, or empty if the provided string is null
@@ -487,7 +467,7 @@ public final class Text {
   /**
    * Makes a string Title Case.
    *
-   * @param str       The string
+   * @param str The string
    * @param delimeter The delimeter to use for splitting the string
    * @return The string in Title Case
    */
@@ -574,7 +554,7 @@ public final class Text {
   /**
    * Logs a plain message into the console.
    *
-   * @param str   The message to send
+   * @param str The message to send
    * @param level The logging level
    */
   public static void log(final Level level, final String str) {
@@ -591,11 +571,11 @@ public final class Text {
   // ---------------------------------------------------------------------------------
 
   /**
-   * Sends a colored and prefixed message to the command sender. Any message equaling null or
-   * {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
+   * Sends a colored and prefixed message to the command sender. Any message equaling null or {@link
+   * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
-   * @param str    The message to send
+   * @param str The message to send
    */
   public static void tell(@NotNull final CommandSender sender, @Nullable final String str) {
 
@@ -610,18 +590,16 @@ public final class Text {
 
   /**
    * Sends a {@link #localized(String, CommandSender, Object...)}, colored, and prefixed message to
-   * the command sender. Any key equaling null or any message equaling to
-   * {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
+   * the command sender. Any key equaling null or any message equaling to {@link
+   * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
-   * @param key    The key of the localized string
-   * @param args   Arguments to replace in the localized string
+   * @param key The key of the localized string
+   * @param args Arguments to replace in the localized string
    * @see #tell(CommandSender, String)
    */
   public static void tellLocalized(
-      @NotNull final CommandSender sender,
-      @Nullable final String key,
-      final Object... args) {
+      @NotNull final CommandSender sender, @Nullable final String key, final Object... args) {
 
     if (key == null) {
       return;
@@ -643,7 +621,7 @@ public final class Text {
    * message equaling null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
-   * @param str    The message to send
+   * @param str The message to send
    */
   public static void coloredTell(@NotNull final CommandSender sender, @Nullable final String str) {
 
@@ -662,14 +640,12 @@ public final class Text {
    * (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
-   * @param key    The key of the localized string
-   * @param args   Arguments to replace in the localized string
+   * @param key The key of the localized string
+   * @param args Arguments to replace in the localized string
    * @see #tellLocalized(CommandSender, String, Object...)
    */
   public static void coloredTellLocalized(
-      @NotNull final CommandSender sender,
-      @Nullable final String key,
-      final Object... args) {
+      @NotNull final CommandSender sender, @Nullable final String key, final Object... args) {
 
     if (key == null) {
       return;
@@ -689,13 +665,12 @@ public final class Text {
   /**
    * Sends the {@link Component} to the player as a chat message.
    *
-   * @param player    The player who should receive the component
+   * @param player The player who should receive the component
    * @param component The component to send
    * @see #parseMini(String)
    */
   public static void tellComponent(
-      @NotNull final Player player,
-      @NotNull final Component component) {
+      @NotNull final Player player, @NotNull final Component component) {
     BaseManager.getAdventure().player(player).sendMessage(component);
   }
 
@@ -705,7 +680,7 @@ public final class Text {
    * null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
    * @param player The player that will receive the message
-   * @param str    The message to send
+   * @param str The message to send
    */
   public static void tellCentered(@NotNull final Player player, @Nullable final String str) {
 
@@ -755,12 +730,12 @@ public final class Text {
   }
 
   /**
-   * Broadcasts the message after coloring and formatting it. Any message equaling null or
-   * {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
+   * Broadcasts the message after coloring and formatting it. Any message equaling null or {@link
+   * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
-   *                   the broadcast should be seen by everyone
-   * @param str        The message to send
+   *     the broadcast should be seen by everyone
+   * @param str The message to send
    */
   public static void broadcast(@Nullable final String permission, @Nullable final String str) {
 
@@ -781,12 +756,12 @@ public final class Text {
    * null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
-   *                   the broadcast should be seen by everyone
-   * @param str        The message to send
+   *     the broadcast should be seen by everyone
+   * @param str The message to send
    * @see #broadcast(String, String)
    */
-  public static void broadcastColored(@Nullable final String permission,
-      @Nullable final String str) {
+  public static void broadcastColored(
+      @Nullable final String permission, @Nullable final String str) {
 
     if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
@@ -807,35 +782,33 @@ public final class Text {
   /**
    * Sends the title to the player.
    *
-   * @param p        The player who should receive the title
-   * @param title    The title to send, or null for none
+   * @param p The player who should receive the title
+   * @param title The title to send, or null for none
    * @param subtitle The subtitle to send, or null for none
    */
   public static void sendTitle(
-      @NotNull final Player p,
-      @Nullable final String title,
-      @Nullable final String subtitle) {
+      @NotNull final Player p, @Nullable final String title, @Nullable final String subtitle) {
     Titles.sendTitle(p, Text.colorize(title), Text.colorize(subtitle));
   }
 
   /**
    * Sends the title to the player.
    *
-   * @param p        The player who should receive the title
-   * @param title    The title to send, or null for none
+   * @param p The player who should receive the title
+   * @param title The title to send, or null for none
    * @param subtitle The subtitle to send, or null for none
-   * @param fadeIn   The fade in duration, in ticks
-   * @param stay     The stay duration, in ticks
-   * @param fadeOut  The fade out duration, in ticks
+   * @param fadeIn The fade in duration, in ticks
+   * @param stay The stay duration, in ticks
+   * @param fadeOut The fade out duration, in ticks
    */
   public static void sendTitle(
       @NotNull final Player p,
       @Nullable final String title,
       @Nullable final String subtitle,
-      final int fadeIn, final int stay, final int fadeOut) {
-    Titles.sendTitle(p, fadeIn, stay, fadeOut,
-        Text.colorize(title),
-        Text.colorize(subtitle));
+      final int fadeIn,
+      final int stay,
+      final int fadeOut) {
+    Titles.sendTitle(p, fadeIn, stay, fadeOut, Text.colorize(title), Text.colorize(subtitle));
   }
 
   /**

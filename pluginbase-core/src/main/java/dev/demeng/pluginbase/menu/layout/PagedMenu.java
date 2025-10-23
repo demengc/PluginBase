@@ -48,24 +48,16 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * A paginated GUI menu that will be displayed to a player.
- */
+/** A paginated GUI menu that will be displayed to a player. */
 public abstract class PagedMenu implements IMenu {
 
-  /**
-   * The placeholder that can be used in the inventory title for the current page.
-   */
+  /** The placeholder that can be used in the inventory title for the current page. */
   private static final String CURRENT_PAGE_PLACEHOLDER = "%current-page%";
 
-  /**
-   * The unique ID of this menu.
-   */
+  /** The unique ID of this menu. */
   @NotNull @Getter private final UUID uuid = UUID.randomUUID();
 
-  /**
-   * The single-paged menus (pages) related to this paged menu.
-   */
+  /** The single-paged menus (pages) related to this paged menu. */
   @NotNull @Getter private final List<Menu> pages = new ArrayList<>();
 
   private final int pageSize;
@@ -76,8 +68,8 @@ public abstract class PagedMenu implements IMenu {
    * Creates a new paged menu with the specified size per page and inventory title.
    *
    * @param pageSize The size of each page, in slots; must be greater than or equal to 9 and less
-   *                 than or equal to 54, and a multiple of 9
-   * @param title    The menu title, colorized internally and permits page number placeholders
+   *     than or equal to 54, and a multiple of 9
+   * @param title The menu title, colorized internally and permits page number placeholders
    * @param settings The settings for the paged menu
    */
   protected PagedMenu(final int pageSize, @NotNull final String title, final Settings settings) {
@@ -112,8 +104,11 @@ public abstract class PagedMenu implements IMenu {
       if (page.availableSlots.isEmpty()
           || page.availableSlots.peek() >= page.getInventory().getSize()) {
 
-        page = new Page(pageSize,
-            title.replace(CURRENT_PAGE_PLACEHOLDER, String.valueOf(pages.size() + 1)), settings);
+        page =
+            new Page(
+                pageSize,
+                title.replace(CURRENT_PAGE_PLACEHOLDER, String.valueOf(pages.size() + 1)),
+                settings);
         pages.add(page);
       }
 
@@ -131,8 +126,8 @@ public abstract class PagedMenu implements IMenu {
   }
 
   /**
-   * Adds a static item that will be displayed on all pages. Must be done AFTER the
-   * {@link #fill(List)} method.
+   * Adds a static item that will be displayed on all pages. Must be done AFTER the {@link
+   * #fill(List)} method.
    *
    * @param button The button to set on all pages
    */
@@ -146,11 +141,13 @@ public abstract class PagedMenu implements IMenu {
    * Creates and adds a static item that will be displayed on all pages. Must be done AFTER the
    * {@link #fill(List)} method.
    *
-   * @param slot    The slot of the button
-   * @param stack   The stack of the button
+   * @param slot The slot of the button
+   * @param stack The stack of the button
    * @param actions The actions of the button
    */
-  public void addButton(final int slot, @NotNull final ItemStack stack,
+  public void addButton(
+      final int slot,
+      @NotNull final ItemStack stack,
       @Nullable final Consumer<InventoryClickEvent> actions) {
     for (final Menu page : pages) {
       page.addButton(MenuButton.create(slot, stack, actions));
@@ -168,7 +165,7 @@ public abstract class PagedMenu implements IMenu {
   /**
    * Opens a specific page of the menu to the players.
    *
-   * @param index   The index of the page (starts at 0)
+   * @param index The index of the page (starts at 0)
    * @param players THe players to open the page to
    */
   public void open(final int index, final Player... players) {
@@ -210,10 +207,11 @@ public abstract class PagedMenu implements IMenu {
                 }
               }));
 
-      this.availableSlots = settings.getAvailableSlots().stream()
-          .filter(Objects::nonNull)
-          .sorted()
-          .collect(Collectors.toCollection(LinkedList::new));
+      this.availableSlots =
+          settings.getAvailableSlots().stream()
+              .filter(Objects::nonNull)
+              .sorted()
+              .collect(Collectors.toCollection(LinkedList::new));
 
       if (availableSlots.isEmpty()) {
         throw new BaseException("Available slots cannot be empty");
@@ -226,9 +224,7 @@ public abstract class PagedMenu implements IMenu {
     }
   }
 
-  /**
-   * Settings for the paged menu.
-   */
+  /** Settings for the paged menu. */
   public interface Settings {
 
     /**
@@ -236,7 +232,8 @@ public abstract class PagedMenu implements IMenu {
      *
      * @return The previous page button
      */
-    @NotNull MenuButton getPreviousButton();
+    @NotNull
+    MenuButton getPreviousButton();
 
     /**
      * The previous page button if there are no more pages to go back to. The provided consumer will
@@ -244,14 +241,16 @@ public abstract class PagedMenu implements IMenu {
      *
      * @return The dummy previous page button
      */
-    @NotNull MenuButton getDummyPreviousButton();
+    @NotNull
+    MenuButton getDummyPreviousButton();
 
     /**
      * The next page button. The provided consumer will be ignored.
      *
      * @return The next page button
      */
-    @NotNull MenuButton getNextButton();
+    @NotNull
+    MenuButton getNextButton();
 
     /**
      * The next page button if there are no more pages to go to. The provided consumer will be
@@ -259,7 +258,8 @@ public abstract class PagedMenu implements IMenu {
      *
      * @return The dummy next page button
      */
-    @NotNull MenuButton getDummyNextButton();
+    @NotNull
+    MenuButton getDummyNextButton();
 
     /**
      * The list of slots that buttons can use. If none of the slots in this list are empty, a new
@@ -268,7 +268,8 @@ public abstract class PagedMenu implements IMenu {
      *
      * @return The list of slots that buttons can use
      */
-    @NotNull List<Integer> getAvailableSlots();
+    @NotNull
+    List<Integer> getAvailableSlots();
 
     /**
      * Gets the paged menu settings from a configuration section.
@@ -281,32 +282,41 @@ public abstract class PagedMenu implements IMenu {
       return new Settings() {
         @Override
         public @NotNull MenuButton getPreviousButton() {
-          return MenuButton.create(Objects.requireNonNull(
-              section.getConfigurationSection("previous-page"),
-              "'Previous page' button is null"), null);
+          return MenuButton.create(
+              Objects.requireNonNull(
+                  section.getConfigurationSection("previous-page"),
+                  "'Previous page' button is null"),
+              null);
         }
 
         @Override
         public @NotNull MenuButton getDummyPreviousButton() {
-          return MenuButton.create(getPreviousButton().getSlot(),
-              ItemSerializer.deserialize(Objects.requireNonNull(
-                  section.getConfigurationSection("previous-page.no-more-pages"),
-                  "'No more previous pages' button is null")), null);
+          return MenuButton.create(
+              getPreviousButton().getSlot(),
+              ItemSerializer.deserialize(
+                  Objects.requireNonNull(
+                      section.getConfigurationSection("previous-page.no-more-pages"),
+                      "'No more previous pages' button is null")),
+              null);
         }
 
         @Override
         public @NotNull MenuButton getNextButton() {
-          return MenuButton.create(Objects.requireNonNull(
-              section.getConfigurationSection("next-page"),
-              "'Next page' button is null"), null);
+          return MenuButton.create(
+              Objects.requireNonNull(
+                  section.getConfigurationSection("next-page"), "'Next page' button is null"),
+              null);
         }
 
         @Override
         public @NotNull MenuButton getDummyNextButton() {
-          return MenuButton.create(getNextButton().getSlot(),
-              ItemSerializer.deserialize(Objects.requireNonNull(
-                  section.getConfigurationSection("next-page.no-more-pages"),
-                  "'No more next pages' button is null")), null);
+          return MenuButton.create(
+              getNextButton().getSlot(),
+              ItemSerializer.deserialize(
+                  Objects.requireNonNull(
+                      section.getConfigurationSection("next-page.no-more-pages"),
+                      "'No more next pages' button is null")),
+              null);
         }
 
         @Override
@@ -317,14 +327,15 @@ public abstract class PagedMenu implements IMenu {
             return IntStream.range(
                     section.getInt("listing-range.start") - 1,
                     section.getInt("listing-range.end") - 1)
-                .boxed().collect(Collectors.toList());
+                .boxed()
+                .collect(Collectors.toList());
           }
 
           final List<Integer> available = new ArrayList<>();
 
           try {
-            Common.forEachInt(section.getString("available-slots"),
-                slot -> available.add(slot - 1));
+            Common.forEachInt(
+                section.getString("available-slots"), slot -> available.add(slot - 1));
           } catch (final IllegalArgumentException ex) {
             Common.error(ex, "Failed to parse listing range.", false);
           }

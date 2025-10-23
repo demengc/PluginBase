@@ -41,5 +41,4 @@ public interface SingleSubscription<T extends Event> extends Subscription {
    */
   @NotNull
   Class<T> getEventClass();
-
 }
