@@ -54,9 +54,9 @@ public final class BaseFailureHandler<A extends CommandActor> implements Failure
 
   @Override
   public void handleFailedAttempts(
-      @NotNull A actor,
-      @NotNull @Unmodifiable List<Potential<A>> failedAttempts,
-      @NotNull StringStream input) {
+      @NotNull final A actor,
+      @NotNull @Unmodifiable final List<Potential<A>> failedAttempts,
+      @NotNull final StringStream input) {
 
     if (failedAttempts.isEmpty()) {
       return;
@@ -71,7 +71,7 @@ public final class BaseFailureHandler<A extends CommandActor> implements Failure
         filter(failedAttempts, v -> !(v.error() instanceof ExpectedLiteralException));
 
     if (realExceptions.isEmpty()) {
-      if (!(actor instanceof BukkitCommandActor bukkitActor)) {
+      if (!(actor instanceof final BukkitCommandActor bukkitActor)) {
         return;
       }
 

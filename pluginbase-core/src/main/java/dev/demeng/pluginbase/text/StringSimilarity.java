@@ -43,7 +43,7 @@ public class StringSimilarity {
    * @param s2 The second string
    * @return The Levenshtein distance between the two strings
    */
-  public static int levenshteinDistance(@NotNull String s1, @NotNull String s2) {
+  public static int levenshteinDistance(@NotNull final String s1, @NotNull final String s2) {
     final String str1 = s1.toLowerCase();
     final String str2 = s2.toLowerCase();
 
@@ -87,7 +87,7 @@ public class StringSimilarity {
    * @param s2 The second string
    * @return A similarity score between 0.0 and 1.0
    */
-  public static double similarity(@NotNull String s1, @NotNull String s2) {
+  public static double similarity(@NotNull final String s1, @NotNull final String s2) {
     final int distance = levenshteinDistance(s1, s2);
     final int maxLength = Math.max(s1.length(), s2.length());
 
@@ -107,7 +107,8 @@ public class StringSimilarity {
    * @param threshold The minimum similarity score (0.0 to 1.0) required to consider strings similar
    * @return true if the similarity score is greater than or equal to the threshold
    */
-  public static boolean isSimilar(@NotNull String s1, @NotNull String s2, double threshold) {
+  public static boolean isSimilar(
+      @NotNull final String s1, @NotNull final String s2, final double threshold) {
     return similarity(s1, s2) >= threshold;
   }
 }

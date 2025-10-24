@@ -41,8 +41,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Requests a chat input from players, with the ability to map the string input into the object you
- * require and a retry system for invalid inputs. Created using the Bukkit
- * {@link org.bukkit.conversations.Conversation} API.
+ * require and a retry system for invalid inputs. Created using the Bukkit {@link
+ * org.bukkit.conversations.Conversation} API.
  *
  * @param <T> The expected return type for the input request
  */
@@ -73,8 +73,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
    * Creates a new chat input request builder.
    *
    * @param parser The input parser that returns the expected object, or null if the string input is
-   *               invalid
-   * @param <T>    The expected return type for the input request
+   *     invalid
+   * @param <T> The expected return type for the input request
    * @return A new chat input request builder
    */
   @NotNull
@@ -163,8 +163,8 @@ public class ChatInputRequest<T> extends ValidatingPrompt {
 
   /**
    * The consumer that is accepted with the parsed input when a valid input has been provided. This
-   * utility will automatically clear the title and subtitle (if applicable) and end the
-   * {@link org.bukkit.conversations.Conversation}.
+   * utility will automatically clear the title and subtitle (if applicable) and end the {@link
+   * org.bukkit.conversations.Conversation}.
    *
    * @param consumer The consumer to be accepted with the input
    * @return this
