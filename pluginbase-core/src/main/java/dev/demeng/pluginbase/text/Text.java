@@ -177,6 +177,38 @@ public final class Text {
     return localized(key, (Locale) null, args);
   }
 
+  /**
+   * Gets a localized error message with fallback to a default message. If the localization key
+   * cannot be resolved (returns the key itself), the default message is used instead.
+   *
+   * @param sender The command sender to get the locale of
+   * @param key The localization key
+   * @param defaultMessage The default message if localization is not available
+   * @param args Arguments for placeholders in the localized message
+   * @return The localized or default message (not colorized)
+   */
+  @NotNull
+  public static String localizedOrDefault(
+      @Nullable final CommandSender sender,
+      @Nullable final String key,
+      @NotNull final String defaultMessage,
+      @NotNull final Object... args) {
+
+    if (key == null) {
+      return defaultMessage;
+    }
+
+    final String localized = localized(key, sender, args);
+
+    // If the key wasn't found, the translator returns the key itself
+    // In that case, use the default message
+    if (localized.equals(key)) {
+      return defaultMessage;
+    }
+
+    return localized;
+  }
+
   @NotNull
   public static String tl(
       @Nullable final String key,
