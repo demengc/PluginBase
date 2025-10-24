@@ -48,7 +48,7 @@ public final class BaseFailureHandler<A extends CommandActor> implements Failure
   private static final BaseFailureHandler<CommandActor> INSTANCE = new BaseFailureHandler<>();
 
   @SuppressWarnings("unchecked")
-  public static <A extends CommandActor> FailureHandler<A> defaultFailureHandler() {
+  public static <A extends CommandActor> FailureHandler<A> baseFailureHandler() {
     return (FailureHandler<A>) INSTANCE;
   }
 

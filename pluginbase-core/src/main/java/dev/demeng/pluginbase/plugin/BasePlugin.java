@@ -28,6 +28,8 @@ import dev.demeng.pluginbase.BaseSettings;
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.Services;
+import dev.demeng.pluginbase.command.BaseExceptionHandler;
+import dev.demeng.pluginbase.command.BaseFailureHandler;
 import dev.demeng.pluginbase.locale.Translator;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.scheduler.BaseExecutors;
@@ -42,6 +44,9 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import revxrsal.commands.Lamp;
+import revxrsal.commands.bukkit.BukkitLamp;
+import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 /**
  * An extended version of JavaPlugin. It is recommended that you extend this in your main class, but
@@ -233,5 +238,22 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
     }
 
     BaseManager.setBaseSettings(baseSettings);
+  }
+
+  /**
+   * Creates a new Lamp command handler with PluginBase's settings pre-configured.
+   *
+   * @return A Lamp instance
+   */
+  @NotNull
+  public Lamp<BukkitCommandActor> createCommandHandler() {
+    return BukkitLamp.builder(this)
+        .exceptionHandler(new BaseExceptionHandler())
+        .dispatcherSettings(
+            settings ->
+                settings
+                    .maximumFailedAttempts(10)
+                    .failureHandler(BaseFailureHandler.baseFailureHandler()))
+        .build();
   }
 }
