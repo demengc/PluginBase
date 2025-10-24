@@ -1,0 +1,133 @@
+commands:
+  # Invalid player input
+  # Placeholder: {0} = player input
+  invalid-player: "&cInvalid player: &e{0}&c."
+
+  # Invalid world input
+  # Placeholder: {0} = world input
+  invalid-world: "&cInvalid world: &e{0}&c."
+
+  # Missing location parameter (x, y, or z coordinate)
+  # Placeholder: {0} = axis name (x, y, or z)
+  missing-location-parameter: "&cExpected &e{0}&c."
+
+  # Sender is not console
+  sender-not-console: "&cYou must be the console to execute this command!"
+
+  # Sender is not a player
+  sender-not-player: "&cYou must be a player to execute this command!"
+
+  # Malformed entity selector
+  # Placeholders: {0} = input, {1} = error message
+  malformed-entity-selector: "&cMalformed entity selector: &e{0}&c. Error: &e{1}"
+
+  # Entity selector targets non-player entities
+  # Placeholder: {0} = selector input
+  non-player-entities: "&cEntity selector &e{0} &cmust only target players."
+
+  # Entity selector returned more than one entity when only one was expected
+  more-than-one-entity: "&cEntity selector must target only one entity."
+
+  # Entity selector returned no entities
+  empty-entity-selector: "&cNo entities were found."
+
+  # Invalid enum value
+  # Placeholder: {0} = invalid input
+  enum-not-found: "&cInvalid value: &e{0}&c."
+
+  # Expected a literal but got something else
+  # Placeholders: {0} = expected node name, {1} = actual input
+  expected-literal: "&cExpected &e{0}&c, found &e{1}&c."
+
+  input-parse:
+    # Invalid escape character in input
+    invalid-escape: "&cInvalid input. Use &e\\\\\\\\ &cto include a backslash."
+
+    # Unclosed quote in input
+    unclosed-quote: "&cUnclosed quote. Make sure to close all quotes."
+
+    # Expected whitespace after argument
+    expected-whitespace: "&cUnexpected text after argument."
+
+  invalid-list-size:
+    # List size too small
+    # Placeholders: {0} = minimum size, {1} = parameter name
+    too-small: "&cYou must input at least &e{0} &centries for &e{1}&c."
+
+    # List size too large
+    # Placeholders: {0} = maximum size, {1} = parameter name
+    too-large: "&cYou must input at most &e{0} &centries for &e{1}&c."
+
+  invalid-string-size:
+    # String too short
+    # Placeholders: {0} = parameter name, {1} = minimum length
+    too-small: "&cParameter &e{0} &cmust be at least &e{1} &ccharacters long."
+
+    # String too long
+    # Placeholders: {0} = parameter name, {1} = maximum length
+    too-large: "&cParameter &e{0} &ccan be at most &e{1} &ccharacters long."
+
+  # Invalid boolean value
+  # Placeholder: {0} = invalid input
+  invalid-boolean: "&cExpected &etrue &cor &efalse&c, found &e{0}&c."
+
+  # Invalid decimal/double value
+  # Placeholder: {0} = invalid input
+  invalid-decimal: "&cInvalid number: &e{0}&c."
+
+  # Invalid integer value
+  # Placeholder: {0} = invalid input
+  invalid-integer: "&cInvalid integer: &e{0}&c."
+
+  # Invalid UUID format
+  # Placeholder: {0} = invalid input
+  invalid-uuid: "&cInvalid UUID: &e{0}&c."
+
+  # Missing required argument
+  # Placeholders: {0} = parameter name, {1} = command usage
+  missing-argument: "&cRequired parameter is missing: &e{0}&c. Usage: &e/{1}&c."
+
+  # No permission to execute command
+  no-permission: "&cYou do not have permission to execute this command!"
+
+  number-not-in-range:
+    # Number too small
+    # Placeholders: {0} = parameter name, {1} = input value, {2} = minimum
+    too-small: "&c{0} too small &e({1})&c. Must be at least &e{2}&c."
+
+    # Number too large
+    # Placeholders: {0} = parameter name, {1} = input value, {2} = maximum
+    too-large: "&c{0} too large &e({1})&c. Must be at most &e{2}&c."
+
+  invalid-help-page:
+    # Invalid help page - only one page exists
+    # Placeholder: {0} = requested page number
+    single: "&cInvalid help page: &e{0}&c. Must be 1."
+
+    # Invalid help page - multiple pages exist
+    # Placeholders: {0} = requested page, {1} = total pages
+    multiple: "&cInvalid help page: &e{0}&c. Must be between &e1 &cand &e{1}&c."
+
+  # Unknown/non-existent command
+  # Placeholder: {0} = command input
+  unknown-command: "&cUnknown command: &e{0}&c."
+
+  # Value not in allowed list
+  # Placeholders: {0} = invalid value, {1} = allowed values (comma-separated)
+  value-not-allowed: "&cInvalid value: &e{0}&c. Allowed: &e{1}&c."
+
+  # Internal error occurred during command execution
+  internal-error: "&cAn error occurred while executing this command. Please contact an administrator."
+
+  unknown-parameter:
+    # Unknown shorthand flag (single character)
+    # Placeholder: {0} = flag name
+    shorthand: "&cUnknown shorthand flag: &e{0}&c."
+
+    # Unknown flag (full name)
+    # Placeholder: {0} = flag name
+    flag: "&cUnknown flag: &e{0}&c."
+
+  # Command is on cooldown
+  # Placeholder: {0} = time remaining (formatted duration)
+  cooldown: "&cYou must wait &e{0} &cbefore using this command again."
