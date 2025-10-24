@@ -30,6 +30,7 @@ features is as follows:
 - Custom YAML configuration files
 - SpigotMC resource update checker
 - Cross-version compatibility utilities
+- Powerful command framework (Lamp)
 
 ### pluginbase-games
 
@@ -50,7 +51,8 @@ A simple module that allows for easy connections to MongoDB databases.
 
 ### pluginbase-redis
 
-A module that facilitates cross-server communication using Redis publish-subscribe messaging. Capable
+A module that facilitates cross-server communication using Redis publish-subscribe messaging.
+Capable
 of handling objects.
 
 ## Getting Started
@@ -121,11 +123,12 @@ the repository.
 
 ## Special Thanks
 
-A special thank you to [lucko](https://github.com/lucko/helper) for creating helper, a major part of
-this library. Your contributions have been invaluable to this project.
+Special thanks to the following for their contribution to this project:
 
-Another special thank you to [CryptoMorin](https://github.com/CryptoMorin/XSeries) for creating
-XSeries, a library that enables PluginBase's cross-version compatibility.
+- [lucko](https://github.com/lucko/helper) for creating helper, a major part of this library
+- [CryptoMorin](https://github.com/CryptoMorin/XSeries) for creating XSeries, a library that enables
+  cross-version compatibility
+- [Revxrsal](https://github.com/Revxrsal/Lamp) for creating Lamp, a powerful command framework
 
 ## Support
 
