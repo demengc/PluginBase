@@ -72,17 +72,20 @@ import revxrsal.commands.node.ParameterNode;
  *   <li><b>commands.invalid-help-page.multiple</b> - {0}: requested page, {1}: total pages</li>
  *   <li><b>commands.unknown-command</b> - {0}: command input</li>
  *   <li><b>commands.value-not-allowed</b> - {0}: invalid value, {1}: allowed values (comma-separated)</li>
- *   <li><b>commands.command-invocation</b> - No placeholders</li>
+ *   <li><b>commands.internal-error</b> - No placeholders</li>
  *   <li><b>commands.unknown-parameter.shorthand</b> - {0}: flag name</li>
  *   <li><b>commands.unknown-parameter.flag</b> - {0}: flag name</li>
  *   <li><b>commands.cooldown</b> - {0}: time remaining (formatted)</li>
  * </ul>
  *
- * <p><b>Example locale file entry:</b></p>
+ * <p><b>Example locale file entries:</b></p>
  * <pre>
  * commands.invalid-player=&cInvalid player: &e{0}&c.
  * commands.no-permission=&cYou don't have permission to do that!
  * commands.cooldown=&cPlease wait &e{0} &cbefore using this command again.
+ * commands.enum-not-found=&cInvalid value: &e{0}&c.
+ * commands.value-not-allowed=&cInvalid value: &e{0}&c. Allowed: &e{1}&c.
+ * commands.internal-error=&cSomething went wrong! Please contact a server administrator.
  * </pre>
  */
 public class BaseExceptionHandler extends BukkitExceptionHandler {
@@ -167,7 +170,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     Text.tell(actor.sender(), getLocalizedError(
         actor,
         "commands.non-player-entities",
-        "&cYour entity selector (&e{0}&c) only allows players, but it contains non-player entities too.",
+        "&cEntity selector &e{0} &cmust only target players.",
         e.input()));
   }
 
@@ -176,7 +179,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     Text.tell(actor.sender(), getLocalizedError(
         actor,
         "commands.more-than-one-entity",
-        "&cOnly one entity is allowed, but the provided selector allows more than one"));
+        "&cEntity selector must target only one entity."));
   }
 
   @Override
@@ -192,7 +195,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     Text.tell(actor.sender(), getLocalizedError(
         actor,
         "commands.enum-not-found",
-        "&cInvalid choice: &e{0}&c. Please enter a valid option from the available values.",
+        "&cInvalid value: &e{0}&c.",
         e.input()));
   }
 
@@ -226,7 +229,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
         Text.tell(actor.sender(), getLocalizedError(
             actor,
             "commands.input-parse.expected-whitespace",
-            "&cExpected whitespace to end one argument, but found trailing data."));
+            "&cUnexpected text after argument."));
         break;
     }
   }
@@ -391,7 +394,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     Text.tell(actor.sender(), getLocalizedError(
         actor,
         "commands.value-not-allowed",
-        "&cReceived an invalid value: &e{0}&c. Allowed values: &e{1}&c.",
+        "&cInvalid value: &e{0}&c. Allowed: &e{1}&c.",
         e.input(),
         allowedValues));
   }
@@ -401,8 +404,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
       @NotNull BukkitCommandActor actor) {
     Text.tell(actor.sender(), getLocalizedError(
         actor,
-        "commands.command-invocation",
-        "&cAn error has occurred while executing this command. Please contact the developers. Errors have been printed to the console."));
+        "commands.internal-error",
+        "&cAn error occurred while executing this command. Please contact an administrator."));
     e.cause().printStackTrace();
   }
 
