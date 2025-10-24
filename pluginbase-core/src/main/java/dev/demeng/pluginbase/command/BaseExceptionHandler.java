@@ -52,7 +52,10 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
    * @return The localized or default message (not colorized, will be handled by Text.tell)
    */
   private String getLocalizedError(
-      BukkitCommandActor actor, String key, String defaultMessage, Object... args) {
+      final BukkitCommandActor actor,
+      final String key,
+      final String defaultMessage,
+      final Object... args) {
     final String localized = Text.localized(key, actor.sender(), args);
     // If the key wasn't found, the translator returns the key itself
     // In that case, use the default message
@@ -63,7 +66,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onInvalidPlayer(InvalidPlayerException e, BukkitCommandActor actor) {
+  public void onInvalidPlayer(final InvalidPlayerException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -71,14 +74,15 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onInvalidWorld(InvalidWorldException e, BukkitCommandActor actor) {
+  public void onInvalidWorld(final InvalidWorldException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(actor, "commands.invalid-world", "&cInvalid world: &e{0}&c.", e.input()));
   }
 
   @Override
-  public void onInvalidWorld(MissingLocationParameterException e, BukkitCommandActor actor) {
+  public void onInvalidWorld(
+      final MissingLocationParameterException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -89,7 +93,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onSenderNotConsole(SenderNotConsoleException e, BukkitCommandActor actor) {
+  public void onSenderNotConsole(
+      final SenderNotConsoleException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -99,7 +104,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onSenderNotPlayer(SenderNotPlayerException e, BukkitCommandActor actor) {
+  public void onSenderNotPlayer(final SenderNotPlayerException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -110,7 +115,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onMalformedEntitySelector(
-      MalformedEntitySelectorException e, BukkitCommandActor actor) {
+      final MalformedEntitySelectorException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -122,7 +127,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onNonPlayerEntities(NonPlayerEntitiesException e, BukkitCommandActor actor) {
+  public void onNonPlayerEntities(
+      final NonPlayerEntitiesException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -133,7 +139,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onMoreThanOneEntity(MoreThanOneEntityException e, BukkitCommandActor actor) {
+  public void onMoreThanOneEntity(
+      final MoreThanOneEntityException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -143,14 +150,16 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onEmptyEntitySelector(EmptyEntitySelectorException e, BukkitCommandActor actor) {
+  public void onEmptyEntitySelector(
+      final EmptyEntitySelectorException e, final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(actor, "commands.empty-entity-selector", "&cNo entities were found."));
   }
 
   @Override
-  public void onEnumNotFound(@NotNull EnumNotFoundException e, @NotNull BukkitCommandActor actor) {
+  public void onEnumNotFound(
+      @NotNull final EnumNotFoundException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -159,7 +168,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onExpectedLiteral(
-      @NotNull ExpectedLiteralException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final ExpectedLiteralException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -171,7 +180,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onInputParse(@NotNull InputParseException e, @NotNull BukkitCommandActor actor) {
+  public void onInputParse(
+      @NotNull final InputParseException e, @NotNull final BukkitCommandActor actor) {
     switch (e.cause()) {
       case INVALID_ESCAPE_CHARACTER:
         Text.tell(
@@ -202,9 +212,9 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onInvalidListSize(
-      @NotNull InvalidListSizeException e,
-      @NotNull BukkitCommandActor actor,
-      @NotNull ParameterNode<BukkitCommandActor, ?> parameter) {
+      @NotNull final InvalidListSizeException e,
+      @NotNull final BukkitCommandActor actor,
+      @NotNull final ParameterNode<BukkitCommandActor, ?> parameter) {
     if (e.inputSize() < e.minimum()) {
       Text.tell(
           actor.sender(),
@@ -229,9 +239,9 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onInvalidStringSize(
-      @NotNull InvalidStringSizeException e,
-      @NotNull BukkitCommandActor actor,
-      @NotNull ParameterNode<BukkitCommandActor, ?> parameter) {
+      @NotNull final InvalidStringSizeException e,
+      @NotNull final BukkitCommandActor actor,
+      @NotNull final ParameterNode<BukkitCommandActor, ?> parameter) {
     if (e.input().length() < e.minimum()) {
       Text.tell(
           actor.sender(),
@@ -256,7 +266,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onInvalidBoolean(
-      @NotNull InvalidBooleanException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final InvalidBooleanException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -268,7 +278,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onInvalidDecimal(
-      @NotNull InvalidDecimalException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final InvalidDecimalException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -277,7 +287,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onInvalidInteger(
-      @NotNull InvalidIntegerException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final InvalidIntegerException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -285,7 +295,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onInvalidUUID(@NotNull InvalidUUIDException e, @NotNull BukkitCommandActor actor) {
+  public void onInvalidUUID(
+      @NotNull final InvalidUUIDException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(actor, "commands.invalid-uuid", "&cInvalid UUID: &e{0}&c.", e.input()));
@@ -293,9 +304,9 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onMissingArgument(
-      @NotNull MissingArgumentException e,
-      @NotNull BukkitCommandActor actor,
-      @NotNull ParameterNode<BukkitCommandActor, ?> parameter) {
+      @NotNull final MissingArgumentException e,
+      @NotNull final BukkitCommandActor actor,
+      @NotNull final ParameterNode<BukkitCommandActor, ?> parameter) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -307,7 +318,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onNoPermission(@NotNull NoPermissionException e, @NotNull BukkitCommandActor actor) {
+  public void onNoPermission(
+      @NotNull final NoPermissionException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -318,9 +330,9 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onNumberNotInRange(
-      @NotNull NumberNotInRangeException e,
-      @NotNull BukkitCommandActor actor,
-      @NotNull ParameterNode<BukkitCommandActor, Number> parameter) {
+      @NotNull final NumberNotInRangeException e,
+      @NotNull final BukkitCommandActor actor,
+      @NotNull final ParameterNode<BukkitCommandActor, Number> parameter) {
     if (e.input().doubleValue() < e.minimum()) {
       Text.tell(
           actor.sender(),
@@ -347,7 +359,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onInvalidHelpPage(
-      @NotNull InvalidHelpPageException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final InvalidHelpPageException e, @NotNull final BukkitCommandActor actor) {
     if (e.numberOfPages() == 1) {
       Text.tell(
           actor.sender(),
@@ -370,7 +382,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onUnknownCommand(
-      @NotNull UnknownCommandException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final UnknownCommandException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -379,8 +391,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onValueNotAllowed(
-      @NotNull ValueNotAllowedException e, @NotNull BukkitCommandActor actor) {
-    String allowedValues = String.join("&c, &e", e.allowedValues());
+      @NotNull final ValueNotAllowedException e, @NotNull final BukkitCommandActor actor) {
+    final String allowedValues = String.join("&c, &e", e.allowedValues());
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -393,7 +405,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onCommandInvocation(
-      @NotNull CommandInvocationException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final CommandInvocationException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
@@ -405,7 +417,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
 
   @Override
   public void onUnknownParameter(
-      @NotNull UnknownParameterException e, @NotNull BukkitCommandActor actor) {
+      @NotNull final UnknownParameterException e, @NotNull final BukkitCommandActor actor) {
     if (e.shorthand()) {
       Text.tell(
           actor.sender(),
@@ -423,7 +435,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   }
 
   @Override
-  public void onCooldown(@NotNull CooldownException e, @NotNull BukkitCommandActor actor) {
+  public void onCooldown(
+      @NotNull final CooldownException e, @NotNull final BukkitCommandActor actor) {
     Text.tell(
         actor.sender(),
         getLocalizedError(
