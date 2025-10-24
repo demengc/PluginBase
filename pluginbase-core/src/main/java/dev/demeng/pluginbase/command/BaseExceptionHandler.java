@@ -1,5 +1,6 @@
 package dev.demeng.pluginbase.command;
 
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Time;
 import dev.demeng.pluginbase.Time.DurationFormatter;
 import dev.demeng.pluginbase.text.Text;
@@ -45,10 +46,10 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
   /**
    * Gets a localized error message with fallback to a default message.
    *
-   * @param actor The command actor
-   * @param key The localization key
+   * @param actor          The command actor
+   * @param key            The localization key
    * @param defaultMessage The default message if localization is not available
-   * @param args Arguments for placeholders in the localized message
+   * @param args           Arguments for placeholders in the localized message
    * @return The localized or default message (not colorized, will be handled by Text.tell)
    */
   private String getLocalizedError(
@@ -412,7 +413,8 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor,
             "commands.internal-error",
             "&cAn error occurred while executing this command. Please contact an administrator."));
-    e.cause().printStackTrace();
+
+    Common.error(e.cause(), "Failed to execute command.", false);
   }
 
   @Override
