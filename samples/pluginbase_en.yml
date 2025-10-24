@@ -110,7 +110,7 @@ commands:
 
   # Unknown command with suggestion
   # {0} = user input, {1} = suggested command
-  failed-resolve: "&cUnknown command: &e{0}&c. Did you mean &e{1}&c?"
+  failed-resolve: "&cUnknown command: &e/{0}&c. Did you mean &e/{1}&c?"
 
   # Unknown/non-existent command
   # Placeholder: {0} = command input

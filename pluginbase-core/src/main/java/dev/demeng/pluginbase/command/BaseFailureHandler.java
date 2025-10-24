@@ -87,7 +87,7 @@ public final class BaseFailureHandler<A extends CommandActor> implements Failure
                       Text.localizedOrDefault(
                           bukkitActor.sender(),
                           "commands.failed-resolve",
-                          "&cUnknown command: &e{0}&c. Did you mean &e{1}&c?",
+                          "&cUnknown command: &e/{0}&c. Did you mean &e/{1}&c?",
                           userInput,
                           bestMatch)));
 
