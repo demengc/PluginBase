@@ -72,12 +72,7 @@ public class StringSimilarity {
       for (int j = 1; j <= len2; j++) {
         final int cost = str1.charAt(i - 1) == str2.charAt(j - 1) ? 0 : 1;
 
-        dp[i][j] =
-            Math.min(
-                Math.min(
-                    dp[i - 1][j] + 1,
-                    dp[i][j - 1] + 1),
-                dp[i - 1][j - 1] + cost);
+        dp[i][j] = Math.min(Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1), dp[i - 1][j - 1] + cost);
       }
     }
 
@@ -107,10 +102,9 @@ public class StringSimilarity {
    * Checks if two strings are similar enough based on a threshold. Useful for determining if a
    * string is "close enough" to another for fuzzy matching purposes.
    *
-   * @param s1        The first string
-   * @param s2        The second string
-   * @param threshold The minimum similarity score (0.0 to 1.0) required to consider strings
-   *                  similar
+   * @param s1 The first string
+   * @param s2 The second string
+   * @param threshold The minimum similarity score (0.0 to 1.0) required to consider strings similar
    * @return true if the similarity score is greater than or equal to the threshold
    */
   public static boolean isSimilar(@NotNull String s1, @NotNull String s2, double threshold) {
