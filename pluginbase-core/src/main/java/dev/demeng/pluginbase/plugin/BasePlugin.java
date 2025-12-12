@@ -30,6 +30,8 @@ import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.Services;
 import dev.demeng.pluginbase.command.BaseExceptionHandler;
 import dev.demeng.pluginbase.command.BaseFailureHandler;
+import dev.demeng.pluginbase.di.DependencyInjection;
+import dev.demeng.pluginbase.di.container.DependencyContainer;
 import dev.demeng.pluginbase.locale.Translator;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.scheduler.BaseExecutors;
@@ -55,13 +57,23 @@ import revxrsal.commands.bukkit.actor.BukkitCommandActor;
  */
 public abstract class BasePlugin extends JavaPlugin implements TerminableConsumer {
 
-  /** The backing terminable registry for this plugin. */
+  /**
+   * The backing terminable registry for this plugin.
+   */
   private CompositeTerminable terminableRegistry;
+
+  /**
+   * The dependency injection container for this plugin.
+   */
+  private DependencyContainer dependencyContainer;
 
   @Override
   public final void onLoad() {
     BaseManager.setPlugin(this);
     this.terminableRegistry = CompositeTerminable.create();
+    this.dependencyContainer = configureDependencies();
+    bind(this.dependencyContainer);
+
     load();
   }
 
@@ -101,19 +113,102 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
     BaseManager.setPlugin(null);
   }
 
-  /** Executes at early plugin startup. */
+  /**
+   * Executes at early plugin startup.
+   */
   protected void load() {
     // Override if needed, otherwise nothing will be executed.
   }
 
-  /** Executes on plugin enable. */
+  /**
+   * Executes on plugin enable.
+   */
   protected void enable() {
     // Override if needed, otherwise nothing will be executed.
   }
 
-  /** Executes on plugin disable. */
+  /**
+   * Executes on plugin disable.
+   */
   protected void disable() {
     // Override if needed, otherwise nothing will be executed.
+  }
+
+  /**
+   * Configures dependencies for this plugin.
+   *
+   * <p>Override this method to register your dependencies with the DI container. The default
+   * implementation registers the plugin instance.
+   *
+   * <p>You can manually register core services using either concrete types or interfaces. Classes
+   * marked with {@code @Component} will be auto-created with dependencies injected.
+   *
+   * <p>Example with interface-based registration (recommended):
+   *
+   * <pre>{@code
+   * @Override
+   * protected DependencyContainer configureDependencies() {
+   *   // Create concrete implementations
+   *   DatabaseConnection db = new MySQLConnection(this);
+   *   CacheService cache = new RedisCacheService();
+   *
+   *   return DependencyInjection.builder()
+   *       .register(this)  // Register plugin by concrete type
+   *       .register(DatabaseConnection.class, db)  // Register by interface
+   *       .register(CacheService.class, cache)     // Register by interface
+   *       .build();
+   * }
+   *
+   * // Then in enable() - classes with @Component are auto-created:
+   * @Override
+   * protected void enable() {
+   *   // Auto-creates PlayerDataManager with interfaces injected
+   *   PlayerDataManager manager = getDependency(PlayerDataManager.class);
+   * }
+   *
+   * // Your @Component class can depend on interfaces:
+   * @Component
+   * public class PlayerDataManager {
+   *   private final DatabaseConnection db;  // Interface, not concrete class!
+   *   private final CacheService cache;     // Interface, not concrete class!
+   *
+   *   public PlayerDataManager(DatabaseConnection db, CacheService cache) {
+   *     this.db = db;
+   *     this.cache = cache;
+   *   }
+   * }
+   * }</pre>
+   *
+   * @return The configured dependency container
+   */
+  @NotNull
+  protected DependencyContainer configureDependencies() {
+    return DependencyInjection.builder().register(this).build();
+  }
+
+  /**
+   * Gets the dependency injection container.
+   *
+   * @return The dependency container
+   */
+  @NotNull
+  public DependencyContainer getDependencyContainer() {
+    return this.dependencyContainer;
+  }
+
+  /**
+   * Gets an instance from the DI container.
+   *
+   * <p>This is a convenience method that delegates to {@link
+   * DependencyContainer#getInstance(Class)}.
+   *
+   * @param type The class type
+   * @param <T>  The type parameter
+   * @return The instance
+   */
+  @NotNull
+  public <T> T getDependency(@NotNull final Class<T> type) {
+    return this.dependencyContainer.getInstance(type);
   }
 
   @NotNull
@@ -134,7 +229,7 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    * <p>{@link dev.demeng.pluginbase.Events} should be used instead of this method in most cases.
    *
    * @param listener the listener to register
-   * @param <T> the listener class type
+   * @param <T>      the listener class type
    * @return the listener
    */
   @NotNull
@@ -148,7 +243,7 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    * Gets a service provided by the ServiceManager.
    *
    * @param service The service class
-   * @param <T> The class type
+   * @param <T>     The class type
    * @return The service
    */
   @NotNull
@@ -159,10 +254,10 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   /**
    * Provides a service to the ServiceManager, bound to this plugin.
    *
-   * @param clazz The service class
+   * @param clazz    The service class
    * @param instance The instance
    * @param priority The priority to register the service at
-   * @param <T> The service class type
+   * @param <T>      The service class type
    * @return The instance
    */
   @NotNull
@@ -174,12 +269,12 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   }
 
   /**
-   * Provides a service to the ServiceManager, bound to this plugin at {@link
-   * ServicePriority#Normal}.
+   * Provides a service to the ServiceManager, bound to this plugin at
+   * {@link ServicePriority#Normal}.
    *
-   * @param clazz The service class
+   * @param clazz    The service class
    * @param instance The instance
-   * @param <T> The service class type
+   * @param <T>      The service class type
    * @return The instance
    */
   @NotNull
@@ -233,7 +328,8 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   public void setBaseSettings(@Nullable final BaseSettings baseSettings) {
 
     if (baseSettings == null) {
-      BaseManager.setBaseSettings(new BaseSettings() {});
+      BaseManager.setBaseSettings(new BaseSettings() {
+      });
       return;
     }
 
