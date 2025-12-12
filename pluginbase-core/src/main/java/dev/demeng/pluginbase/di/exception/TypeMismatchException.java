@@ -31,8 +31,6 @@ import org.jetbrains.annotations.NotNull;
  * the instance's actual class.
  *
  * <p>This occurs when trying to register an instance with an incompatible explicit type parameter.
- *
- * @since 1.36.0
  */
 public class TypeMismatchException extends DependencyException {
 

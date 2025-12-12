@@ -125,8 +125,6 @@ public interface DependencyContainer extends Terminable {
    * @param <T>      The type parameter
    * @return This container for method chaining
    * @throws dev.demeng.pluginbase.di.exception.TypeMismatchException if instance is not assignable
-   *                                                                  to type
-   * @since 1.36.0
    */
   @NotNull
   <T> DependencyContainer register(@NotNull Class<T> type, @NotNull T instance);
@@ -218,8 +216,6 @@ public interface DependencyContainer extends Terminable {
      * @param <T>      The type parameter
      * @return This builder for method chaining
      * @throws dev.demeng.pluginbase.di.exception.TypeMismatchException if instance is not
-     *                                                                  assignable to type
-     * @since 1.36.0
      */
     @NotNull
     <T> Builder register(@NotNull Class<T> type, @NotNull T instance);
