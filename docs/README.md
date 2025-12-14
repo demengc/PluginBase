@@ -23,6 +23,7 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 * **ItemBuilder** - Fluent item creation
 * **Cooldowns** - Player/action cooldown tracking
 * **Utilities** - Common helpers (Players, Locations, Sounds, etc.)
+* **Cross-Version Compatibility** - [XSeries](https://github.com/CryptoMorin/XSeries)
 * ...and more! This documentation is not comprehensive, and many features are not included here.
 
 ### Optional Modules
