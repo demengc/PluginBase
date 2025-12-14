@@ -1,6 +1,8 @@
-# Games
+---
+description: Game state management system for phased minigames.
+---
 
-Game state management system for phased minigames.
+# Games
 
 ## GameState Class
 

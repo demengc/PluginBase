@@ -1,6 +1,8 @@
-# Utilities
+---
+description: Helper utilities for common operations.
+---
 
-Helper utilities for common operations.
+# Utilities
 
 ## Common
 

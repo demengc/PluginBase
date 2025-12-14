@@ -1,6 +1,10 @@
-# Commands
+---
+description: >-
+  PluginBase uses Lamp, a powerful annotation-driven command framework for
+  creating Bukkit/Spigot/Paper commands with minimal boilerplate.
+---
 
-PluginBase uses [**Lamp**](https://foxhut.gitbook.io/lamp-docs/), a powerful annotation-driven command framework for creating Bukkit/Spigot/Paper commands with minimal boilerplate.
+# Commands
 
 ## Overview
 

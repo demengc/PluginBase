@@ -1,6 +1,8 @@
-# Menus
+---
+description: Interactive inventory GUIs with clickable items.
+---
 
-Interactive inventory GUIs with clickable items.
+# Menus
 
 ## Basic Menu
 

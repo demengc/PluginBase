@@ -1,6 +1,8 @@
-# Events
+---
+description: Functional event handling with lambda expressions instead of listener classes.
+---
 
-Functional event handling with lambda expressions instead of listener classes.
+# Events
 
 ## Basic Usage
 

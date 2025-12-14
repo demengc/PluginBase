@@ -1,6 +1,8 @@
-# Text & Localization
+---
+description: Text formatting with HEX colors, MiniMessage, Adventure API, and i18n support.
+---
 
-Text formatting with HEX colors, MiniMessage, Adventure API, and i18n support.
+# Text & Localization
 
 ## Color Formatting
 

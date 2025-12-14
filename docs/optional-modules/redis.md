@@ -1,6 +1,8 @@
-# Redis
+---
+description: Redis pub/sub for cross-server messaging.
+---
 
-Redis pub/sub for cross-server messaging.
+# Redis
 
 ## Setup
 

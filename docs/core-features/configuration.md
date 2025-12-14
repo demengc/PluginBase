@@ -1,6 +1,8 @@
-# Configuration
+---
+description: YAML configuration with automatic saving and type-safe getters.
+---
 
-YAML configuration with automatic saving and type-safe getters.
+# Configuration
 
 ## YamlConfig
 

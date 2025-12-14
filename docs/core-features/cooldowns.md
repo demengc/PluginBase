@@ -1,6 +1,8 @@
-# Cooldowns
+---
+description: Track cooldowns for players, actions, or any key.
+---
 
-Track cooldowns for players, actions, or any key.
+# Cooldowns
 
 ## Basic Usage
 

@@ -1,6 +1,8 @@
-# SQL
+---
+description: HikariCP-based SQL database module with async operations.
+---
 
-HikariCP-based SQL database module with async operations.
+# SQL
 
 ## Setup
 

@@ -1,6 +1,8 @@
-# ItemBuilder
+---
+description: Fluent API for creating ItemStacks.
+---
 
-Fluent API for creating ItemStacks.
+# ItemBuilder
 
 ## Basic Usage
 

@@ -1,6 +1,8 @@
-# Introduction
+---
+description: Comprehensive utility library for Spigot plugin development.
+---
 
-Comprehensive utility library for Spigot plugin development.
+# Introduction
 
 ## What is PluginBase?
 

@@ -1,6 +1,10 @@
-# Terminables
+---
+description: >-
+  Automatic resource lifecycle management for events, tasks, and custom
+  resources.
+---
 
-Automatic resource lifecycle management for events, tasks, and custom resources.
+# Terminables
 
 ## What are Terminables?
 

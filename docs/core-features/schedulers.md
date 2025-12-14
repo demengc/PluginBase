@@ -1,6 +1,8 @@
-# Schedulers
+---
+description: Execute tasks synchronously and asynchronously with fluent API.
+---
 
-Execute tasks synchronously and asynchronously with fluent API.
+# Schedulers
 
 ## Basic Usage
 

@@ -1,6 +1,8 @@
-# Dependency Injection
+---
+description: Simple DI system for managing class dependencies with constructor injection.
+---
 
-Simple DI system for managing class dependencies with constructor injection.
+# Dependency Injection
 
 ## Basic Usage
 

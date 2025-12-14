@@ -1,6 +1,8 @@
-# MongoDB
+---
+description: MongoDB database integration for document-based storage.
+---
 
-MongoDB database integration for document-based storage.
+# MongoDB
 
 ## Setup
 
