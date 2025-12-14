@@ -225,7 +225,7 @@ Build your plugin JAR and test it out!
 
 ## Configuration
 
-Configure PluginBase settings via `BaseSettings`:
+Configure PluginBase settings via `BaseSettings` in your main class:
 
 ```java
 @Override
@@ -236,6 +236,7 @@ protected void enable() {
     public String prefix() {
       return "&8[&bMyPlugin&8]&r ";
     }
+    // Other settings can be overridden here.
   });
 }
 ```

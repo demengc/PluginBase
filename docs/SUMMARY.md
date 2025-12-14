@@ -17,10 +17,10 @@
 * [Commands](core-features/commands.md)
 * [Configuration](core-features/configuration.md)
 * [Terminables](core-features/terminables.md)
-* [Menus](features/menus.md)
-* [ItemBuilder](features/item-builder.md)
-* [Cooldowns](features/cooldowns.md)
-* [Utilities](features/utilities.md)
+* [Menus](core-features/menus.md)
+* [ItemBuilder](core-features/item-builder.md)
+* [Cooldowns](core-features/cooldowns.md)
+* [Utilities](core-features/utilities.md)
 
 ## Optional Modules
 
