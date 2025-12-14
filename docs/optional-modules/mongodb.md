@@ -2,16 +2,6 @@
 
 MongoDB database integration for document-based storage.
 
-## Installation
-
-```xml
-<dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
-    <artifactId>pluginbase-mongo</artifactId>
-    <version>VERSION</version>
-</dependency>
-```
-
 ## Setup
 
 ```java

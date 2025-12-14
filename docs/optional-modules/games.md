@@ -2,16 +2,6 @@
 
 Game state management system for phased minigames.
 
-## Installation
-
-```xml
-<dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
-    <artifactId>pluginbase-games</artifactId>
-    <version>VERSION</version>
-</dependency>
-```
-
 ## GameState Class
 
 `GameState` represents a single phase of a minigame (e.g., lobby, active game, post-game).

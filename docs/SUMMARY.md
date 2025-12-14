@@ -6,7 +6,7 @@
 
 ## Getting Started
 
-* [Getting Started](getting-started/getting-started.md)
+* [Getting Started](getting-started.md)
 
 ## Core Features
 

@@ -2,16 +2,6 @@
 
 Redis pub/sub for cross-server messaging.
 
-## Installation
-
-```xml
-<dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
-    <artifactId>pluginbase-redis</artifactId>
-    <version>VERSION</version>
-</dependency>
-```
-
 ## Setup
 
 ```java
