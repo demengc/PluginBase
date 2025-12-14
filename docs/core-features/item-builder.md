@@ -231,3 +231,7 @@ ItemStack item = ItemBuilder.create(Material.DIAMOND_SWORD)
     .unbreakable(true)
     .get();
 ```
+
+## Cross-Version Compatibility
+
+PluginBase uses [XSeries](https://github.com/cryptomorin/xseries) for cross-version compatibility. To learn more about cross-version materials (`XMaterial`), refer to XSeries' documentation.

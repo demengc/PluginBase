@@ -150,7 +150,7 @@ tasks.shadowJar {
 {% endtab %}
 {% endtabs %}
 
-### Preserving Parameter Names (Optional)
+## Preserving Parameter Names (Optional)
 
 By default, Java does not preserve method parameter names. To enable features such as automatic command metadata, you should compile your project with the `-parameters` flag.
 

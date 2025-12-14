@@ -23,6 +23,7 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 * **ItemBuilder** - Fluent item creation
 * **Cooldowns** - Player/action cooldown tracking
 * **Utilities** - Common helpers (Players, Locations, Sounds, etc.)
+* ...and more! This documentation is not comprehensive, and many features are not included here.
 
 ### Optional Modules
 
@@ -33,7 +34,7 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 
 ## Version Compatibility
 
-**Supported:** All major versions between Minecraft 1.8.8 - 1.21.10.
+**Supported:** All major versions between Minecraft 1.8.8 - 1.21.10. Java 17+ is required.
 
 ## Quick Start
 
