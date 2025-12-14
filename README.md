@@ -55,61 +55,10 @@ A module that facilitates cross-server communication using Redis publish-subscri
 Capable
 of handling objects.
 
-## Getting Started
+## Documentation
 
-To use PluginBase in your project, add the JitPack repository and the module(s) you require to your
-build file. An example for the `pluginbase-core` module has been provided below.
-
-### Maven (pom.xml)
-
-```xml
-
-<repositories>
-  <repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-```
-
-```xml
-
-<dependencies>
-  <dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
-    <artifactId>pluginbase-core</artifactId>
-    <version>[VERSION]</version>
-  </dependency>
-</dependencies>
-```
-
-### Gradle - Groovy (build.gradle)
-
-```groovy
-repositories {
-    maven { url = 'https://jitpack.io' }
-}
-```
-
-```groovy
-dependencies {
-    implementation 'com.github.demengc.PluginBase:pluginbase-core:[VERSION]'
-}
-```
-
-### Gradle - Kotlin (build.gradle.kts)
-
-```kotlin
-repositories {
-    maven(url = "https://jitpack.io")
-}
-```
-
-```kotlin
-dependencies {
-    implementation("com.github.demengc.PluginBase:pluginbase-core:[VERSION]")
-}
-```
+For installation instructions, feature guides, and examples, visit
+the **[PluginBase Documentation](https://demeng.gitbook.io/pluginbase)**.
 
 ## Contributing
 
