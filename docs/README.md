@@ -36,4 +36,5 @@ boilerplate code and enforce best practices.
 
 ## Quick Start
 
-See [Getting Started](getting-started.md) for installation instructions and your first plugin.
+See [Getting Started](getting-started.md) for installation instructions and your first plugin. This
+documentation focuses on example-driven guides for core features and optional modules.
