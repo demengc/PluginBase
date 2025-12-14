@@ -270,33 +270,7 @@ For more validation options, see [Lamp's parameter validators documentation](htt
 
 ## Localized Error Messages
 
-PluginBase automatically provides localized error messages for all common errors. Create a `pluginbase_<locale>.properties` file in your plugin's data folder (e.g., `pluginbase_en.properties`):
-
-```properties
-# Player not found
-commands.invalid-player=&cPlayer not found: &e{0}&c.
-
-# No permission
-commands.no-permission=&cYou don't have permission!
-
-# Missing argument
-commands.missing-argument=&cMissing required argument: &e{0}&c. Usage: &e/{1}&c.
-
-# Number out of range
-commands.number-not-in-range.too-small=&c{0} must be at least &e{2}&c.
-commands.number-not-in-range.too-large=&c{0} must be at most &e{2}&c.
-
-# Command cooldown
-commands.cooldown=&cPlease wait &e{0}&c!
-
-# Invalid boolean
-commands.invalid-boolean=&cExpected true or false, got &e{0}&c.
-
-# Unknown command with suggestion
-commands.failed-resolve=&cUnknown command: &e/{0}&c. Did you mean &e/{1}&c?
-```
-
-For a complete list of error keys, see the [sample properties file](../../samples/pluginbase_en.properties). For more information on localization (including how you can use your plugin's YAML configuration instead), see [Text and Localization](text-localization.md).
+PluginBase automatically provides localized error messages for all common errors. For more information on localization, see [Text and Localization](text-localization.md). A comprehensive list of message keys in the form of sample files (in both .properties and .yml format) can be found at [here](https://github.com/demengc/PluginBase/tree/main/samples).
 
 ## Complete Example
 
