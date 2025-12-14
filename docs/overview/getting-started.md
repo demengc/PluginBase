@@ -2,12 +2,11 @@
 
 ## Installation
 
-Add PluginBase to your project:
+Add PluginBase modules to your project through your build tool (e.g., Maven or Gradle). Ensure to replace `VERSION` with the latest version from the [releases page](https://github.com/demengc/PluginBase/releases).
 
-### Maven
-
+{% tabs %}
+{% tab title="Maven (pom.xml)" %}
 ```xml
-
 <repositories>
   <repository>
     <id>jitpack.io</id>
@@ -46,9 +45,9 @@ Add PluginBase to your project:
 </dependency>
 </dependencies>
 ```
+{% endtab %}
 
-### Gradle
-
+{% tab title="Gradle (build.gradle)" %}
 ```groovy
 repositories {
     maven { url 'https://jitpack.io' }
@@ -57,6 +56,7 @@ repositories {
 dependencies {
     // Required
     implementation 'com.github.demengc.PluginBase:pluginbase-core:VERSION'
+    
     // Optional
     implementation 'com.github.demengc.PluginBase:pluginbase-games:VERSION'
     implementation 'com.github.demengc.PluginBase:pluginbase-mongo:VERSION'
@@ -64,19 +64,37 @@ dependencies {
     implementation 'com.github.demengc.PluginBase:pluginbase-sql:VERSION'
 }
 ```
+{% endtab %}
 
-Replace `VERSION` with the latest version from the [releases page](https://github.com/demengc/PluginBase/releases).
+{% tab title="Gradle (build.gradle.kts)" %}
+```kotlin
+repositories {
+    maven {
+        url = uri("https://jitpack.io")
+    }
+}
+
+dependencies {
+    // Required
+    implementation("com.github.demengc.PluginBase:pluginbase-core:VERSION")
+
+    // Optional
+    implementation("com.github.demengc.PluginBase:pluginbase-games:VERSION")
+    implementation("com.github.demengc.PluginBase:pluginbase-mongo:VERSION")
+    implementation("com.github.demengc.PluginBase:pluginbase-redis:VERSION")
+    implementation("com.github.demengc.PluginBase:pluginbase-sql:VERSION")
+}
+```
+{% endtab %}
+{% endtabs %}
 
 ## Shading and Relocation
 
-To avoid dependency conflicts with other plugins, you should shade and relocate PluginBase into your plugin JAR.
+To avoid dependency conflicts with other plugins, you should shade and relocate PluginBase into your plugin JAR. Ensure to replace the shaded pattern (`com.example.myplugin.lib.pluginbase` ) with a package relevant to your project.
 
-### Maven (maven-shade-plugin)
-
-Add the shade plugin to your `pom.xml`:
-
+{% tabs %}
+{% tab title="Maven (pom.xml)" %}
 ```xml
-
 <build>
   <plugins>
     <plugin>
@@ -103,11 +121,9 @@ Add the shade plugin to your `pom.xml`:
   </plugins>
 </build>
 ```
+{% endtab %}
 
-### Gradle (shadowJar)
-
-Add the shadow plugin to your `build.gradle`:
-
+{% tab title="Gradle (build.gradle)" %}
 ```groovy
 plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
@@ -118,9 +134,9 @@ shadowJar {
     relocate 'dev.demeng.pluginbase', 'com.example.myplugin.lib.pluginbase'
 }
 ```
+{% endtab %}
 
-Or for Gradle Kotlin DSL (`build.gradle.kts`):
-
+{% tab title="Gradle (build.gradle.kts)" %}
 ```kotlin
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
@@ -131,15 +147,15 @@ tasks.shadowJar {
     relocate("dev.demeng.pluginbase", "com.example.myplugin.lib.pluginbase")
 }
 ```
-
-**Important:** Replace `com.example.myplugin.lib.pluginbase` with your own package structure to avoid conflicts.
+{% endtab %}
+{% endtabs %}
 
 ### Preserving Parameter Names (Optional)
 
 By default, Java does not preserve method parameter names. To enable features such as automatic command metadata, you should compile your project with the `-parameters` flag.
 
-**Maven:**
-
+{% tabs %}
+{% tab title="Maven (pom.xml)" %}
 ```xml
 <build>
   <plugins>
@@ -156,22 +172,24 @@ By default, Java does not preserve method parameter names. To enable features su
   </plugins>
 </build>
 ```
+{% endtab %}
 
-**Gradle:**
-
+{% tab title="Gradle (build.gradle)" %}
 ```groovy
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-parameters'
 }
 ```
+{% endtab %}
 
-Or for Gradle Kotlin DSL:
-
+{% tab title="Gradle (build.gradle.kts)" %}
 ```kotlin
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("-parameters")
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## Your First Plugin
 
@@ -192,7 +210,7 @@ public class MyPlugin extends BasePlugin {
     // Plugin initialization
     Text.console("&aMyPlugin enabled!");
 
-    // Subscribe to events
+    // Example: subscribe to events
     Events.subscribe(PlayerJoinEvent.class)
         .handler(e -> Text.tell(e.getPlayer(), "&aWelcome!"))
         .bindWith(this);
@@ -212,7 +230,7 @@ public class MyPlugin extends BasePlugin {
 name: MyPlugin
 version: 1.0.0
 main: com.example.myplugin.MyPlugin
-api-version: 1.13
+api-version: 1.13 # Required for multi-version support
 ```
 
 ### 3. Build and Test
