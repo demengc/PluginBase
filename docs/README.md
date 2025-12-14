@@ -37,4 +37,4 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 
 ## Quick Start
 
-See [Getting Started](getting-started.md) for installation instructions and your first plugin. This documentation focuses on example-driven guides for core features and optional modules.
+See [Getting Started](overview/getting-started.md) for installation instructions and your first plugin. This documentation focuses on example-driven guides for core features and optional modules.

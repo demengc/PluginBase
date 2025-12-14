@@ -3,10 +3,7 @@
 ## Overview
 
 * [Introduction](README.md)
-
-## Getting Started
-
-* [Getting Started](getting-started.md)
+* [Getting Started](overview/getting-started.md)
 
 ## Core Features
 
