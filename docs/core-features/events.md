@@ -4,105 +4,197 @@ description: Functional event handling with lambda expressions instead of listen
 
 # Events
 
-## Basic Usage
+The `Events` utility provides a fluent builder API for subscribing to Bukkit events, firing custom events, and managing listener lifecycle.
+
+## Single event subscription
 
 ```java
 Events.subscribe(PlayerJoinEvent.class)
     .handler(event -> {
-        Player player = event.getPlayer();
-        Text.tell(player, "&aWelcome!");
-    })
-    .bindWith(this);  // Auto-unregister on disable
-```
-
-## With Filters
-
-```java
-Events.subscribe(PlayerMoveEvent.class)
-    .filter(e -> e.getPlayer().hasPermission("special"))
-    .filter(e -> !e.getFrom().getBlock().equals(e.getTo().getBlock()))
-    .handler(e -> {
-        // Only called for players with permission
-        // And only when moving to different block
+        Text.tell(event.getPlayer(), "&aWelcome!");
     })
     .bindWith(this);
 ```
 
-## Method References
+`handler()` returns a `SingleSubscription` (which implements `Terminable`), so `.bindWith(this)` registers it for automatic cleanup when the plugin disables. `this` must be a `TerminableConsumer`, which `BasePlugin` implements.
 
-```java
-Events.subscribe(PlayerJoinEvent.class)
-    .handler(this::onPlayerJoin)
-    .bindWith(this);
-
-private void onPlayerJoin(PlayerJoinEvent event) {
-    Text.tell(event.getPlayer(), "&aWelcome!");
-}
-```
-
-## Event Priority
+## Event priority
 
 ```java
 Events.subscribe(AsyncPlayerChatEvent.class, EventPriority.HIGHEST)
     .handler(e -> {
-        // Handled at HIGHEST priority
+        e.setFormat("[Server] %s: %s");
     })
+    .bindWith(this);
+```
+
+The default priority is `EventPriority.NORMAL`.
+
+## Filters
+
+Filters are evaluated in registration order. The handler is only called if all filters pass.
+
+```java
+Events.subscribe(PlayerMoveEvent.class)
+    .filter(EventFilters.ignoreSameBlock())
+    .filter(e -> e.getPlayer().hasPermission("special"))
+    .handler(e -> {
+        Text.tell(e.getPlayer(), "&eYou moved to a new block.");
+    })
+    .bindWith(this);
+```
+
+### Built-in filters (EventFilters)
+
+| Method | Applies to | Passes when |
+|---|---|---|
+| `ignoreCancelled()` | `Cancellable` | Event is not cancelled |
+| `ignoreNotCancelled()` | `Cancellable` | Event is cancelled |
+| `ignoreSameBlock()` | `PlayerMoveEvent` | Player crossed a block boundary (X, Y, or Z) |
+| `ignoreSameBlockAndY()` | `PlayerMoveEvent` | Player crossed a block boundary on X or Z only (ignores jumping) |
+| `ignoreSameChunk()` | `PlayerMoveEvent` | Player crossed a chunk boundary |
+| `ignoreDisallowedLogin()` | `PlayerLoginEvent` | Login result is `ALLOWED` |
+| `ignoreDisallowedPreLogin()` | `AsyncPlayerPreLoginEvent` | Login result is `ALLOWED` |
+| `playerHasPermission(String)` | `PlayerEvent` | Player has the given permission |
+
+### Built-in handlers (EventHandlers)
+
+| Method | Applies to | Action |
+|---|---|---|
+| `EventHandlers.cancel()` | `Cancellable` | Cancels the event |
+| `EventHandlers.uncancel()` | `Cancellable` | Un-cancels the event |
+
+```java
+Events.subscribe(PlayerInteractEvent.class)
+    .filter(EventFilters.ignoreCancelled())
+    .handler(EventHandlers.cancel())
     .bindWith(this);
 ```
 
 ## Expiry
 
+Subscriptions can be configured to unregister themselves automatically.
+
+| Method | Behavior |
+|---|---|
+| `expireAfter(long maxCalls)` | Unregister after the handler has been called `maxCalls` times |
+| `expireAfter(long duration, TimeUnit unit)` | Unregister after the given wall-clock duration |
+| `expireIf(Predicate)` | Unregister when the predicate returns `true` (tested `PRE` and `POST_HANDLE`) |
+| `expireIf(BiPredicate, ExpiryTestStage...)` | Unregister when the predicate returns `true`, tested at the specified stages |
+
+`ExpiryTestStage` values:
+
+| Value | Tested |
+|---|---|
+| `PRE` | Before filtering or handling |
+| `POST_FILTER` | After filters pass, before handling |
+| `POST_HANDLE` | After the handler completes |
+
 ```java
-// Unregister after 10 calls
 Events.subscribe(PlayerInteractEvent.class)
     .expireAfter(10)
     .handler(e -> {})
     .bindWith(this);
 
-// Unregister after 30 seconds
 Events.subscribe(PlayerMoveEvent.class)
     .expireAfter(30, TimeUnit.SECONDS)
     .handler(e -> {})
     .bindWith(this);
 ```
 
-## Merged Events
+## Merged event subscription
 
-Listen to multiple **related** events:
+Merged subscriptions listen to multiple event types through a shared supertype.
+
+The convenience overload pre-binds the subclasses with an identity mapping:
 
 ```java
-// Both EntityDamageEvent and EntityDeathEvent are related to EntityEvent
 Events.merge(EntityEvent.class, EntityDamageEvent.class, EntityDeathEvent.class)
     .handler(event -> {
         Entity entity = event.getEntity();
         if (entity instanceof Player) {
-            // Handle either event type
+            Text.console("&7Entity event on player: " + entity.getName());
         }
     })
     .bindWith(this);
 ```
 
-## Complete Example
+For unrelated event types or custom mapping, start with `Events.merge(Class)` and call `bindEvent()` manually:
+
+```java
+Events.merge(Player.class)
+    .bindEvent(PlayerJoinEvent.class, PlayerJoinEvent::getPlayer)
+    .bindEvent(PlayerQuitEvent.class, PlayerQuitEvent::getPlayer)
+    .handler(player -> {
+        Text.console("&7Player connection event: " + player.getName());
+    })
+    .bindWith(this);
+```
+
+`bindEvent()` accepts an optional `EventPriority` parameter between the class and the mapping function. The convenience `merge(Class, Class...)` overload defaults to `EventPriority.NORMAL`. A variant `merge(Class, EventPriority, Class...)` applies the given priority to all bound events.
+
+## biHandler
+
+Both `SingleSubscriptionBuilder` and `MergedSubscriptionBuilder` offer `biHandler()`, which provides access to the `Subscription` instance inside the handler. This is useful for self-unregistering based on runtime conditions.
+
+```java
+Events.subscribe(PlayerJoinEvent.class)
+    .biHandler((sub, event) -> {
+        if (event.getPlayer().getName().equals("Notch")) {
+            Text.tell(event.getPlayer(), "&6First Notch sighting!");
+            sub.unregister();
+        }
+    })
+    .bindWith(this);
+```
+
+## Additional builder options
+
+| Method | Available on | Purpose |
+|---|---|---|
+| `exceptionConsumer(BiConsumer)` | Both | Custom exception handling for the handler |
+| `handleSubclasses()` | `SingleSubscriptionBuilder` | Accept subclasses of the event type |
+| `handlers()` | Both | Returns a `HandlerList` for registering multiple handlers |
+
+## Firing events
+
+`Events` provides methods for dispatching custom events.
+
+| Method | Thread | Returns |
+|---|---|---|
+| `Events.call(Event)` | Current thread | `void` |
+| `Events.callAsync(Event)` | New async thread | `void` |
+| `Events.callSync(Event)` | Main server thread | `void` |
+| `Events.callAndReturn(Event)` | Current thread | The event |
+| `Events.callAsyncAndJoin(Event)` | Async thread, blocks until done | The event |
+| `Events.callSyncAndJoin(Event)` | Main thread, blocks until done | The event |
+
+```java
+MyCustomEvent event = Events.callAndReturn(new MyCustomEvent("data"));
+if (!event.isCancelled()) {
+    // proceed
+}
+```
+
+## Complete example
 
 ```java
 public class MyPlugin extends BasePlugin {
 
     @Override
     protected void enable() {
-        // Welcome VIP players
         Events.subscribe(PlayerJoinEvent.class)
-            .filter(e -> e.getPlayer().hasPermission("vip"))
+            .filter(EventFilters.playerHasPermission("vip"))
             .handler(e -> Text.tell(e.getPlayer(), "&6Welcome VIP!"))
             .bindWith(this);
 
-        // Freeze player for 5 seconds
         Events.subscribe(PlayerMoveEvent.class)
+            .filter(EventFilters.ignoreSameBlock())
             .filter(e -> shouldFreeze(e.getPlayer()))
             .expireAfter(5, TimeUnit.SECONDS)
-            .handler(e -> e.setCancelled(true))
+            .handler(EventHandlers.cancel())
             .bindWith(this);
 
-        // Log damage to players
         Events.subscribe(EntityDamageEvent.class)
             .filter(e -> e.getEntity() instanceof Player)
             .handler(e -> {
