@@ -4,27 +4,33 @@ description: Interactive inventory GUIs with clickable items.
 
 # Menus
 
-## Basic Menu
+PluginBase provides `Menu` for single-page inventories and `PagedMenu` for paginated inventories. Both extend `IMenu`, which handles opening and close callbacks. `MenuManager` is registered automatically by `BasePlugin`.
+
+## Single-page menu
+
+Extend `Menu`, call `super(size, title)`, and populate buttons in the constructor or a helper method.
 
 ```java
 import dev.demeng.pluginbase.menu.layout.Menu;
+import dev.demeng.pluginbase.menu.model.MenuButton;
 import dev.demeng.pluginbase.item.ItemBuilder;
+import dev.demeng.pluginbase.text.Text;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 public class ShopMenu extends Menu {
 
     public ShopMenu() {
-        super(27, "&6Shop");  // Size (slots), title
-        populateItems();
+        super(27, "&6Shop");
+        populate();
     }
 
-    private void populateItems() {
-        // Add items
+    private void populate() {
         addButton(10, ItemBuilder.create(Material.DIAMOND)
             .name("&bDiamonds")
             .lore("&7Price: $100")
             .get(), click -> {
                 Player player = (Player) click.getWhoClicked();
-                // Handle purchase
                 Text.tell(player, "&aPurchased diamonds!");
                 player.closeInventory();
             });
@@ -38,7 +44,6 @@ public class ShopMenu extends Menu {
                 player.closeInventory();
             });
 
-        // Fill empty slots with glass
         setBackground(ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE)
             .name(" ")
             .get());
@@ -46,18 +51,29 @@ public class ShopMenu extends Menu {
 }
 ```
 
-## Open Menu
+Open the menu:
 
 ```java
-ShopMenu menu = new ShopMenu();
-menu.open(player);
+new ShopMenu().open(player);
 ```
 
-## Paged Menu
+`open(Player... players)` accepts varargs, so you can open for multiple players at once:
+
+```java
+menu.open(player1, player2, player3);
+```
+
+## Paginated menu
+
+Extend `PagedMenu` and implement a `Settings` object that controls navigation buttons and available slots.
+
+Buttons with slot `-1` are auto-assigned across pages. Buttons with a slot `>= 0` are placed on the first page at that fixed position.
 
 ```java
 import dev.demeng.pluginbase.menu.layout.PagedMenu;
 import dev.demeng.pluginbase.menu.model.MenuButton;
+import dev.demeng.pluginbase.item.ItemBuilder;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PlayerListMenu extends PagedMenu {
@@ -65,11 +81,10 @@ public class PlayerListMenu extends PagedMenu {
     public PlayerListMenu(List<Player> players) {
         super(54, "&bPlayers - Page %current-page%", createSettings());
 
-        // Create buttons for each player
         List<MenuButton> buttons = new ArrayList<>();
         for (Player player : players) {
             buttons.add(MenuButton.create(
-                -1,  // Auto-assign slot
+                -1,
                 ItemBuilder.create(Material.PLAYER_HEAD)
                     .skullOwner(player.getName())
                     .name("&e" + player.getName())
@@ -83,7 +98,6 @@ public class PlayerListMenu extends PagedMenu {
             ));
         }
 
-        // Fill pages with buttons
         fill(buttons);
     }
 
@@ -91,51 +105,32 @@ public class PlayerListMenu extends PagedMenu {
         return new Settings() {
             @Override
             public MenuButton getPreviousButton() {
-                return MenuButton.create(
-                    45,
-                    ItemBuilder.create(Material.ARROW)
-                        .name("&aPrevious Page")
-                        .get(),
-                    null
-                );
+                return MenuButton.create(45,
+                    ItemBuilder.create(Material.ARROW).name("&aPrevious Page").get(), null);
             }
 
             @Override
             public MenuButton getDummyPreviousButton() {
-                return MenuButton.create(
-                    45,
+                return MenuButton.create(45,
                     ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE)
-                        .name("&cNo previous page")
-                        .get(),
-                    null
-                );
+                        .name("&cNo previous page").get(), null);
             }
 
             @Override
             public MenuButton getNextButton() {
-                return MenuButton.create(
-                    53,
-                    ItemBuilder.create(Material.ARROW)
-                        .name("&aNext Page")
-                        .get(),
-                    null
-                );
+                return MenuButton.create(53,
+                    ItemBuilder.create(Material.ARROW).name("&aNext Page").get(), null);
             }
 
             @Override
             public MenuButton getDummyNextButton() {
-                return MenuButton.create(
-                    53,
+                return MenuButton.create(53,
                     ItemBuilder.create(Material.GRAY_STAINED_GLASS_PANE)
-                        .name("&cNo next page")
-                        .get(),
-                    null
-                );
+                        .name("&cNo next page").get(), null);
             }
 
             @Override
             public List<Integer> getAvailableSlots() {
-                // Slots 0-44 (excluding navigation buttons at 45 and 53)
                 return IntStream.range(0, 45).boxed().collect(Collectors.toList());
             }
         };
@@ -143,25 +138,20 @@ public class PlayerListMenu extends PagedMenu {
 
     @Override
     public boolean onClose(InventoryCloseEvent event) {
-        // Cleanup when menu closes
         return false;
     }
 }
 ```
 
-### Simpler PagedMenu Example
+### Loading settings from config
 
-You can also load Settings from config:
+`Settings.fromConfig(ConfigurationSection)` parses navigation buttons and available slots from YAML. Config slots are 1-indexed and converted automatically.
 
 ```java
 public class SimplePagedMenu extends PagedMenu {
 
     public SimplePagedMenu(ConfigurationSection config, List<ItemStack> items) {
-        super(
-            54,
-            "&6Items - Page %current-page%",
-            Settings.fromConfig(config)  // Load from config
-        );
+        super(54, "&6Items - Page %current-page%", Settings.fromConfig(config));
 
         List<MenuButton> buttons = items.stream()
             .map(item -> MenuButton.create(-1, item, null))
@@ -177,15 +167,64 @@ public class SimplePagedMenu extends PagedMenu {
 }
 ```
 
-## Complete Example
+### Static buttons on all pages
+
+Use `addStaticButton(MenuButton)` or `addButton(int slot, ItemStack, Consumer)` after calling `fill()` to place a button on every page.
+
+## MenuButton factory methods
+
+`MenuButton.create(...)` has several overloads:
+
+| Signature | Slot handling |
+|---|---|
+| `create(int slot, ItemStack stack, Consumer action)` | Uses slot as-is (0-indexed) |
+| `create(ConfigurationSection section, Consumer action)` | Reads `slot` from config, subtracts 1 |
+| `create(ConfigurationSection section, UnaryOperator translator, Consumer action)` | Same as above, with string translator |
+| `create(int slot, ConfigurationSection section, Consumer action)` | Overrides config slot, no subtraction |
+| `create(int slot, ConfigurationSection section, UnaryOperator translator, Consumer action)` | Same as above, with string translator |
+
+## Layout fill methods
+
+All fill methods only affect empty slots. The item's display name is set to `"&0"` (invisible) automatically.
+
+| Method | Parameters | Indexing |
+|---|---|---|
+| `setBackground(ItemStack)` | Fill material | Fills all empty slots |
+| `setBorder(ItemStack)` | Fill material | Fills the outer edge (top row, bottom row, left column, right column) |
+| `setRow(int row, ItemStack)` | Row number (1-based, top to bottom), fill material | Row 1 = top, row 6 = bottom of a 54-slot inventory |
+| `setColumn(int col, ItemStack)` | Column number (1-based, left to right), fill material | Column 1 = leftmost, column 9 = rightmost |
+| `applyFillersFromConfig(ConfigurationSection)` | Config section | Reads `background`, `border`, `row`, `column`, `custom` keys |
+
+## Inventory layout and slot indexing
+
+A 54-slot (6-row) inventory uses 0-based slot indices in code:
+
+```
+Row 1:  [ 0][ 1][ 2][ 3][ 4][ 5][ 6][ 7][ 8]
+Row 2:  [ 9][10][11][12][13][14][15][16][17]
+Row 3:  [18][19][20][21][22][23][24][25][26]
+Row 4:  [27][28][29][30][31][32][33][34][35]
+Row 5:  [36][37][38][39][40][41][42][43][44]
+Row 6:  [45][46][47][48][49][50][51][52][53]
+```
+
+| Context | Slots | Rows / Columns |
+|---|---|---|
+| Java code (`addButton`, constructor) | 0-indexed (0-53) | `setRow` and `setColumn` are 1-indexed |
+| Config files (`slot` key, `custom` filler slots, `available-slots`) | 1-indexed (1-54), auto-converted | `row` and `column` filler keys are 1-indexed |
+
+## `onClose` callback
+
+Override `onClose(InventoryCloseEvent)` in your menu subclass. Return `true` to re-open the menu (cancels close), `false` to allow it to close normally.
+
+## Full example with command registration
 
 ```java
 public class MyPlugin extends BasePlugin {
 
     @Override
     protected void enable() {
-        // Command to open shop
-        Lamp<BukkitCommandActor> handler = createCommandHandler();
+        Lamp<BukkitCommandActor> handler = createCommandHandler().build();
         handler.register(new ShopCommands());
     }
 }
@@ -201,38 +240,30 @@ public class ShopCommands {
 public class ShopMenu extends Menu {
 
     public ShopMenu() {
-        super(36, "&6&lShop");  // 4 rows = 36 slots
-        populateItems();
+        super(36, "&6&lShop");
+        populate();
     }
 
-    private void populateItems() {
-        // Weapons
+    private void populate() {
         addButton(10, ItemBuilder.create(Material.DIAMOND_SWORD)
             .name("&bDiamond Sword")
             .lore("&7Price: $500", "", "&eClick to purchase")
             .get(), this::purchaseWeapon);
 
-        // Armor
         addButton(12, ItemBuilder.create(Material.DIAMOND_CHESTPLATE)
             .name("&bDiamond Armor")
             .lore("&7Price: $1000", "", "&eClick to purchase")
             .get(), this::purchaseArmor);
 
-        // Food
         addButton(14, ItemBuilder.create(Material.COOKED_BEEF)
             .name("&6Food Pack")
             .lore("&7Price: $50", "", "&eClick to purchase")
             .get(), this::purchaseFood);
 
-        // Close button
         addButton(31, ItemBuilder.create(Material.BARRIER)
             .name("&cClose")
-            .get(), click -> {
-                Player player = (Player) click.getWhoClicked();
-                player.closeInventory();
-            });
+            .get(), click -> ((Player) click.getWhoClicked()).closeInventory());
 
-        // Decorative borders
         setBorder(ItemBuilder.create(Material.BLACK_STAINED_GLASS_PANE)
             .name(" ")
             .get());
@@ -240,94 +271,17 @@ public class ShopMenu extends Menu {
 
     private void purchaseWeapon(InventoryClickEvent click) {
         Player player = (Player) click.getWhoClicked();
-        if (hasEnoughMoney(player, 500)) {
-            takeMoney(player, 500);
-            player.getInventory().addItem(new ItemStack(Material.DIAMOND_SWORD));
-            Text.tell(player, "&aPurchased Diamond Sword!");
-            player.closeInventory();
-        } else {
-            Text.tell(player, "&cNot enough money!");
-        }
+        player.getInventory().addItem(new ItemStack(Material.DIAMOND_SWORD));
+        Text.tell(player, "&aPurchased Diamond Sword!");
+        player.closeInventory();
     }
 
     private void purchaseArmor(InventoryClickEvent click) {
-        Player player = (Player) click.getWhoClicked();
         // Purchase logic
     }
 
     private void purchaseFood(InventoryClickEvent click) {
-        Player player = (Player) click.getWhoClicked();
         // Purchase logic
     }
 }
 ```
-
-## Layout Methods
-
-### Fill Background
-
-```java
-// Fill all empty slots
-setBackground(ItemStack item);
-```
-
-### Fill Border
-
-```java
-// Fill border slots (outer edge)
-setBorder(ItemStack item);
-```
-
-### Fill Row
-
-```java
-// Fill entire row (1-6 for 6-row inventory)
-setRow(int row, ItemStack item);
-```
-
-### Fill Column
-
-```java
-// Fill entire column (1-9)
-setColumn(int column, ItemStack item);
-```
-
-## Menu State
-
-```java
-// Open for multiple players
-menu.open(player1, player2, player3);
-```
-
-## Adding Buttons
-
-```java
-// Add button at specific slot (0-indexed: 0-53 for 54-slot inventory)
-addButton(int slot, ItemStack item, Consumer<InventoryClickEvent> handler);
-
-// Add button to first empty slot
-addButton(ItemStack item, Consumer<InventoryClickEvent> handler);
-
-// Add button object
-MenuButton button = MenuButton.create(slot, itemStack, clickHandler);
-addButton(button);
-```
-
-## Slot Indexing
-
-**Important:** Slot indexing differs between code and configuration files:
-
-*   **In Java code:** Slots are **0-indexed** (0-53 for a 54-slot inventory)
-
-    ```java
-    addButton(0, item, handler);  // First slot (top-left)
-    addButton(53, item, handler); // Last slot (bottom-right in 6-row GUI)
-    ```
-*   **In config files:** Slots are **1-indexed** (1-54 for a 54-slot inventory)
-
-    ```yaml
-    slot: 1   # First slot (automatically converted to 0 internally)
-    slot: 54  # Last slot (automatically converted to 53 internally)
-    ```
-
-The framework automatically converts config slots by subtracting 1. This makes config files more user-friendly while keeping code consistent with Bukkit's 0-indexed inventory API.
