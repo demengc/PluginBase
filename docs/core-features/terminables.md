@@ -6,29 +6,42 @@ description: >-
 
 # Terminables
 
-## What are Terminables?
+Terminables represent resources with a defined lifecycle. Binding a `Terminable` to a `TerminableConsumer` (such as `BasePlugin`) guarantees cleanup when the consumer shuts down, eliminating manual unregister and cancel calls.
 
-Terminables are resources that can be automatically cleaned up when no longer needed. Using `.bindWith()` ensures resources are properly closed when your plugin disables.
+## Interface hierarchy
 
-## Basic Usage
+| Interface | Extends | Role |
+|---|---|---|
+| `Terminable` | `AutoCloseable` | Single closeable resource. Provides `close()`, `bindWith(TerminableConsumer)`, `closeSilently()`, `isClosed()`. |
+| `TerminableConsumer` | -- | Accepts resources via `bind(AutoCloseable)` and `bindModule(TerminableModule)`. |
+| `CompositeTerminable` | `Terminable`, `TerminableConsumer` | Groups multiple terminables. Closes in LIFO order. Created via `CompositeTerminable.create()`. |
+| `TerminableModule` | -- | Encapsulates related setup logic. Receives a `TerminableConsumer` in `setup(TerminableConsumer)`. |
+| `Task` | `Terminable` | Repeating scheduler task. `close()` delegates to `stop()`. |
+| `Promise<V>` | `Future<V>`, `Terminable` | Async computation result. |
+
+`BasePlugin` implements `TerminableConsumer`, so `bind()` and `bindModule()` are available directly via `this` in any `BasePlugin` subclass.
+
+## Binding resources
 
 ### Events
 
 ```java
 Events.subscribe(PlayerJoinEvent.class)
     .handler(e -> {})
-    .bindWith(this);  // Auto-unregister on plugin disable
+    .bindWith(this);
 ```
 
-### Schedulers
+### Scheduler tasks
 
 ```java
 Schedulers.sync().runRepeating(() -> {
-    // Repeating task
-}, 0L, 20L).bindWith(this);  // Auto-cancel on plugin disable
+    updateScoreboard();
+}, 0L, 20L).bindWith(this);
 ```
 
-### Custom Resources
+### Custom resources
+
+Any class implementing `Terminable` (or `AutoCloseable`) can be bound.
 
 ```java
 public class DatabaseConnection implements Terminable {
@@ -46,120 +59,110 @@ public class DatabaseConnection implements Terminable {
     }
 }
 
-// Usage
 DatabaseConnection db = new DatabaseConnection();
-bind(db);  // Auto-close on plugin disable
+bind(db);
 ```
 
 ## CompositeTerminable
 
-Group multiple terminables together:
+Groups multiple terminables under a single handle. Useful for subsystems that need independent lifecycle control.
 
 ```java
 public class GameArena {
     private final CompositeTerminable terminables = CompositeTerminable.create();
 
     public void start() {
-        // Register events for this arena
         Events.subscribe(PlayerMoveEvent.class)
             .filter(e -> isInArena(e.getPlayer()))
             .handler(this::handleMove)
             .bindWith(terminables);
 
-        // Start arena tasks
         Schedulers.sync().runRepeating(() -> {
             updateArena();
         }, 0L, 20L).bindWith(terminables);
     }
 
     public void stop() {
-        // Clean up ALL arena resources at once
         terminables.close();
     }
 }
 ```
 
+`CompositeTerminable` also provides:
+
+| Method | Description |
+|---|---|
+| `create()` | New instance with strong references |
+| `createWeak()` | New instance with weak references |
+| `with(AutoCloseable)` | Add a resource (returns `this` for chaining) |
+| `withAll(AutoCloseable...)` | Add multiple resources |
+| `withAll(Iterable<AutoCloseable>)` | Add multiple resources from iterable |
+| `cleanup()` | Remove already-terminated entries |
+| `bind(AutoCloseable)` | Same as `with()`, returns the bound resource |
+| `bindModule(TerminableModule)` | Inherited from `TerminableConsumer` |
+
 ## TerminableModule
 
-Organize related functionality:
+Encapsulates a group of related resources behind a `setup()` method. The consumer passed to `setup()` handles binding.
 
 ```java
 public class ScoreboardModule implements TerminableModule {
 
     @Override
     public void setup(TerminableConsumer consumer) {
-        // Events
         Events.subscribe(PlayerJoinEvent.class)
             .handler(this::createScoreboard)
             .bindWith(consumer);
 
-        // Tasks
         Schedulers.sync().runRepeating(() -> {
             updateScoreboards();
         }, 0L, 20L).bindWith(consumer);
     }
-
-    private void createScoreboard(PlayerJoinEvent event) {
-        // Create scoreboard for player
-    }
-
-    private void updateScoreboards() {
-        // Update all scoreboards
-    }
 }
 
-// Usage in plugin
 public class MyPlugin extends BasePlugin {
 
     @Override
     protected void enable() {
-        bindModule(new ScoreboardModule());  // Auto-cleanup on disable
+        bindModule(new ScoreboardModule());
     }
 }
 ```
 
-## Complete Example
+## Complete example
 
 ```java
 public class MyPlugin extends BasePlugin {
 
     @Override
     protected void enable() {
-        // Events - auto cleanup
         Events.subscribe(PlayerJoinEvent.class)
             .handler(this::onJoin)
             .bindWith(this);
 
-        // Tasks - auto cleanup
         Schedulers.sync().runRepeating(() -> {
             saveData();
         }, 0L, 6000L).bindWith(this);
 
-        // Modules - auto cleanup
         bindModule(new ChatModule());
         bindModule(new ScoreboardModule());
 
-        // Custom resources - auto cleanup
         DatabaseConnection db = new DatabaseConnection();
         bind(db);
     }
 
     @Override
     protected void disable() {
-        // All resources automatically cleaned up!
-        // No manual unregister/cancel needed
+        // All bound resources are automatically cleaned up.
     }
 }
 ```
 
-## Benefits
+## Comparison with manual cleanup
 
-✅ **No memory leaks** - Resources always cleaned up ✅ **Less boilerplate** - No manual unregister code ✅ **Safer** - Can't forget to clean up ✅ **Organized** - Group related resources together
-
-## Without Terminables
+Without terminables, you must track and cancel every resource individually:
 
 ```java
-// Traditional approach - easy to forget cleanup!
 private Task task;
 private Listener listener;
 
@@ -175,27 +178,26 @@ public void onEnable() {
 
 @Override
 public void onDisable() {
-    HandlerList.unregisterAll(listener);  // Easy to forget!
-    task.cancel();  // Easy to forget!
+    HandlerList.unregisterAll(listener);
+    task.cancel();
 }
 ```
 
-## With Terminables
+With terminables, binding handles all of this:
 
 ```java
-// PluginBase approach - automatic!
 @Override
 protected void enable() {
     Events.subscribe(PlayerJoinEvent.class)
         .handler(e -> {})
-        .bindWith(this);  // Auto cleanup
+        .bindWith(this);
 
     Schedulers.sync().runRepeating(() -> {}, 0L, 20L)
-        .bindWith(this);  // Auto cleanup
+        .bindWith(this);
 }
 
 @Override
 protected void disable() {
-    // Nothing to do - automatic cleanup!
+    // Nothing needed.
 }
 ```
