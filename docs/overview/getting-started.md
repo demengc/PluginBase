@@ -1,8 +1,12 @@
+---
+description: Add PluginBase to your project, shade it, and create your first plugin.
+---
+
 # Getting Started
 
-## Installation
+## Add the Dependency
 
-Add PluginBase modules to your project through your build tool (e.g., Maven or Gradle). Ensure to replace `VERSION` with the latest version from the [releases page](https://github.com/demengc/PluginBase/releases).
+PluginBase is hosted on JitPack. Replace `VERSION` with the latest tag from the [releases page](https://github.com/demengc/PluginBase/releases).
 
 {% tabs %}
 {% tab title="Maven (pom.xml)" %}
@@ -15,34 +19,34 @@ Add PluginBase modules to your project through your build tool (e.g., Maven or G
 </repositories>
 
 <dependencies>
-<!-- Core module (required) -->
-<dependency>
-  <groupId>com.github.demengc.PluginBase</groupId>
-  <artifactId>pluginbase-core</artifactId>
-  <version>VERSION</version>
-</dependency>
+  <!-- Core module (required) -->
+  <dependency>
+    <groupId>com.github.demengc.PluginBase</groupId>
+    <artifactId>pluginbase-core</artifactId>
+    <version>VERSION</version>
+  </dependency>
 
-<!-- Optional modules -->
-<dependency>
-  <groupId>com.github.demengc.PluginBase</groupId>
-  <artifactId>pluginbase-games</artifactId>
-  <version>VERSION</version>
-</dependency>
-<dependency>
-  <groupId>com.github.demengc.PluginBase</groupId>
-  <artifactId>pluginbase-mongo</artifactId>
-  <version>VERSION</version>
-</dependency>
-<dependency>
-  <groupId>com.github.demengc.PluginBase</groupId>
-  <artifactId>pluginbase-redis</artifactId>
-  <version>VERSION</version>
-</dependency>
-<dependency>
-  <groupId>com.github.demengc.PluginBase</groupId>
-  <artifactId>pluginbase-sql</artifactId>
-  <version>VERSION</version>
-</dependency>
+  <!-- Optional modules -->
+  <dependency>
+    <groupId>com.github.demengc.PluginBase</groupId>
+    <artifactId>pluginbase-games</artifactId>
+    <version>VERSION</version>
+  </dependency>
+  <dependency>
+    <groupId>com.github.demengc.PluginBase</groupId>
+    <artifactId>pluginbase-mongo</artifactId>
+    <version>VERSION</version>
+  </dependency>
+  <dependency>
+    <groupId>com.github.demengc.PluginBase</groupId>
+    <artifactId>pluginbase-redis</artifactId>
+    <version>VERSION</version>
+  </dependency>
+  <dependency>
+    <groupId>com.github.demengc.PluginBase</groupId>
+    <artifactId>pluginbase-sql</artifactId>
+    <version>VERSION</version>
+  </dependency>
 </dependencies>
 ```
 {% endtab %}
@@ -56,7 +60,7 @@ repositories {
 dependencies {
     // Required
     implementation 'com.github.demengc.PluginBase:pluginbase-core:VERSION'
-    
+
     // Optional
     implementation 'com.github.demengc.PluginBase:pluginbase-games:VERSION'
     implementation 'com.github.demengc.PluginBase:pluginbase-mongo:VERSION'
@@ -88,9 +92,9 @@ dependencies {
 {% endtab %}
 {% endtabs %}
 
-## Shading and Relocation
+## Shade and Relocate PluginBase
 
-To avoid dependency conflicts with other plugins, you should shade and relocate PluginBase into your plugin JAR. Ensure to replace the shaded pattern (`com.example.myplugin.lib.pluginbase` ) with a package relevant to your project.
+PluginBase must be shaded into your plugin JAR and relocated to avoid conflicts with other plugins that bundle it. Replace `com.example.myplugin.lib.pluginbase` with a package under your own namespace.
 
 {% tabs %}
 {% tab title="Maven (pom.xml)" %}
@@ -100,7 +104,7 @@ To avoid dependency conflicts with other plugins, you should shade and relocate 
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-shade-plugin</artifactId>
-      <version>3.5.1</version>
+      <version>3.6.1</version>
       <executions>
         <execution>
           <phase>package</phase>
@@ -150,9 +154,9 @@ tasks.shadowJar {
 {% endtab %}
 {% endtabs %}
 
-## Preserving Parameter Names (Optional)
+## Preserve Parameter Names for Lamp Commands
 
-By default, Java does not preserve method parameter names. To enable features such as automatic command metadata, you should compile your project with the `-parameters` flag.
+Lamp uses method parameter names to derive command argument names. Java does not retain these by default, so you need the `-parameters` compiler flag. Without it, Lamp falls back to generic names like `arg0`.
 
 {% tabs %}
 {% tab title="Maven (pom.xml)" %}
@@ -162,7 +166,7 @@ By default, Java does not preserve method parameter names. To enable features su
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-compiler-plugin</artifactId>
-      <version>3.11.0</version>
+      <version>3.14.1</version>
       <configuration>
         <compilerArgs>
           <arg>-parameters</arg>
@@ -191,9 +195,9 @@ tasks.withType<JavaCompile> {
 {% endtab %}
 {% endtabs %}
 
-## Your First Plugin
+## Extend BasePlugin
 
-### 1. Extend BasePlugin
+`BasePlugin` wraps `JavaPlugin` with automatic lifecycle management. Override `enable()` and `disable()` instead of `onEnable()` and `onDisable()` (those are `final` in `BasePlugin`).
 
 ```java
 package com.example.myplugin;
@@ -207,10 +211,8 @@ public class MyPlugin extends BasePlugin {
 
   @Override
   protected void enable() {
-    // Plugin initialization
     Text.console("&aMyPlugin enabled!");
 
-    // Example: subscribe to events
     Events.subscribe(PlayerJoinEvent.class)
         .handler(e -> Text.tell(e.getPlayer(), "&aWelcome!"))
         .bindWith(this);
@@ -218,39 +220,56 @@ public class MyPlugin extends BasePlugin {
 
   @Override
   protected void disable() {
-    // Cleanup (most resources auto-cleanup via bindWith)
     Text.console("&cMyPlugin disabled!");
   }
 }
 ```
 
-### 2. Create plugin.yml
+| Method | When it runs | Purpose |
+|--------|-------------|---------|
+| `load()` | `onLoad` (before enable) | Early initialization, dependency container setup |
+| `enable()` | `onEnable` | Register commands, listeners, load configs |
+| `disable()` | `onDisable` | Cleanup (most resources auto-cleanup via `bindWith`) |
+
+## Create plugin.yml
 
 ```yaml
 name: MyPlugin
 version: 1.0.0
 main: com.example.myplugin.MyPlugin
-api-version: 1.13 # Required for multi-version support
+api-version: 1.13
 ```
 
-### 3. Build and Test
+## Configure BaseSettings
 
-Build your plugin JAR and test it out!
-
-## Configuration
-
-Configure PluginBase settings via `BaseSettings` in your main class:
+Override `BaseSettings` methods to customize library-wide behavior. Call `setBaseSettings()` early in `enable()`.
 
 ```java
 @Override
 protected void enable() {
   setBaseSettings(new BaseSettings() {
-    // Example: Modifying the plugin's chat prefix.
     @Override
     public String prefix() {
       return "&8[&bMyPlugin&8]&r ";
     }
-    // Other settings can be overridden here.
+
+    @Override
+    public boolean includePrefixOnEachLine() {
+      return true;
+    }
+
+    @Override
+    public ColorScheme colorScheme() {
+      return new ColorScheme("&b", "&7", "&f");
+    }
   });
 }
 ```
+
+| Method | Default | Description |
+|--------|---------|-------------|
+| `prefix()` | `"&r"` | Prepended to `Text.tell()` and `Text.console()` messages |
+| `includePrefixOnEachLine()` | `true` | Adds the prefix to each `\n`-delimited line |
+| `colorScheme()` | `null` | 3-color scheme accessible as `&p`, `&s`, `&t` in any colorized text |
+| `dateTimeFormat()` | `"MMMM dd yyyy HH:mm z"` | Format for combined date/time strings |
+| `dateFormat()` | `"MMMM dd yyyy"` | Format for date-only strings |
