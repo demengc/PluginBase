@@ -1,29 +1,29 @@
 ---
 description: >-
-  PluginBase uses Lamp, a powerful annotation-driven command framework for
-  creating Bukkit/Spigot/Paper commands with minimal boilerplate.
+  Annotation-driven commands using Lamp 4.x, with built-in parameter parsing,
+  tab completion, permissions, cooldowns, and localized error messages.
 ---
 
 # Commands
 
-## Overview
+PluginBase integrates [Lamp 4.x](https://github.com/Revxrsal/Lamp), an annotation-driven command framework for Bukkit. `BasePlugin.createCommandHandler()` returns a pre-configured `Lamp.Builder<BukkitCommandActor>` with localized error handling and a "did you mean?" failure handler.
 
-Lamp provides:
+| Capability               | How                                     |
+| ------------------------ | --------------------------------------- |
+| Define commands          | `@Command`, `@Subcommand`               |
+| Permissions              | `@CommandPermission`                    |
+| Parameter parsing        | Automatic for Player, Material, int, etc. |
+| Tab completion           | `@Suggest` (literals), `@SuggestWith` (dynamic) |
+| Optional parameters      | `@Optional`, `@Default`                 |
+| Flags and switches       | `@Flag`, `@Switch`                      |
+| Cooldowns                | `@Cooldown`                             |
+| Validation               | `@Range`                                |
 
-* **Annotation-based commands** - Define commands with `@Command`, `@Description`, etc.
-* **Automatic parameter parsing** - Players, numbers, enums, etc.
-* **Tab completion** - Built-in suggestions for parameters
-* **Permission handling** - Via `@CommandPermission`
-* **Optional parameters** - Using `@Default` or `@Optional`
-* **Flags and switches** - Unix-style flags like `--silent`
-* **Cooldowns** - Built-in command cooldowns
-* **Localized errors** - PluginBase provides automatic localized error messages
+Full Lamp documentation: [https://github.com/Revxrsal/Lamp/wiki](https://github.com/Revxrsal/Lamp/wiki)
 
-For complete Lamp documentation, see [**https://foxhut.gitbook.io/lamp-docs/**](https://foxhut.gitbook.io/lamp-docs/).
+## Creating the Command Handler
 
-## Setup
-
-### 1. Create Command Handler
+`createCommandHandler()` returns a `Lamp.Builder<BukkitCommandActor>`. Call `.build()` to produce the `Lamp` instance, then register command classes on it.
 
 ```java
 import dev.demeng.pluginbase.plugin.BasePlugin;
@@ -34,16 +34,15 @@ public class MyPlugin extends BasePlugin {
 
     @Override
     protected void enable() {
-        // Create Lamp handler with PluginBase's settings
         Lamp<BukkitCommandActor> lamp = createCommandHandler().build();
-        
-        // Register command classes
         lamp.register(new MyCommands());
     }
 }
 ```
 
-### 2. Create Command Class
+You can customize the builder before calling `.build()`, for example to add suggestion providers or parameter types.
+
+## Defining a Command
 
 ```java
 import revxrsal.commands.annotation.Command;
@@ -67,85 +66,71 @@ public class MyCommands {
 
 ## Command Parameters
 
-Lamp automatically parses command parameters:
+Lamp parses parameters from the command input automatically.
 
 ```java
 @Command("give")
 @CommandPermission("myplugin.give")
 public void give(Player sender, Player target, Material material, int amount) {
-    // Usage: /give Steve DIAMOND 64
     ItemStack item = new ItemStack(material, amount);
     target.getInventory().addItem(item);
     Text.tell(sender, "&aGave " + amount + "x " + material + " to " + target.getName());
 }
 ```
 
-### Supported Types
+### Built-in Parameter Types
 
-* `Player`, `OfflinePlayer`, `World`, `Entity`
-* `int`, `double`, `float`, `long`, `short`, `byte`
-* `String`, `boolean`, `UUID`
-* `Material`, `EntityType`, and other Bukkit enums
-* Custom types (see [Lamp docs](https://foxhut.gitbook.io/lamp-docs/how-to/custom-parameter-types))
+| Category  | Types                                                    |
+| --------- | -------------------------------------------------------- |
+| Bukkit    | `Player`, `OfflinePlayer`, `World`, `Entity`             |
+| Numbers   | `int`, `double`, `float`, `long`, `short`, `byte`        |
+| General   | `String`, `boolean`, `UUID`                              |
+| Enums     | `Material`, `EntityType`, and other Bukkit enums          |
 
-## Optional Parameters
+Custom parameter types can be registered through the builder. See Lamp's documentation on custom parameter types.
 
-### Using @Default
+## Optional Parameters with @Default and @Optional
+
+`@Default` supplies a fallback value when the argument is omitted. `@Optional` makes the parameter nullable instead.
 
 ```java
 import revxrsal.commands.annotation.Default;
+import revxrsal.commands.annotation.Optional;
 
 @Command("heal")
 public void heal(Player sender, @Default("me") Player target) {
-    // /heal        -> heals sender
-    // /heal Steve  -> heals Steve
-    Player toHeal = target;
-    if (target.getName().equals("me")) {
-        toHeal = sender;
-    }
-    
+    Player toHeal = target.getName().equals("me") ? sender : target;
     toHeal.setHealth(20.0);
     Text.tell(sender, "&aHealed " + toHeal.getName());
 }
-```
-
-### Using @Optional
-
-```java
-import revxrsal.commands.annotation.Optional;
 
 @Command("teleport")
 @CommandPermission("myplugin.teleport")
 public void teleport(Player sender, Player target, @Optional Location location) {
-    // /teleport Steve           -> teleports sender to Steve
-    // /teleport Steve 100 64 100 -> teleports sender to coordinates
-    
     if (location == null) {
         sender.teleport(target);
         Text.tell(sender, "&aTeleported to " + target.getName());
     } else {
         sender.teleport(location);
-        Text.tell(sender, "&aTeleported to " + formatLocation(location));
+        Text.tell(sender, "&aTeleported to location");
     }
 }
 ```
 
-## Subcommands
+## Subcommands via @Command Paths
 
-Group related commands together:
+Subcommands are defined by using space-separated paths in `@Command`.
 
 ```java
 @Command("shop")
 @CommandPermission("myplugin.shop")
 public void shop(Player sender) {
-    // /shop
     Text.tell(sender, "&6=== Shop Menu ===");
 }
 
 @Command("shop buy")
 @CommandPermission("myplugin.shop.buy")
 public void shopBuy(Player sender, Material item, @Default("1") int amount) {
-    // /shop buy DIAMOND 64
     int cost = calculateCost(item, amount);
     Text.tell(sender, "&aPurchased " + amount + "x " + item + " for $" + cost);
 }
@@ -153,7 +138,6 @@ public void shopBuy(Player sender, Material item, @Default("1") int amount) {
 @Command("shop sell")
 @CommandPermission("myplugin.shop.sell")
 public void shopSell(Player sender, Material item, @Default("1") int amount) {
-    // /shop sell DIAMOND 64
     int price = calculatePrice(item, amount);
     Text.tell(sender, "&aSold " + amount + "x " + item + " for $" + price);
 }
@@ -161,7 +145,10 @@ public void shopSell(Player sender, Material item, @Default("1") int amount) {
 
 ## Flags and Switches
 
-Add Unix-style flags to commands:
+| Annotation | Purpose                                   | Example usage            |
+| ---------- | ----------------------------------------- | ------------------------ |
+| `@Switch`  | Boolean toggle, no value                  | `--silent`               |
+| `@Flag`    | Named parameter that accepts a value      | `--message "Woosh!"`     |
 
 ```java
 import revxrsal.commands.annotation.Flag;
@@ -175,28 +162,18 @@ public void teleport(
     @Switch("silent") boolean silent,
     @Flag("message") String customMessage
 ) {
-    // /teleport Steve --silent
-    // /teleport Steve --message "Woosh!"
-    
     sender.teleport(target.getLocation());
-    
+
     if (!silent) {
-        String message = customMessage != null 
-            ? customMessage 
+        String message = customMessage != null
+            ? customMessage
             : "&aTeleported to " + target.getName();
         Text.tell(sender, message);
     }
 }
 ```
 
-**Switch vs Flag:**
-
-* `@Switch` - Boolean flag with no value (e.g., `--silent`)
-* `@Flag` - Flag that accepts a value (e.g., `--message "text"`)
-
-## Cooldowns
-
-Add command cooldowns using `@Cooldown`:
+## Cooldowns with @Cooldown
 
 ```java
 import revxrsal.commands.annotation.Cooldown;
@@ -211,48 +188,71 @@ public void heal(Player sender) {
 }
 ```
 
-When on cooldown, players see a localized error message automatically.
+When a player is on cooldown, PluginBase's `BaseExceptionHandler` sends a localized error message with the remaining time.
 
-## Suggestions
+## Tab Completion with @Suggest and @SuggestWith
 
-Provide tab completion suggestions:
+### Static suggestions with @Suggest
+
+`@Suggest` provides a fixed list of tab-completion values.
 
 ```java
-import revxrsal.commands.annotation.SuggestionProvider;
+import revxrsal.commands.annotation.Suggest;
 
+@Command("difficulty")
+@CommandPermission("myplugin.difficulty")
+public void setDifficulty(Player sender, @Suggest({"easy", "normal", "hard"}) String difficulty) {
+    Text.tell(sender, "&aSet difficulty to " + difficulty);
+}
+```
+
+### Dynamic suggestions with @SuggestWith
+
+`@SuggestWith` references a class that implements `SuggestionProvider<BukkitCommandActor>`.
+
+```java
+import revxrsal.commands.annotation.SuggestWith;
+import revxrsal.commands.autocomplete.SuggestionProvider;
+import revxrsal.commands.bukkit.actor.BukkitCommandActor;
+import revxrsal.commands.node.ExecutionContext;
+
+public class WarpSuggestionProvider implements SuggestionProvider<BukkitCommandActor> {
+
+    @Override
+    public Collection<String> getSuggestions(ExecutionContext<BukkitCommandActor> context) {
+        return getWarpNames();
+    }
+}
+```
+
+```java
 @Command("warp")
 @CommandPermission("myplugin.warp")
-public void warp(Player sender, @SuggestionProvider("warps") String warpName) {
-    // Tab completion suggests warp names
+public void warp(Player sender, @SuggestWith(WarpSuggestionProvider.class) String warpName) {
     Location warpLocation = getWarpLocation(warpName);
     sender.teleport(warpLocation);
     Text.tell(sender, "&aTeleported to " + warpName);
 }
 ```
 
-Then register the suggestion provider:
+### Programmatic registration via the builder
+
+You can also register suggestion providers by type through the builder:
 
 ```java
 @Override
 protected void enable() {
     Lamp<BukkitCommandActor> lamp = createCommandHandler()
         .suggestionProviders(providers -> {
-            providers.put("warps", (context) -> {
-                // Return list of warp names
-                return getWarpNames();
-            });
+            providers.addProvider(String.class, context -> getWarpNames());
         })
         .build();
-    
+
     lamp.register(new MyCommands());
 }
 ```
 
-For more on suggestions, see [Lamp's suggestions documentation](https://foxhut.gitbook.io/lamp-docs/how-to/suggestions-and-auto-completion).
-
-## Parameter Validation
-
-Validate parameter ranges using annotations:
+## Parameter Validation with @Range
 
 ```java
 import revxrsal.commands.annotation.Range;
@@ -260,17 +260,16 @@ import revxrsal.commands.annotation.Range;
 @Command("setlevel")
 @CommandPermission("myplugin.setlevel")
 public void setLevel(Player sender, Player target, @Range(min = 0, max = 100) int level) {
-    // Only accepts levels between 0-100
     target.setLevel(level);
     Text.tell(sender, "&aSet " + target.getName() + "'s level to " + level);
 }
 ```
 
-For more validation options, see [Lamp's parameter validators documentation](https://foxhut.gitbook.io/lamp-docs/how-to/parameter-validators).
-
 ## Localized Error Messages
 
-PluginBase automatically provides localized error messages for all common errors. For more information on localization, see [Text and Localization](text-localization.md). A comprehensive list of message keys in the form of sample files (in both .properties and .yml format) can be found at [here](https://github.com/demengc/PluginBase/tree/main/samples).
+PluginBase's `BaseExceptionHandler` and `BaseFailureHandler` handle all common command errors with localized messages. These cover invalid players, missing arguments, permission denials, cooldowns, number range violations, and more.
+
+For localization configuration, see [Text and Localization](text-and-localization.md). Sample locale files (`.properties` and `.yml`) are available in the [samples directory](https://github.com/demengc/PluginBase/tree/main/samples).
 
 ## Complete Example
 
@@ -287,7 +286,6 @@ import revxrsal.commands.bukkit.annotation.CommandPermission;
 
 import java.util.concurrent.TimeUnit;
 
-// ===== Plugin Main Class =====
 public class MyPlugin extends BasePlugin {
 
     @Override
@@ -297,7 +295,6 @@ public class MyPlugin extends BasePlugin {
     }
 }
 
-// ===== Command Class =====
 public class AdminCommands {
 
     @Command("heal")
@@ -306,11 +303,11 @@ public class AdminCommands {
     @Cooldown(value = 10, unit = TimeUnit.SECONDS)
     public void heal(Player sender, @Default("me") Player target) {
         Player toHeal = target.getName().equals("me") ? sender : target;
-        
+
         toHeal.setHealth(20.0);
         toHeal.setFoodLevel(20);
         toHeal.setSaturation(20.0f);
-        
+
         Text.tell(sender, "&aHealed " + toHeal.getName() + "!");
         if (!toHeal.equals(sender)) {
             Text.tell(toHeal, "&aYou were healed by " + sender.getName());
@@ -328,7 +325,7 @@ public class AdminCommands {
     ) {
         ItemStack item = new ItemStack(material, amount);
         target.getInventory().addItem(item);
-        
+
         Text.tell(sender, "&aGave " + amount + "x " + material + " to " + target.getName());
         Text.tell(target, "&aYou received " + amount + "x " + material);
     }
@@ -343,10 +340,10 @@ public class AdminCommands {
     ) {
         Player toToggle = target.getName().equals("me") ? sender : target;
         boolean flying = !toToggle.getAllowFlight();
-        
+
         toToggle.setAllowFlight(flying);
         toToggle.setFlying(flying);
-        
+
         if (!silent) {
             String status = flying ? "&aenabled" : "&cdisabled";
             Text.tell(sender, "&7Flight " + status + " for " + toToggle.getName());
@@ -359,20 +356,19 @@ public class AdminCommands {
     public void gamemode(Player sender, org.bukkit.GameMode mode, @Default("me") Player target) {
         Player toChange = target.getName().equals("me") ? sender : target;
         toChange.setGameMode(mode);
-        
+
         Text.tell(sender, "&aSet " + toChange.getName() + "'s game mode to " + mode);
     }
 }
 ```
 
-## Advanced Features
+## Further Reading
 
-For more advanced features, see the official [Lamp documentation](https://foxhut.gitbook.io/lamp-docs/):
+For features beyond what PluginBase configures, see the [Lamp documentation](https://github.com/Revxrsal/Lamp/wiki):
 
-* [**Custom Parameter Types**](https://foxhut.gitbook.io/lamp-docs/how-to/custom-parameter-types) - Parse custom objects
-* [**Context Parameters**](https://foxhut.gitbook.io/lamp-docs/how-to/context-parameters) - Auto-inject contextual data
-* [**Command Conditions**](https://foxhut.gitbook.io/lamp-docs/how-to/command-conditions) - Add pre-execution checks
-* [**Response Handlers**](https://foxhut.gitbook.io/lamp-docs/how-to/response-handlers) - Handle command return values
-* [**Help Commands**](https://foxhut.gitbook.io/lamp-docs/how-to/help-commands) - Auto-generate help menus
-* [**Hooks**](https://foxhut.gitbook.io/lamp-docs/how-to/hooks) - Execute code before/after commands
-* [**Visitors**](https://foxhut.gitbook.io/lamp-docs/how-to/visitors) - Modify command structure dynamically
+* **Custom Parameter Types** - Parse custom objects from command input
+* **Context Parameters** - Auto-inject contextual data into command methods
+* **Command Conditions** - Add pre-execution checks
+* **Response Handlers** - Handle command return values
+* **Help Commands** - Auto-generate help menus
+* **Hooks** - Execute code before/after commands
