@@ -6,276 +6,229 @@ description: Helper utilities for common operations.
 
 ## Common
 
-Version checking and plugin utilities.
+General-purpose helpers for plugin metadata, version checks, number parsing, and error reporting.
+
+### Plugin and server information
+
+| Method | Return type | Description |
+|---|---|---|
+| `getName()` | `String` | Plugin name from plugin.yml. |
+| `getVersion()` | `String` | Plugin version from plugin.yml. |
+| `getServerMajorVersion()` | `int` | Major MC version (e.g. `20` for 1.20.x). |
+| `isServerVersionAtLeast(int)` | `boolean` | `true` if the server's major version >= the argument. |
 
 ```java
-import dev.demeng.pluginbase.Common;
-
-// Check server version (takes only major version number)
 if (Common.isServerVersionAtLeast(16)) {
-    // Use 1.16+ features (like HEX colors)
+    // Use 1.16+ features
 }
+```
 
-// Get server's major version as integer
-int majorVersion = Common.getServerMajorVersion();  // Returns 20 for 1.20.x
+### Number parsing
 
-// Get plugin version string
-String version = Common.getVersion();  // Returns plugin version from plugin.yml
+Each method returns `null` if the string is not a valid number.
 
-// Get plugin name
-String name = Common.getName();  // Returns plugin name from plugin.yml
+| Method | Return type |
+|---|---|
+| `checkInt(String)` | `Integer` |
+| `checkLong(String)` | `Long` |
+| `checkFloat(String)` | `Float` |
+| `checkDouble(String)` | `Double` |
 
-// Log errors
-try {
-    // Code that might fail
-} catch (Exception ex) {
-    Common.error(ex, "Failed to load data", true);  // Prints to console and optionally disables plugin
+```java
+Integer level = Common.checkInt("42");
+if (level != null) {
+    player.setLevel(level);
 }
+```
 
-// Log errors and notify players
-try {
-    // Code that might fail
-} catch (Exception ex) {
-    Common.error(ex, "Failed to save data", false, player);  // Notifies player about error
-}
+### Null handling
+
+| Method | Return type | Description |
+|---|---|---|
+| `getOrDefault(T, T)` | `T` | Returns the first argument if non-null, otherwise the second. |
+| `getOrError(T, String, boolean)` | `T` | Returns the first argument if non-null, otherwise throws `PluginErrorException`. The boolean controls whether the plugin is disabled. |
+
+### Other helpers
+
+| Method | Description |
+|---|---|
+| `formatDecimal(double)` | Formats a double to 2 decimal places (e.g. `"3.14"`). |
+| `hasPermission(CommandSender, String)` | Returns `true` if the sender has the permission, or if the permission is null/empty/`"none"`. |
+| `checkClass(String)` | Returns the `Class<?>` if it exists on the classpath, otherwise `null`. |
+| `forEachInt(String, IntConsumer)` | Parses an integer sequence (`"1"`, `"1-5"`, or `"1,3,7"`) and runs the consumer for each value. |
+| `error(Throwable, String, boolean, CommandSender...)` | Logs an error to console with a formatted block. Optionally disables the plugin and notifies players. |
+
+```java
+Common.error(ex, "Failed to load data", true);
+Common.error(ex, "Failed to save data", false, player);
 ```
 
 ## Players
 
-Player-related utilities.
+Bulk operations on online players.
+
+| Method | Return type | Description |
+|---|---|---|
+| `all()` | `Collection<Player>` | All online players. |
+| `stream()` | `Stream<Player>` | Stream of all online players. |
+| `forEach(Consumer<Player>)` | `void` | Applies an action to every online player. |
+| `streamInRange(Location, double)` | `Stream<Player>` | Stream of players within the given radius of a location. |
+| `forEachInRange(Location, double, Consumer<Player>)` | `void` | Applies an action to every player within the radius. |
 
 ```java
-import dev.demeng.pluginbase.Players;
+Players.forEach(p -> p.sendMessage("Server restarting!"));
 
-// Get all online players
-Collection<Player> players = Players.all();
-
-// Stream all online players
-Players.stream().forEach(player -> {
-    // Do something with each player
-});
-
-// Apply action to all players
-Players.forEach(player -> {
-    player.sendMessage("Broadcast message!");
-});
-
-// Get players within radius of a location
-Players.streamInRange(location, 50.0).forEach(player -> {
-    // Do something with nearby players
-});
-
-// Apply action to players within radius
-Players.forEachInRange(location, 50.0, player -> {
-    player.sendMessage("You are near the spawn!");
+Players.forEachInRange(location, 50.0, p -> {
+    Text.tell(p, "&aYou are near spawn!");
 });
 ```
 
 ## Locations
 
-Location utilities.
+Location manipulation helpers.
+
+| Method | Return type | Description |
+|---|---|---|
+| `center(Location)` | `Location` | Rounds to the center of the block (+0.5 on X and Z), preserving yaw/pitch. |
+| `toBlockLocation(Location)` | `Location` | Converts to integer coordinates with yaw/pitch zeroed. |
 
 ```java
-import dev.demeng.pluginbase.Locations;
-
-// Center location to block (adds 0.5 to X and Z)
 Location centered = Locations.center(loc);
-
-// Convert to block location (integer coordinates)
 Location blockLoc = Locations.toBlockLocation(loc);
 ```
 
 ## Sounds
 
-Play sounds easily.
+Play vanilla or custom (resource pack) sounds. All `playTo*` methods silently no-op if the sound name is `null` or `"none"`.
+
+### By name (auto-detecting custom sounds)
+
+Pass a `Sound` enum name for vanilla sounds. Prefix with `custom:` for resource pack sounds.
+
+| Method | Parameters | Description |
+|---|---|---|
+| `playToPlayer` | `Player, String, float, float` | Plays to a player by sound name, volume, pitch. |
+| `playToPlayer` | `Player, ConfigurationSection` | Reads `sound`, `volume`, `pitch` keys from the section. |
+| `playToLocation` | `Location, String, float, float` | Plays at a location by sound name, volume, pitch. |
+| `playToLocation` | `Location, ConfigurationSection` | Reads `sound`, `volume`, `pitch` keys from the section. |
 
 ```java
-import dev.demeng.pluginbase.Sounds;
-import org.bukkit.Sound;
-
-// Play vanilla sound to player
-Sounds.playVanillaToPlayer(player, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
-
-// Play vanilla sound at location
-Sounds.playVanillaToLocation(location, Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
-
-// Play custom sound (from resource pack) to player
-Sounds.playCustomToPlayer(player, "custom.sound.name", 1.0f, 1.0f);
-
-// Play custom sound at location
-Sounds.playCustomToLocation(location, "custom.sound.name", 1.0f, 1.0f);
-
-// Play sound by name (supports both vanilla and custom sounds)
 Sounds.playToPlayer(player, "ENTITY_PLAYER_LEVELUP", 1.0f, 1.0f);
-Sounds.playToPlayer(player, "custom:mysound", 1.0f, 1.0f);  // Custom sounds use "custom:" prefix
-
-// Play sound from config section
-ConfigurationSection soundConfig = config.getConfigurationSection("sounds.levelup");
-Sounds.playToPlayer(player, soundConfig);
-Sounds.playToLocation(location, soundConfig);
+Sounds.playToPlayer(player, "custom:myplugin.reward", 1.0f, 1.0f);
+Sounds.playToLocation(location, "BLOCK_NOTE_BLOCK_PLING", 1.0f, 2.0f);
 ```
+
+Config section format:
+
+```yaml
+sounds:
+  levelup:
+    sound: "ENTITY_PLAYER_LEVELUP"
+    volume: 1.0
+    pitch: 1.0
+```
+
+```java
+Sounds.playToPlayer(player, config.getConfigurationSection("sounds.levelup"));
+```
+
+### Direct vanilla/custom methods
+
+These skip the name-based dispatch and accept typed arguments directly.
+
+| Method | Parameters |
+|---|---|
+| `playVanillaToPlayer` | `Player, Sound, float, float` |
+| `playVanillaToLocation` | `Location, Sound, float, float` |
+| `playCustomToPlayer` | `Player, String, float, float` |
+| `playCustomToLocation` | `Location, String, float, float` |
+
+```java
+Sounds.playVanillaToPlayer(player, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+Sounds.playCustomToPlayer(player, "myplugin.reward", 1.0f, 1.0f);
+```
+
+Note: the direct custom methods take the raw sound name without the `custom:` prefix.
 
 ## UpdateChecker
 
-Check for plugin updates from SpigotMC.
+Checks for plugin updates against the SpigotMC API. The constructor performs a blocking HTTP request, so it should be called asynchronously.
+
+| Method | Return type | Description |
+|---|---|---|
+| `new UpdateChecker(int)` | `UpdateChecker` | Fetches the latest version for the given SpigotMC resource ID. |
+| `getResult()` | `UpdateChecker.Result` | `UP_TO_DATE`, `OUTDATED`, or `ERROR`. |
+| `getLatestVersion()` | `String` | The version string from SpigotMC (null on error). |
+| `getResourceId()` | `int` | The resource ID passed to the constructor. |
+| `notifyResult(CommandSender)` | `void` | Sends an update notification if outdated. Pass `null` for console. |
 
 ```java
-import dev.demeng.pluginbase.UpdateChecker;
-import dev.demeng.pluginbase.Schedulers;
-
-// Check for updates asynchronously
 Schedulers.async().run(() -> {
     UpdateChecker checker = new UpdateChecker(spigotResourceId);
-    
-    // Get results
-    UpdateChecker.Result result = checker.getResult();
-    String latestVersion = checker.getLatestVersion();
-    
-    // Notify console or player
-    checker.notifyResult(null);  // Notifies console
-    checker.notifyResult(player);  // Notifies specific player
-});
-```
-
-## Error Handling
-
-```java
-try {
-    // Database operation
-    database.save(data);
-} catch (Exception ex) {
-    // Log with stack trace
-    Common.error(ex, "Failed to save data", true);
-
-    // Notify player
-    Text.tell(player, "&cFailed to save data!");
-}
-```
-
-## Version-Specific Code
-
-```java
-if (Common.isServerVersionAtLeast(16)) {
-    // Use HEX colors (1.16+)
-    Text.tell(player, "<#FF5733>Custom color!");
-} else {
-    // Fallback to legacy colors
-    Text.tell(player, "&cRed color");
-}
-
-if (Common.isServerVersionAtLeast(19)) {
-    // Use 1.19+ features
-} else {
-    // Fallback for older versions
-}
-
-// Get major version number
-int majorVersion = Common.getServerMajorVersion();
-Text.tell(player, "&7Server version: 1." + majorVersion);
-```
-
-## Player Selection
-
-```java
-import java.util.stream.Collectors;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-
-// Get player by name using Bukkit
-Player target = Bukkit.getPlayer("Steve");
-if (target == null) {
-    Text.tell(sender, "&cPlayer not found!");
-    return;
-}
-
-// Get online VIPs using stream filtering
-List<Player> vips = Players.stream()
-    .filter(p -> p.hasPermission("vip"))
-    .collect(Collectors.toList());
-
-for (Player vip : vips) {
-    Text.tell(vip, "&6VIP announcement!");
-}
-
-// Or use forEach directly
-Players.stream()
-    .filter(p -> p.hasPermission("vip"))
-    .forEach(vip -> Text.tell(vip, "&6VIP announcement!"));
-
-// Get players in specific world using stream filtering
-World world = Bukkit.getWorld("world");
-List<Player> survivalPlayers = Players.stream()
-    .filter(p -> p.getWorld().equals(world))
-    .collect(Collectors.toList());
-
-// Get players near a location
-Location spawn = new Location(world, 0, 64, 0);
-Players.forEachInRange(spawn, 50.0, player -> {
-    Text.tell(player, "&aYou are near spawn!");
+    checker.notifyResult(null);
 });
 ```
 
 ## Time
 
-Parse and format durations and timestamps.
+Duration parsing, formatting, and timestamp utilities.
+
+### Duration parsing
+
+`Time.parse(String)` accepts human-readable duration strings. Supported units: `y` (years), `mo` (months), `w` (weeks), `d` (days), `h` (hours), `m` (minutes), `s` (seconds). Throws `IllegalArgumentException` on invalid input.
 
 ```java
-import dev.demeng.pluginbase.Time;
-import java.sql.Timestamp;
-import java.time.Duration;
-import java.util.Optional;
+Duration d1 = Time.parse("1h 30m");
+Duration d2 = Time.parse("3d 2h");
+Duration d3 = Time.parse("1y 2mo 3w 4d 5h 6m 7s");
+```
 
-// Parse duration strings
-Duration duration = Time.parse("1h 30m");  // 1 hour 30 minutes
-Duration duration2 = Time.parse("3d 2h");  // 3 days 2 hours
-Duration duration3 = Time.parse("1y 2mo 3w 4d 5h 6m 7s");  // All units
+`Time.parseSafely(String)` returns `Optional<Duration>` instead of throwing.
 
-// Parse safely (returns Optional)
-Optional<Duration> optional = Time.parseSafely("invalid");
+### Duration formatting
 
-// Format durations
-long millis = Duration.ofHours(2).toMillis();
+| Formatter | Example output for 2h 15m |
+|---|---|
+| `DurationFormatter.LONG` | `2 hours 15 minutes` |
+| `DurationFormatter.CONCISE` | `2h 15m` |
+| `DurationFormatter.CONCISE_LOW_ACCURACY` | `2h 15m` (max 3 units) |
+
+```java
+long millis = Duration.ofHours(2).plusMinutes(15).toMillis();
 String formatted = Time.formatDuration(Time.DurationFormatter.LONG, millis);
-// Output: "2 hours"
+```
 
-String concise = Time.formatDuration(Time.DurationFormatter.CONCISE, millis);
-// Output: "2h"
+### Timestamp formatting and conversion
 
-// Format dates and timestamps
+| Method | Description |
+|---|---|
+| `formatDateTime(long)` | Formats using the configured date-time pattern. |
+| `formatDate(long)` | Formats using the configured date pattern. |
+| `toSqlTimestamp(long)` | Converts epoch millis to `java.sql.Timestamp`. |
+| `fromSqlTimestamp(String)` | Parses an SQL timestamp string to epoch millis. |
+
+```java
 String dateTime = Time.formatDateTime(System.currentTimeMillis());
-String date = Time.formatDate(System.currentTimeMillis());
-
-// Convert to/from SQL timestamps
 Timestamp sqlTime = Time.toSqlTimestamp(System.currentTimeMillis());
-long timestamp = Time.fromSqlTimestamp("2025-12-13 10:30:00");
+long millis = Time.fromSqlTimestamp("2025-12-13 10:30:00");
 ```
 
 ## Services
 
-Work with Bukkit's service manager.
+Wrapper around Bukkit's `ServicesManager`.
+
+| Method | Return type | Description |
+|---|---|---|
+| `provide(Class<T>, T)` | `T` | Registers a service at `Normal` priority using the base plugin. |
+| `provide(Class<T>, T, ServicePriority)` | `T` | Registers a service at the given priority using the base plugin. |
+| `provide(Class<T>, T, Plugin, ServicePriority)` | `T` | Registers a service with an explicit plugin and priority. |
+| `get(Class<T>)` | `Optional<T>` | Retrieves a registered service, or empty. |
+| `load(Class<T>)` | `T` | Retrieves a registered service, or throws `IllegalStateException`. |
 
 ```java
-import dev.demeng.pluginbase.Services;
-import org.bukkit.plugin.ServicePriority;
+Services.provide(MyService.class, new MyServiceImpl());
 
-// Register a service
-MyService service = new MyService();
-Services.provide(MyService.class, service);
-
-// Register with specific priority
-Services.provide(MyService.class, service, ServicePriority.High);
-
-// Get a service (returns Optional)
 Optional<Economy> economy = Services.get(Economy.class);
-if (economy.isPresent()) {
-    // Use economy service
-}
 
-// Load a service (throws if not found)
-try {
-    Economy economy = Services.load(Economy.class);
-    // Use economy service
-} catch (IllegalStateException ex) {
-    Text.console("&cEconomy service not found!");
-}
+Economy econ = Services.load(Economy.class);
 ```
