@@ -1,20 +1,16 @@
 ---
-description: Comprehensive utility library for Spigot plugin development.
+description: Spigot plugin framework with DI, commands, menus, schedulers, and cross-version support for Minecraft 1.8.8 - 1.21.11.
 ---
 
 # Introduction
 
-## What is PluginBase?
-
 PluginBase streamlines Spigot plugin development by providing ready-to-use components that eliminate boilerplate code and enforce best practices.
 
-## Key Features
-
-### Core Features
+## Core Features
 
 * **Dependency Injection** - Simple DI with @Component annotation
 * **Events** - Functional event handling
-* **Commands** - Powerful annotation-driven commands framework (Lamp)
+* **Commands** - Annotation-driven command framework (Lamp)
 * **Text & Localization** - HEX colors, MiniMessage, i18n
 * **Schedulers** - Sync/async tasks with Promise API
 * **Configuration** - YAML config management
@@ -24,9 +20,8 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 * **Cooldowns** - Player/action cooldown tracking
 * **Utilities** - Common helpers (Players, Locations, Sounds, etc.)
 * **Cross-Version Compatibility** - [XSeries](https://github.com/CryptoMorin/XSeries)
-* ...and more! This documentation is not comprehensive, and many features are not included here.
 
-### Optional Modules
+## Optional Modules
 
 * **pluginbase-sql** - HikariCP SQL database
 * **pluginbase-mongo** - MongoDB integration
@@ -35,8 +30,8 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 
 ## Version Compatibility
 
-**Supported:** All major versions between Minecraft 1.8.8 - 1.21.10. Java 17+ is required.
+Minecraft 1.8.8 - 1.21.11. Java 17+.
 
 ## Quick Start
 
-See [Getting Started](overview/getting-started.md) for installation instructions and your first plugin. This documentation focuses on example-driven guides for core features and optional modules.
+See [Getting Started](overview/getting-started.md) for installation instructions and your first plugin.
