@@ -1,38 +1,60 @@
 ---
-description: HikariCP-based SQL database module with async operations.
+description: HikariCP-based SQL database module with connection pooling and async operations.
 ---
 
 # SQL
 
+The `pluginbase-sql` module wraps [HikariCP 7.x](https://github.com/brettwooldridge/HikariCP) with preconfigured connection pooling, prepared statement helpers, batch operations, and built-in async variants for every operation.
+
 ## Setup
 
+### Credentials
+
+`SqlCredentials` holds the connection details. Create one directly or load from a config section:
+
 ```java
-import dev.demeng.pluginbase.sql.Sql;
-import dev.demeng.pluginbase.sql.SqlCredentials;
-
-// Create credentials
 SqlCredentials credentials = SqlCredentials.of(
-    "localhost",
-    3306,
-    "minecraft",
-    "root",      // user
-    "password"
-);
-
-// Create SQL instance
-Sql sql = new Sql(
-    "com.mysql.cj.jdbc.Driver",
-    "jdbc:mysql://" + credentials.getHost() + ":" + credentials.getPort() + "/" + credentials.getDatabase(),
-    credentials
+    "localhost",  // host
+    3306,         // port
+    "minecraft",  // database
+    "root",       // user
+    "password"    // password
 );
 ```
 
-## Basic Queries
-
-### Execute Update
+You can also load credentials from a Bukkit `ConfigurationSection` (expects keys `host`, `port`, `database`, `user`, `password` with sensible defaults):
 
 ```java
-// INSERT
+SqlCredentials credentials = SqlCredentials.of(getConfig().getConfigurationSection("database"));
+```
+
+### Creating a connection
+
+The `Sql` constructor accepts a driver class, JDBC URL, and credentials. Both driver and URL can be `null` to use the built-in defaults (`Sql.MYSQL_DRIVER` and `Sql.DEFAULT_JDBC_URL`).
+
+```java
+// Minimal setup (uses default MySQL driver and JDBC URL):
+Sql sql = new Sql(null, null, credentials);
+
+// Equivalent explicit setup:
+Sql sql = new Sql(Sql.MYSQL_DRIVER, Sql.DEFAULT_JDBC_URL, credentials);
+```
+
+`DEFAULT_JDBC_URL` is `jdbc:mysql://{host}:{port}/{database}?autoReconnect=true&useSSL=false`. The `{host}`, `{port}`, and `{database}` placeholders are replaced automatically from the credentials. You can provide a custom JDBC URL with the same placeholders, or a fully hardcoded URL.
+
+### Constants
+
+| Constant | Value |
+|---|---|
+| `Sql.MYSQL_DRIVER` | `com.mysql.cj.jdbc.Driver` |
+| `Sql.MYSQL_LEGACY_DRIVER` | `com.mysql.jdbc.Driver` |
+| `Sql.DEFAULT_JDBC_URL` | `jdbc:mysql://{host}:{port}/{database}?autoReconnect=true&useSSL=false` |
+
+## Executing statements
+
+`execute` runs any non-query SQL statement (INSERT, UPDATE, DELETE, CREATE TABLE, etc.). The second argument is a `SqlConsumer<PreparedStatement>` that binds parameters.
+
+```java
 sql.execute("INSERT INTO players (uuid, name, coins) VALUES (?, ?, ?)",
     ps -> {
         ps.setString(1, uuid.toString());
@@ -40,36 +62,46 @@ sql.execute("INSERT INTO players (uuid, name, coins) VALUES (?, ?, ?)",
         ps.setInt(3, 100);
     });
 
-// UPDATE
 sql.execute("UPDATE players SET coins = ? WHERE uuid = ?",
     ps -> {
         ps.setInt(1, 500);
         ps.setString(2, uuid.toString());
     });
 
-// DELETE
 sql.execute("DELETE FROM players WHERE uuid = ?",
     ps -> ps.setString(1, uuid.toString()));
 ```
 
-### Query Data
+For statements with no parameters, you can omit the preparer:
 
 ```java
-// Single result
-Integer coins = sql.query(
+sql.execute("CREATE TABLE IF NOT EXISTS players ("
+    + "uuid VARCHAR(36) PRIMARY KEY, "
+    + "name VARCHAR(16) NOT NULL, "
+    + "coins INT DEFAULT 0, "
+    + "level INT DEFAULT 1, "
+    + "last_login BIGINT"
+    + ")");
+```
+
+## Querying data
+
+`query` returns an `Optional<R>`. It takes the SQL string, a preparer for binding parameters, and a `SqlFunction<ResultSet, R>` handler that maps the result set to your return type. If the handler returns `null` or an `SQLException` occurs, `Optional.empty()` is returned.
+
+```java
+Optional<Integer> coins = sql.query(
     "SELECT coins FROM players WHERE uuid = ?",
     ps -> ps.setString(1, uuid.toString()),
     rs -> {
         if (rs.next()) {
             return rs.getInt("coins");
         }
-        return 0;
-    }).orElse(0);
+        return null;
+    });
 
-// Multiple results
-List<PlayerData> players = sql.query(
+List<PlayerData> topPlayers = sql.query(
     "SELECT * FROM players ORDER BY coins DESC LIMIT 10",
-    ps -> {},  // No parameters
+    ps -> {},
     rs -> {
         List<PlayerData> list = new ArrayList<>();
         while (rs.next()) {
@@ -83,79 +115,69 @@ List<PlayerData> players = sql.query(
     }).orElse(new ArrayList<>());
 ```
 
-## Async Operations
+For queries with no parameters, the preparer can be omitted:
 
 ```java
-// Async load on join
+Optional<Integer> count = sql.query(
+    "SELECT COUNT(*) FROM players",
+    rs -> {
+        rs.next();
+        return rs.getInt(1);
+    });
+```
+
+## Async operations
+
+Every synchronous method has an async counterpart that returns a `Promise`:
+
+| Synchronous | Asynchronous | Return type |
+|---|---|---|
+| `execute(String, SqlConsumer)` | `executeAsync(String, SqlConsumer)` | `Promise<Void>` |
+| `execute(String)` | `executeAsync(String)` | `Promise<Void>` |
+| `query(String, SqlConsumer, SqlFunction)` | `queryAsync(String, SqlConsumer, SqlFunction)` | `Promise<Optional<R>>` |
+| `query(String, SqlFunction)` | `queryAsync(String, SqlFunction)` | `Promise<Optional<R>>` |
+| `executeBatch(BatchBuilder)` | `executeBatchAsync(BatchBuilder)` | `Promise<Void>` |
+
+```java
 Events.subscribe(PlayerJoinEvent.class)
     .handler(e -> {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        // Load data async
-        Schedulers.async().supply(() -> {
-            return sql.query(
-                "SELECT * FROM players WHERE uuid = ?",
-                ps -> ps.setString(1, uuid.toString()),
-                rs -> {
-                    if (rs.next()) {
-                        return new PlayerData(
-                            uuid,
-                            rs.getString("name"),
-                            rs.getInt("coins"),
-                            rs.getInt("level")
-                        );
-                    }
-                    return null;
-                }).orElse(null);
-        }).thenApplySync(data -> {
-            // Apply data on main thread
-            if (data != null) {
-                applyPlayerData(player, data);
-            } else {
-                createNewPlayer(uuid, player.getName());
-            }
-            return data;
-        });
+        sql.queryAsync(
+            "SELECT * FROM players WHERE uuid = ?",
+            ps -> ps.setString(1, uuid.toString()),
+            rs -> {
+                if (rs.next()) {
+                    return new PlayerData(
+                        uuid,
+                        rs.getString("name"),
+                        rs.getInt("coins"),
+                        rs.getInt("level")
+                    );
+                }
+                return null;
+            }).thenApplySync(data -> {
+                if (data.isPresent()) {
+                    applyPlayerData(player, data.get());
+                } else {
+                    createNewPlayer(uuid, player.getName());
+                }
+                return data;
+            });
     })
     .bindWith(this);
 ```
 
-## Table Creation
+## Batch operations
+
+Use `BatchBuilder` when you need to execute the same statement many times with different parameters. This uses a single connection and `addBatch`/`executeBatch` under the hood.
 
 ```java
-@Override
-protected void enable() {
-    // Create tables
-    sql.execute(
-        "CREATE TABLE IF NOT EXISTS players (" +
-        "uuid VARCHAR(36) PRIMARY KEY, " +
-        "name VARCHAR(16) NOT NULL, " +
-        "coins INT DEFAULT 0, " +
-        "level INT DEFAULT 1, " +
-        "last_login BIGINT" +
-        ")",
-        ps -> {});
-
-    sql.execute(
-        "CREATE TABLE IF NOT EXISTS stats (" +
-        "uuid VARCHAR(36), " +
-        "stat_name VARCHAR(32), " +
-        "value INT, " +
-        "PRIMARY KEY (uuid, stat_name)" +
-        ")",
-        ps -> {});
-}
-```
-
-## Batch Operations
-
-```java
-// Batch insert
 BatchBuilder batch = sql.batch("INSERT INTO players (uuid, name) VALUES (?, ?)");
 
 for (Player player : Bukkit.getOnlinePlayers()) {
-    batch.bind(ps -> {
+    batch.batch(ps -> {
         ps.setString(1, player.getUniqueId().toString());
         ps.setString(2, player.getName());
     });
@@ -164,7 +186,31 @@ for (Player player : Bukkit.getOnlinePlayers()) {
 sql.executeBatch(batch);
 ```
 
-## Complete Example
+`BatchBuilder` also exposes:
+- `execute()` to execute the batch directly (delegates to `sql.executeBatch(this)`)
+- `reset()` to clear all handlers so the builder can be reused
+
+If the batch contains only one handler, `executeBatch` optimizes by calling `execute` instead.
+
+## Low-level access
+
+For cases not covered by the helper methods:
+
+```java
+SqlStream stream = sql.stream();
+
+Connection connection = sql.getConnection();
+
+HikariDataSource hikari = sql.getHikari();
+```
+
+`getConnection()` returns a pooled connection that should be closed after use (returned to the pool). Prefer the `execute`/`query` helpers whenever possible.
+
+## Cleanup
+
+`Sql` implements `ISql`, which extends `Terminable` (which extends `AutoCloseable`). Calling `close()` shuts down the HikariCP connection pool. If the `Sql` instance is bound to a `TerminableConsumer` (such as the plugin itself), it will be closed automatically when the plugin disables.
+
+## Complete example
 
 ```java
 public class MyPlugin extends BasePlugin {
@@ -173,7 +219,6 @@ public class MyPlugin extends BasePlugin {
 
     @Override
     protected DependencyContainer configureDependencies() {
-        // Setup SQL
         SqlCredentials credentials = SqlCredentials.of(
             getConfig().getString("database.host", "localhost"),
             getConfig().getInt("database.port", 3306),
@@ -182,11 +227,7 @@ public class MyPlugin extends BasePlugin {
             getConfig().getString("database.password", "password")
         );
 
-        this.sql = new Sql(
-            "com.mysql.cj.jdbc.Driver",
-            "jdbc:mysql://" + credentials.getHost() + ":" + credentials.getPort() + "/" + credentials.getDatabase(),
-            credentials
-        );
+        this.sql = new Sql(null, null, credentials);
 
         return DependencyInjection.builder()
             .register(this)
@@ -196,15 +237,12 @@ public class MyPlugin extends BasePlugin {
 
     @Override
     protected void enable() {
-        // Create tables
         createTables();
 
-        // Load player data on join
         Events.subscribe(PlayerJoinEvent.class)
             .handler(this::loadPlayerData)
             .bindWith(this);
 
-        // Save player data on quit
         Events.subscribe(PlayerQuitEvent.class)
             .handler(this::savePlayerData)
             .bindWith(this);
@@ -212,45 +250,40 @@ public class MyPlugin extends BasePlugin {
 
     private void createTables() {
         sql.execute(
-            "CREATE TABLE IF NOT EXISTS players (" +
-            "uuid VARCHAR(36) PRIMARY KEY, " +
-            "name VARCHAR(16) NOT NULL, " +
-            "coins INT DEFAULT 0, " +
-            "level INT DEFAULT 1" +
-            ")",
-            ps -> {});
+            "CREATE TABLE IF NOT EXISTS players ("
+            + "uuid VARCHAR(36) PRIMARY KEY, "
+            + "name VARCHAR(16) NOT NULL, "
+            + "coins INT DEFAULT 0, "
+            + "level INT DEFAULT 1"
+            + ")");
     }
 
     private void loadPlayerData(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        Schedulers.async().supply(() -> {
-            return sql.query(
-                "SELECT * FROM players WHERE uuid = ?",
-                ps -> ps.setString(1, uuid.toString()),
-                rs -> {
-                    if (rs.next()) {
-                        return new PlayerData(
-                            uuid,
-                            rs.getString("name"),
-                            rs.getInt("coins"),
-                            rs.getInt("level")
-                        );
-                    }
-                    return null;
-                }).orElse(null);
-        }).thenApplySync(data -> {
-            if (data != null) {
-                // Apply loaded data
-                playerDataCache.put(uuid, data);
-                Text.tell(player, "&aData loaded! Coins: " + data.getCoins());
-            } else {
-                // Create new player
-                createNewPlayer(uuid, player.getName());
-            }
-            return data;
-        });
+        sql.queryAsync(
+            "SELECT * FROM players WHERE uuid = ?",
+            ps -> ps.setString(1, uuid.toString()),
+            rs -> {
+                if (rs.next()) {
+                    return new PlayerData(
+                        uuid,
+                        rs.getString("name"),
+                        rs.getInt("coins"),
+                        rs.getInt("level")
+                    );
+                }
+                return null;
+            }).thenApplySync(data -> {
+                if (data.isPresent()) {
+                    playerDataCache.put(uuid, data.get());
+                    Text.tell(player, "&aData loaded! Coins: " + data.get().getCoins());
+                } else {
+                    createNewPlayer(uuid, player.getName());
+                }
+                return data;
+            });
     }
 
     private void savePlayerData(PlayerQuitEvent event) {
@@ -259,26 +292,24 @@ public class MyPlugin extends BasePlugin {
         PlayerData data = playerDataCache.get(uuid);
 
         if (data != null) {
-            Schedulers.async().run(() -> {
-                sql.execute(
-                    "INSERT INTO players (uuid, name, coins, level) " +
-                    "VALUES (?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE name=?, coins=?, level=?",
-                    ps -> {
-                        ps.setString(1, uuid.toString());
-                        ps.setString(2, player.getName());
-                        ps.setInt(3, data.getCoins());
-                        ps.setInt(4, data.getLevel());
-                        ps.setString(5, player.getName());
-                        ps.setInt(6, data.getCoins());
-                        ps.setInt(7, data.getLevel());
-                    });
-            });
+            sql.executeAsync(
+                "INSERT INTO players (uuid, name, coins, level) "
+                + "VALUES (?, ?, ?, ?) "
+                + "ON DUPLICATE KEY UPDATE name=?, coins=?, level=?",
+                ps -> {
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, player.getName());
+                    ps.setInt(3, data.getCoins());
+                    ps.setInt(4, data.getLevel());
+                    ps.setString(5, player.getName());
+                    ps.setInt(6, data.getCoins());
+                    ps.setInt(7, data.getLevel());
+                });
         }
     }
 
     private void createNewPlayer(UUID uuid, String name) {
-        sql.execute("INSERT INTO players (uuid, name) VALUES (?, ?)",
+        sql.executeAsync("INSERT INTO players (uuid, name) VALUES (?, ?)",
             ps -> {
                 ps.setString(1, uuid.toString());
                 ps.setString(2, name);
@@ -287,11 +318,3 @@ public class MyPlugin extends BasePlugin {
     }
 }
 ```
-
-## Connection Pooling
-
-HikariCP is used for connection pooling automatically. Connection pool settings are configured internally.
-
-## Cleanup
-
-SQL connections are automatically closed when plugin disables (implements AutoCloseable).
