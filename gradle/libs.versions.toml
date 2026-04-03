@@ -1,0 +1,52 @@
+[versions]
+shadow = "8.3.5"
+
+spigot-api = "1.21.11-R0.1-SNAPSHOT"
+annotations = "26.0.2"
+jsr305 = "3.0.2"
+lombok = "1.18.42"
+
+authlib = "6.0.54"
+lamp = "4.0.0-rc.14"
+xseries = "13.6.0"
+adventure-api = "4.25.0"
+adventure-platform = "4.4.1"
+expiringmap = "0.5.11"
+
+hikaricp = "7.0.2"
+sqlstreams = "1.0.0"
+
+mongodb-driver = "5.6.1"
+
+jedis = "7.0.0"
+commons-pool2 = "2.12.1"
+
+[libraries]
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "jsr305" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+authlib = { module = "com.mojang:authlib", version.ref = "authlib" }
+lamp-common = { module = "io.github.revxrsal:lamp.common", version.ref = "lamp" }
+lamp-bukkit = { module = "io.github.revxrsal:lamp.bukkit", version.ref = "lamp" }
+lamp-brigadier = { module = "io.github.revxrsal:lamp.brigadier", version.ref = "lamp" }
+xseries = { module = "com.github.cryptomorin:XSeries", version.ref = "xseries" }
+adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
+adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
+adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-api" }
+expiringmap = { module = "net.jodah:expiringmap", version.ref = "expiringmap" }
+
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+sqlstreams = { module = "me.lucko:sql-streams", version.ref = "sqlstreams" }
+
+mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-sync", version.ref = "mongodb-driver" }
+
+jedis = { module = "redis.clients:jedis", version.ref = "jedis" }
+commons-pool2 = { module = "org.apache.commons:commons-pool2", version.ref = "commons-pool2" }
+
+[bundles]
+lamp = ["lamp-common", "lamp-bukkit", "lamp-brigadier"]
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
