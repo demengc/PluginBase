@@ -18,5 +18,7 @@ hs_err_pid*
 Thumbs.db
 [Dd]esktop.ini
 
-# Minecraft server testing
-run/
+# AI tools
+CLAUDE.md
+.claude/
+.cursorrules

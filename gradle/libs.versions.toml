@@ -1,25 +1,25 @@
 [versions]
-shadow = "8.3.5"
+shadow = "9.4.1"
 
 spigot-api = "1.21.11-R0.1-SNAPSHOT"
-annotations = "26.0.2"
+annotations = "26.1.0"
 jsr305 = "3.0.2"
-lombok = "1.18.42"
+lombok = "1.18.44"
 
-authlib = "6.0.54"
-lamp = "4.0.0-rc.14"
+authlib = "6.0.57"
+lamp = "4.0.0-rc.16"
 xseries = "13.6.0"
-adventure-api = "4.25.0"
+adventure-api = "4.26.1"
 adventure-platform = "4.4.1"
 expiringmap = "0.5.11"
 
 hikaricp = "7.0.2"
 sqlstreams = "1.0.0"
 
-mongodb-driver = "5.6.1"
+mongodb-driver = "5.6.4"
 
-jedis = "7.0.0"
-commons-pool2 = "2.12.1"
+jedis = "7.2.0"
+commons-pool2 = "2.13.1"
 
 [libraries]
 spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
