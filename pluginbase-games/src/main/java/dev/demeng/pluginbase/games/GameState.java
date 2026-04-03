@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2025 Demeng Chen
+ * Copyright (c) 2026 Demeng Chen
  * Credits: https://www.spigotmc.org/threads/235786/ (Minikloon/FSMgasm)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy

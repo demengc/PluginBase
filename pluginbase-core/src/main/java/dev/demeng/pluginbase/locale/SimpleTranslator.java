@@ -2,7 +2,7 @@
  * MIT License
  *
  * Copyright (c) 2021 Revxrsal
- * Copyright (c) 2025 Demeng Chen
+ * Copyright (c) 2026 Demeng Chen
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
