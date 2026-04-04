@@ -481,11 +481,14 @@ public class ItemBuilder {
    */
   @NotNull
   public ItemBuilder copy() {
-    return new ItemBuilder(stack);
+    return new ItemBuilder(stack.clone());
   }
 
   private void updateMeta(final Consumer<ItemMeta> consumer) {
     final ItemMeta meta = stack.getItemMeta();
+    if (meta == null) {
+      return;
+    }
     consumer.accept(meta);
     stack.setItemMeta(meta);
   }
