@@ -6,44 +6,37 @@ description: Add PluginBase to your project, shade it, and create your first plu
 
 ## Add the Dependency
 
-PluginBase is hosted on JitPack. Replace `VERSION` with the latest tag from the [releases page](https://github.com/demengc/PluginBase/releases).
+PluginBase is published to [Maven Central](https://central.sonatype.com/namespace/dev.demeng.pluginbase). Check there for the latest version.
 
 {% tabs %}
 {% tab title="Maven (pom.xml)" %}
 ```xml
-<repositories>
-  <repository>
-    <id>jitpack.io</id>
-    <url>https://jitpack.io</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <!-- Core module (required) -->
   <dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
+    <groupId>dev.demeng.pluginbase</groupId>
     <artifactId>pluginbase-core</artifactId>
     <version>VERSION</version>
   </dependency>
 
   <!-- Optional modules -->
   <dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
+    <groupId>dev.demeng.pluginbase</groupId>
     <artifactId>pluginbase-games</artifactId>
     <version>VERSION</version>
   </dependency>
   <dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
+    <groupId>dev.demeng.pluginbase</groupId>
     <artifactId>pluginbase-mongo</artifactId>
     <version>VERSION</version>
   </dependency>
   <dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
+    <groupId>dev.demeng.pluginbase</groupId>
     <artifactId>pluginbase-redis</artifactId>
     <version>VERSION</version>
   </dependency>
   <dependency>
-    <groupId>com.github.demengc.PluginBase</groupId>
+    <groupId>dev.demeng.pluginbase</groupId>
     <artifactId>pluginbase-sql</artifactId>
     <version>VERSION</version>
   </dependency>
@@ -53,40 +46,30 @@ PluginBase is hosted on JitPack. Replace `VERSION` with the latest tag from the 
 
 {% tab title="Gradle (build.gradle)" %}
 ```groovy
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
     // Required
-    implementation 'com.github.demengc.PluginBase:pluginbase-core:VERSION'
+    implementation 'dev.demeng.pluginbase:pluginbase-core:VERSION'
 
     // Optional
-    implementation 'com.github.demengc.PluginBase:pluginbase-games:VERSION'
-    implementation 'com.github.demengc.PluginBase:pluginbase-mongo:VERSION'
-    implementation 'com.github.demengc.PluginBase:pluginbase-redis:VERSION'
-    implementation 'com.github.demengc.PluginBase:pluginbase-sql:VERSION'
+    implementation 'dev.demeng.pluginbase:pluginbase-games:VERSION'
+    implementation 'dev.demeng.pluginbase:pluginbase-mongo:VERSION'
+    implementation 'dev.demeng.pluginbase:pluginbase-redis:VERSION'
+    implementation 'dev.demeng.pluginbase:pluginbase-sql:VERSION'
 }
 ```
 {% endtab %}
 
 {% tab title="Gradle (build.gradle.kts)" %}
 ```kotlin
-repositories {
-    maven {
-        url = uri("https://jitpack.io")
-    }
-}
-
 dependencies {
     // Required
-    implementation("com.github.demengc.PluginBase:pluginbase-core:VERSION")
+    implementation("dev.demeng.pluginbase:pluginbase-core:VERSION")
 
     // Optional
-    implementation("com.github.demengc.PluginBase:pluginbase-games:VERSION")
-    implementation("com.github.demengc.PluginBase:pluginbase-mongo:VERSION")
-    implementation("com.github.demengc.PluginBase:pluginbase-redis:VERSION")
-    implementation("com.github.demengc.PluginBase:pluginbase-sql:VERSION")
+    implementation("dev.demeng.pluginbase:pluginbase-games:VERSION")
+    implementation("dev.demeng.pluginbase:pluginbase-mongo:VERSION")
+    implementation("dev.demeng.pluginbase:pluginbase-redis:VERSION")
+    implementation("dev.demeng.pluginbase:pluginbase-sql:VERSION")
 }
 ```
 {% endtab %}
