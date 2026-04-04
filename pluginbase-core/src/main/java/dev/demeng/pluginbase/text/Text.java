@@ -220,6 +220,11 @@ public final class Text {
     return localized;
   }
 
+  /**
+   * Shorthand for {@link #localized(String, CommandSender, Object...)}.
+   *
+   * @see #localized(String, CommandSender, Object...)
+   */
   @NotNull
   public static String tl(
       @Nullable final String key,
@@ -228,6 +233,11 @@ public final class Text {
     return localized(key, sender, args);
   }
 
+  /**
+   * Shorthand for {@link #localized(String, Locale, Object...)}.
+   *
+   * @see #localized(String, Locale, Object...)
+   */
   @NotNull
   public static String tl(
       @Nullable final String key, @Nullable final Locale locale, @NotNull final Object... args) {
@@ -507,24 +517,24 @@ public final class Text {
       return str;
     }
 
-    return Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase();
+    return Character.toUpperCase(str.charAt(0)) + str.substring(1).toLowerCase(Locale.ROOT);
   }
 
   /**
    * Makes a string Title Case.
    *
    * @param str The string
-   * @param delimeter The delimeter to use for splitting the string
+   * @param delimiter The delimiter to use for splitting the string
    * @return The string in Title Case
    */
   @NotNull
-  public static String titleCase(@NotNull final String str, @NotNull final String delimeter) {
+  public static String titleCase(@NotNull final String str, @NotNull final String delimiter) {
 
     final StringBuilder builder = new StringBuilder();
-    final Iterator<String> iterator = Arrays.stream(str.split(delimeter)).iterator();
+    final Iterator<String> iterator = Arrays.stream(str.split(delimiter)).iterator();
 
     while (iterator.hasNext()) {
-      builder.append(capitalizeFirst(iterator.next().toLowerCase()));
+      builder.append(capitalizeFirst(iterator.next().toLowerCase(Locale.ROOT)));
       if (iterator.hasNext()) {
         builder.append(" ");
       }
@@ -540,7 +550,7 @@ public final class Text {
    * @return The list of lines
    */
   @NotNull
-  public static List<String> toList(@Nullable final String str) {
+  public static List<String> splitLines(@Nullable final String str) {
 
     if (str == null) {
       return Collections.emptyList();
@@ -569,12 +579,12 @@ public final class Text {
   }
 
   /**
-   * Sends a colored console message. Any message equaling null or {@link #IGNORE_MESSAGE_VALUE}
-   * (ignore case) will be ignored.
+   * Sends a colorized console message without the prefix. Any message equaling null or {@link
+   * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param str The message to send
    */
-  public static void coloredConsole(@Nullable final String str) {
+  public static void consoleRaw(@Nullable final String str) {
 
     if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
@@ -666,13 +676,14 @@ public final class Text {
   }
 
   /**
-   * Does the same thing as {@link #tell(CommandSender, String)}, but without the prefix. Any
-   * message equaling null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
+   * Sends a colorized message without the prefix. Any message equaling null or {@link
+   * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param sender The command sender that will receive the message
    * @param str The message to send
+   * @see #tell(CommandSender, String)
    */
-  public static void coloredTell(@NotNull final CommandSender sender, @Nullable final String str) {
+  public static void tellRaw(@NotNull final CommandSender sender, @Nullable final String str) {
 
     if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
@@ -684,9 +695,8 @@ public final class Text {
   }
 
   /**
-   * Does the same thing as {@link #tellLocalized(CommandSender, String, Object...)}, but without
-   * the prefix. Any key equaling null or any message equaling to {@link #IGNORE_MESSAGE_VALUE}
-   * (ignore case) will be ignored.
+   * Sends a localized, colorized message without the prefix. Any key equaling null or any message
+   * equaling to {@link #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * <p>Uses {@link MessageFormat} internally for argument substitution. Single quotes in
    * translation values must be doubled ({@code ''}) to appear literally.
@@ -696,7 +706,7 @@ public final class Text {
    * @param args Arguments to replace in the localized string
    * @see #tellLocalized(CommandSender, String, Object...)
    */
-  public static void coloredTellLocalized(
+  public static void tellLocalizedRaw(
       @NotNull final CommandSender sender, @Nullable final String key, final Object... args) {
 
     if (key == null) {
@@ -750,7 +760,8 @@ public final class Text {
     boolean previousCode = false;
     boolean isBold = false;
 
-    for (final char c : colorized.toCharArray()) {
+    for (int i = 0; i < colorized.length(); i++) {
+      final char c = colorized.charAt(i);
 
       if (c == ChatColor.COLOR_CHAR) {
         previousCode = true;
@@ -804,16 +815,15 @@ public final class Text {
   }
 
   /**
-   * Same thing as {@link #broadcast(String, String)}, but without the prefix. Any message equaling
-   * null or IGNORE_MESSAGE_VALUE (ignore case) will be ignored.
+   * Broadcasts a colorized message without the prefix. Any message equaling null or {@link
+   * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
    * @param permission The permission players must have in order to see this broadcast, or null if
    *     the broadcast should be seen by everyone
    * @param str The message to send
    * @see #broadcast(String, String)
    */
-  public static void broadcastColored(
-      @Nullable final String permission, @Nullable final String str) {
+  public static void broadcastRaw(@Nullable final String permission, @Nullable final String str) {
 
     if (str == null || str.equalsIgnoreCase(IGNORE_MESSAGE_VALUE)) {
       return;
@@ -834,19 +844,19 @@ public final class Text {
   /**
    * Sends the title to the player.
    *
-   * @param p The player who should receive the title
+   * @param player The player who should receive the title
    * @param title The title to send, or null for none
    * @param subtitle The subtitle to send, or null for none
    */
   public static void sendTitle(
-      @NotNull final Player p, @Nullable final String title, @Nullable final String subtitle) {
-    Titles.sendTitle(p, Text.colorize(title), Text.colorize(subtitle));
+      @NotNull final Player player, @Nullable final String title, @Nullable final String subtitle) {
+    Titles.sendTitle(player, Text.colorize(title), Text.colorize(subtitle));
   }
 
   /**
    * Sends the title to the player.
    *
-   * @param p The player who should receive the title
+   * @param player The player who should receive the title
    * @param title The title to send, or null for none
    * @param subtitle The subtitle to send, or null for none
    * @param fadeIn The fade in duration, in ticks
@@ -854,22 +864,22 @@ public final class Text {
    * @param fadeOut The fade out duration, in ticks
    */
   public static void sendTitle(
-      @NotNull final Player p,
+      @NotNull final Player player,
       @Nullable final String title,
       @Nullable final String subtitle,
       final int fadeIn,
       final int stay,
       final int fadeOut) {
-    Titles.sendTitle(p, fadeIn, stay, fadeOut, Text.colorize(title), Text.colorize(subtitle));
+    Titles.sendTitle(player, fadeIn, stay, fadeOut, Text.colorize(title), Text.colorize(subtitle));
   }
 
   /**
    * Clears the current title and subtitle of the player.
    *
-   * @param p The player who should have thier title and subtitle cleared
+   * @param player The player who should have their title and subtitle cleared
    */
-  public static void clearTitle(@NotNull final Player p) {
-    Titles.clearTitle(p);
+  public static void clearTitle(@NotNull final Player player) {
+    Titles.clearTitle(player);
   }
 
   // ---------------------------------------------------------------------------------

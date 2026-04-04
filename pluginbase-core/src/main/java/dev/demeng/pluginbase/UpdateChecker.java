@@ -28,6 +28,7 @@ import dev.demeng.pluginbase.text.Text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -76,12 +77,12 @@ public class UpdateChecker {
     final CommandSender cs = Common.getOrDefault(sender, Bukkit.getConsoleSender());
     final String line = cs instanceof ConsoleCommandSender ? Text.CONSOLE_LINE : Text.CHAT_LINE;
 
-    Text.coloredTell(cs, "&2" + line);
-    Text.coloredTell(cs, "&aA new update for " + Common.getName() + " is available!");
-    Text.coloredTell(cs, "&aYour version: &f" + Common.getVersion());
-    Text.coloredTell(cs, "&aLatest version: &f" + latestVersion);
-    Text.coloredTell(cs, "&aDownload: &fhttps://spigotmc.org/resources/" + resourceId);
-    Text.coloredTell(cs, "&2" + line);
+    Text.tellRaw(cs, "&2" + line);
+    Text.tellRaw(cs, "&aA new update for " + Common.getName() + " is available!");
+    Text.tellRaw(cs, "&aYour version: &f" + Common.getVersion());
+    Text.tellRaw(cs, "&aLatest version: &f" + latestVersion);
+    Text.tellRaw(cs, "&aDownload: &fhttps://spigotmc.org/resources/" + resourceId);
+    Text.tellRaw(cs, "&2" + line);
   }
 
   private String retrieveVersionFromSpigot() {
@@ -89,7 +90,7 @@ public class UpdateChecker {
     try (final InputStream inputStream =
             new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resourceId)
                 .openStream();
-        final Scanner scanner = new Scanner(inputStream)) {
+        final Scanner scanner = new Scanner(inputStream, StandardCharsets.UTF_8)) {
 
       if (scanner.hasNext()) {
         return scanner.next();

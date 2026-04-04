@@ -48,13 +48,13 @@ Text.tell(player, "&pPrimary &sSecondary &tTertiary");
 | Method | Prefix | Color | Notes |
 |---|---|---|---|
 | `tell(CommandSender, String)` | Yes | Yes | Standard message |
-| `coloredTell(CommandSender, String)` | No | Yes | Colors only, no prefix |
+| `tellRaw(CommandSender, String)` | No | Yes | Colors only, no prefix |
 | `tellComponent(Player, Component)` | No | No | Sends an Adventure `Component` directly |
 | `tellCentered(Player, String)` | No | Yes | Centered in chat; may not work with custom fonts or HEX colors |
 
 ```java
 Text.tell(player, "&aWelcome!");
-Text.coloredTell(player, "&aHello!");
+Text.tellRaw(player, "&aHello!");
 Text.tellCentered(player, "&6&lWELCOME");
 
 Component component = Text.parseMini("<gradient:red:blue>Rainbow!</gradient>");
@@ -66,13 +66,13 @@ Text.tellComponent(player, component);
 | Method | Prefix | Color | Notes |
 |---|---|---|---|
 | `console(String)` | Yes | Yes | Formatted console output |
-| `coloredConsole(String)` | No | Yes | Colors only, no prefix |
+| `consoleRaw(String)` | No | Yes | Colors only, no prefix |
 | `log(String)` | No | No | Plain logger output at INFO level |
 | `log(Level, String)` | No | No | Plain logger output at specified level |
 
 ```java
 Text.console("&aPlugin loaded successfully!");
-Text.coloredConsole("&7Running background task...");
+Text.consoleRaw("&7Running background task...");
 Text.log("Starting initialization");
 Text.log(Level.WARNING, "This is a warning");
 ```
@@ -82,14 +82,14 @@ Text.log(Level.WARNING, "This is a warning");
 | Method | Prefix | Color |
 |---|---|---|
 | `broadcast(String permission, String)` | Yes | Yes |
-| `broadcastColored(String permission, String)` | No | Yes |
+| `broadcastRaw(String permission, String)` | No | Yes |
 
 Pass `null` as the permission to broadcast to all players.
 
 ```java
 Text.broadcast(null, "&aServer event started!");
 Text.broadcast("myplugin.admin", "&cAdmin announcement!");
-Text.broadcastColored(null, "&eGlobal message!");
+Text.broadcastRaw(null, "&eGlobal message!");
 ```
 
 ## Titles
@@ -112,7 +112,7 @@ Pass `null` for either `title` or `subtitle` to send only one.
 
 ## MiniMessage
 
-Prefix any message string with `"mini:"` to parse it as [MiniMessage](https://docs.papermc.io/adventure/minimessage/) instead of legacy color codes. This works with `tell`, `coloredTell`, `tellLocalized`, and `coloredTellLocalized`.
+Prefix any message string with `"mini:"` to parse it as [MiniMessage](https://docs.papermc.io/adventure/minimessage/) instead of legacy color codes. This works with `tell`, `tellRaw`, `tellLocalized`, and `tellLocalizedRaw`.
 
 ```java
 Text.tell(player, "mini:<gradient:red:blue>Rainbow text!</gradient>");
@@ -149,7 +149,7 @@ The `MINI_MESSAGE` field on `Text` exposes the underlying `MiniMessage` instance
 |---|---|---|
 | `capitalizeFirst(String)` | `String` | `"hello"` -> `"Hello"` |
 | `titleCase(String, String)` | `String` | `"hello_world", "_"` -> `"Hello World"` |
-| `toList(String)` | `List<String>` | Splits on `\n` |
+| `splitLines(String)` | `List<String>` | Splits on `\n` |
 | `line(CommandSender)` | `String` | `CHAT_LINE` for players, `CONSOLE_LINE` for console |
 | `getPrefix()` | `String` | Current plugin prefix |
 | `getLocale(CommandSender)` | `Locale` | Player's client locale, or default locale for console/null |
@@ -158,7 +158,7 @@ Constants: `Text.CHAT_LINE` (player chat separator), `Text.CONSOLE_LINE` (consol
 
 ## Ignoring Messages
 
-Any message with the value `"ignore"` (case-insensitive) is silently discarded. This applies to `tell`, `coloredTell`, `console`, `coloredConsole`, `broadcast`, `broadcastColored`, `tellCentered`, `tellLocalized`, and `coloredTellLocalized`.
+Any message with the value `"ignore"` (case-insensitive) is silently discarded. This applies to `tell`, `tellRaw`, `console`, `consoleRaw`, `broadcast`, `broadcastRaw`, `tellCentered`, `tellLocalized`, and `tellLocalizedRaw`.
 
 Useful for letting users disable messages in config files:
 
@@ -232,11 +232,11 @@ BaseManager.getTranslator().addResourceBundle("messages", Locales.ENGLISH, Local
 | Method | Prefix | Description |
 |---|---|---|
 | `tellLocalized(CommandSender, String key, Object... args)` | Yes | Sends a localized, formatted message |
-| `coloredTellLocalized(CommandSender, String key, Object... args)` | No | Sends a localized, colorized message without prefix |
+| `tellLocalizedRaw(CommandSender, String key, Object... args)` | No | Sends a localized, colorized message without prefix |
 
 ```java
 Text.tellLocalized(player, "welcome", player.getName());
-Text.coloredTellLocalized(player, "goodbye", player.getName());
+Text.tellLocalizedRaw(player, "goodbye", player.getName());
 ```
 
 ### Retrieving Localized Strings

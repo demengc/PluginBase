@@ -32,9 +32,9 @@ import com.google.common.primitives.Longs;
 import dev.demeng.pluginbase.exceptions.PluginErrorException;
 import dev.demeng.pluginbase.plugin.BaseManager;
 import dev.demeng.pluginbase.text.Text;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.IntConsumer;
@@ -65,8 +65,6 @@ public final class Common {
       "&6An internal error has occurred in "
           + Common.getName()
           + ". Check the console for more information.";
-
-  private static final String STR_DECIMAL_FORMAT = "%.2f";
 
   // ---------------------------------------------------------------------------------
   // PLUGIN INFORMATION
@@ -188,7 +186,7 @@ public final class Common {
       return Common.getOrDefault(list, Collections.emptyList());
     }
 
-    final List<String> applied = new LinkedList<>();
+    final List<String> applied = new ArrayList<>();
 
     for (final String str : list) {
       applied.add(operator.apply(str));
@@ -247,7 +245,7 @@ public final class Common {
    */
   @NotNull
   public static String formatDecimal(final double d) {
-    return String.format(STR_DECIMAL_FORMAT, d);
+    return String.format("%.2f", d);
   }
 
   /**
@@ -318,15 +316,15 @@ public final class Common {
       throwable.printStackTrace();
     }
 
-    Text.coloredConsole("&4" + Text.CONSOLE_LINE);
-    Text.coloredConsole("&cAn internal error has occurred in " + Common.getName() + ".");
-    Text.coloredConsole("&cDescription: &6" + description);
-    Text.coloredConsole("&cContact the plugin author if you cannot fix this issue.");
-    Text.coloredConsole("&4" + Text.CONSOLE_LINE);
+    Text.consoleRaw("&4" + Text.CONSOLE_LINE);
+    Text.consoleRaw("&cAn internal error has occurred in " + Common.getName() + ".");
+    Text.consoleRaw("&cDescription: &6" + description);
+    Text.consoleRaw("&cContact the plugin author if you cannot fix this issue.");
+    Text.consoleRaw("&4" + Text.CONSOLE_LINE);
 
     Arrays.stream(players)
         .filter(Player.class::isInstance)
-        .forEach(p -> Text.coloredTell(p, PLAYERS_ERROR_MESSAGE));
+        .forEach(p -> Text.tellRaw(p, PLAYERS_ERROR_MESSAGE));
 
     if (disable && Bukkit.getPluginManager().isPluginEnabled(BaseManager.getPlugin())) {
       Bukkit.getPluginManager().disablePlugin(BaseManager.getPlugin());
