@@ -74,7 +74,7 @@ public class CooldownMap<T> {
    */
   @NotNull
   public Cooldown get(@NotNull final T key) {
-    this.cache.putIfAbsent(key, base);
+    this.cache.putIfAbsent(key, base.copy());
     return this.cache.get(key);
   }
 
