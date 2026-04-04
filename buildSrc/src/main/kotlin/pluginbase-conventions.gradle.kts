@@ -31,6 +31,16 @@ dependencies {
     "compileOnly"(libs.findLibrary("jsr305").get())
     "compileOnly"(libs.findLibrary("lombok").get())
     "annotationProcessor"(libs.findLibrary("lombok").get())
+
+    "testImplementation"(libs.findLibrary("junit-jupiter").get())
+    "testRuntimeOnly"(libs.findLibrary("junit-platform-launcher").get())
+    "testImplementation"(libs.findLibrary("assertj-core").get())
+    "testCompileOnly"(libs.findLibrary("lombok").get())
+    "testAnnotationProcessor"(libs.findLibrary("lombok").get())
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 tasks.shadowJar {
