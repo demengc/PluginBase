@@ -55,11 +55,11 @@ class DependencyContainerTest {
     private final String value;
 
     MultiConstructor() {
-      this.value = "no-arg";
+      this.value = "default";
     }
 
     MultiConstructor(NoArgService service) {
-      this.value = service.name();
+      this.value = "injected";
     }
   }
 
@@ -193,6 +193,6 @@ class DependencyContainerTest {
   void getInstance_multipleConstructors_selectsLongest() {
     DependencyContainer container = DependencyContainer.builder().build();
     MultiConstructor instance = container.getInstance(MultiConstructor.class);
-    assertThat(instance.value).isEqualTo("no-arg");
+    assertThat(instance.value).isEqualTo("injected");
   }
 }
