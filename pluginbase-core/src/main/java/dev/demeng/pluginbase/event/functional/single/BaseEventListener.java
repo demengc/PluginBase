@@ -212,7 +212,8 @@ class BaseEventListener<T extends Event> implements SingleSubscription<T>, Event
       final HandlerList handlerList = (HandlerList) getHandlerListMethod.invoke(null);
       handlerList.unregister(listener);
     } catch (final Throwable t) {
-      // ignored
+      java.util.logging.Logger.getLogger("PluginBase")
+          .log(java.util.logging.Level.FINE, "Failed to unregister listener for " + eventClass.getName(), t);
     }
   }
 }
