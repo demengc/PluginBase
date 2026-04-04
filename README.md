@@ -72,9 +72,8 @@ create a pull request.
 
 ## License
 
-This project is licensed under the MIT License. For more details, refer to the LICENSE.txt file in
-the repository.
-
+This project is licensed under the MIT License. For more details, refer to [LICENSE](LICENSE).
+        
 ## Special Thanks
 
 Special thanks to the following for their contribution to this project:
