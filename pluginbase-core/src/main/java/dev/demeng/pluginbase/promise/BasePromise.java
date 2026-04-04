@@ -206,7 +206,7 @@ final class BasePromise<V> implements Promise<V> {
 
   @Override
   public CompletableFuture<V> toCompletableFuture() {
-    return this.fut.thenApply(Function.identity());
+    return this.fut.copy();
   }
 
   @Override
