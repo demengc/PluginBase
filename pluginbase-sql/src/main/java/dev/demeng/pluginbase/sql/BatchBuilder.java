@@ -27,7 +27,8 @@ package dev.demeng.pluginbase.sql;
 import be.bendem.sqlstreams.util.SqlConsumer;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
@@ -44,9 +45,8 @@ public class BatchBuilder {
   /** The statement to be executed. */
   @NotNull @Getter private final String statement;
 
-  /** A linked list of PreparedStatement handlers. */
-  @NotNull @Getter
-  private final LinkedList<SqlConsumer<PreparedStatement>> handlers = new LinkedList<>();
+  /** The PreparedStatement handlers for this batch. */
+  @NotNull @Getter private final List<SqlConsumer<PreparedStatement>> handlers = new ArrayList<>();
 
   public BatchBuilder(@NotNull final Sql owner, @NotNull @Language("SQL") final String statement) {
     this.owner = owner;
