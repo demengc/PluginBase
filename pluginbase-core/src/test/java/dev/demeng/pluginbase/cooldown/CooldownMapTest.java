@@ -50,8 +50,7 @@ class CooldownMapTest {
   void put_rejectsWrongDuration() {
     CooldownMap<String> map = CooldownMap.create(Cooldown.of(5, TimeUnit.SECONDS));
     Cooldown wrong = Cooldown.of(10, TimeUnit.SECONDS);
-    assertThatThrownBy(() -> map.put("key", wrong))
-        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> map.put("key", wrong)).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test

@@ -30,8 +30,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Base exception for all dependency injection related errors.
  *
- * <p>This exception is thrown when errors occur during dependency resolution, instance creation,
- * or
+ * <p>This exception is thrown when errors occur during dependency resolution, instance creation, or
  * container operations.
  */
 public class DependencyException extends BaseException {

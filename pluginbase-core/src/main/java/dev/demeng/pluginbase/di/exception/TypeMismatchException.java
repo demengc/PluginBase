@@ -38,7 +38,7 @@ public class TypeMismatchException extends DependencyException {
    * Creates a new type mismatch exception with details about the expected and actual types.
    *
    * @param expected The expected type (what was specified in register)
-   * @param actual   The actual type of the instance
+   * @param actual The actual type of the instance
    */
   public TypeMismatchException(@NotNull final Class<?> expected, @NotNull final Class<?> actual) {
     super(

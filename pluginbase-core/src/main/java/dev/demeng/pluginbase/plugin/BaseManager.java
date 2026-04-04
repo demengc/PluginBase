@@ -53,7 +53,8 @@ public final class BaseManager {
   @Getter @Setter private static volatile BukkitAudiences adventure;
 
   /** The settings the library should use. */
-  @NotNull @Getter @Setter private static volatile BaseSettings baseSettings = new BaseSettings() {};
+  @NotNull @Getter @Setter
+  private static volatile BaseSettings baseSettings = new BaseSettings() {};
 
   /**
    * Gets a never-null instance of the {@link JavaPlugin} the library is currently working with.

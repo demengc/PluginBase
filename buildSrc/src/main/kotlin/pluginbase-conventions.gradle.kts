@@ -1,7 +1,11 @@
+import net.ltgt.gradle.errorprone.errorprone
+
 plugins {
     `java-library`
     `maven-publish`
     id("com.gradleup.shadow")
+    id("com.diffplug.spotless")
+    id("net.ltgt.errorprone")
 }
 
 group = "dev.demeng"
@@ -15,8 +19,18 @@ java {
     withJavadocJar()
 }
 
+spotless {
+    java {
+        googleJavaFormat()
+        targetExclude("build/**")
+    }
+}
+
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
+    options.errorprone {
+        disableWarningsInGeneratedCode.set(true)
+    }
 }
 
 tasks.javadoc {
@@ -31,6 +45,7 @@ dependencies {
     "compileOnly"(libs.findLibrary("jsr305").get())
     "compileOnly"(libs.findLibrary("lombok").get())
     "annotationProcessor"(libs.findLibrary("lombok").get())
+    "errorprone"(libs.findLibrary("errorprone-core").get())
 
     "testImplementation"(libs.findLibrary("junit-jupiter").get())
     "testRuntimeOnly"(libs.findLibrary("junit-platform-launcher").get())

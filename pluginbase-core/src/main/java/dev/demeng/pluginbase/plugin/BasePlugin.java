@@ -57,14 +57,10 @@ import revxrsal.commands.bukkit.actor.BukkitCommandActor;
  */
 public abstract class BasePlugin extends JavaPlugin implements TerminableConsumer {
 
-  /**
-   * The backing terminable registry for this plugin.
-   */
+  /** The backing terminable registry for this plugin. */
   private CompositeTerminable terminableRegistry;
 
-  /**
-   * The dependency injection container for this plugin.
-   */
+  /** The dependency injection container for this plugin. */
   private DependencyContainer dependencyContainer;
 
   @Override
@@ -113,23 +109,17 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
     BaseManager.setPlugin(null);
   }
 
-  /**
-   * Executes at early plugin startup.
-   */
+  /** Executes at early plugin startup. */
   protected void load() {
     // Override if needed, otherwise nothing will be executed.
   }
 
-  /**
-   * Executes on plugin enable.
-   */
+  /** Executes on plugin enable. */
   protected void enable() {
     // Override if needed, otherwise nothing will be executed.
   }
 
-  /**
-   * Executes on plugin disable.
-   */
+  /** Executes on plugin disable. */
   protected void disable() {
     // Override if needed, otherwise nothing will be executed.
   }
@@ -203,7 +193,7 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    * DependencyContainer#getInstance(Class)}.
    *
    * @param type The class type
-   * @param <T>  The type parameter
+   * @param <T> The type parameter
    * @return The instance
    */
   @NotNull
@@ -229,7 +219,7 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    * <p>{@link dev.demeng.pluginbase.Events} should be used instead of this method in most cases.
    *
    * @param listener the listener to register
-   * @param <T>      the listener class type
+   * @param <T> the listener class type
    * @return the listener
    */
   @NotNull
@@ -243,7 +233,7 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
    * Gets a service provided by the ServiceManager.
    *
    * @param service The service class
-   * @param <T>     The class type
+   * @param <T> The class type
    * @return The service
    */
   @NotNull
@@ -254,10 +244,10 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   /**
    * Provides a service to the ServiceManager, bound to this plugin.
    *
-   * @param clazz    The service class
+   * @param clazz The service class
    * @param instance The instance
    * @param priority The priority to register the service at
-   * @param <T>      The service class type
+   * @param <T> The service class type
    * @return The instance
    */
   @NotNull
@@ -269,12 +259,12 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   }
 
   /**
-   * Provides a service to the ServiceManager, bound to this plugin at
-   * {@link ServicePriority#Normal}.
+   * Provides a service to the ServiceManager, bound to this plugin at {@link
+   * ServicePriority#Normal}.
    *
-   * @param clazz    The service class
+   * @param clazz The service class
    * @param instance The instance
-   * @param <T>      The service class type
+   * @param <T> The service class type
    * @return The instance
    */
   @NotNull
@@ -328,8 +318,7 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   public void setBaseSettings(@Nullable final BaseSettings baseSettings) {
 
     if (baseSettings == null) {
-      BaseManager.setBaseSettings(new BaseSettings() {
-      });
+      BaseManager.setBaseSettings(new BaseSettings() {});
       return;
     }
 

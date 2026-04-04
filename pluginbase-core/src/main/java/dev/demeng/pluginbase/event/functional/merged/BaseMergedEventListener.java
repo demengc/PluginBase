@@ -242,10 +242,14 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
       handlerList.unregister(listener);
     } catch (final Throwable t) {
       java.util.logging.Logger.getLogger("PluginBase")
-          .log(java.util.logging.Level.FINE, "Failed to unregister listener for " + eventClass.getName(), t);
+          .log(
+              java.util.logging.Level.FINE,
+              "Failed to unregister listener for " + eventClass.getName(),
+              t);
     }
   }
 
+  @SuppressWarnings("ReturnValueIgnored")
   private static Class<? extends Event> getRegistrationClass(final Class<? extends Event> clazz) {
     try {
       clazz.getDeclaredMethod("getHandlerList");

@@ -213,7 +213,10 @@ class BaseEventListener<T extends Event> implements SingleSubscription<T>, Event
       handlerList.unregister(listener);
     } catch (final Throwable t) {
       java.util.logging.Logger.getLogger("PluginBase")
-          .log(java.util.logging.Level.FINE, "Failed to unregister listener for " + eventClass.getName(), t);
+          .log(
+              java.util.logging.Level.FINE,
+              "Failed to unregister listener for " + eventClass.getName(),
+              t);
     }
   }
 }

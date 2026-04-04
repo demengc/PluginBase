@@ -39,34 +39,23 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Simple implementation of {@link DependencyContainer}.
- */
+/** Simple implementation of {@link DependencyContainer}. */
 final class SimpleDependencyContainer implements DependencyContainer {
 
-  /**
-   * Cache of registered instances.
-   */
+  /** Cache of registered instances. */
   private final Map<Class<?>, Object> instances = new ConcurrentHashMap<>();
 
-  /**
-   * Tracks construction path to detect circular dependencies (per-thread).
-   */
+  /** Tracks construction path to detect circular dependencies (per-thread). */
   private final ThreadLocal<Set<Class<?>>> constructionPath =
       ThreadLocal.withInitial(LinkedHashSet::new);
 
-  /**
-   * Manages cleanup of AutoCloseable instances.
-   */
+  /** Manages cleanup of AutoCloseable instances. */
   private final CompositeTerminable terminables = CompositeTerminable.create();
 
-  /**
-   * Whether this container has been closed.
-   */
+  /** Whether this container has been closed. */
   private volatile boolean closed = false;
 
-  private SimpleDependencyContainer() {
-  }
+  private SimpleDependencyContainer() {}
 
   @NotNull
   @Override
@@ -80,8 +69,7 @@ final class SimpleDependencyContainer implements DependencyContainer {
 
   @NotNull
   @Override
-  public <T> DependencyContainer register(
-      @NotNull final Class<T> type, @NotNull final T instance) {
+  public <T> DependencyContainer register(@NotNull final Class<T> type, @NotNull final T instance) {
     Objects.requireNonNull(type, "type");
     Objects.requireNonNull(instance, "instance");
     checkNotClosed();
@@ -93,8 +81,7 @@ final class SimpleDependencyContainer implements DependencyContainer {
 
     // Warn if duplicate registration
     if (this.instances.containsKey(type)) {
-      System.err.println(
-          "WARNING: Overwriting existing registration for type: " + type.getName());
+      System.err.println("WARNING: Overwriting existing registration for type: " + type.getName());
     }
 
     // Register instance
@@ -176,7 +163,7 @@ final class SimpleDependencyContainer implements DependencyContainer {
    *
    * @param type The type to instantiate
    * @param path The current construction path (for circular dependency detection)
-   * @param <T>  The type parameter
+   * @param <T> The type parameter
    * @return A new instance
    */
   private <T> T createInstance(final Class<T> type, final Set<Class<?>> path) {
@@ -231,7 +218,7 @@ final class SimpleDependencyContainer implements DependencyContainer {
    * {@code @RequiredArgsConstructor} and {@code @AllArgsConstructor}).
    *
    * @param type The type to find a constructor for
-   * @param <T>  The type parameter
+   * @param <T> The type parameter
    * @return The constructor to use
    */
   @SuppressWarnings("unchecked")
@@ -258,9 +245,7 @@ final class SimpleDependencyContainer implements DependencyContainer {
     return (Constructor<T>) longestConstructor;
   }
 
-  /**
-   * Checks if the container is closed and throws an exception if it is.
-   */
+  /** Checks if the container is closed and throws an exception if it is. */
   private void checkNotClosed() {
     if (this.closed) {
       throw new IllegalStateException("DependencyContainer has been closed");
@@ -277,9 +262,7 @@ final class SimpleDependencyContainer implements DependencyContainer {
     return new BuilderImpl();
   }
 
-  /**
-   * Builder implementation for creating {@link SimpleDependencyContainer}.
-   */
+  /** Builder implementation for creating {@link SimpleDependencyContainer}. */
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
   private static final class BuilderImpl implements Builder {
 

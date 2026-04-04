@@ -89,7 +89,7 @@ public interface DependencyContainer extends Terminable {
    * that type is requested from the container.
    *
    * @param instance The instance to register
-   * @param <T>      The type parameter
+   * @param <T> The type parameter
    * @return This container for method chaining
    */
   @NotNull
@@ -120,9 +120,9 @@ public interface DependencyContainer extends Terminable {
    * }
    * }</pre>
    *
-   * @param type     The type to register the instance under (interface or class)
+   * @param type The type to register the instance under (interface or class)
    * @param instance The instance to register
-   * @param <T>      The type parameter
+   * @param <T> The type parameter
    * @return This container for method chaining
    * @throws dev.demeng.pluginbase.di.exception.TypeMismatchException if instance is not assignable
    */
@@ -137,15 +137,12 @@ public interface DependencyContainer extends Terminable {
    * from the container.
    *
    * @param type The class type to get an instance of
-   * @param <T>  The type parameter
+   * @param <T> The type parameter
    * @return The instance (either registered or auto-created)
    * @throws dev.demeng.pluginbase.di.exception.MissingDependencyException if no instance is
-   *                                                                       registered and class is
-   *                                                                       not annotated with
-   *                                                                       @Component
-   * @throws dev.demeng.pluginbase.di.exception.DependencyException        if a circular dependency
-   *                                                                       is detected or instance
-   *                                                                       creation fails
+   *     registered and class is not annotated with @Component
+   * @throws dev.demeng.pluginbase.di.exception.DependencyException if a circular dependency is
+   *     detected or instance creation fails
    */
   @NotNull
   <T> T getInstance(@NotNull Class<T> type);
@@ -182,8 +179,7 @@ public interface DependencyContainer extends Terminable {
     /**
      * Registers an instance in the container.
      *
-     * <p>The instance will be stored and can be retrieved later via {@link #getInstance(Class)}.
-     * It
+     * <p>The instance will be stored and can be retrieved later via {@link #getInstance(Class)}. It
      * will also be injected into {@code @Component} classes that depend on it.
      *
      * @param instance The instance to register
@@ -211,9 +207,9 @@ public interface DependencyContainer extends Terminable {
      *     .build();
      * }</pre>
      *
-     * @param type     The type to register the instance under
+     * @param type The type to register the instance under
      * @param instance The instance to register
-     * @param <T>      The type parameter
+     * @param <T> The type parameter
      * @return This builder for method chaining
      * @throws dev.demeng.pluginbase.di.exception.TypeMismatchException if instance is not
      */

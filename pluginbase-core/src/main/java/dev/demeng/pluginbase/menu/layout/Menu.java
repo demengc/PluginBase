@@ -61,8 +61,7 @@ public abstract class Menu implements IMenu {
    * A map of all the actions for the menu buttons, with the key being the slot number, and the
    * value being the consumer for the click event if the slot clicked matches the key.
    */
-  @NotNull
-  private final Map<Integer, Consumer<InventoryClickEvent>> actions = new HashMap<>();
+  @NotNull private final Map<Integer, Consumer<InventoryClickEvent>> actions = new HashMap<>();
 
   @NotNull
   public Map<Integer, Consumer<InventoryClickEvent>> getActions() {
