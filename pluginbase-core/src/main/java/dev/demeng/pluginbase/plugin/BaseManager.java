@@ -43,17 +43,17 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class BaseManager {
 
-  private static JavaPlugin plugin = null;
-  private static Thread mainThread = null;
+  private static volatile JavaPlugin plugin = null;
+  private static volatile Thread mainThread = null;
 
   /** The translator used for handling localized messages. */
-  @NotNull @Getter @Setter private static Translator translator;
+  @NotNull @Getter @Setter private static volatile Translator translator;
 
   /** The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables. */
-  @Getter @Setter private static BukkitAudiences adventure;
+  @Getter @Setter private static volatile BukkitAudiences adventure;
 
   /** The settings the library should use. */
-  @NotNull @Getter @Setter private static BaseSettings baseSettings = new BaseSettings() {};
+  @NotNull @Getter @Setter private static volatile BaseSettings baseSettings = new BaseSettings() {};
 
   /**
    * Gets a never-null instance of the {@link JavaPlugin} the library is currently working with.
