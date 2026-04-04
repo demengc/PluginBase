@@ -46,6 +46,7 @@ public final class GsonProvider {
   private static final Gson PRETTY_PRINT_GSON =
       new GsonBuilder().serializeNulls().disableHtmlEscaping().setPrettyPrinting().create();
 
+  @SuppressWarnings("deprecation")
   private static final JsonParser PARSER = new JsonParser();
 
   @NotNull
@@ -58,16 +59,19 @@ public final class GsonProvider {
     return PRETTY_PRINT_GSON;
   }
 
+  @SuppressWarnings("deprecation")
   @NotNull
   public static JsonParser parser() {
     return PARSER;
   }
 
+  @SuppressWarnings("deprecation")
   @NotNull
   public static JsonObject readObject(@NotNull final Reader reader) {
     return PARSER.parse(reader).getAsJsonObject();
   }
 
+  @SuppressWarnings("deprecation")
   @NotNull
   public static JsonObject readObject(@NotNull final String s) {
     return PARSER.parse(s).getAsJsonObject();

@@ -33,7 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -174,7 +174,7 @@ public final class Time {
    * @return The equivalent timestamp, as one used by SQL
    */
   public static Timestamp toSqlTimestamp(final long timestamp) {
-    return new Timestamp(new Date(timestamp).getTime());
+    return new Timestamp(timestamp);
   }
 
   /**
@@ -185,13 +185,6 @@ public final class Time {
    */
   public static long fromSqlTimestamp(@NotNull final String timestamp) {
     return Timestamp.valueOf(timestamp).getTime();
-  }
-
-  private static void checkLimit(final String unit, final long value, final int limit) {
-    if (value > limit) {
-      throw new IllegalArgumentException(
-          "Unit " + unit + " is out of bounds: " + value + " exceeds " + limit);
-    }
   }
 
   private static SimpleDateFormat refreshFormat(
@@ -263,7 +256,7 @@ public final class Time {
      */
     public static String format(
         final Duration duration, final boolean concise, final int elements) {
-      long seconds = duration.getSeconds();
+      long seconds = duration.toSeconds();
       final StringBuilder output = new StringBuilder();
       int outputSize = 0;
 
@@ -280,7 +273,7 @@ public final class Time {
       }
 
       if (output.isEmpty()) {
-        return "0" + (UNITS[UNITS.length - 1].toString(concise, 0));
+        return "0" + UNITS[UNITS.length - 1].toString(concise, 0);
       }
       return output.substring(1);
     }
@@ -305,10 +298,10 @@ public final class Time {
       private final String conciseString;
 
       Unit(final ChronoUnit unit) {
-        this.duration = unit.getDuration().getSeconds();
-        this.formalStringPlural = " " + unit.name().toLowerCase();
+        this.duration = unit.getDuration().toSeconds();
+        this.formalStringPlural = " " + unit.name().toLowerCase(Locale.ROOT);
         this.formalStringSingular =
-            " " + unit.name().substring(0, unit.name().length() - 1).toLowerCase();
+            " " + unit.name().substring(0, unit.name().length() - 1).toLowerCase(Locale.ROOT);
         this.conciseString = String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
       }
 

@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase.text;
 
+import java.util.Locale;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,8 +45,8 @@ public class StringSimilarity {
    * @return The Levenshtein distance between the two strings
    */
   public static int levenshteinDistance(@NotNull final String s1, @NotNull final String s2) {
-    final String str1 = s1.toLowerCase();
-    final String str2 = s2.toLowerCase();
+    final String str1 = s1.toLowerCase(Locale.ROOT);
+    final String str2 = s2.toLowerCase(Locale.ROOT);
 
     final int len1 = str1.length();
     final int len2 = str2.length();

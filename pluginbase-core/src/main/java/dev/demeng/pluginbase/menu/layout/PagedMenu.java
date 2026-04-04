@@ -30,9 +30,9 @@ import dev.demeng.pluginbase.menu.IMenu;
 import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
@@ -217,7 +217,7 @@ public abstract class PagedMenu implements IMenu {
           settings.getAvailableSlots().stream()
               .filter(Objects::nonNull)
               .sorted()
-              .collect(Collectors.toCollection(LinkedList::new));
+              .collect(Collectors.toCollection(ArrayDeque::new));
 
       if (availableSlots.isEmpty()) {
         throw new BaseException("Available slots cannot be empty");

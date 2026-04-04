@@ -60,7 +60,7 @@ public final class RandomString {
     final StringBuilder sb = new StringBuilder(length);
 
     for (int n = 0; n < length; n++) {
-      sb.append(chars[(ThreadLocalRandom.current().nextInt(chars.length))]);
+      sb.append(chars[ThreadLocalRandom.current().nextInt(chars.length)]);
     }
 
     return sb.toString();

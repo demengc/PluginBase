@@ -87,7 +87,7 @@ class BaseMergedEventListener<T> implements MergedSubscription<T>, EventExecutor
   }
 
   void register(final Plugin plugin) {
-    final Map<Class<?>, EventPriority> registered = new IdentityHashMap<>();
+    final IdentityHashMap<Class<?>, EventPriority> registered = new IdentityHashMap<>();
 
     for (final Map.Entry<Class<? extends Event>, MergedHandlerMapping<T, ? extends Event>> ent :
         this.mappings.entrySet()) {

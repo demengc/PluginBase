@@ -24,6 +24,7 @@
 
 package dev.demeng.pluginbase;
 
+import java.util.Locale;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -59,8 +60,10 @@ public final class Sounds {
       return;
     }
 
-    if (soundName.toLowerCase().startsWith(CUSTOM_PREFIX)) {
-      playCustomToPlayer(player, soundName.toLowerCase().replace(CUSTOM_PREFIX, ""), volume, pitch);
+    final String lowerName = soundName.toLowerCase(Locale.ROOT);
+
+    if (lowerName.startsWith(CUSTOM_PREFIX)) {
+      playCustomToPlayer(player, lowerName.replace(CUSTOM_PREFIX, ""), volume, pitch);
       return;
     }
 
@@ -107,8 +110,10 @@ public final class Sounds {
       return;
     }
 
-    if (soundName.toLowerCase().startsWith(CUSTOM_PREFIX)) {
-      playCustomToLocation(loc, soundName.toLowerCase().replace(CUSTOM_PREFIX, ""), volume, pitch);
+    final String lowerName = soundName.toLowerCase(Locale.ROOT);
+
+    if (lowerName.startsWith(CUSTOM_PREFIX)) {
+      playCustomToLocation(loc, lowerName.replace(CUSTOM_PREFIX, ""), volume, pitch);
       return;
     }
 

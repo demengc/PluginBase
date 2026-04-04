@@ -28,6 +28,7 @@ import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Time;
 import dev.demeng.pluginbase.Time.DurationFormatter;
 import dev.demeng.pluginbase.text.Text;
+import java.util.Locale;
 import org.jetbrains.annotations.NotNull;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 import revxrsal.commands.bukkit.exception.BukkitExceptionHandler;
@@ -92,7 +93,7 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(),
             "commands.missing-location-parameter",
             "&cExpected &e{0}&c.",
-            e.axis().name().toLowerCase()));
+            e.axis().name().toLowerCase(Locale.ROOT)));
   }
 
   @Override
