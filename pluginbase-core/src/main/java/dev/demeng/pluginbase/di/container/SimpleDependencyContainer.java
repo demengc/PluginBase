@@ -120,8 +120,12 @@ final class SimpleDependencyContainer implements DependencyContainer {
                 + " and class is not annotated with @Component");
       }
 
-      // Auto-create the component (singleton)
-      return (T) this.instances.computeIfAbsent(type, k -> createInstance(type, path));
+      // Auto-create the component (singleton).
+      // Avoid computeIfAbsent because ConcurrentHashMap throws on reentrant calls,
+      // which prevents the path-based circular dependency detection from working.
+      final T created = createInstance(type, path);
+      this.instances.putIfAbsent(type, created);
+      return (T) this.instances.get(type);
 
     } finally {
       // Clean up ThreadLocal for top-level calls to prevent memory leaks
