@@ -83,6 +83,31 @@ public interface Translator {
   String get(@NotNull String key, @NotNull Locale locale);
 
   /**
+   * Returns the message array that corresponds to the given key, using the current {@link
+   * #getLocale()}. Useful for multi-line translations such as item lore. If no such message is
+   * found, a single-element array containing the key will be returned.
+   *
+   * @param key Message key to fetch with
+   * @return The translated message array, or a single-element array of the key if not found.
+   */
+  default @NotNull String @NotNull [] getArray(@NotNull String key) {
+    return new String[] {get(key)};
+  }
+
+  /**
+   * Returns the message array that corresponds to the given key, using the given locale. Useful for
+   * multi-line translations such as item lore. If no such message is found, a single-element array
+   * containing the key will be returned.
+   *
+   * @param key Message key to fetch with
+   * @param locale Locale to get with
+   * @return The translated message array, or a single-element array of the key if not found.
+   */
+  default @NotNull String @NotNull [] getArray(@NotNull String key, @NotNull Locale locale) {
+    return new String[] {get(key, locale)};
+  }
+
+  /**
    * Adds the given locale reader to this translator.
    *
    * @param reader The locale reader to add

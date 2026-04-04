@@ -111,7 +111,7 @@ public final class Text {
         }
       }
 
-      final Locale locale = Locales.get(playerLocale);
+      final Locale locale = Locales.get(playerLocale.trim());
       return locale == null ? BaseManager.getTranslator().getLocale() : locale;
     }
 
@@ -121,6 +121,10 @@ public final class Text {
   /**
    * Gets the localized string with the given key using the provided sender's locale. Uses the
    * default locale if the localized string could not be resolved with the provided sender's locale.
+   *
+   * <p>Uses {@link MessageFormat} internally for argument substitution. Single quotes in
+   * translation values must be doubled ({@code ''}) to appear literally, and curly braces used as
+   * literal text (not placeholders) must be quoted: {@code '{literal}'}.
    *
    * @param key The key of the message
    * @param sender The sender to get the locale of
@@ -145,6 +149,10 @@ public final class Text {
    * Gets the localized string with the given key using the provided locale. Uses the default locale
    * if the localized string could not be resolved with the provided locale.
    *
+   * <p>Uses {@link MessageFormat} internally for argument substitution. Single quotes in
+   * translation values must be doubled ({@code ''}) to appear literally, and curly braces used as
+   * literal text (not placeholders) must be quoted: {@code '{literal}'}.
+   *
    * @param key The key of the message
    * @param locale The locale
    * @param args Arguments for positioned placeholders ({n})
@@ -167,6 +175,9 @@ public final class Text {
 
   /**
    * Gets the localized string with the given key using the default locale.
+   *
+   * <p>Uses {@link MessageFormat} internally for argument substitution. Single quotes in
+   * translation values must be doubled ({@code ''}) to appear literally.
    *
    * @param key The key of the message
    * @param args Arguments for positioned placeholders ({n})
@@ -226,6 +237,9 @@ public final class Text {
   /**
    * Localizes the placeholders in the string using the sender's locale. Note that the same
    * arguments are used for EVERY placeholder.
+   *
+   * <p>Each resolved placeholder is processed through {@link MessageFormat}. Single quotes in
+   * translation values must be doubled ({@code ''}) to appear literally.
    *
    * @param str The string to localize
    * @param locale The locale to use
@@ -625,6 +639,9 @@ public final class Text {
    * the command sender. Any key equaling null or any message equaling to {@link
    * #IGNORE_MESSAGE_VALUE} (ignore case) will be ignored.
    *
+   * <p>Uses {@link MessageFormat} internally for argument substitution. Single quotes in
+   * translation values must be doubled ({@code ''}) to appear literally.
+   *
    * @param sender The command sender that will receive the message
    * @param key The key of the localized string
    * @param args Arguments to replace in the localized string
@@ -670,6 +687,9 @@ public final class Text {
    * Does the same thing as {@link #tellLocalized(CommandSender, String, Object...)}, but without
    * the prefix. Any key equaling null or any message equaling to {@link #IGNORE_MESSAGE_VALUE}
    * (ignore case) will be ignored.
+   *
+   * <p>Uses {@link MessageFormat} internally for argument substitution. Single quotes in
+   * translation values must be doubled ({@code ''}) to appear literally.
    *
    * @param sender The command sender that will receive the message
    * @param key The key of the localized string
