@@ -4,7 +4,7 @@ spotless = "8.4.0"
 errorprone-plugin = "5.1.0"
 errorprone-core = "2.35.1"
 
-spigot-api = "1.21.11-R0.1-SNAPSHOT"
+spigot-api = "26.1.1-R0.1-SNAPSHOT"
 annotations = "26.1.0"
 jsr305 = "3.0.2"
 lombok = "1.18.44"
