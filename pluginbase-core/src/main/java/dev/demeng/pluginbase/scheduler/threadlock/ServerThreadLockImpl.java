@@ -77,6 +77,7 @@ final class ServerThreadLockImpl implements ServerThreadLock {
       this.doneSignal.await();
     } catch (final InterruptedException e) {
       e.printStackTrace();
+      Thread.currentThread().interrupt();
     }
   }
 }
