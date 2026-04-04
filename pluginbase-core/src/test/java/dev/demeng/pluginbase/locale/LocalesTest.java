@@ -50,4 +50,30 @@ class LocalesTest {
     assertThat(Locales.get("ko")).isEqualTo(Locale.KOREAN);
     assertThat(Locales.get("zh")).isEqualTo(Locale.CHINESE);
   }
+
+  @Test
+  void get_languageCountryCode_returnsExactMatch() {
+    assertThat(Locales.get("zh_CN")).isEqualTo(Locales.SIMPLIFIED_CHINESE);
+    assertThat(Locales.get("zh_TW")).isEqualTo(Locales.TRADITIONAL_CHINESE);
+  }
+
+  @Test
+  void get_minecraftLowercaseFormat_resolvesCorrectly() {
+    assertThat(Locales.get("zh_cn")).isEqualTo(Locales.SIMPLIFIED_CHINESE);
+    assertThat(Locales.get("zh_tw")).isEqualTo(Locales.TRADITIONAL_CHINESE);
+  }
+
+  @Test
+  void get_languageCountryCode_fallsBackToBaseLanguage() {
+    assertThat(Locales.get("en_gb")).isEqualTo(Locales.ENGLISH);
+    assertThat(Locales.get("en_us")).isEqualTo(Locales.ENGLISH);
+    assertThat(Locales.get("pt_br")).isEqualTo(Locales.PORTUGUESE);
+    assertThat(Locales.get("es_mx")).isEqualTo(Locales.SPANISH);
+  }
+
+  @Test
+  void get_caseInsensitive_resolvesCorrectly() {
+    assertThat(Locales.get("FR")).isEqualTo(Locales.FRENCH);
+    assertThat(Locales.get("De")).isEqualTo(Locales.GERMAN);
+  }
 }
