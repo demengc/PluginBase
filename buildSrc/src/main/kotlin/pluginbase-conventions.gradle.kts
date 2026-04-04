@@ -51,6 +51,7 @@ dependencies {
     "testRuntimeOnly"(libs.findLibrary("junit-platform-launcher").get())
     "testImplementation"(libs.findLibrary("assertj-core").get())
     "testImplementation"(libs.findLibrary("mockito-core").get())
+    "testImplementation"(libs.findLibrary("guava").get())
     "testCompileOnly"(libs.findLibrary("lombok").get())
     "testAnnotationProcessor"(libs.findLibrary("lombok").get())
 }
