@@ -50,6 +50,7 @@ dependencies {
     "testImplementation"(libs.findLibrary("junit-jupiter").get())
     "testRuntimeOnly"(libs.findLibrary("junit-platform-launcher").get())
     "testImplementation"(libs.findLibrary("assertj-core").get())
+    "testImplementation"(libs.findLibrary("mockito-core").get())
     "testCompileOnly"(libs.findLibrary("lombok").get())
     "testAnnotationProcessor"(libs.findLibrary("lombok").get())
 }
