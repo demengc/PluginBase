@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase.model;
 
-import lombok.Data;
+import lombok.Value;
 
 /**
  * A simple pair of objects.
@@ -32,7 +32,7 @@ import lombok.Data;
  * @param <A> The type of object A
  * @param <B> The type of object B
  */
-@Data(staticConstructor = "of")
+@Value(staticConstructor = "of")
 public class Pair<A, B> {
 
   private final A a;

@@ -26,14 +26,14 @@ package dev.demeng.pluginbase.model;
 
 import dev.demeng.pluginbase.serialize.YamlSerializable;
 import java.util.Objects;
-import lombok.Data;
+import lombok.Value;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 /** An immutable and serializable Location object without the yaw or pitch. */
-@Data(staticConstructor = "of")
+@Value(staticConstructor = "of")
 public class Position implements YamlSerializable {
 
   @NotNull private final String world;
