@@ -55,6 +55,11 @@ A module that facilitates cross-server communication using Redis publish-subscri
 Capable
 of handling objects.
 
+## Requirements
+
+- **Java 17+**
+- **Spigot 1.8.8+** (compiled against latest, runtime-compatible back to 1.8.8)
+
 ## Documentation
 
 For installation instructions, feature guides, and examples, visit
