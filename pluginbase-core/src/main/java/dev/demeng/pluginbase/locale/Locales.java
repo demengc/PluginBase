@@ -31,7 +31,7 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * An enum-like class for packing all the available locales in Lamp.
+ * An enum-like class for packing all available locales supported by the framework.
  *
  * <p>Due to the fact that {@link Locale} does not define all locales, additional ones are added.
  */
@@ -73,16 +73,42 @@ public final class Locales {
   public static final Locale HUNGARIAN = new Locale("hu");
 
   /**
-   * Returns the locale that matches the given language.
+   * Returns the locale that matches the given language string. Handles case-insensitive matching
+   * and Minecraft client locale formats (e.g., "en_us", "pt_br", "zh_cn"). If no exact match is
+   * found, falls back to the base language (e.g., "en_GB" falls back to "en").
    *
    * <p>get("en") -> ENGLISH <br>
-   * get("fr") -> FRENCH
+   * get("fr") -> FRENCH <br>
+   * get("zh_cn") -> SIMPLIFIED_CHINESE <br>
+   * get("en_gb") -> ENGLISH (hierarchical fallback)
    *
    * @param language Language to get locale for
    * @return The locale, or null if not found.
    */
   public static Locale get(@NotNull final String language) {
-    return LOCALES.get(language);
+    Locale result = LOCALES.get(language);
+    if (result != null) {
+      return result;
+    }
+
+    final int underscore = language.indexOf('_');
+
+    if (underscore > 0 && underscore < language.length() - 1) {
+      final String normalized =
+          language.substring(0, underscore).toLowerCase(Locale.ROOT)
+              + "_"
+              + language.substring(underscore + 1).toUpperCase(Locale.ROOT);
+      result = LOCALES.get(normalized);
+      if (result != null) {
+        return result;
+      }
+    }
+
+    final String baseLang =
+        underscore > 0
+            ? language.substring(0, underscore).toLowerCase(Locale.ROOT)
+            : language.toLowerCase(Locale.ROOT);
+    return LOCALES.get(baseLang);
   }
 
   /**

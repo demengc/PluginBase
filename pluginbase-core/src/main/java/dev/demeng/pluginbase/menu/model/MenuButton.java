@@ -26,12 +26,14 @@ package dev.demeng.pluginbase.menu.model;
 
 import dev.demeng.pluginbase.menu.layout.Menu;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
+import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -148,5 +150,179 @@ public class MenuButton {
       @NotNull final ConfigurationSection section,
       @Nullable final Consumer<InventoryClickEvent> consumer) {
     return create(slot, section, null, consumer);
+  }
+
+  // ---------------------------------------------------------------------------------
+  // LOCALIZED FACTORY METHODS
+  // ---------------------------------------------------------------------------------
+
+  /**
+   * Creates a new menu button from a configuration section with localization support. Translation
+   * key placeholders ({@code #{key}}) in item strings will be resolved using the given locale. The
+   * slot will always be subtracted by 1.
+   *
+   * @param section The configuration section containing the button information
+   * @param locale The locale to use for localization
+   * @param transformer Additional transformer for strings in the item, applied after localization
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      @NotNull final ConfigurationSection section,
+      @Nullable final Locale locale,
+      @Nullable final UnaryOperator<String> transformer,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+
+    int slot = section.getInt("slot", 0);
+    if (slot > 0) {
+      slot--;
+    }
+    return create(
+        slot, ItemSerializer.deserializeLocalized(section, locale, transformer), consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support. Translation
+   * key placeholders ({@code #{key}}) in item strings will be resolved using the given locale. The
+   * slot will always be subtracted by 1.
+   *
+   * @param section The configuration section containing the button information
+   * @param locale The locale to use for localization
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      @NotNull final ConfigurationSection section,
+      @Nullable final Locale locale,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return createLocalized(section, locale, null, consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support, using the
+   * sender's locale. The slot will always be subtracted by 1.
+   *
+   * @param section The configuration section containing the button information
+   * @param sender The command sender whose locale will be used
+   * @param transformer Additional transformer for strings in the item, applied after localization
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      @NotNull final ConfigurationSection section,
+      @NotNull final CommandSender sender,
+      @Nullable final UnaryOperator<String> transformer,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+
+    int slot = section.getInt("slot", 0);
+    if (slot > 0) {
+      slot--;
+    }
+    return create(
+        slot, ItemSerializer.deserializeLocalized(section, sender, transformer), consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support, using the
+   * sender's locale. The slot will always be subtracted by 1.
+   *
+   * @param section The configuration section containing the button information
+   * @param sender The command sender whose locale will be used
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      @NotNull final ConfigurationSection section,
+      @NotNull final CommandSender sender,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return createLocalized(section, sender, null, consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support, overriding
+   * the slot. Unlike the non-slot variant, the slot is not subtracted by 1.
+   *
+   * @param slot The slot of the button
+   * @param section The configuration section containing the button information
+   * @param locale The locale to use for localization
+   * @param transformer Additional transformer for strings in the item
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      final int slot,
+      @NotNull final ConfigurationSection section,
+      @Nullable final Locale locale,
+      @Nullable final UnaryOperator<String> transformer,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return create(
+        slot, ItemSerializer.deserializeLocalized(section, locale, transformer), consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support, overriding
+   * the slot. Unlike the non-slot variant, the slot is not subtracted by 1.
+   *
+   * @param slot The slot of the button
+   * @param section The configuration section containing the button information
+   * @param locale The locale to use for localization
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      final int slot,
+      @NotNull final ConfigurationSection section,
+      @Nullable final Locale locale,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return createLocalized(slot, section, locale, null, consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support, overriding
+   * the slot, using the sender's locale. Unlike the non-slot variant, the slot is not subtracted by
+   * 1.
+   *
+   * @param slot The slot of the button
+   * @param section The configuration section containing the button information
+   * @param sender The command sender whose locale will be used
+   * @param transformer Additional transformer for strings in the item
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      final int slot,
+      @NotNull final ConfigurationSection section,
+      @NotNull final CommandSender sender,
+      @Nullable final UnaryOperator<String> transformer,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return create(
+        slot, ItemSerializer.deserializeLocalized(section, sender, transformer), consumer);
+  }
+
+  /**
+   * Creates a new menu button from a configuration section with localization support, overriding
+   * the slot, using the sender's locale. Unlike the non-slot variant, the slot is not subtracted by
+   * 1.
+   *
+   * @param slot The slot of the button
+   * @param section The configuration section containing the button information
+   * @param sender The command sender whose locale will be used
+   * @param consumer The consumer for the button
+   * @return The button from config
+   */
+  @NotNull
+  public static MenuButton createLocalized(
+      final int slot,
+      @NotNull final ConfigurationSection section,
+      @NotNull final CommandSender sender,
+      @Nullable final Consumer<InventoryClickEvent> consumer) {
+    return createLocalized(slot, section, sender, null, consumer);
   }
 }
