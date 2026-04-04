@@ -1,4 +1,16 @@
+plugins {
+    id("com.gradleup.nmcp.settings") version "1.4.4"
+}
+
 rootProject.name = "pluginbase"
+
+nmcpSettings {
+    centralPortal {
+        username = providers.gradleProperty("centralPortalUsername")
+        password = providers.gradleProperty("centralPortalPassword")
+        publishingType = "AUTOMATIC"
+    }
+}
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
