@@ -78,6 +78,17 @@ public class CooldownMap<T> {
     return this.cache.get(key);
   }
 
+  /**
+   * Stores a custom cooldown instance for the given key, replacing any existing entry.
+   *
+   * <p>The provided cooldown must have the same duration as the base cooldown, since the expiring
+   * cache is configured around that duration.
+   *
+   * @param key The key to associate the cooldown with
+   * @param cooldown The cooldown instance to store
+   * @throws IllegalArgumentException If the cooldown's duration differs from the base cooldown's
+   *     duration
+   */
   public void put(@NotNull final T key, @NotNull final Cooldown cooldown) {
 
     if (cooldown.getDuration() != base.getDuration()) {
@@ -98,35 +109,94 @@ public class CooldownMap<T> {
     return cache;
   }
 
+  /**
+   * Tests whether the given key is off cooldown and, if so, records the current time as the last
+   * tested instant. Delegates to {@link Cooldown#test()}.
+   *
+   * @param key The key to test
+   * @return {@code true} if the key is not currently on cooldown
+   */
   public boolean test(@NotNull final T key) {
     return get(key).test();
   }
 
+  /**
+   * Tests whether the given key is off cooldown without recording the current time. Use this when
+   * you need to check cooldown status without consuming it. Delegates to {@link
+   * Cooldown#testSilently()}.
+   *
+   * @param key The key to test
+   * @return {@code true} if the key is not currently on cooldown
+   */
   public boolean testSilently(@NotNull final T key) {
     return get(key).testSilently();
   }
 
+  /**
+   * Returns the number of milliseconds that have elapsed since the cooldown for the given key was
+   * last tested. Delegates to {@link Cooldown#elapsed()}.
+   *
+   * @param key The key to check
+   * @return Milliseconds elapsed since the last test
+   */
   public long elapsed(@NotNull final T key) {
     return get(key).elapsed();
   }
 
+  /**
+   * Resets the cooldown for the given key so that it behaves as if it was never tested. Delegates
+   * to {@link Cooldown#reset()}.
+   *
+   * @param key The key whose cooldown should be reset
+   */
   public void reset(@NotNull final T key) {
     get(key).reset();
   }
 
+  /**
+   * Returns the number of milliseconds remaining on the cooldown for the given key. Returns {@code
+   * 0} if the key is not currently on cooldown. Delegates to {@link Cooldown#remainingMillis()}.
+   *
+   * @param key The key to check
+   * @return Remaining cooldown time in milliseconds, or {@code 0} if not on cooldown
+   */
   public long remainingMillis(@NotNull final T key) {
     return get(key).remainingMillis();
   }
 
+  /**
+   * Returns the remaining cooldown time for the given key expressed in the specified time unit.
+   * Returns {@code 0} if the key is not currently on cooldown. Delegates to {@link
+   * Cooldown#remainingTime(TimeUnit)}.
+   *
+   * @param key The key to check
+   * @param unit The time unit to express the result in
+   * @return Remaining cooldown time in the given unit, or {@code 0} if not on cooldown
+   */
   public long remainingTime(@NotNull final T key, @NotNull final TimeUnit unit) {
     return get(key).remainingTime(unit);
   }
 
+  /**
+   * Returns the timestamp at which the cooldown for the given key was last tested, as milliseconds
+   * since the epoch. Returns an empty {@link OptionalLong} if the cooldown has never been tested.
+   * Delegates to {@link Cooldown#getLastTested()}.
+   *
+   * @param key The key to check
+   * @return The last tested timestamp, or an empty optional if never tested
+   */
   @NotNull
   public OptionalLong getLastTested(@NotNull final T key) {
     return get(key).getLastTested();
   }
 
+  /**
+   * Manually sets the last tested timestamp for the cooldown associated with the given key.
+   * Delegates to {@link Cooldown#setLastTested(long)}.
+   *
+   * @param key The key whose cooldown should be updated
+   * @param time The timestamp to set, as milliseconds since the epoch
+   */
   public void setLastTested(@NotNull final T key, final long time) {
     get(key).setLastTested(time);
   }

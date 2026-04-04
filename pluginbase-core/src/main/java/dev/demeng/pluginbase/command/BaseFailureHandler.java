@@ -47,11 +47,26 @@ public final class BaseFailureHandler<A extends CommandActor> implements Failure
 
   private static final BaseFailureHandler<CommandActor> INSTANCE = new BaseFailureHandler<>();
 
+  /**
+   * Returns the shared singleton instance of this handler. The instance is stateless and safe to
+   * reuse across multiple dispatchers.
+   *
+   * @return the shared {@link FailureHandler} instance
+   */
   @SuppressWarnings("unchecked")
   public static <A extends CommandActor> FailureHandler<A> baseFailureHandler() {
     return (FailureHandler<A>) INSTANCE;
   }
 
+  /**
+   * Resolves which error to surface when one or more command attempts fail. If there is exactly one
+   * failure, its exception is re-thrown directly. If there are multiple failures and at least one
+   * is not an {@link ExpectedLiteralException}, the first real exception is dispatched. If all
+   * failures are literal mismatches (i.e. no matching subcommand), a "did you mean X?" suggestion
+   * is sent to the actor using string similarity against the available command paths.
+   *
+   * <p>Locale key for the suggestion message: {@code commands.failed-resolve}
+   */
   @Override
   public void handleFailedAttempts(
       @NotNull final A actor,

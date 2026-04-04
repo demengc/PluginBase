@@ -299,51 +299,160 @@ public final class JsonBuilder {
       add(property, value);
     }
 
+    /**
+     * Adds a property with the given name and value.
+     *
+     * <p>If {@code copy} is true, {@link JsonObject} and {@link JsonArray} values are deep copied
+     * before being added; otherwise the element is referenced directly.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @param copy whether to deep copy object and array values
+     * @return this builder
+     */
     JsonObjectBuilder add(String property, @Nullable JsonElement value, boolean copy);
 
+    /**
+     * Adds a property with the given name and value without copying.
+     *
+     * <p>Equivalent to calling {@link #add(String, JsonElement, boolean)} with {@code copy =
+     * false}.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder add(final String property, @Nullable final JsonElement value) {
       return add(property, value, false);
     }
 
+    /**
+     * Adds a string property, wrapping the value via {@link JsonBuilder#primitive(String)}.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder add(final String property, @Nullable final String value) {
       return add(property, primitive(value));
     }
 
+    /**
+     * Adds a number property, wrapping the value via {@link JsonBuilder#primitive(Number)}.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder add(final String property, @Nullable final Number value) {
       return add(property, primitive(value));
     }
 
+    /**
+     * Adds a boolean property, wrapping the value via {@link JsonBuilder#primitive(Boolean)}.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder add(final String property, @Nullable final Boolean value) {
       return add(property, primitive(value));
     }
 
+    /**
+     * Adds a character property, wrapping the value via {@link JsonBuilder#primitive(Character)}.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder add(final String property, @Nullable final Character value) {
       return add(property, primitive(value));
     }
 
+    /**
+     * Adds a property only if no property with the same name is already present.
+     *
+     * <p>If {@code copy} is true, {@link JsonObject} and {@link JsonArray} values are deep copied
+     * before being added; otherwise the element is referenced directly.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @param copy whether to deep copy object and array values
+     * @return this builder
+     */
     JsonObjectBuilder addIfAbsent(String property, @Nullable JsonElement value, boolean copy);
 
+    /**
+     * Adds a property only if no property with the same name is already present, without copying.
+     *
+     * <p>Equivalent to calling {@link #addIfAbsent(String, JsonElement, boolean)} with {@code copy
+     * = false}.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder addIfAbsent(
         final String property, @Nullable final JsonElement value) {
       return addIfAbsent(property, value, false);
     }
 
+    /**
+     * Adds a string property only if no property with the same name is already present.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder addIfAbsent(final String property, @Nullable final String value) {
       return addIfAbsent(property, primitive(value));
     }
 
+    /**
+     * Adds a number property only if no property with the same name is already present.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder addIfAbsent(final String property, @Nullable final Number value) {
       return addIfAbsent(property, primitive(value));
     }
 
+    /**
+     * Adds a boolean property only if no property with the same name is already present.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder addIfAbsent(final String property, @Nullable final Boolean value) {
       return addIfAbsent(property, primitive(value));
     }
 
+    /**
+     * Adds a character property only if no property with the same name is already present.
+     *
+     * @param property the property name
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonObjectBuilder addIfAbsent(final String property, @Nullable final Character value) {
       return addIfAbsent(property, primitive(value));
     }
 
+    /**
+     * Adds all entries from the iterable.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped. If {@code
+     * deepCopy} is true, object and array values are deep copied before being added.
+     *
+     * @param iterable the entries to add
+     * @param deepCopy whether to deep copy object and array values
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAll(
         final Iterable<Map.Entry<String, T>> iterable, final boolean deepCopy) {
       Objects.requireNonNull(iterable, "iterable");
@@ -356,11 +465,31 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all entries from the iterable without copying.
+     *
+     * <p>Equivalent to calling {@link #addAll(Iterable, boolean)} with {@code deepCopy = false}.
+     *
+     * @param iterable the entries to add
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAll(
         final Iterable<Map.Entry<String, T>> iterable) {
       return addAll(iterable, false);
     }
 
+    /**
+     * Adds all entries from the stream.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped. If {@code
+     * deepCopy} is true, object and array values are deep copied before being added.
+     *
+     * @param stream the entries to add
+     * @param deepCopy whether to deep copy object and array values
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAll(
         final Stream<Map.Entry<String, T>> stream, final boolean deepCopy) {
       Objects.requireNonNull(stream, "stream");
@@ -374,20 +503,55 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all entries from the stream without copying.
+     *
+     * <p>Equivalent to calling {@link #addAll(Stream, boolean)} with {@code deepCopy = false}.
+     *
+     * @param stream the entries to add
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAll(
         final Stream<Map.Entry<String, T>> stream) {
       return addAll(stream, false);
     }
 
+    /**
+     * Adds all entries from another {@link JsonObject}.
+     *
+     * <p>If {@code deepCopy} is true, object and array values are deep copied before being added.
+     *
+     * @param object the source object
+     * @param deepCopy whether to deep copy object and array values
+     * @return this builder
+     */
     default JsonObjectBuilder addAll(final JsonObject object, final boolean deepCopy) {
       Objects.requireNonNull(object, "object");
       return addAll(object.entrySet(), deepCopy);
     }
 
+    /**
+     * Adds all entries from another {@link JsonObject} without copying.
+     *
+     * <p>Equivalent to calling {@link #addAll(JsonObject, boolean)} with {@code deepCopy = false}.
+     *
+     * @param object the source object
+     * @return this builder
+     */
     default JsonObjectBuilder addAll(final JsonObject object) {
       return addAll(object, false);
     }
 
+    /**
+     * Adds all string entries from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(String)}.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @return this builder
+     */
     default JsonObjectBuilder addAllStrings(final Iterable<Map.Entry<String, String>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
       for (final Map.Entry<String, String> e : iterable) {
@@ -399,6 +563,16 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all number entries from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(Number)}.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @param <T> the number type
+     * @return this builder
+     */
     default <T extends Number> JsonObjectBuilder addAllNumbers(
         final Iterable<Map.Entry<String, T>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
@@ -411,6 +585,15 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all boolean entries from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(Boolean)}.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @return this builder
+     */
     default JsonObjectBuilder addAllBooleans(final Iterable<Map.Entry<String, Boolean>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
       for (final Map.Entry<String, Boolean> e : iterable) {
@@ -422,6 +605,15 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all character entries from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(Character)}.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @return this builder
+     */
     default JsonObjectBuilder addAllCharacters(
         final Iterable<Map.Entry<String, Character>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
@@ -434,6 +626,17 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all entries from the iterable, skipping any whose key is already present.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped. If {@code
+     * deepCopy} is true, object and array values are deep copied before being added.
+     *
+     * @param iterable the entries to add
+     * @param deepCopy whether to deep copy object and array values
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
         final Iterable<Map.Entry<String, T>> iterable, final boolean deepCopy) {
       Objects.requireNonNull(iterable, "iterable");
@@ -446,11 +649,33 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all entries from the iterable without copying, skipping any whose key is already
+     * present.
+     *
+     * <p>Equivalent to calling {@link #addAllIfAbsent(Iterable, boolean)} with {@code deepCopy =
+     * false}.
+     *
+     * @param iterable the entries to add
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
         final Iterable<Map.Entry<String, T>> iterable) {
       return addAllIfAbsent(iterable, false);
     }
 
+    /**
+     * Adds all entries from the stream, skipping any whose key is already present.
+     *
+     * <p>Entries with a {@code null} key or a {@code null} entry itself are skipped. If {@code
+     * deepCopy} is true, object and array values are deep copied before being added.
+     *
+     * @param stream the entries to add
+     * @param deepCopy whether to deep copy object and array values
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
         final Stream<Map.Entry<String, T>> stream, final boolean deepCopy) {
       Objects.requireNonNull(stream, "stream");
@@ -464,20 +689,58 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all entries from the stream without copying, skipping any whose key is already present.
+     *
+     * <p>Equivalent to calling {@link #addAllIfAbsent(Stream, boolean)} with {@code deepCopy =
+     * false}.
+     *
+     * @param stream the entries to add
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonObjectBuilder addAllIfAbsent(
         final Stream<Map.Entry<String, T>> stream) {
       return addAllIfAbsent(stream, false);
     }
 
+    /**
+     * Adds all entries from another {@link JsonObject}, skipping any whose key is already present.
+     *
+     * <p>If {@code deepCopy} is true, object and array values are deep copied before being added.
+     *
+     * @param object the source object
+     * @param deepCopy whether to deep copy object and array values
+     * @return this builder
+     */
     default JsonObjectBuilder addAllIfAbsent(final JsonObject object, final boolean deepCopy) {
       Objects.requireNonNull(object, "object");
       return addAllIfAbsent(object.entrySet(), deepCopy);
     }
 
+    /**
+     * Adds all entries from another {@link JsonObject} without copying, skipping any whose key is
+     * already present.
+     *
+     * <p>Equivalent to calling {@link #addAllIfAbsent(JsonObject, boolean)} with {@code deepCopy =
+     * false}.
+     *
+     * @param object the source object
+     * @return this builder
+     */
     default JsonObjectBuilder addAllIfAbsent(final JsonObject object) {
       return addAllIfAbsent(object, false);
     }
 
+    /**
+     * Adds all string entries from the iterable, skipping any whose key is already present.
+     *
+     * <p>Each value is wrapped via {@link JsonBuilder#primitive(String)}. Entries with a {@code
+     * null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @return this builder
+     */
     default JsonObjectBuilder addAllStringsIfAbsent(
         final Iterable<Map.Entry<String, String>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
@@ -490,6 +753,16 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all number entries from the iterable, skipping any whose key is already present.
+     *
+     * <p>Each value is wrapped via {@link JsonBuilder#primitive(Number)}. Entries with a {@code
+     * null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @param <T> the number type
+     * @return this builder
+     */
     default <T extends Number> JsonObjectBuilder addAllNumbersIfAbsent(
         final Iterable<Map.Entry<String, T>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
@@ -502,6 +775,15 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all boolean entries from the iterable, skipping any whose key is already present.
+     *
+     * <p>Each value is wrapped via {@link JsonBuilder#primitive(Boolean)}. Entries with a {@code
+     * null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @return this builder
+     */
     default JsonObjectBuilder addAllBooleansIfAbsent(
         final Iterable<Map.Entry<String, Boolean>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
@@ -514,6 +796,15 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Adds all character entries from the iterable, skipping any whose key is already present.
+     *
+     * <p>Each value is wrapped via {@link JsonBuilder#primitive(Character)}. Entries with a {@code
+     * null} key or a {@code null} entry itself are skipped.
+     *
+     * @param iterable the entries to add
+     * @return this builder
+     */
     default JsonObjectBuilder addAllCharactersIfAbsent(
         final Iterable<Map.Entry<String, Character>> iterable) {
       Objects.requireNonNull(iterable, "iterable");
@@ -526,6 +817,11 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Returns the built {@link JsonObject}.
+     *
+     * @return the built object
+     */
     JsonObject build();
   }
 
@@ -537,28 +833,80 @@ public final class JsonBuilder {
       add(value);
     }
 
+    /**
+     * Appends an element to the array.
+     *
+     * <p>If {@code copy} is true, {@link JsonObject} and {@link JsonArray} values are deep copied
+     * before being added; otherwise the element is referenced directly.
+     *
+     * @param value the element to add, or {@code null} to add {@link JsonNull}
+     * @param copy whether to deep copy object and array values
+     * @return this builder
+     */
     JsonArrayBuilder add(@Nullable JsonElement value, boolean copy);
 
+    /**
+     * Appends an element to the array without copying.
+     *
+     * <p>Equivalent to calling {@link #add(JsonElement, boolean)} with {@code copy = false}.
+     *
+     * @param value the element to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonArrayBuilder add(@Nullable final JsonElement value) {
       return add(value, false);
     }
 
+    /**
+     * Appends a string element, wrapping the value via {@link JsonBuilder#primitive(String)}.
+     *
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonArrayBuilder add(@Nullable final String value) {
       return add(primitive(value));
     }
 
+    /**
+     * Appends a number element, wrapping the value via {@link JsonBuilder#primitive(Number)}.
+     *
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonArrayBuilder add(@Nullable final Number value) {
       return add(primitive(value));
     }
 
+    /**
+     * Appends a boolean element, wrapping the value via {@link JsonBuilder#primitive(Boolean)}.
+     *
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonArrayBuilder add(@Nullable final Boolean value) {
       return add(primitive(value));
     }
 
+    /**
+     * Appends a character element, wrapping the value via {@link JsonBuilder#primitive(Character)}.
+     *
+     * @param value the value to add, or {@code null} to add {@link JsonNull}
+     * @return this builder
+     */
     default JsonArrayBuilder add(@Nullable final Character value) {
       return add(primitive(value));
     }
 
+    /**
+     * Appends all elements from the iterable.
+     *
+     * <p>If {@code copy} is true, object and array values are deep copied before being added.
+     *
+     * @param iterable the elements to add
+     * @param copy whether to deep copy object and array values
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonArrayBuilder addAll(
         final Iterable<T> iterable, final boolean copy) {
       Objects.requireNonNull(iterable, "iterable");
@@ -568,10 +916,29 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Appends all elements from the iterable without copying.
+     *
+     * <p>Equivalent to calling {@link #addAll(Iterable, boolean)} with {@code copy = false}.
+     *
+     * @param iterable the elements to add
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonArrayBuilder addAll(final Iterable<T> iterable) {
       return addAll(iterable, false);
     }
 
+    /**
+     * Appends all elements from the stream.
+     *
+     * <p>If {@code copy} is true, object and array values are deep copied before being added.
+     *
+     * @param stream the elements to add
+     * @param copy whether to deep copy object and array values
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonArrayBuilder addAll(
         final Stream<T> stream, final boolean copy) {
       Objects.requireNonNull(stream, "iterable");
@@ -579,10 +946,26 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Appends all elements from the stream without copying.
+     *
+     * <p>Equivalent to calling {@link #addAll(Stream, boolean)} with {@code copy = false}.
+     *
+     * @param stream the elements to add
+     * @param <T> the element type
+     * @return this builder
+     */
     default <T extends JsonElement> JsonArrayBuilder addAll(final Stream<T> stream) {
       return addAll(stream, false);
     }
 
+    /**
+     * Appends all strings from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(String)}.
+     *
+     * @param iterable the values to add
+     * @return this builder
+     */
     default JsonArrayBuilder addStrings(final Iterable<String> iterable) {
       Objects.requireNonNull(iterable, "iterable");
       for (final String e : iterable) {
@@ -591,6 +974,14 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Appends all numbers from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(Number)}.
+     *
+     * @param iterable the values to add
+     * @param <T> the number type
+     * @return this builder
+     */
     default <T extends Number> JsonArrayBuilder addNumbers(final Iterable<T> iterable) {
       Objects.requireNonNull(iterable, "iterable");
       for (final T e : iterable) {
@@ -599,6 +990,13 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Appends all booleans from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(Boolean)}.
+     *
+     * @param iterable the values to add
+     * @return this builder
+     */
     default JsonArrayBuilder addBooleans(final Iterable<Boolean> iterable) {
       Objects.requireNonNull(iterable, "iterable");
       for (final Boolean e : iterable) {
@@ -607,6 +1005,13 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Appends all characters from the iterable, wrapping each value via {@link
+     * JsonBuilder#primitive(Character)}.
+     *
+     * @param iterable the values to add
+     * @return this builder
+     */
     default JsonArrayBuilder addCharacters(final Iterable<Character> iterable) {
       Objects.requireNonNull(iterable, "iterable");
       for (final Character e : iterable) {
@@ -615,6 +1020,11 @@ public final class JsonBuilder {
       return this;
     }
 
+    /**
+     * Returns the built {@link JsonArray}.
+     *
+     * @return the built array
+     */
     JsonArray build();
   }
 

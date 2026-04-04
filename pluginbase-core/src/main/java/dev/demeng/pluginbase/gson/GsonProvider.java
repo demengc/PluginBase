@@ -49,59 +49,124 @@ public final class GsonProvider {
   @SuppressWarnings("deprecation")
   private static final JsonParser PARSER = new JsonParser();
 
+  /**
+   * Returns the standard {@link Gson} instance configured with null serialization and HTML escaping
+   * disabled.
+   *
+   * @return the standard Gson instance
+   */
   @NotNull
   public static Gson standard() {
     return STANDARD_GSON;
   }
 
+  /**
+   * Returns a {@link Gson} instance configured with pretty printing, null serialization, and HTML
+   * escaping disabled.
+   *
+   * @return the pretty-printing Gson instance
+   */
   @NotNull
   public static Gson prettyPrinting() {
     return PRETTY_PRINT_GSON;
   }
 
+  /**
+   * Returns the shared {@link JsonParser} instance.
+   *
+   * @return the shared JsonParser
+   */
   @SuppressWarnings("deprecation")
   @NotNull
   public static JsonParser parser() {
     return PARSER;
   }
 
+  /**
+   * Parses the content of the given {@link Reader} into a {@link JsonObject}.
+   *
+   * @param reader the reader supplying the JSON content
+   * @return the parsed JsonObject
+   */
   @SuppressWarnings("deprecation")
   @NotNull
   public static JsonObject readObject(@NotNull final Reader reader) {
     return PARSER.parse(reader).getAsJsonObject();
   }
 
+  /**
+   * Parses a JSON string into a {@link JsonObject}.
+   *
+   * @param s the JSON string to parse
+   * @return the parsed JsonObject
+   */
   @SuppressWarnings("deprecation")
   @NotNull
   public static JsonObject readObject(@NotNull final String s) {
     return PARSER.parse(s).getAsJsonObject();
   }
 
+  /**
+   * Serializes a {@link JsonObject} to the given {@link Appendable} using standard formatting.
+   *
+   * @param writer the target to write the JSON to
+   * @param object the object to serialize
+   */
   public static void writeObject(
       @NotNull final Appendable writer, @NotNull final JsonObject object) {
     standard().toJson(object, writer);
   }
 
+  /**
+   * Serializes a {@link JsonObject} to the given {@link Appendable} using pretty-print formatting.
+   *
+   * @param writer the target to write the JSON to
+   * @param object the object to serialize
+   */
   public static void writeObjectPretty(
       @NotNull final Appendable writer, @NotNull final JsonObject object) {
     prettyPrinting().toJson(object, writer);
   }
 
+  /**
+   * Serializes a {@link JsonElement} to the given {@link Appendable} using standard formatting.
+   *
+   * @param writer the target to write the JSON to
+   * @param element the element to serialize
+   */
   public static void writeElement(
       @NotNull final Appendable writer, @NotNull final JsonElement element) {
     standard().toJson(element, writer);
   }
 
+  /**
+   * Serializes a {@link JsonElement} to the given {@link Appendable} using pretty-print formatting.
+   *
+   * @param writer the target to write the JSON to
+   * @param element the element to serialize
+   */
   public static void writeElementPretty(
       @NotNull final Appendable writer, @NotNull final JsonElement element) {
     prettyPrinting().toJson(element, writer);
   }
 
+  /**
+   * Serializes a {@link JsonElement} to a string using standard formatting.
+   *
+   * @param element the element to serialize
+   * @return the JSON string representation
+   */
   @NotNull
   public static String toString(@NotNull final JsonElement element) {
     return Objects.requireNonNull(standard().toJson(element));
   }
 
+  /**
+   * Serializes a {@link JsonElement} to a pretty-printed string.
+   *
+   * @param element the element to serialize
+   * @return the pretty-printed JSON string representation
+   */
   @NotNull
   public static String toStringPretty(@NotNull final JsonElement element) {
     return Objects.requireNonNull(prettyPrinting().toJson(element));

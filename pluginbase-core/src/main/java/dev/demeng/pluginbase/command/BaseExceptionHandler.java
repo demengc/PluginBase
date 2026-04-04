@@ -68,6 +68,11 @@ import revxrsal.commands.node.ParameterNode;
  */
 public class BaseExceptionHandler extends BukkitExceptionHandler {
 
+  /**
+   * Sends a localized error message for invalid player input.
+   *
+   * <p>Locale key: {@code commands.invalid-player}
+   */
   @Override
   public void onInvalidPlayer(final InvalidPlayerException e, final BukkitCommandActor actor) {
     Text.tell(
@@ -76,6 +81,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.invalid-player", "&cInvalid player: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message for an invalid world name.
+   *
+   * <p>Locale key: {@code commands.invalid-world}
+   */
   @Override
   public void onInvalidWorld(final InvalidWorldException e, final BukkitCommandActor actor) {
     Text.tell(
@@ -84,6 +94,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.invalid-world", "&cInvalid world: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message when a required location axis parameter is missing.
+   *
+   * <p>Locale key: {@code commands.missing-location-parameter}
+   */
   @Override
   public void onInvalidWorld(
       final MissingLocationParameterException e, final BukkitCommandActor actor) {
@@ -96,6 +111,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             e.axis().name().toLowerCase(Locale.ROOT)));
   }
 
+  /**
+   * Sends a localized error message when a non-console sender runs a console-only command.
+   *
+   * <p>Locale key: {@code commands.sender-not-console}
+   */
   @Override
   public void onSenderNotConsole(
       final SenderNotConsoleException e, final BukkitCommandActor actor) {
@@ -107,6 +127,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             "&cYou must be the console to execute this command!"));
   }
 
+  /**
+   * Sends a localized error message when a non-player sender runs a player-only command.
+   *
+   * <p>Locale key: {@code commands.sender-not-player}
+   */
   @Override
   public void onSenderNotPlayer(final SenderNotPlayerException e, final BukkitCommandActor actor) {
     Text.tell(
@@ -117,6 +142,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             "&cYou must be a player to execute this command!"));
   }
 
+  /**
+   * Sends a localized error message for a malformed entity selector.
+   *
+   * <p>Locale key: {@code commands.malformed-entity-selector}
+   */
   @Override
   public void onMalformedEntitySelector(
       final MalformedEntitySelectorException e, final BukkitCommandActor actor) {
@@ -130,6 +160,12 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             e.errorMessage()));
   }
 
+  /**
+   * Sends a localized error message when an entity selector targets non-player entities but only
+   * players are allowed.
+   *
+   * <p>Locale key: {@code commands.non-player-entities}
+   */
   @Override
   public void onNonPlayerEntities(
       final NonPlayerEntitiesException e, final BukkitCommandActor actor) {
@@ -142,6 +178,12 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             e.input()));
   }
 
+  /**
+   * Sends a localized error message when an entity selector matches more than one entity but only
+   * one is allowed.
+   *
+   * <p>Locale key: {@code commands.more-than-one-entity}
+   */
   @Override
   public void onMoreThanOneEntity(
       final MoreThanOneEntityException e, final BukkitCommandActor actor) {
@@ -153,6 +195,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             "&cEntity selector must target only one entity."));
   }
 
+  /**
+   * Sends a localized error message when an entity selector matches no entities.
+   *
+   * <p>Locale key: {@code commands.empty-entity-selector}
+   */
   @Override
   public void onEmptyEntitySelector(
       final EmptyEntitySelectorException e, final BukkitCommandActor actor) {
@@ -162,6 +209,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.empty-entity-selector", "&cNo entities were found."));
   }
 
+  /**
+   * Sends a localized error message when input does not match any enum constant.
+   *
+   * <p>Locale key: {@code commands.enum-not-found}
+   */
   @Override
   public void onEnumNotFound(
       @NotNull final EnumNotFoundException e, @NotNull final BukkitCommandActor actor) {
@@ -171,6 +223,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.enum-not-found", "&cInvalid value: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message when a literal node received unexpected input.
+   *
+   * <p>Locale key: {@code commands.expected-literal}
+   */
   @Override
   public void onExpectedLiteral(
       @NotNull final ExpectedLiteralException e, @NotNull final BukkitCommandActor actor) {
@@ -184,6 +241,16 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             e.input()));
   }
 
+  /**
+   * Sends a localized error message for input parsing failures. The specific message depends on the
+   * parse error cause:
+   *
+   * <ul>
+   *   <li>Invalid escape character: {@code commands.input-parse.invalid-escape}
+   *   <li>Unclosed quote: {@code commands.input-parse.unclosed-quote}
+   *   <li>Expected whitespace: {@code commands.input-parse.expected-whitespace}
+   * </ul>
+   */
   @Override
   public void onInputParse(
       @NotNull final InputParseException e, @NotNull final BukkitCommandActor actor) {
@@ -215,6 +282,14 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     }
   }
 
+  /**
+   * Sends a localized error message when a list argument has too few or too many entries.
+   *
+   * <ul>
+   *   <li>Too few entries: {@code commands.invalid-list-size.too-small}
+   *   <li>Too many entries: {@code commands.invalid-list-size.too-large}
+   * </ul>
+   */
   @Override
   public void onInvalidListSize(
       @NotNull final InvalidListSizeException e,
@@ -242,6 +317,14 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     }
   }
 
+  /**
+   * Sends a localized error message when a string argument is too short or too long.
+   *
+   * <ul>
+   *   <li>Too short: {@code commands.invalid-string-size.too-small}
+   *   <li>Too long: {@code commands.invalid-string-size.too-large}
+   * </ul>
+   */
   @Override
   public void onInvalidStringSize(
       @NotNull final InvalidStringSizeException e,
@@ -269,6 +352,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     }
   }
 
+  /**
+   * Sends a localized error message when input cannot be parsed as a boolean.
+   *
+   * <p>Locale key: {@code commands.invalid-boolean}
+   */
   @Override
   public void onInvalidBoolean(
       @NotNull final InvalidBooleanException e, @NotNull final BukkitCommandActor actor) {
@@ -281,6 +369,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             e.input()));
   }
 
+  /**
+   * Sends a localized error message when input cannot be parsed as a decimal number.
+   *
+   * <p>Locale key: {@code commands.invalid-decimal}
+   */
   @Override
   public void onInvalidDecimal(
       @NotNull final InvalidDecimalException e, @NotNull final BukkitCommandActor actor) {
@@ -290,6 +383,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.invalid-decimal", "&cInvalid number: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message when input cannot be parsed as an integer.
+   *
+   * <p>Locale key: {@code commands.invalid-integer}
+   */
   @Override
   public void onInvalidInteger(
       @NotNull final InvalidIntegerException e, @NotNull final BukkitCommandActor actor) {
@@ -299,6 +397,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.invalid-integer", "&cInvalid integer: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message when input cannot be parsed as a UUID.
+   *
+   * <p>Locale key: {@code commands.invalid-uuid}
+   */
   @Override
   public void onInvalidUUID(
       @NotNull final InvalidUUIDException e, @NotNull final BukkitCommandActor actor) {
@@ -308,6 +411,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.invalid-uuid", "&cInvalid UUID: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message when a required command argument is missing.
+   *
+   * <p>Locale key: {@code commands.missing-argument}
+   */
   @Override
   public void onMissingArgument(
       @NotNull final MissingArgumentException e,
@@ -323,6 +431,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             parameter.command().usage()));
   }
 
+  /**
+   * Sends a localized error message when the sender lacks permission to run the command.
+   *
+   * <p>Locale key: {@code commands.no-permission}
+   */
   @Override
   public void onNoPermission(
       @NotNull final NoPermissionException e, @NotNull final BukkitCommandActor actor) {
@@ -334,6 +447,14 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             "&cYou do not have permission to execute this command!"));
   }
 
+  /**
+   * Sends a localized error message when a numeric argument falls outside its allowed range.
+   *
+   * <ul>
+   *   <li>Below minimum: {@code commands.number-not-in-range.too-small}
+   *   <li>Above maximum: {@code commands.number-not-in-range.too-large}
+   * </ul>
+   */
   @Override
   public void onNumberNotInRange(
       @NotNull final NumberNotInRangeException e,
@@ -363,6 +484,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     }
   }
 
+  /**
+   * Sends a localized error message for an out-of-range help page number. Uses {@code
+   * commands.invalid-help-page.single} when there is only one page, otherwise {@code
+   * commands.invalid-help-page.multiple}.
+   */
   @Override
   public void onInvalidHelpPage(
       @NotNull final InvalidHelpPageException e, @NotNull final BukkitCommandActor actor) {
@@ -386,6 +512,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     }
   }
 
+  /**
+   * Sends a localized error message when the input does not match any known command.
+   *
+   * <p>Locale key: {@code commands.unknown-command}
+   */
   @Override
   public void onUnknownCommand(
       @NotNull final UnknownCommandException e, @NotNull final BukkitCommandActor actor) {
@@ -395,6 +526,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             actor.sender(), "commands.unknown-command", "&cUnknown command: &e{0}&c.", e.input()));
   }
 
+  /**
+   * Sends a localized error message when the provided value is not in the set of allowed values.
+   *
+   * <p>Locale key: {@code commands.value-not-allowed}
+   */
   @Override
   public void onValueNotAllowed(
       @NotNull final ValueNotAllowedException e, @NotNull final BukkitCommandActor actor) {
@@ -409,6 +545,12 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
             allowedValues));
   }
 
+  /**
+   * Sends a localized internal error message and logs the underlying cause when command execution
+   * throws an unexpected exception.
+   *
+   * <p>Locale key: {@code commands.internal-error}
+   */
   @Override
   public void onCommandInvocation(
       @NotNull final CommandInvocationException e, @NotNull final BukkitCommandActor actor) {
@@ -422,6 +564,11 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     Common.error(e.cause(), "Failed to execute command.", false);
   }
 
+  /**
+   * Sends a localized error message for an unrecognized flag or shorthand parameter. Uses {@code
+   * commands.unknown-parameter.shorthand} for shorthand flags, otherwise {@code
+   * commands.unknown-parameter.flag}.
+   */
   @Override
   public void onUnknownParameter(
       @NotNull final UnknownParameterException e, @NotNull final BukkitCommandActor actor) {
@@ -444,6 +591,12 @@ public class BaseExceptionHandler extends BukkitExceptionHandler {
     }
   }
 
+  /**
+   * Sends a localized error message when a command is on cooldown, including the remaining wait
+   * time formatted with the concise duration formatter.
+   *
+   * <p>Locale key: {@code commands.cooldown}
+   */
   @Override
   public void onCooldown(
       @NotNull final CooldownException e, @NotNull final BukkitCommandActor actor) {

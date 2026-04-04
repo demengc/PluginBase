@@ -40,39 +40,117 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Delegates {
 
+  /**
+   * Wraps a {@link Runnable} as a {@link Consumer}. The consumer ignores its argument and simply
+   * runs the delegate.
+   *
+   * @param runnable the runnable to wrap
+   * @param <T> the type of the consumer's argument
+   * @return a consumer that delegates to the given runnable
+   */
   public static <T> Consumer<T> runnableToConsumer(final Runnable runnable) {
     return new RunnableToConsumer<>(runnable);
   }
 
+  /**
+   * Wraps a {@link Runnable} as a {@link Supplier Supplier&lt;Void&gt;}. Runs the delegate and
+   * returns {@code null}.
+   *
+   * @param runnable the runnable to wrap
+   * @return a supplier that runs the delegate and always returns {@code null}
+   */
   public static Supplier<Void> runnableToSupplier(final Runnable runnable) {
     return new RunnableToSupplier<>(runnable);
   }
 
+  /**
+   * Wraps a {@link Callable} as a {@link Supplier}. Any checked exception thrown by the callable is
+   * rethrown wrapped in a {@link BaseException}; unchecked exceptions propagate as-is.
+   *
+   * @param callable the callable to wrap
+   * @param <T> the type of the supplied value
+   * @return a supplier that delegates to the given callable
+   * @throws BaseException if the callable throws a checked exception
+   */
   public static <T> Supplier<T> callableToSupplier(final Callable<T> callable) {
     return new CallableToSupplier<>(callable);
   }
 
+  /**
+   * Wraps a {@link Consumer} as a {@link BiConsumer} that applies the consumer to the first
+   * argument, ignoring the second.
+   *
+   * @param consumer the consumer to wrap
+   * @param <T> the type of the first argument
+   * @param <U> the type of the second argument (ignored)
+   * @return a bi-consumer that delegates to the given consumer using the first argument
+   */
   public static <T, U> BiConsumer<T, U> consumerToBiConsumerFirst(final Consumer<T> consumer) {
     return new ConsumerToBiConsumerFirst<>(consumer);
   }
 
+  /**
+   * Wraps a {@link Consumer} as a {@link BiConsumer} that applies the consumer to the second
+   * argument, ignoring the first.
+   *
+   * @param consumer the consumer to wrap
+   * @param <T> the type of the first argument (ignored)
+   * @param <U> the type of the second argument
+   * @return a bi-consumer that delegates to the given consumer using the second argument
+   */
   public static <T, U> BiConsumer<T, U> consumerToBiConsumerSecond(final Consumer<U> consumer) {
     return new ConsumerToBiConsumerSecond<>(consumer);
   }
 
+  /**
+   * Wraps a {@link Predicate} as a {@link BiPredicate} that tests the first argument, ignoring the
+   * second.
+   *
+   * @param predicate the predicate to wrap
+   * @param <T> the type of the first argument
+   * @param <U> the type of the second argument (ignored)
+   * @return a bi-predicate that delegates to the given predicate using the first argument
+   */
   public static <T, U> BiPredicate<T, U> predicateToBiPredicateFirst(final Predicate<T> predicate) {
     return new PredicateToBiPredicateFirst<>(predicate);
   }
 
+  /**
+   * Wraps a {@link Predicate} as a {@link BiPredicate} that tests the second argument, ignoring the
+   * first.
+   *
+   * @param predicate the predicate to wrap
+   * @param <T> the type of the first argument (ignored)
+   * @param <U> the type of the second argument
+   * @return a bi-predicate that delegates to the given predicate using the second argument
+   */
   public static <T, U> BiPredicate<T, U> predicateToBiPredicateSecond(
       final Predicate<U> predicate) {
     return new PredicateToBiPredicateSecond<>(predicate);
   }
 
+  /**
+   * Wraps a {@link Consumer} as a {@link Function}. Applies the consumer to the argument and
+   * returns {@code null}.
+   *
+   * @param consumer the consumer to wrap
+   * @param <T> the type of the function's argument
+   * @param <U> the declared return type of the function (always {@code null} at runtime)
+   * @return a function that delegates to the given consumer and always returns {@code null}
+   */
   public static <T, U> Function<T, U> consumerToFunction(final Consumer<T> consumer) {
     return new ConsumerToFunction<>(consumer);
   }
 
+  /**
+   * Wraps a {@link Runnable} as a {@link Function}. Runs the delegate, ignores the argument, and
+   * returns {@code null}.
+   *
+   * @param runnable the runnable to wrap
+   * @param <T> the type of the function's argument (ignored)
+   * @param <U> the declared return type of the function (always {@code null} at runtime)
+   * @return a function that delegates to the given runnable and always returns {@code null}
+   */
   public static <T, U> Function<T, U> runnableToFunction(final Runnable runnable) {
     return new RunnableToFunction<>(runnable);
   }

@@ -31,7 +31,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Settings for the plugin base. Most of these methods should be overriden to suite your needs.
+ * Settings for the plugin base. Most of these methods should be overridden to suit your needs.
  * Apply the settings using {@link BasePlugin}'s #setBaseSettings().
  */
 public interface BaseSettings {
@@ -91,7 +91,7 @@ public interface BaseSettings {
   @Data
   class ColorScheme {
 
-    /** The primarily color, used as &p. */
+    /** The primary color, used as &p. */
     @NotNull private final String primary;
 
     /** The secondary color, used as &s. */
