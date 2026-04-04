@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class AbstractCompositeTerminable implements CompositeTerminable {
 
   private final Deque<AutoCloseable> closeables = new ConcurrentLinkedDeque<>();
-  private boolean closed = false;
+  private volatile boolean closed = false;
 
   protected AbstractCompositeTerminable() {}
 
