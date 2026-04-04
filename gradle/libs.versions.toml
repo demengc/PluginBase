@@ -21,7 +21,7 @@ sqlstreams = "1.0.0"
 
 mongodb-driver = "5.6.4"
 
-jedis = "7.2.0"
+jedis = "7.4.1"
 commons-pool2 = "2.13.1"
 
 junit-jupiter = "6.0.3"
