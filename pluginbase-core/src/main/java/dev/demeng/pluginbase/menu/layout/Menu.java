@@ -31,6 +31,7 @@ import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
 import dev.demeng.pluginbase.text.Text;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -60,8 +61,13 @@ public abstract class Menu implements IMenu {
    * A map of all the actions for the menu buttons, with the key being the slot number, and the
    * value being the consumer for the click event if the slot clicked matches the key.
    */
-  @NotNull @Getter
+  @NotNull
   private final Map<Integer, Consumer<InventoryClickEvent>> actions = new HashMap<>();
+
+  @NotNull
+  public Map<Integer, Consumer<InventoryClickEvent>> getActions() {
+    return Collections.unmodifiableMap(actions);
+  }
 
   private static final String EMPTY_NAME = "&0";
 

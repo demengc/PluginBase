@@ -31,6 +31,7 @@ import dev.demeng.pluginbase.menu.MenuManager;
 import dev.demeng.pluginbase.menu.model.MenuButton;
 import dev.demeng.pluginbase.serialize.ItemSerializer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +59,12 @@ public abstract class PagedMenu implements IMenu {
   @NotNull @Getter private final UUID uuid = UUID.randomUUID();
 
   /** The single-paged menus (pages) related to this paged menu. */
-  @NotNull @Getter private final List<Menu> pages = new ArrayList<>();
+  @NotNull private final List<Menu> pages = new ArrayList<>();
+
+  @NotNull
+  public List<Menu> getPages() {
+    return Collections.unmodifiableList(pages);
+  }
 
   private final int pageSize;
   private final String title;
