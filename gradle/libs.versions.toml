@@ -3,6 +3,7 @@ shadow = "9.4.1"
 spotless = "8.4.0"
 errorprone-plugin = "5.1.0"
 errorprone-core = "2.35.1"
+nmcp = "1.4.4"
 
 spigot-api = "1.21.11-R0.1-SNAPSHOT"
 annotations = "26.1.0"
@@ -68,3 +69,4 @@ lamp = ["lamp-common", "lamp-bukkit", "lamp-brigadier"]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }
+nmcp-settings = { id = "com.gradleup.nmcp.settings", version.ref = "nmcp" }

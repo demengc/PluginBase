@@ -3,13 +3,14 @@ import net.ltgt.gradle.errorprone.errorprone
 plugins {
     `java-library`
     `maven-publish`
+    signing
     id("com.gradleup.shadow")
     id("com.diffplug.spotless")
     id("net.ltgt.errorprone")
 }
 
-group = "dev.demeng"
-version = "1.37.0-SNAPSHOT"
+group = "dev.demeng.pluginbase"
+version = findProperty("releaseVersion") as String? ?: "0.0.0-SNAPSHOT"
 
 java {
     toolchain {
@@ -79,6 +80,43 @@ publishing {
             artifact(tasks.shadowJar)
             artifact(tasks.named("sourcesJar"))
             artifact(tasks.named("javadocJar"))
+            pom {
+                name.set(project.name)
+                description.set(provider { project.description ?: project.name })
+                url.set("https://github.com/demengc/PluginBase")
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("demengc")
+                        name.set("Demeng")
+                        email.set("hi@demeng.dev")
+                        url.set("https://github.com/demengc")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/demengc/PluginBase.git")
+                    developerConnection.set("scm:git:ssh://github.com/demengc/PluginBase.git")
+                    url.set("https://github.com/demengc/PluginBase")
+                }
+            }
         }
     }
+}
+
+signing {
+    val signingKey = findProperty("signingInMemoryKey") as String?
+    val signingPassword = findProperty("signingInMemoryKeyPassword") as String?
+    if (signingKey != null) {
+        useInMemoryPgpKeys(signingKey, signingPassword)
+    }
+    sign(publishing.publications["shadow"])
+}
+
+tasks.withType<Sign>().configureEach {
+    isRequired = !version.toString().endsWith("-SNAPSHOT")
 }
