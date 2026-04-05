@@ -44,7 +44,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,7 +94,7 @@ public abstract class Menu implements IMenu {
       return;
     }
 
-    inventory.setItem(button.getSlot(), button.getStack());
+    inventory.setItem(button.getSlot(), hideFlags(button.getStack()));
 
     if (button.getConsumer() != null) {
       actions.put(button.getSlot(), button.getConsumer());
@@ -333,6 +335,16 @@ public abstract class Menu implements IMenu {
         return;
       }
     }
+  }
+
+  private static ItemStack hideFlags(final ItemStack stack) {
+    final ItemStack clone = stack.clone();
+    final ItemMeta meta = clone.getItemMeta();
+    if (meta != null) {
+      meta.addItemFlags(ItemFlag.values());
+      clone.setItemMeta(meta);
+    }
+    return clone;
   }
 
   @Override
