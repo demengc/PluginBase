@@ -292,6 +292,17 @@ public final class Time {
 
     private static final class Unit {
 
+      private static final Map<ChronoUnit, String> CONCISE_LABELS =
+          ImmutableMap.<ChronoUnit, String>builder()
+              .put(ChronoUnit.YEARS, "y")
+              .put(ChronoUnit.MONTHS, "mo")
+              .put(ChronoUnit.WEEKS, "w")
+              .put(ChronoUnit.DAYS, "d")
+              .put(ChronoUnit.HOURS, "h")
+              .put(ChronoUnit.MINUTES, "m")
+              .put(ChronoUnit.SECONDS, "s")
+              .build();
+
       private final long duration;
       private final String formalStringPlural;
       private final String formalStringSingular;
@@ -302,7 +313,7 @@ public final class Time {
         this.formalStringPlural = " " + unit.name().toLowerCase(Locale.ROOT);
         this.formalStringSingular =
             " " + unit.name().substring(0, unit.name().length() - 1).toLowerCase(Locale.ROOT);
-        this.conciseString = String.valueOf(Character.toLowerCase(unit.name().charAt(0)));
+        this.conciseString = CONCISE_LABELS.get(unit);
       }
 
       public String toString(final boolean concise, final long n) {
