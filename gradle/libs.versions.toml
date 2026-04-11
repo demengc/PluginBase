@@ -20,7 +20,7 @@ expiringmap = "0.5.11"
 hikaricp = "7.0.2"
 sqlstreams = "1.0.0"
 
-mongodb-driver = "5.6.4"
+mongodb-driver = "5.6.5"
 
 jedis = "7.4.1"
 commons-pool2 = "2.13.1"
