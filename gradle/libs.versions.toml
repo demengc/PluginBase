@@ -2,7 +2,7 @@
 shadow = "9.4.1"
 spotless = "8.4.0"
 errorprone-plugin = "5.1.0"
-errorprone-core = "2.35.1"
+errorprone-core = "2.49.0"
 nmcp = "1.4.4"
 
 spigot-api = "1.21.11-R0.1-SNAPSHOT"
