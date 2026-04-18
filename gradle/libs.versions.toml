@@ -13,7 +13,7 @@ lombok = "1.18.44"
 authlib = "6.0.57"
 lamp = "4.0.0-rc.16"
 xseries = "13.6.0"
-adventure-api = "4.26.1"
+adventure-api = "5.0.1"
 adventure-platform = "4.4.1"
 expiringmap = "0.5.11"
 
