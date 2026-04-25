@@ -8,7 +8,7 @@ nmcp = "1.4.4"
 spigot-api = "1.21.11-R0.1-SNAPSHOT"
 annotations = "26.1.0"
 jsr305 = "3.0.2"
-lombok = "1.18.44"
+lombok = "1.18.46"
 
 authlib = "6.0.57"
 lamp = "4.0.0-rc.16"
