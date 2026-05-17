@@ -31,7 +31,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -48,9 +47,6 @@ public final class BaseManager {
 
   /** The translator used for handling localized messages. */
   @NotNull @Getter @Setter private static volatile Translator translator;
-
-  /** The BukkitAudiences instance to use for Adventure. Should be set when your plugin enables. */
-  @Getter @Setter private static volatile BukkitAudiences adventure;
 
   /** The settings the library should use. */
   @NotNull @Getter @Setter

@@ -1,34 +1,35 @@
 [versions]
 shadow = "9.4.1"
-spotless = "8.4.0"
+spotless = "8.5.1"
 errorprone-plugin = "5.1.0"
-errorprone-core = "2.35.1"
-nmcp = "1.4.4"
+errorprone-core = "2.42.0"
+nmcp = "1.5.0"
 
-spigot-api = "1.21.11-R0.1-SNAPSHOT"
+spigot-api = "26.1.2-R0.1-SNAPSHOT"
 annotations = "26.1.0"
 jsr305 = "3.0.2"
-lombok = "1.18.44"
+lombok = "1.18.46"
 
 authlib = "6.0.57"
 lamp = "4.0.0-rc.16"
-xseries = "13.6.0"
+xseries = "13.7.0"
 adventure-api = "4.26.1"
-adventure-platform = "4.4.1"
+adventure-text-minimessage = "4.26.1"
+adventure-text-serializer-legacy = "4.26.1"
 expiringmap = "0.5.11"
 
 hikaricp = "7.0.2"
 sqlstreams = "1.0.0"
 
-mongodb-driver = "5.6.4"
+mongodb-driver = "5.7.0"
 
-jedis = "7.4.1"
+jedis = "7.5.0"
 commons-pool2 = "2.13.1"
 
 junit-jupiter = "6.0.3"
 assertj = "3.27.7"
 mockito = "5.23.0"
-guava = "33.4.8-jre"
+guava = "33.6.0-jre"
 
 [libraries]
 spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot-api" }
@@ -42,8 +43,8 @@ lamp-bukkit = { module = "io.github.revxrsal:lamp.bukkit", version.ref = "lamp" 
 lamp-brigadier = { module = "io.github.revxrsal:lamp.brigadier", version.ref = "lamp" }
 xseries = { module = "com.github.cryptomorin:XSeries", version.ref = "xseries" }
 adventure-api = { module = "net.kyori:adventure-api", version.ref = "adventure-api" }
-adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "adventure-platform" }
-adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-api" }
+adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure-text-minimessage" }
+adventure-text-serializer-legacy = { module = "net.kyori:adventure-text-serializer-legacy", version.ref = "adventure-text-serializer-legacy" }
 expiringmap = { module = "net.jodah:expiringmap", version.ref = "expiringmap" }
 
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
