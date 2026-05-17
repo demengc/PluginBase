@@ -41,9 +41,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.kyori.adventure.platform.bukkit.BukkitComponentSerializer;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -76,8 +77,6 @@ public final class Text {
   /** Separation line for console. */
   public static final String CONSOLE_LINE =
       "*-----------------------------------------------------*";
-
-  public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().build();
 
   // ---------------------------------------------------------------------------------
   // LOCALE
@@ -429,20 +428,41 @@ public final class Text {
   }
 
   /**
+   * Returns the {@link MiniMessage} instance used for parsing.
+   *
+   * <p>Throws {@link UnsupportedOperationException} on servers without Adventure (vanilla
+   * Spigot/Bukkit).
+   *
+   * @return the MiniMessage instance
+   */
+  @NotNull
+  public static MiniMessage miniMessage() {
+    try {
+      return AdventureBridge.MINI;
+    } catch (final LinkageError e) {
+      throw new UnsupportedOperationException(
+          "Text.miniMessage() requires Paper (Adventure is not available on Spigot)", e);
+    }
+  }
+
+  /**
    * Parses the string using the MiniMessage library. Format: <a
    * href="https://docs.advntr.dev/minimessage/format.html">...</a>
+   *
+   * <p>Throws {@link UnsupportedOperationException} on servers without Adventure (vanilla
+   * Spigot/Bukkit).
    *
    * @param str The raw string
    * @return The result component for the string, or empty if the provided string is null
    */
   @NotNull
   public static Component parseMini(@Nullable final String str) {
-
-    if (str == null) {
-      return Component.empty();
+    try {
+      return AdventureBridge.parseMini(str);
+    } catch (final LinkageError e) {
+      throw new UnsupportedOperationException(
+          "Text.parseMini(String) requires Paper (Adventure is not available on Spigot)", e);
     }
-
-    return MINI_MESSAGE.deserialize(str);
   }
 
   /**
@@ -459,8 +479,11 @@ public final class Text {
   }
 
   /**
-   * Serializes an Adventure {@link Component} using the legacy Bukkit Component Serializer, which
-   * can be useful for displaying components in areas other than the chat (ex. item names).
+   * Serializes an Adventure {@link Component} using the legacy section-prefix serializer, which can
+   * be useful for displaying components in areas other than the chat (ex. item names).
+   *
+   * <p>Throws {@link UnsupportedOperationException} on servers without Adventure (vanilla
+   * Spigot/Bukkit).
    *
    * @param component The component to serialize
    * @return The serialized component
@@ -468,7 +491,13 @@ public final class Text {
    */
   @NotNull
   public static String legacySerialize(@NotNull final Component component) {
-    return BukkitComponentSerializer.legacy().serialize(component);
+    try {
+      return AdventureBridge.legacySerialize(component);
+    } catch (final LinkageError e) {
+      throw new UnsupportedOperationException(
+          "Text.legacySerialize(Component) requires Paper (Adventure is not available on Spigot)",
+          e);
+    }
   }
 
   /**
@@ -727,13 +756,23 @@ public final class Text {
   /**
    * Sends the {@link Component} to the player as a chat message.
    *
+   * <p>Throws {@link UnsupportedOperationException} on servers without Adventure (vanilla
+   * Spigot/Bukkit).
+   *
    * @param player The player who should receive the component
    * @param component The component to send
    * @see #parseMini(String)
    */
   public static void tellComponent(
       @NotNull final Player player, @NotNull final Component component) {
-    BaseManager.getAdventure().player(player).sendMessage(component);
+    try {
+      AdventureBridge.tell(player, component);
+    } catch (final LinkageError e) {
+      throw new UnsupportedOperationException(
+          "Text.tellComponent(Player, Component) requires Paper"
+              + " (Adventure is not available on Spigot)",
+          e);
+    }
   }
 
   /**
@@ -897,7 +936,45 @@ public final class Text {
       return false;
     }
 
-    tellComponent((Player) sender, parseMini(str.replaceFirst(MINI_PREFIX, "")));
+    try {
+      AdventureBridge.routeMini((Player) sender, str.replaceFirst(MINI_PREFIX, ""));
+    } catch (final LinkageError e) {
+      throw new UnsupportedOperationException(
+          "Text.tell(...) with 'mini:' prefix requires Paper"
+              + " (Adventure is not available on Spigot)",
+          e);
+    }
     return true;
+  }
+
+  private static final class AdventureBridge {
+
+    private static final MiniMessage MINI = MiniMessage.miniMessage();
+
+    private AdventureBridge() {}
+
+    @NotNull
+    static Component parseMini(@Nullable final String str) {
+      if (str == null) {
+        return Component.empty();
+      }
+      return MINI.deserialize(str);
+    }
+
+    @NotNull
+    static String legacySerialize(@NotNull final Component component) {
+      return LegacyComponentSerializer.legacySection().serialize(component);
+    }
+
+    static void tell(@NotNull final Player player, @NotNull final Component component) {
+      // Paper's Player implements net.kyori.adventure.audience.Audience.
+      // On Spigot, this whole class fails to load (Audience missing) and the
+      // calling boundary catches the resulting LinkageError.
+      ((Audience) player).sendMessage(component);
+    }
+
+    static void routeMini(@NotNull final Player player, @NotNull final String stripped) {
+      tell(player, parseMini(stripped));
+    }
   }
 }

@@ -25,6 +25,7 @@
 package dev.demeng.pluginbase.plugin;
 
 import dev.demeng.pluginbase.BaseSettings;
+import dev.demeng.pluginbase.Common;
 import dev.demeng.pluginbase.Schedulers;
 import dev.demeng.pluginbase.ServerProperties;
 import dev.demeng.pluginbase.Services;
@@ -40,7 +41,7 @@ import dev.demeng.pluginbase.terminable.composite.CompositeTerminable;
 import dev.demeng.pluginbase.terminable.module.TerminableModule;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import java.util.function.Function;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,6 +63,11 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
 
   /** The dependency injection container for this plugin. */
   private DependencyContainer dependencyContainer;
+
+  /**
+   * Cached result of Paper-server detection; {@code null} until {@link #isPaper()} is first called.
+   */
+  private static volatile Boolean paperCache;
 
   @Override
   public final void onLoad() {
@@ -85,7 +91,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
         .bindWith(this.terminableRegistry);
 
     BaseManager.setTranslator(Translator.create());
-    BaseManager.setAdventure(BukkitAudiences.create(this));
 
     bindModule(new MenuManager());
 
@@ -96,11 +101,6 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   public final void onDisable() {
 
     disable();
-
-    if (getAdventure() != null) {
-      getAdventure().close();
-      BaseManager.setAdventure(null);
-    }
 
     this.terminableRegistry.closeAndReportException();
     BaseExecutors.shutdown();
@@ -292,12 +292,23 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   }
 
   /**
-   * Gets the BukkitAudiences instance to use for Adventure.
+   * Whether the server is running Paper (or a Paper fork like Pufferfish, Purpur, Folia). Returns
+   * {@code false} on vanilla Spigot or Bukkit. Cached after the first call. Detection looks for
+   * {@code io.papermc.paper.ServerBuildInfo}, which has shipped in Paper since 2024.
    *
-   * @return The BukkitAudiences instance to use for Adventure
+   * @return true on Paper-derived servers, false otherwise
    */
-  public BukkitAudiences getAdventure() {
-    return BaseManager.getAdventure();
+  public boolean isPaper() {
+    Boolean cached = paperCache;
+    if (cached == null) {
+      cached = detectPaper(Common::checkClass);
+      paperCache = cached;
+    }
+    return cached;
+  }
+
+  static boolean detectPaper(@NotNull final Function<String, Class<?>> classLookup) {
+    return classLookup.apply("io.papermc.paper.ServerBuildInfo") != null;
   }
 
   /**
