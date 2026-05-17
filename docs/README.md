@@ -1,5 +1,5 @@
 ---
-description: Spigot plugin framework with DI, commands, menus, schedulers, and cross-version support for Minecraft 1.8.8 - 1.21.11.
+description: Spigot plugin framework with DI, commands, menus, schedulers, and cross-version support back to Minecraft 1.8.8.
 ---
 
 # Introduction
@@ -30,7 +30,11 @@ PluginBase streamlines Spigot plugin development by providing ready-to-use compo
 
 ## Version Compatibility
 
-Minecraft 1.8.8 - 1.21.11. Java 17+.
+Minecraft 1.8.8+. Java 17+.
+
+Adventure-based APIs (`Text.parseMini`, `Text.tellComponent`, `mini:` message prefix) require
+Paper at runtime and throw `UnsupportedOperationException` on vanilla Spigot. All other features
+work on both Paper and Spigot.
 
 ## Quick Start
 
