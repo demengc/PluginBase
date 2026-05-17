@@ -59,6 +59,9 @@ of handling objects.
 
 - **Java 17+**
 - **Spigot 1.8.8+** (compiled against latest, runtime-compatible back to 1.8.8)
+- **Paper** for Adventure-based APIs (`Text.parseMini`, `Text.tellComponent`, `mini:` message
+  prefix). These methods throw `UnsupportedOperationException` on vanilla Spigot. Use
+  `BasePlugin#isPaper()` to gate calls if you target both platforms.
 
 ## Documentation
 

@@ -12,7 +12,7 @@ The `Text` utility class handles all message formatting and sending. It supports
 |---|---|---|---|
 | Legacy codes | `&` + code | `&a` (green), `&l` (bold) | Any version |
 | HEX colors | `<#RRGGBB>` | `<#FF5733>` | Spigot 1.16+ |
-| MiniMessage | `mini:` prefix | `mini:<gradient:red:blue>text</gradient>` | Adventure |
+| MiniMessage | `mini:` prefix | `mini:<gradient:red:blue>text</gradient>` | Paper (Adventure) |
 | Color scheme | `&p`, `&s`, `&t` | `&pPrimary color` | `ColorScheme` configured |
 
 ### Legacy and HEX Colors
@@ -49,7 +49,7 @@ Text.tell(player, "&pPrimary &sSecondary &tTertiary");
 |---|---|---|---|
 | `tell(CommandSender, String)` | Yes | Yes | Standard message |
 | `tellRaw(CommandSender, String)` | No | Yes | Colors only, no prefix |
-| `tellComponent(Player, Component)` | No | No | Sends an Adventure `Component` directly |
+| `tellComponent(Player, Component)` | No | No | Sends an Adventure `Component` directly (Paper only) |
 | `tellCentered(Player, String)` | No | Yes | Centered in chat; may not work with custom fonts or HEX colors |
 
 ```java
@@ -127,7 +127,13 @@ Component comp = Text.parseMini("<gradient:red:blue>Text</gradient>");
 Text.tellComponent(player, comp);
 ```
 
-The `MINI_MESSAGE` field on `Text` exposes the underlying `MiniMessage` instance if you need direct access.
+Call `Text.miniMessage()` to access the underlying `MiniMessage` instance directly.
+
+> **Paper required.** `parseMini`, `legacyParseMini`, `legacySerialize`, `tellComponent`,
+> `miniMessage()`, and the `mini:` prefix in `tell`/`tellRaw`/`tellLocalized`/`tellLocalizedRaw`
+> all require a Paper-derived server (Paper, Folia, Pufferfish, Purpur). They throw
+> `UnsupportedOperationException` on vanilla Spigot, where Adventure is not provided. Use
+> `BasePlugin#isPaper()` to gate calls if you target both platforms.
 
 ## Formatting Utilities
 

@@ -52,7 +52,27 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/** Message-related utilities, including console and chat messages. */
+/**
+ * Message-related utilities, including console and chat messages.
+ *
+ * <p><b>Paper-only methods:</b> the following methods touch Adventure and therefore require a
+ * Paper-derived server at runtime. They throw {@link UnsupportedOperationException} on vanilla
+ * Spigot or Bukkit, where Adventure is not provided:
+ *
+ * <ul>
+ *   <li>{@link #miniMessage()}
+ *   <li>{@link #parseMini(String)}
+ *   <li>{@link #legacyParseMini(String)} (delegates to the above)
+ *   <li>{@link #legacySerialize(Component)}
+ *   <li>{@link #tellComponent(Player, Component)}
+ *   <li>{@link #tell(CommandSender, String)} (and its {@code tellRaw}/{@code tellLocalized}
+ *       siblings) <i>only</i> when the message starts with the {@code "mini:"} prefix
+ * </ul>
+ *
+ * <p>Plugins that target both Paper and Spigot should guard these calls with {@link
+ * dev.demeng.pluginbase.plugin.BasePlugin#isPaper()} or catch {@link
+ * UnsupportedOperationException}.
+ */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Text {
 
@@ -466,9 +486,12 @@ public final class Text {
   }
 
   /**
-   * Parses the string using the MiniMessage library, and then uses the legacy Bukkit Component
-   * Serializer to return a String rather than a Component. Format: <a
+   * Parses the string using the MiniMessage library, and then serializes the result to a legacy
+   * section-prefix string. Format: <a
    * href="https://docs.advntr.dev/minimessage/format.html">...</a>
+   *
+   * <p>Throws {@link UnsupportedOperationException} on servers without Adventure (vanilla
+   * Spigot/Bukkit), inherited from {@link #parseMini(String)} and {@link #legacySerialize}.
    *
    * @param str The raw string(s)
    * @return The serialized component for the string, or empty if the provided string is null

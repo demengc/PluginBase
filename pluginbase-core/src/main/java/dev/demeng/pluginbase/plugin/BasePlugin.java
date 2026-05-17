@@ -294,7 +294,14 @@ public abstract class BasePlugin extends JavaPlugin implements TerminableConsume
   /**
    * Whether the server is running Paper (or a Paper fork like Pufferfish, Purpur, Folia). Returns
    * {@code false} on vanilla Spigot or Bukkit. Cached after the first call. Detection looks for
-   * {@code io.papermc.paper.ServerBuildInfo}, which has shipped in Paper since 2024.
+   * {@code io.papermc.paper.ServerBuildInfo}, which has shipped in Paper since 2024; older Paper
+   * builds will be reported as non-Paper.
+   *
+   * <p>This is exposed for downstream plugins that need to gate Adventure-using code (e.g. {@link
+   * dev.demeng.pluginbase.text.Text#parseMini(String)}, {@link
+   * dev.demeng.pluginbase.text.Text#tellComponent}). PluginBase itself does not consult this flag
+   * internally; {@code Text} relies on a {@link LinkageError} boundary instead so that detection
+   * cannot drift out of sync with actual class availability.
    *
    * @return true on Paper-derived servers, false otherwise
    */

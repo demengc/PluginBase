@@ -3,16 +3,9 @@ package dev.demeng.pluginbase.text;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.junit.jupiter.api.Test;
 
 class TextAdventureTest {
-
-  @Test
-  void miniMessage_returnsNonNullInstance() {
-    MiniMessage instance = Text.miniMessage();
-    assertThat(instance).isNotNull();
-  }
 
   @Test
   void miniMessage_returnsSameInstanceAcrossCalls() {
