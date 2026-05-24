@@ -1,5 +1,5 @@
 plugins {
-    id("com.gradleup.nmcp.settings") version "1.4.4"
+    id("com.gradleup.nmcp.settings") version "1.5.0"
 }
 
 rootProject.name = "pluginbase"
