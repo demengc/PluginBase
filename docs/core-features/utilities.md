@@ -14,11 +14,10 @@ General-purpose helpers for plugin metadata, version checks, number parsing, and
 |---|---|---|
 | `getName()` | `String` | Plugin name from plugin.yml. |
 | `getVersion()` | `String` | Plugin version from plugin.yml. |
-| `getServerMajorVersion()` | `int` | Major MC version (e.g. `20` for 1.20.x). |
-| `isServerVersionAtLeast(int)` | `boolean` | `true` if the server's major version >= the argument. |
+| `isServerVersionAtLeast(int, int)` | `boolean` | `true` if the server version is at least the specified major and minor version. |
 
 ```java
-if (Common.isServerVersionAtLeast(16)) {
+if (Common.isServerVersionAtLeast(1, 16)) {
     // Use 1.16+ features
 }
 ```

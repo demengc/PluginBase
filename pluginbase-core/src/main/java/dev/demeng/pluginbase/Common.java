@@ -24,7 +24,7 @@
 
 package dev.demeng.pluginbase;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.reflection.XReflection;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 import com.google.common.primitives.Ints;
@@ -95,24 +95,14 @@ public final class Common {
   // ---------------------------------------------------------------------------------
 
   /**
-   * Gets the server's major Minecraft version.
+   * Checks whether the server's Minecraft version is at least the specified version.
    *
-   * <p>For example, if a server is running 1.16.4, this will return 16.
-   *
-   * @return The server's major Minecraft version.
+   * @param major The minimum major version
+   * @param minor The minimum minor version
+   * @return True if the server version is equal to or newer than the provided version
    */
-  public static int getServerMajorVersion() {
-    return XMaterial.getVersion();
-  }
-
-  /**
-   * Checks if the server's major version is at least the specified version.
-   *
-   * @param version The minimum major version
-   * @return True if equal or greater to the provided version, false otherwise
-   */
-  public static boolean isServerVersionAtLeast(final int version) {
-    return getServerMajorVersion() >= version;
+  public static boolean isServerVersionAtLeast(final int major, final int minor) {
+    return XReflection.supports(major, minor);
   }
 
   // ---------------------------------------------------------------------------------

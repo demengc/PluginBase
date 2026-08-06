@@ -375,7 +375,7 @@ public final class Text {
               .replace("&t", scheme.getTertiary());
     }
 
-    if (Common.SPIGOT && Common.isServerVersionAtLeast(16)) {
+    if (Common.SPIGOT && Common.isServerVersionAtLeast(1, 16)) {
 
       Matcher matcher = HEX_PATTERN.matcher(message);
 

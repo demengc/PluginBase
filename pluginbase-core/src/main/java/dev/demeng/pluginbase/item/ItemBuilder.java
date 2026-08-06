@@ -348,7 +348,7 @@ public class ItemBuilder {
    */
   public ItemBuilder modelData(@Nullable final Integer modelData) {
 
-    if (Common.isServerVersionAtLeast(14)) {
+    if (Common.isServerVersionAtLeast(1, 14)) {
       updateMeta(meta -> meta.setCustomModelData(modelData));
     }
 
@@ -392,7 +392,7 @@ public class ItemBuilder {
       final SkullMeta meta = Objects.requireNonNull((SkullMeta) stack.getItemMeta());
       final OfflinePlayer p = Bukkit.getOfflinePlayer(owner);
 
-      if (Common.isServerVersionAtLeast(12)) {
+      if (Common.isServerVersionAtLeast(1, 12)) {
         meta.setOwningPlayer(Bukkit.getOfflinePlayer(owner));
 
       } else {
